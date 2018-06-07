@@ -286,3 +286,8 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+*.njsproj
+obj/
+bin/
+node_modules/

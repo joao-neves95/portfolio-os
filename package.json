@@ -1,0 +1,13 @@
+{
+  "name": "portfolio-os",
+  "version": "0.0.0",
+  "description": "portfolio-os",
+  "main": "app.js",
+  "author": {
+    "name": "Utilizador"
+  },
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3"
+  }
+}
