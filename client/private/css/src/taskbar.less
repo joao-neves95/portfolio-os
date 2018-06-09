@@ -1,0 +1,43 @@
+﻿@icons-width-height: 3em;
+
+.taskbar {
+    background-color: #4d4b4b;
+    height: @icons-width-height !important;
+    width: 100%;
+    margin-bottom: 0;
+    position: absolute;
+    bottom: 0;
+
+    .menu-icon-wrap {
+        width: @icons-width-height;
+    }
+
+    .icon-wrap {
+        height: @icons-width-height;
+
+        ul {
+            display: inline;
+            list-style-type: none;
+            margin-left: 0;
+            margin-bottom: 0;
+
+            li {
+                display: inline-block;
+            }
+        }
+    }
+
+    .icon {
+        width: @icons-width-height;
+        height: @icons-width-height;
+
+        &:hover {
+            background-color: #626060;
+            cursor: pointer;
+        }
+    }
+
+    .minimized {
+        border-bottom: .15em solid white;
+    }
+}

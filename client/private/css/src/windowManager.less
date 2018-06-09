@@ -1,0 +1,38 @@
+﻿.window-manager {
+    background-color: white;
+    height: 25em;
+    width: 45em;
+    margin: auto;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    z-index: 1;
+
+    .toolbar {
+        background-color: #4d4b4b;
+        height: 2.2em;
+        width: 100%;
+
+        .window-title {
+            color: white;
+            font-size: .9rem;
+            margin: .3em;
+            margin-left: 1em;
+        }
+
+        .icon-wrap {
+            cursor: pointer;
+            width: 2em;
+
+            &:hover {
+                background-color: #626060;
+            }
+
+            .icon {
+                width: 1.5em;
+                margin: .3em;
+                float: right;
+            }
+        }
+    }
+}

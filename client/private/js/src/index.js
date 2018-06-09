@@ -1,11 +1,16 @@
 ﻿// Imports for MergerJS.
 //
-// @import './main'
+// @import './externalLibs'
 // @import './utils'
+// @import './domUtils'
 // @import './services/networking'
-// @import './services/windowManager/windowManager.html'
-// @import './services/windowManager/windowManager.handlers'
-// @import './components/calculator/calculator.html'
-// @import './components/calculator/calculator.handlers'
-// @import './components/calculator/calculator.listeners'
+// @import './services/taskbarManager/taskbarIcon'
+// @import './services/taskbarManager/taskbarManager'
+// @import './services/windowManager/window'
+// @import './services/windowManager/windowManager.js'
+// @import './services/dragAndDrop.js'
+// @import './components/calculator/calculator.html.js'
+// @import './components/calculator/calculator.handlers.js'
+// @import './components/calculator/calculator.listeners.js'
+// @import './main'
 //
