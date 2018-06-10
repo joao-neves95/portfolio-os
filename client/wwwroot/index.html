@@ -18,6 +18,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css"
         integrity="sha256-GSio8qamaXapM8Fq9JYdGNTvk/dgs+cMLgPeevOYEx0="
         crossorigin="anonymous" />
+  <!-- TODO: Remover Hover.css and do the input's animaytions with css. -->
   <!-- HOVER CSS -->
   <link rel="stylesheet" 
         href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css" 
@@ -28,19 +29,20 @@
 
 <body>
   <main class="grid-container">
-    <form action="/" method="post">
-      <div class="grid-x" style="height: 100%;">
+    <form action="/auth/login" method="post">
+      <div class="grid-x">
         <!-- Email Input -->
         <div class="cell large-12">
-          <input class="hvr-float-shadow" type="text" placeholder="Email">
+          <input class="hvr-float-shadow" type="text" placeholder="Email" name="email">
         </div>
         <!-- Password Input -->
         <div class="cell large-12">
-          <input class="hvr-float-shadow" type="password" placeholder="Password">
+          <input class="hvr-float-shadow" type="password" placeholder="Password" name="password">
         </div>
+        <button type="submit">Login</button>
         <div class="grid-x icon-wrap">
           <div class="cell large-4 large-offset-2">
-            <img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" />
+            <img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" id="google-btn" />
           </div>
           <div class="cell large-4">
             <img src="img/github.svg" alt="Github Icon" class="icon" />
