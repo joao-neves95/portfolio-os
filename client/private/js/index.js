@@ -3,12 +3,12 @@
 // @import './externalLibs'
 // @import './utils'
 // @import './domUtils'
-// @import './services/networking'
-// @import './services/taskbarManager/taskbarIcon'
-// @import './services/taskbarManager/taskbarManager'
-// @import './services/windowManager/window'
-// @import './services/windowManager/windowManager.js'
-// @import './services/dragAndDrop.js'
+// @import './modules/networking'
+// @import './modules/taskbarManager/taskbarIcon'
+// @import './modules/taskbarManager/taskbarManager'
+// @import './modules/windowManager/window'
+// @import './modules/windowManager/windowManager.js'
+// @import './modules/dragAndDrop.js'
 // @import './components/calculator/calculator.html.js'
 // @import './components/calculator/calculator.handlers.js'
 // @import './components/calculator/calculator.listeners.js'
@@ -130,21 +130,21 @@ class TaskbarManager {
     }
 
     this.killIcon = (windowId) => {
-      findIcon(windowId).kill();
+      findIconInstance(windowId).kill();
     }
 
     this.minimizedIcon = (windowId) => {
-      findIcon(windowId).minimized();
+      findIconInstance(windowId).minimized();
     }
 
     this.maximizedIcon = (windowId) => {
-      findIcon(windowId).maximized();
+      findIconInstance(windowId).maximized();
     }
   }
 }
 
 // UTILITIES:
-const findIcon = (windowId, Callback) => {
+const findIconInstance = (windowId, Callback) => {
   const icons = taskbarManager.icons;
   for (let i = 0; i < icons.length; i++) {
     if (icons[i].windowId === windowId) {
@@ -226,18 +226,18 @@ class WindowManager {
     }
 
     this.closeWindow = (windowId) => {
-      findWindow(windowId).kill();
+      findWindowInstance(windowId).kill();
       taskbarManager.killIcon(windowId);
       this.updateListeners();
     }
 
     this.minimizeWindow = (windowId) => {
-      findWindow(windowId).minimize();
+      findWindowInstance(windowId).minimize();
       taskbarManager.minimizedIcon(windowId);
     }
 
     this.maximizeWindow = (windowId) => {
-      findWindow(windowId).maximize();
+      findWindowInstance(windowId).maximize();
       taskbarManager.maximizedIcon(windowId);
     }
 
@@ -266,7 +266,7 @@ class WindowManager {
         allTaskbarIcons[i].addEventListener('click', () => {
           const thisIconId = DomUtils.getParentByIdInclude(allTaskbarIcons[i], 'win-').id;
           const thisWindowId = Utils.parseIDs(thisIconId)[1];
-          const thisWindow = findWindow(thisWindowId);
+          const thisWindow = findWindowInstance(thisWindowId);
           if (thisWindow.isMinimized)
             this.maximizeWindow(thisWindowId);
           else
@@ -279,7 +279,7 @@ class WindowManager {
 
 const windowManager = new WindowManager();
 
-const findWindow = (windowId, Callback) => {
+const findWindowInstance = (windowId, Callback) => {
   const windows = windowManager.windows;
 
   for (let i = 0; i < windows.length; i++) {

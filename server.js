@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger('combined'));
 
 // Serve public files.
-app.use('/', express.static(path.join(__dirname, './client/wwwroot')));
+app.use('/', express.static(path.join(process.cwd(), './client/wwwroot')));
 
 // TODO: Add database connection.
 app.use('/', routes);

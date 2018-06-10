@@ -2,29 +2,11 @@
 const path = require('path');
 const router = require('express').Router();
 const authRoute = require('./auth');
-
-const JS_FILES_PATH = './client/private/js/';
-const CSS_FILES_PATH = './client/private/css/';
-
-router.get(['/desktop/js/:fileName', '/desktop/css/:fileName'], (req, res) => {
-  const reqPath = req.path.split(/\//g);
-
-  switch (reqPath[2]) {
-    case 'js':
-      res.status(200).sendFile(path.join(process.cwd(), JS_FILES_PATH, req.params.fileName));
-      break;
-    case 'css':
-      res.status(200).sendFile(path.join(process.cwd(), CSS_FILES_PATH, req.params.fileName));
-      break;
-    default:
-  }
-});
-
-router.get('/desktop', (req, res) => {
-  res.contentType = 'html';
-  res.status(200).sendFile(path.join(process.cwd(), './client/private/desktop.html'));
-});
+const desktopRoute = require('./desktop');
 
 router.post('/auth/login', authRoute.login);
+
+router.get('/desktop', desktopRoute.getDesktopHtmlPage);
+router.get(['/desktop/js/:fileName', '/desktop/css/:fileName'], desktopRoute.getDesktopFiles);
 
 module.exports = router;

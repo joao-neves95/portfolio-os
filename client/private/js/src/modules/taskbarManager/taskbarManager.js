@@ -18,21 +18,21 @@ class TaskbarManager {
     }
 
     this.killIcon = (windowId) => {
-      findIcon(windowId).kill();
+      findIconInstance(windowId).kill();
     }
 
     this.minimizedIcon = (windowId) => {
-      findIcon(windowId).minimized();
+      findIconInstance(windowId).minimized();
     }
 
     this.maximizedIcon = (windowId) => {
-      findIcon(windowId).maximized();
+      findIconInstance(windowId).maximized();
     }
   }
 }
 
 // UTILITIES:
-const findIcon = (windowId, Callback) => {
+const findIconInstance = (windowId, Callback) => {
   const icons = taskbarManager.icons;
   for (let i = 0; i < icons.length; i++) {
     if (icons[i].windowId === windowId) {

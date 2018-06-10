@@ -16,15 +16,29 @@ form {
   margin-top: 25vh;
 }
 
-input {
-  border-radius: 1em !important;
+span.input-group-label {
+  display: inline-block;
+}
+
+span.input-group-label > img {
+  width: 1.2em;
+  margin-top: 50%;
+  margin-bottom: 50%;
+}
+
+span.pass-visibility-span {
+  cursor: pointer;
+  width: 3em;
+}
+
+form button.login {
+  float: right;
 }
 
 input:focus {
   border-style: none !important;
 }
 
-/* CLASSES */
 .icon-wrap {
   margin-top: 1em;
   text-align: center;

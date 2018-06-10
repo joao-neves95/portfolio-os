@@ -2,13 +2,19 @@
   "name": "portfolio-os",
   "version": "0.0.0",
   "description": "portfolio-os",
-  "main": "app.js",
+  "main": "server.js",
   "author": {
     "name": "Utilizador"
+  },
+  "scripts": {
+    "start": "node-dev server.js"
   },
   "dependencies": {
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "node-dev": "^3.1.3"
   }
 }

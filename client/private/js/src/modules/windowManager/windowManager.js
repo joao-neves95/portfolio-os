@@ -17,18 +17,18 @@ class WindowManager {
     }
 
     this.closeWindow = (windowId) => {
-      findWindow(windowId).kill();
+      findWindowInstance(windowId).kill();
       taskbarManager.killIcon(windowId);
       this.updateListeners();
     }
 
     this.minimizeWindow = (windowId) => {
-      findWindow(windowId).minimize();
+      findWindowInstance(windowId).minimize();
       taskbarManager.minimizedIcon(windowId);
     }
 
     this.maximizeWindow = (windowId) => {
-      findWindow(windowId).maximize();
+      findWindowInstance(windowId).maximize();
       taskbarManager.maximizedIcon(windowId);
     }
 
@@ -57,7 +57,7 @@ class WindowManager {
         allTaskbarIcons[i].addEventListener('click', () => {
           const thisIconId = DomUtils.getParentByIdInclude(allTaskbarIcons[i], 'win-').id;
           const thisWindowId = Utils.parseIDs(thisIconId)[1];
-          const thisWindow = findWindow(thisWindowId);
+          const thisWindow = findWindowInstance(thisWindowId);
           if (thisWindow.isMinimized)
             this.maximizeWindow(thisWindowId);
           else
@@ -70,7 +70,7 @@ class WindowManager {
 
 const windowManager = new WindowManager();
 
-const findWindow = (windowId, Callback) => {
+const findWindowInstance = (windowId, Callback) => {
   const windows = windowManager.windows;
 
   for (let i = 0; i < windows.length; i++) {
