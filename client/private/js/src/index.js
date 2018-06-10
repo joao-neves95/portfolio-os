@@ -14,3 +14,5 @@
 // @import './components/calculator/calculator.listeners.js'
 // @import './main'
 //
+
+const SERVER_ROOT_PATH = 'http://localhost:3000/';

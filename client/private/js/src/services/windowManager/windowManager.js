@@ -5,10 +5,10 @@ class WindowManager {
   constructor () {
     this.windows = [];
 
-    this.openNewWindow = (content) => {
+    this.openNewWindow = (windowTitle, content) => {
       if (!content) content = '';
 
-      const thisWindow = new Window();
+      const thisWindow = new Window(windowTitle);
       this.windows.push(thisWindow);
       thisWindow.init();
       const newIcon = taskbarManager.addIcon(thisWindow.id);

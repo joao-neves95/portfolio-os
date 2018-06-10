@@ -13,7 +13,7 @@ class TaskbarIcon {
     this.id = 'icn_' + windowId;
     this.windowId = windowId;
     this.iconContainerElem = document.getElementById('icon-container');
-    this.iconUrl = '../wwwroot/img/default-taskbar-icon-white.svg';
+    this.iconUrl = SERVER_ROOT_PATH + 'img/default-taskbar-icon-white.svg';
     this.element = HTMLElement;
     this.isMinimized = Boolean;
 

@@ -1,17 +1,25 @@
 ﻿'use strict'
 const path = require('path');
-const express = require('express');
-const routes = require('./server/routes/index.js');
-const app = express();
+const router = require('express').Router();
 
-const PORT = process.env.PORT || 3000;
+router.get(['/desktop/js/:fileName', '/desktop/css/:fileName'], (req, res) => {
+  const reqPath = req.path.split(/\//g);
 
-// Serve public files.
-app.use('/', express.static(path.join(__dirname, './client/wwwroot')));
-
-// TODO: Add database connection.
-app.use('/', routes);
-
-app.listen(PORT, () => {
-  console.info(`The server is listening on port ${PORT}`);
+  switch (reqPath[2]) {
+    case 'js':
+      res.status(200).sendFile(path.join(process.cwd(), `./client/private/js/${req.params.fileName}`));
+      break;
+    case 'css':
+      res.status(200).sendFile(path.join(process.cwd(), `./client/private/css/${req.params.fileName}`));
+      break;
+    default:
+  }
 });
+
+router.get('/desktop', (req, res) => {
+  res.contentType = 'html';
+  console.info(req.body.email, req.body.password);
+  res.status(200).sendFile(path.join(process.cwd(), './client/private/desktop.html'));
+});
+
+module.exports = router;
