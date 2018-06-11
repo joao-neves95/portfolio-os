@@ -1,13 +1,5 @@
 ﻿@bg-light-grey: #cecbcb;
 
-/* ELEMENTS */
-
-img {
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-}
-
 html {
     height: 100%;
 
@@ -15,6 +7,13 @@ html {
         background-color: @bg-light-grey;
         height: 100vh;
         overflow: hidden;
+    }
+
+    img {
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
     }
 }
 
@@ -36,6 +35,7 @@ main {
         a {
             height: 100%;
             padding: 1em;
+            font-weight: bold;
         }
     }
 }
@@ -46,7 +46,8 @@ main {
     margin-top: 20vh;
 
     form {
-        // margin-top: 25vh;
+        transition: all 5s ease-in-out;
+
         .input-group-label {
             display: inline-block;
         }

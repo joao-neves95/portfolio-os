@@ -7,7 +7,7 @@
 	},
 	"uglify": false,
 	"autoBuild": true,
-	"notifications": false,
+	"notifications": true,
 	"sourceFiles": [
 		{
 			"source": "C:\\Users\\Utilizador\\odrive\\ISTEC\\DEV\\portfolio-os\\portfolio-os\\client\\private\\js\\src\\index.js",

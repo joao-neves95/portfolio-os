@@ -1,6 +1,4 @@
-﻿'use strict'
-
-class Window {
+﻿class Window {
   constructor (windowTitle) {
     this.id = 'win-' + Utils.randomString(5);
     this.windowTitle = windowTitle;
@@ -11,7 +9,7 @@ class Window {
     if (!windowTitle) this.windowTitle = '';
 
     this.template = `
-      <article class="window-manager" id="${this.id}">
+      <article class="window-manager free-draggable" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
             <div class="cell large-10">
@@ -38,16 +36,16 @@ class Window {
     }
 
     this.kill = () => {
-      document.getElementById('window-manager-container').removeChild(this.element);
+      document.getElementById(this.id).remove();
     }
 
     this.minimize = () => {
-      this.element.style.display = 'none';
+      document.getElementById(this.id).style.display = 'none';
       this.isMinimized = true;
     }
 
     this.maximize = () => {
-      this.element.style.display = 'block';
+      document.getElementById(this.id).style.display = 'block';
       this.isMinimized = false;
     }
   }

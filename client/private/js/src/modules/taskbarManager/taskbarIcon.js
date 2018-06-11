@@ -1,6 +1,4 @@
-﻿'use strict'
-
-class TaskbarIcon {
+﻿class TaskbarIcon {
   /**
    * 
    * @param {string} windowId
@@ -14,7 +12,6 @@ class TaskbarIcon {
     this.windowId = windowId;
     this.iconContainerElem = document.getElementById('icon-container');
     this.iconUrl = SERVER_ROOT_PATH + 'img/default-taskbar-icon-white.svg';
-    this.element = HTMLElement;
     this.isMinimized = Boolean;
 
     if (iconUrl) this.iconUrl = iconUrl;
@@ -27,21 +24,20 @@ class TaskbarIcon {
     // METHODS:
     this.init = () => {
       this.iconContainerElem.innerHTML += this.template;
-      this.element = document.getElementById(this.id);
       this.isMinimized = false;
     }
 
     this.kill = () => {
-      this.element.remove();
+      document.getElementById(this.id).remove();
     }
 
     this.minimized = () => {
-      this.element.children[0].classList.add('minimized');
+      document.getElementById(this.id).children[0].classList.add('minimized');
       this.isMinimized = true;
     }
 
     this.maximized = () => {
-      this.element.children[0].classList.remove('minimized');
+      document.getElementById(this.id).children[0].classList.remove('minimized');
       this.isMinimized = false;
     }
 

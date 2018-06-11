@@ -8,17 +8,19 @@
 // @import './modules/taskbarManager/taskbarManager'
 // @import './modules/windowManager/window'
 // @import './modules/windowManager/windowManager.js'
+// @import './modules/desktopManager/desktopTemplates'
+// @import './modules/desktopManager/desktopManager'
 // @import './modules/dragAndDrop.js'
 // @import './components/calculator/calculator.html.js'
 // @import './components/calculator/calculator.handlers.js'
 // @import './components/calculator/calculator.listeners.js'
 // @import './main'
 //
+'use strict'
 
 const SERVER_ROOT_PATH = 'http://localhost:3000/';
-﻿'use strict'
-
-// when-dom-ready
+const IMG_PATH = `${SERVER_ROOT_PATH}img/`
+﻿// when-dom-ready
 // https://github.com/lukechilds/when-dom-ready
 !function (e, n) { "object" == typeof exports && "undefined" != typeof module ? module.exports = n() : "function" == typeof define && define.amd ? define(n) : e.whenDomReady = n() }(this, function () { "use strict"; var e = ["interactive", "complete"], n = function (n, t) { return new Promise(function (o) { n && "function" != typeof n && (t = n, n = null), t = t || window.document; var i = function () { return o(void (n && setTimeout(n))) }; -1 !== e.indexOf(t.readyState) ? i() : t.addEventListener("DOMContentLoaded", i) }) }; return n.resume = function (e) { return function (t) { return n(e).then(function () { return t }) } }, n });
 
@@ -30,7 +32,11 @@ const SERVER_ROOT_PATH = 'http://localhost:3000/';
 
 class Utils {
   static randomString(length) {
-    return Random.string()(Random.engines.browserCrypto, length);
+    return Random.string('qwertyuiopasdfghjklçzxcvbnmQWERTYUIOPÇLKJHGFDSAZXCVBNM1234567890?!#$%&/()')(Random.engines.browserCrypto, length);
+  }
+
+  static randomNumString(length) {
+    return Random.string('1234567890')(Random.engines.browserCrypto, length);
   }
 
   static parseIDs(id) {
@@ -38,9 +44,7 @@ class Utils {
     return split;
   }
 }
-﻿'use strict'
-
-class DomUtils {
+﻿class DomUtils {
    /**
     * 
     * @param {HTMLElement} elem
@@ -55,11 +59,46 @@ class DomUtils {
       that = that.parentNode
     }
     return that
-  }
-}
-﻿﻿'use strict'
+  };
 
-class TaskbarIcon {
+  static getParentByTag(elem, tag) {
+    let that = elem
+    while (that && that.localName !== tag) {
+      that = that.parentNode
+    }
+    return that
+  };
+
+  static getDirectChildrenByTag(elem, tag) {
+    if (elem.localName === tag) return elem;
+
+    const that = elem.children;
+    let found = false;
+    let elems = [];
+    for (let i = 0; i < that.length; i++) {
+      if (that[i].localName === tag) {
+        elems.push(that[i]);
+        found = true;
+      }
+    }
+    if (found) {
+      if (elems.length <= 1)
+        return elems[0];
+      else
+        return elems;
+    }
+    return false;
+  };
+
+  static getAttributeFromElem(elem, attribute) {
+    const attr = elem.attributes;
+    for (let i = 0; i < attr.length; i++) {
+      if (attr[i].localName === attribute)
+        return attr[i].nodeValue;
+    }
+  };
+}
+﻿﻿class TaskbarIcon {
   /**
    * 
    * @param {string} windowId
@@ -73,7 +112,6 @@ class TaskbarIcon {
     this.windowId = windowId;
     this.iconContainerElem = document.getElementById('icon-container');
     this.iconUrl = SERVER_ROOT_PATH + 'img/default-taskbar-icon-white.svg';
-    this.element = HTMLElement;
     this.isMinimized = Boolean;
 
     if (iconUrl) this.iconUrl = iconUrl;
@@ -86,21 +124,20 @@ class TaskbarIcon {
     // METHODS:
     this.init = () => {
       this.iconContainerElem.innerHTML += this.template;
-      this.element = document.getElementById(this.id);
       this.isMinimized = false;
     }
 
     this.kill = () => {
-      this.element.remove();
+      document.getElementById(this.id).remove();
     }
 
     this.minimized = () => {
-      this.element.children[0].classList.add('minimized');
+      document.getElementById(this.id).children[0].classList.add('minimized');
       this.isMinimized = true;
     }
 
     this.maximized = () => {
-      this.element.children[0].classList.remove('minimized');
+      document.getElementById(this.id).children[0].classList.remove('minimized');
       this.isMinimized = false;
     }
 
@@ -110,9 +147,7 @@ class TaskbarIcon {
     }
   }
 }
-﻿'use strict'
-
-class TaskbarManager {
+﻿class TaskbarManager {
   constructor() {
     this.iconContainerElem = document.getElementById('icon-container');
     this.icons = [];
@@ -143,6 +178,8 @@ class TaskbarManager {
   }
 }
 
+const taskbarManager = new TaskbarManager();
+
 // UTILITIES:
 const findIconInstance = (windowId, Callback) => {
   const icons = taskbarManager.icons;
@@ -153,9 +190,7 @@ const findIconInstance = (windowId, Callback) => {
     }
   }
 }
-﻿'use strict'
-
-class Window {
+﻿class Window {
   constructor (windowTitle) {
     this.id = 'win-' + Utils.randomString(5);
     this.windowTitle = windowTitle;
@@ -166,7 +201,7 @@ class Window {
     if (!windowTitle) this.windowTitle = '';
 
     this.template = `
-      <article class="window-manager" id="${this.id}">
+      <article class="window-manager free-draggable" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
             <div class="cell large-10">
@@ -193,24 +228,21 @@ class Window {
     }
 
     this.kill = () => {
-      document.getElementById('window-manager-container').removeChild(this.element);
+      document.getElementById(this.id).remove();
     }
 
     this.minimize = () => {
-      this.element.style.display = 'none';
+      document.getElementById(this.id).style.display = 'none';
       this.isMinimized = true;
     }
 
     this.maximize = () => {
-      this.element.style.display = 'block';
+      document.getElementById(this.id).style.display = 'block';
       this.isMinimized = false;
     }
   }
 }
-﻿'use strict';
-const taskbarManager = new TaskbarManager();
-
-class WindowManager {
+﻿class WindowManager {
   constructor () {
     this.windows = [];
 
@@ -223,79 +255,345 @@ class WindowManager {
       const newIcon = taskbarManager.addIcon(thisWindow.id);
       thisWindow.icon = newIcon;
       this.updateListeners();
-    }
+    };
 
     this.closeWindow = (windowId) => {
-      findWindowInstance(windowId).kill();
+      this.utils.findWindowInstance(windowId).kill();
       taskbarManager.killIcon(windowId);
       this.updateListeners();
-    }
+    };
 
     this.minimizeWindow = (windowId) => {
-      findWindowInstance(windowId).minimize();
+      this.utils.findWindowInstance(windowId).minimize();
       taskbarManager.minimizedIcon(windowId);
-    }
+    };
 
     this.maximizeWindow = (windowId) => {
-      findWindowInstance(windowId).maximize();
+      this.utils.findWindowInstance(windowId).maximize();
       taskbarManager.maximizedIcon(windowId);
-    }
+    };
 
     this.updateListeners = () => {
       const allCloseWindowsBtns = document.querySelectorAll('[id^="win-"] .close-window');
 
       for (let i = 0; i < allCloseWindowsBtns.length; i++) {
-        allCloseWindowsBtns[i].addEventListener('click', () => {
-          const thisWindow = DomUtils.getParentByIdInclude(allCloseWindowsBtns[i], 'win-');
-          this.closeWindow(thisWindow.id);
+        allCloseWindowsBtns[i].removeEventListener('click', this.eventHandlers.closeWindowHandler);
+        allCloseWindowsBtns[i].addEventListener('click', (e) => {
+          this.eventHandlers.closeWindowHandler(e, allCloseWindowsBtns[i]);
         });
       };
 
       const allMinimizeWindowsBtns = document.querySelectorAll('[id^="win-"] .minimize-window');
 
       for (let i = 0; i < allMinimizeWindowsBtns.length; i++) {
-        allMinimizeWindowsBtns[i].addEventListener('click', () => {
-          const thisWindow = DomUtils.getParentByIdInclude(allCloseWindowsBtns[i], 'win-');
-          this.minimizeWindow(thisWindow.id);
+        allMinimizeWindowsBtns[i].removeEventListener('click', this.eventHandlers.minimizeWindowHandler);
+        allMinimizeWindowsBtns[i].addEventListener('click', (e) => {
+          this.eventHandlers.minimizeWindowHandler(e, allMinimizeWindowsBtns[i]);
         });
       }
 
       const allTaskbarIcons = document.querySelectorAll('[id^="icn_"] .icon');
 
       for (let i = 0; i < allTaskbarIcons.length; i++) {
-        allTaskbarIcons[i].addEventListener('click', () => {
-          const thisIconId = DomUtils.getParentByIdInclude(allTaskbarIcons[i], 'win-').id;
-          const thisWindowId = Utils.parseIDs(thisIconId)[1];
-          const thisWindow = findWindowInstance(thisWindowId);
-          if (thisWindow.isMinimized)
-            this.maximizeWindow(thisWindowId);
-          else
-            this.minimizeWindow(thisWindowId);
+        allTaskbarIcons[i].removeEventListener('click', this.eventHandlers.taskbarIconsHandler);
+        allTaskbarIcons[i].addEventListener('click', (e) => {
+          this.eventHandlers.taskbarIconsHandler(e, allTaskbarIcons[i]);
         });
+      }
+    };
+
+    this.eventHandlers = {
+
+      closeWindowHandler: (e, closeWindowBtn) => {
+        console.debug('close')
+        e.stopPropagation();
+        const thisWindow = DomUtils.getParentByIdInclude(closeWindowBtn, 'win-');
+        windowManager.closeWindow(thisWindow.id);
+      },
+
+      minimizeWindowHandler: (e, minimizeWindowBtn) => {
+        e.stopPropagation();
+        const thisWindow = DomUtils.getParentByIdInclude(minimizeWindowBtn, 'win-');
+        windowManager.minimizeWindow(thisWindow.id);
+      },
+
+      taskbarIconsHandler: (e, taskbarIcon) => {
+        e.stopPropagation();
+        const thisIconId = DomUtils.getParentByIdInclude(taskbarIcon, 'win-').id;
+        const thisWindowId = Utils.parseIDs(thisIconId)[1];
+        const thisWindow = this.utils.findWindowInstance(thisWindowId);
+        if (thisWindow.isMinimized)
+          windowManager.maximizeWindow(thisWindowId);
+        else
+          windowManager.minimizeWindow(thisWindowId);
+      }
+    };
+
+    this.utils = {
+      findWindowInstance: (windowId, Callback) => {
+        for (let i = 0; i < this.windows.length; i++) {
+          if (this.windows[i].id === windowId) {
+            if (Callback) Callback();
+            else return this.windows[i];
+          }
+        }
       }
     }
   }
 }
 
 const windowManager = new WindowManager();
+﻿class DesktopTemplates {
+  constructor() {
+    this.rowTemplate = (idx) => {
+      return `
+        <div id="row-${idx}" class="grid-y desktop-row"></div>
+      `;
+    }
 
-const findWindowInstance = (windowId, Callback) => {
-  const windows = windowManager.windows;
+    this.cellTemplate = (idx, content) => {
+      if (!content) content = '';
 
-  for (let i = 0; i < windows.length; i++) {
-    if (windows[i].id === windowId) {
-      if (Callback) Callback();
-      else return windows[i];
+      return `
+        <article id="cell-${idx}" class="cell desktop-cell droppable"></article>
+      `;
+    } 
+
+    this.iconTemplate = (id, iconUrl, label) => {
+      if (!label) label = 'Desktop Icon';
+
+      return `
+        <figure class="desktop-icon draggable" id="d-icon-${id}">
+          <img src="${iconUrl}" alt="${label}" class="unselectable icon" />
+          <label class="unselectable icon-label">Trash</label>
+        </figure>
+      `;
     }
   }
 }
-﻿'use strict'
+﻿const desktopTemplates = new DesktopTemplates();
+
+class DesktopManager {
+  constructor() {
+    this.rowCount = 0
+    this.cellCount = 0;
+    this.icons = [];
+
+    this.init = () => {
+      const theDesktop = document.getElementById('desktop');
+
+      for (let rowIdx = 0; rowIdx <= 19; rowIdx++) {
+        theDesktop.innerHTML += desktopTemplates.rowTemplate(rowIdx + 1);
+        this.rowCount++;
+
+        for (let cellIdx = 0; cellIdx <= 5; cellIdx++) {
+          const lastInsertedRow = document.getElementById(`row-${this.rowCount}`);
+          lastInsertedRow.innerHTML += desktopTemplates.cellTemplate(this.cellCount + 1);
+          this.cellCount++;
+        }
+      }
+    }
+
+    // TODO: Create a DesktopIcon class and add it to the DesktopManager on instantiation.
+    this.insertIcon = (iconUrl, label) => {
+      const emptyCell = findEmptyCell();
+      const newIconId = Utils.randomString(4);
+      emptyCell.innerHTML = desktopTemplates.iconTemplate(newIconId, iconUrl, label);
+      this.updateListeners();
+    }
+
+    this.updateListeners = () => {
+      const allIcons = document.getElementsByClassName('desktop-icon');
+      if (!allIcons) return false;
+
+      for (let i = 0; i < allIcons.length; i++) {
+        allIcons[i].removeEventListener('click', this.selectedIcon);
+        allIcons[i].addEventListener('click', (e) => {
+          console.debug('click')
+          const that = e.target;
+          const figure = DomUtils.getParentByTag(that, 'figure');
+          this.selectedIcon(figure);
+        });
+
+        allIcons[i].removeEventListener('dblclick', windowManager.openNewWindow);
+        allIcons[i].addEventListener('dblclick', (e) => {
+          const that = e.target;
+          const icon = DomUtils.getDirectChildrenByTag(that, 'img');
+          windowManager.openNewWindow(icon.alt);
+        });
+      }
+    }
+
+    // TEMPORARY.
+    // TODO: Pass this to the DesktopIcon class.
+    this.selectedIcon = (icon) => {
+      if (icon.className.includes('selected'))
+        icon.classList.remove('selected');
+      else
+        icon.classList.add('selected');
+    }
+  }
+}
+
+const desktopManager = new DesktopManager();
+
+const findEmptyCell = () => {
+  const cellCount = desktopManager.cellCount;
+
+  for (let i = 0; i < cellCount; i++) {
+    let currentCell = document.getElementById(`cell-${i + 1}`);
+    if (currentCell.childElementCount <= 0)
+      return currentCell;
+  }
+  return false;
+}
+﻿class DragAndDrop {
+  constructor() {
+    this.draggableElements = [];
+
+    this.init = () => {
+      this.updateDraggables();
+      this.updateFreeDraggListeners();
+    };
+
+    this.updateDraggables = () => {
+      this.cancelNonDraggableElements();
+      this.updateDraggableElements();
+      this.updateDraggListeners();
+      this.updateDroppableListeners();
+    };
+
+    this.cancelNonDraggableElements = () => {
+      let nonDraggableElements = [];
+      nonDraggableElements.push(document.getElementsByTagName('img'));
+      nonDraggableElements.push(document.getElementsByTagName('a'));
+
+      for (let i = 0; i < nonDraggableElements[0].length; i++) {
+        nonDraggableElements[0][i].setAttribute('draggable', 'false');
+      }
+    };
+
+    this.updateDraggableElements = () => {
+      this.draggableElements = [];
+      this.draggableElements.push(document.getElementsByClassName('draggable'));
+      this.draggableElements.push(document.getElementsByClassName('free-draggable'));
+
+      for (let i = 0; i < this.draggableElements.length; i++) {
+        this.draggableElements[i][0].setAttribute('draggable', 'true');
+      }
+    };
+
+    this.updateFreeDraggListeners = () => {
+      const freeDraggableElems = document.getElementsByClassName('free-draggable');
+      for (let i = 0; i < freeDraggableElems.length; i++) {
+        freeDraggableElems[i].removeEventListener('dragstart', this.eventHandlers.freeDragstartHandler);
+        freeDraggableElems[i].addEventListener('dragstart', (e) => {
+          e.stopPropagation();
+          this.eventHandlers.freeDragstartHandler(e);
+        });
+      }
+    };
+
+    this.updateDraggListeners = () => {
+      const constrainedDraggableElems = document.getElementsByClassName('draggable');
+      for (let i = 0; i < constrainedDraggableElems.length; i++) {
+        constrainedDraggableElems[i].removeEventListener('dragstart', this.eventHandlers.dragstartHandler);
+        constrainedDraggableElems[i].addEventListener('dragstart', (e) => {
+          e.stopPropagation();
+          this.eventHandlers.dragstartHandler(e);
+        });
+      }
+    };
+
+    this.updateDroppableListeners = () => {
+      const droppableElems = document.getElementsByClassName('droppable');
+      for (let i = 0; i < droppableElems.length; i++) {
+        droppableElems[i].removeEventListener('dragover', this.eventHandlers.dragoverHandler);
+        droppableElems[i].addEventListener('dragover', (e) => {
+          e.stopPropagation();
+          this.eventHandlers.dragoverHandler(e);
+        }, false);
+
+
+        droppableElems[i].removeEventListener('drop', this.eventHandlers.dropHandler);
+        droppableElems[i].addEventListener('drop', (e) => {
+          e.stopPropagation();
+          this.eventHandlers.dropHandler(e)
+        }, false);
+      }
+    };
+
+    this.eventHandlers = {
+
+      dragstartHandler: (e) => {
+        e.stopPropagation();
+        const that = e.target;
+        this.utils.populateDataTransfer(e);
+        return false;
+      },
+
+      dragoverHandler: (e) => {
+        e.stopPropagation();
+        const that = e.target;
+        if (that.children.length > 0)
+          return;
+
+        this.utils.acceptDrop(e);
+        return false;
+      },
+
+      dropHandler: (e) => {
+        e.stopPropagation();
+        const that = e.target;
+        const newElement = new DOMParser().parseFromString(e.dataTransfer.getData('text/html'), 'text/html').body.firstChild;
+        document.getElementById(newElement.id).remove();
+        // data.classList.add('animated', 'bounceIn');
+        that.insertAdjacentElement('afterbegin', newElement);
+        this.updateDraggables();
+        desktopManager.updateListeners();
+      },
+
+      // TODO: Finish the free draggable handler (for windows).
+      freeDragstartHandler: (e) => {
+        e.stopPropagation();
+        const that = e.target;
+        this.utils.populateDataTransfer(e);
+        return false;
+      }
+    };
+
+    this.utils = {
+
+      populateDataTransfer: (e) => {
+        const that = e.target;
+        const id = that.id;
+        const tag = that.localName;
+        const classes = that.className;
+        const data = `<${tag} id="${id}" class="${classes}"> ${that.innerHTML} </${tag}>`;
+        e.dataTransfer.setData('text/html', data)
+        e.dataTransfer.effectAllowed = 'move'
+        e.dataTransfer.dropEffect = 'move'
+      },
+
+      acceptDrop: (e) => {
+        e.preventDefault()
+        e.dataTransfer.effectAllowed = 'move'
+        e.dataTransfer.dropEffect = 'move'
+      }
+    };
+  }
+}
 ﻿﻿﻿﻿// Initializations.
-'use strict'
+const dragAndDrop = new DragAndDrop();
 
 whenDomReady(() => {
+
+  desktopManager.init();
+  desktopManager.insertIcon(IMG_PATH + 'trash.svg', 'Trash');
  
-  windowManager.openNewWindow('A WIndow Title');
+  windowManager.openNewWindow('A Window Title');
+
+  dragAndDrop.init();
 
   console.debug('Windows:', windowManager.windows);
   console.debug('Taskbar Icons:', taskbarManager.icons);

@@ -1,6 +1,4 @@
-﻿'use strict'
-
-class TaskbarManager {
+﻿class TaskbarManager {
   constructor() {
     this.iconContainerElem = document.getElementById('icon-container');
     this.icons = [];
@@ -30,6 +28,8 @@ class TaskbarManager {
     }
   }
 }
+
+const taskbarManager = new TaskbarManager();
 
 // UTILITIES:
 const findIconInstance = (windowId, Callback) => {

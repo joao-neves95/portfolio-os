@@ -3,7 +3,11 @@
 
 class Utils {
   static randomString(length) {
-    return Random.string()(Random.engines.browserCrypto, length);
+    return Random.string('qwertyuiopasdfghjklçzxcvbnmQWERTYUIOPÇLKJHGFDSAZXCVBNM1234567890?!#$%&/()')(Random.engines.browserCrypto, length);
+  }
+
+  static randomNumString(length) {
+    return Random.string('1234567890')(Random.engines.browserCrypto, length);
   }
 
   static parseIDs(id) {

@@ -33,13 +33,23 @@ const getParentNodeClassIncludes = (elem, query) => {
 }
 
 $(document).ready(() => {
+  const allPageImgs = document.getElementsByTagName('img');
+  for (let i = 0; i < allPageImgs.length; i++) {
+    allPageImgs[i].addEventListener('dragstart', (e) => {
+      e.preventDefault();
+      return false;
+    });
+  }
+
   const showHidePasswordIcons = document.getElementsByClassName('pass-visibility-span'); 
   for (let i = 0; i < showHidePasswordIcons.length; i++) {
     showHidePasswordIcons[i].addEventListener('click', (e) => {
       e.stopPropagation();
+
       const that = e.target;
       const passwordInput = getParentNodeClassIncludes(that, 'pass-visibility-span').previousElementSibling;
       const showHideImg = findDirectChildrenByTag(that, 'img');
+
       if (showHideImg.src.includes('show.svg')) {
         showHideImg.src = 'img/hide.svg';
         passwordInput.type = 'text';
