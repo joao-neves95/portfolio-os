@@ -24,17 +24,44 @@ const findDirectChildrenByTag = (elem, tag) => {
   return false;
 }
 
-// Logic:
-document.getElementById('show-hide-password').addEventListener('click', (e) => {
-  e.stopPropagation();
-  const that = e.target;
-  const passwordInput = document.getElementById('login-password');
-  const showHideImg = findDirectChildrenByTag(that, 'img');
-  if (showHideImg.src.includes('show.svg')) {
-    showHideImg.src = 'img/hide.svg';
-    passwordInput.type = 'text';
-  } else {
-    showHideImg.src = 'img/show.svg';
-    passwordInput.type = 'password';
+const getParentNodeClassIncludes = (elem, query) => {
+  let that = elem
+  while (that && !that.className.includes(query)) {
+    that = that.parentNode
   }
+  return that
+}
+
+$(document).ready(() => {
+  const showHidePasswordIcons = document.getElementsByClassName('pass-visibility-span'); 
+  for (let i = 0; i < showHidePasswordIcons.length; i++) {
+    showHidePasswordIcons[i].addEventListener('click', (e) => {
+      e.stopPropagation();
+      const that = e.target;
+      const passwordInput = getParentNodeClassIncludes(that, 'pass-visibility-span').previousElementSibling;
+      const showHideImg = findDirectChildrenByTag(that, 'img');
+      if (showHideImg.src.includes('show.svg')) {
+        showHideImg.src = 'img/hide.svg';
+        passwordInput.type = 'text';
+      } else {
+        showHideImg.src = 'img/show.svg';
+        passwordInput.type = 'password';
+      }
+    });
+  };
+
+  document.getElementById('register-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const userPassword = document.getElementById('register-password').value;
+    const passwordRepeat = document.getElementById('register-password-repeat').value;
+
+    if (passwordRepeat !== userPassword) {
+      console.debug('The passwords do not match.');
+      e.preventDefault();
+      return false;
+    }
+
+    document.getElementById('register').submit();
+  }, false);
 });

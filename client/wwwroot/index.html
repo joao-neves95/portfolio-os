@@ -23,15 +23,15 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/hint.css/2.5.0/hint.min.css"
         integrity="sha256-EaR2e3c1FypmKsKDNZmWB6cSPqi+c/wXPX0eQQKwj70="
         crossorigin="anonymous" />
-  <link rel="stylesheet" href="style.css" type="text/css" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 </head>
 
 <body>
   <main class="grid-container">
 
-    <ul class="tabs" data-deep-link="true" data-update-history="true" data-tabs id="auth">
-      <li class="tabs-title is-active"><a href="#login" aria-selected="true">Login</a></li>
-      <li class="tabs-title"><a href="#register">Register</a></li>
+    <ul class="tabs align-center" data-deep-link="true" data-update-history="true" data-tabs id="auth">
+      <li class="tabs-title left is-active"><a href="#login" aria-selected="true">Login</a></li>
+      <li class="tabs-title right"><a href="#register">Register</a></li>
     </ul>
 
     <section class="tabs-content" data-tabs-content="auth">
@@ -43,7 +43,7 @@
           <div class="cell large-12">
             <div class="input-group">
               <span class="input-group-label"><img src="img/at.svg" alt="A Lock Icon" /></span>
-              <input class="input-group-field" type="text" placeholder="Email" name="email" required>
+              <input class="input-group-field" type="email" placeholder="Email" name="email" required>
             </div>
           </div>
           <!-- Password Login Input -->
@@ -51,11 +51,11 @@
             <div class="input-group">
               <span class="input-group-label"><img src="img/lock.svg" alt="A Lock Icon" /></span>
               <input id="login-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" required>
-              <span class="input-group-label pass-visibility-span" id="show-hide-password"><img src="img/show.svg" alt="Show/Hide Password Icon" /></span>
+              <span class="input-group-label pass-visibility-span"><img src="img/show.svg" alt="Show/Hide Password Icon" draggable="false" /></span>
             </div>
           </div>
           <div class="cell large-6">
-            <button type="submit" class="login button success">Login</button>
+            <button type="submit" class="submit button success">Login</button>
           </div>
           <!-- Social Login -->
           <div class="grid-x icon-wrap">
@@ -63,7 +63,7 @@
               <span class="hint--top hint--bounce" aria-label="Login with Google."><img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" id="google-btn" /></span>
             </div>
             <div class="cell large-4">
-              <span class="hint--top hint--bounce" aria-label="Login with GitHub."><img src="img/github.svg" alt="Github Icon" class="icon" /></span>
+              <span class="hint--top hint--bounce" aria-label="Login with GitHub."><img src="img/github.svg" alt="Github Icon" class="icon" draggable="false" /></span>
             </div>
           </div>
         </div>
@@ -72,31 +72,39 @@
       <!-- Register -->
       <form action="/auth/register" method="post" class="tabs-panel" id="register">
         <div class="grid-y">
-          <!-- Email Login Input -->
+          <!-- Email Register Input -->
           <div class="cell large-12">
             <div class="input-group">
               <span class="input-group-label"><img src="img/at.svg" alt="A Lock Icon" /></span>
-              <input class="input-group-field" type="text" placeholder="Email" name="email" required>
+              <input class="input-group-field" type="email" placeholder="Email" name="email" required>
             </div>
           </div>
-          <!-- Password Login Input -->
+          <!-- Password Register Input -->
           <div class="cell large-12">
             <div class="input-group">
               <span class="input-group-label"><img src="img/lock.svg" alt="A Lock Icon" /></span>
-              <input id="login-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" required>
-              <span class="input-group-label pass-visibility-span" id="show-hide-password"><img src="img/show.svg" alt="Show/Hide Password Icon" /></span>
+              <input id="register-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" required>
+              <span class="input-group-label pass-visibility-span"><img src="img/show.svg" alt="Show/Hide Password Icon" draggable="false" /></span>
+            </div>
+          </div>
+          <!-- Repeat Password Register Input -->
+          <div class="cell large-12">
+            <div class="input-group">
+              <span class="input-group-label"><img src="img/lock.svg" alt="A Lock Icon" /></span>
+              <input id="register-password-repeat" class="input-group-field hvr-float-shadow" type="password" placeholder="Repeat your password" required>
+              <span class="input-group-label pass-visibility-span"><img src="img/show.svg" alt="Show/Hide Password Icon" draggable="false"/></span>
             </div>
           </div>
           <div class="cell large-6">
-            <button type="submit" class="login button success">Login</button>
+            <button id="register-btn" type="submit" class="submit button success hvr-float-shadow" value="Register">Register</button>
           </div>
-          <!-- Social Login -->
+          <!-- Social Register -->
           <div class="grid-x icon-wrap">
             <div class="cell large-4 large-offset-2">
-              <span class="hint--top hint--bounce" aria-label="Login with Google."><img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" id="google-btn" /></span>
+              <span class="hint--top hint--bounce" aria-label="Register with Google."><img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" /></span>
             </div>
             <div class="cell large-4">
-              <span class="hint--top hint--bounce" aria-label="Login with GitHub."><img src="img/github.svg" alt="Github Icon" class="icon" /></span>
+              <span class="hint--top hint--bounce" aria-label="Register with GitHub."><img src="img/github.svg" alt="Github Icon" class="icon" /></span>
             </div>
           </div>
         </div>

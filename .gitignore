@@ -291,3 +291,4 @@ __pycache__/
 obj/
 bin/
 node_modules/
+*.sln
