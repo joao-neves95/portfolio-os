@@ -287,8 +287,11 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
+##
+
+*.sln
 *.njsproj
 obj/
 bin/
 node_modules/
-*.sln
+*.lnk
