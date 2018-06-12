@@ -7,6 +7,8 @@
       this.updateFreeDraggListeners();
     };
 
+    // UPDATES:
+
     this.updateDraggables = () => {
       this.cancelNonDraggableElements();
       this.updateDraggableElements();
@@ -34,17 +36,7 @@
       }
     };
 
-    this.updateFreeDraggListeners = () => {
-      const freeDraggableElems = document.getElementsByClassName('free-draggable');
-      for (let i = 0; i < freeDraggableElems.length; i++) {
-        freeDraggableElems[i].removeEventListener('dragstart', this.eventHandlers.freeDragstartHandler);
-        freeDraggableElems[i].addEventListener('dragstart', (e) => {
-          e.stopPropagation();
-          this.eventHandlers.freeDragstartHandler(e);
-        });
-      }
-    };
-
+    // LISTENERS:
     this.updateDraggListeners = () => {
       const constrainedDraggableElems = document.getElementsByClassName('draggable');
       for (let i = 0; i < constrainedDraggableElems.length; i++) {
@@ -74,6 +66,26 @@
       }
     };
 
+    this.updateFreeDraggListeners = () => {
+      const freeDraggableElems = document.getElementsByClassName('free-draggable');
+
+      for (let i = 0; i < freeDraggableElems.length; i++) {
+  
+        freeDraggableElems[i].removeEventListener('dragstart', this.eventHandlers.dragstartHandler);
+        freeDraggableElems[i].addEventListener('dragstart', (e) => {
+          e.stopPropagation();
+          this.eventHandlers.dragstartHandler(e);
+        });
+
+        freeDraggableElems[i].removeEventListener('dragover', this.eventHandlers.freeDragHandler);
+        freeDraggableElems[i].addEventListener('dragover', (e) => {
+          e.stopPropagation();
+          this.eventHandlers.freeDragHandler(e);
+        });
+      }
+    };
+
+    // HANDLERS:
     this.eventHandlers = {
 
       dragstartHandler: (e) => {
@@ -86,7 +98,7 @@
       dragoverHandler: (e) => {
         e.stopPropagation();
         const that = e.target;
-        if (that.children.length > 0)
+        if (that.children.length > 0 || !that.className.includes('cell desktop-cell'))
           return;
 
         this.utils.acceptDrop(e);
@@ -96,6 +108,10 @@
       dropHandler: (e) => {
         e.stopPropagation();
         const that = e.target;
+        console.log(that)
+        if (!that.className.includes('cell desktop-cell'))
+          return;
+
         const newElement = new DOMParser().parseFromString(e.dataTransfer.getData('text/html'), 'text/html').body.firstChild;
         document.getElementById(newElement.id).remove();
         // data.classList.add('animated', 'bounceIn');
@@ -104,11 +120,18 @@
         desktopManager.updateListeners();
       },
 
-      // TODO: Finish the free draggable handler (for windows).
-      freeDragstartHandler: (e) => {
-        e.stopPropagation();
+      freeDragHandler: (e) => {
+        // e.stopPropagation();
         const that = e.target;
-        this.utils.populateDataTransfer(e);
+        const thisWindow = DomUtils.getParentByTag(that, 'article')
+        console.debug(e)
+        console.debug('that.style.top:', thisWindow.style.top);
+        console.debug('e.clientX:', e.clientX);
+        console.debug('that.style.left:', thisWindow.style.left);
+        console.debug('e.clientY:', e.clientY);
+        // TODO: Fix the final position of the window.
+        thisWindow.style.top = e.offsetTop + 'px';
+        thisWindow.style.left = e.target.offsetLeft + 'px';
         return false;
       }
     };
