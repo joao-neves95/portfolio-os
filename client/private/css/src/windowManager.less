@@ -1,13 +1,12 @@
 ﻿#window-manager-container {
     height: 100%;
     width: 100%;
-    position: absolute;
-    
+    position: relative;
+
     .window-manager {
         background-color: white;
-        cursor: pointer;
-        height: 25em;
-        width: 45em;
+        height: 40em;
+        width: 65em;
         margin: auto;
         position: absolute;
         top: 25%;
@@ -21,9 +20,12 @@
 
             .window-title {
                 color: white;
+                cursor: pointer;
+                user-select: none;
                 font-size: .9rem;
                 margin: .3em;
                 margin-left: 1em;
+                position: relative;
             }
 
             .icon-wrap {
@@ -38,10 +40,9 @@
                     width: 1.5em;
                     margin: .3em;
                     float: right;
+                    user-select: none;
                 }
             }
         }
     }
 }
-
-

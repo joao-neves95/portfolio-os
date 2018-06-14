@@ -1,16 +1,18 @@
 ﻿class WindowManager {
-  constructor () {
-    this.windows = [];
+  constructor() {
+    this.windows = new Dictionary();
 
     this.openNewWindow = (windowTitle, content) => {
       if (!content) content = '';
 
       const thisWindow = new Window(windowTitle);
-      this.windows.push(thisWindow);
-      thisWindow.init();
       const newIcon = taskbarManager.addIcon(thisWindow.id);
       thisWindow.icon = newIcon;
+      this.windows.add(thisWindow.id, thisWindow);
       this.updateListeners();
+      dragAndDrop.updateFreeDraggListeners()
+
+      console.info(this.windows)
     };
 
     this.closeWindow = (windowId) => {
@@ -86,13 +88,11 @@
     };
 
     this.utils = {
+
       findWindowInstance: (windowId, Callback) => {
-        for (let i = 0; i < this.windows.length; i++) {
-          if (this.windows[i].id === windowId) {
-            if (Callback) Callback();
-            else return this.windows[i];
-          }
-        }
+        thisWindow = this.windows.getByKey(windowId);
+        if (Callback) Callback(thisWindow);
+        else return thisWindow;
       }
     }
   }

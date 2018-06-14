@@ -18,7 +18,7 @@
       if (!label) label = 'Desktop Icon';
 
       return `
-        <figure class="desktop-icon draggable" id="d-icon-${id}">
+        <figure class="desktop-icon draggable" id="${id}">
           <img src="${iconUrl}" alt="${label}" class="unselectable icon" />
           <label class="unselectable icon-label">Trash</label>
         </figure>
@@ -26,3 +26,5 @@
     }
   }
 }
+
+const desktopTemplates = new DesktopTemplates();

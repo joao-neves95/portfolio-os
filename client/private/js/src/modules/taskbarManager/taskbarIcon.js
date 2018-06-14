@@ -11,7 +11,7 @@
     this.id = 'icn_' + windowId;
     this.windowId = windowId;
     this.iconContainerElem = document.getElementById('icon-container');
-    this.iconUrl = SERVER_ROOT_PATH + 'img/default-taskbar-icon-white.svg';
+    this.iconUrl = IMG_PATH + 'default-taskbar-icon-white.svg';
     this.isMinimized = Boolean;
 
     if (iconUrl) this.iconUrl = iconUrl;

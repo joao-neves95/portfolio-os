@@ -2,7 +2,7 @@
   constructor() {
     this.draggableElements = [];
 
-    this.noDrag = Boolean;
+    this.isDragging = Boolean;
     this.currentFreeDragElem = HTMLElement;
     this.currentreeDragData = '';
 
@@ -12,7 +12,6 @@
     };
 
     // UPDATES:
-
     this.updateDraggables = () => {
       this.cancelNonDraggableElements();
       this.updateDraggableElements();
@@ -22,27 +21,38 @@
 
     this.cancelNonDraggableElements = () => {
       let nonDraggableElements = [];
-      nonDraggableElements.push(document.getElementsByTagName('img'));
-      nonDraggableElements.push(document.getElementsByTagName('a'));
+      nonDraggableElements.push(document.getElementsByTagName('img')[0]);
+      nonDraggableElements.push(document.getElementsByTagName('a')[0]);
+
+      if (nonDraggableElements.length <= 0)
+        return;
 
       for (let i = 0; i < nonDraggableElements[0].length; i++) {
-        nonDraggableElements[0][i].setAttribute('draggable', 'false');
+        nonDraggableElements[i].setAttribute('draggable', 'false');
       }
     };
 
     this.updateDraggableElements = () => {
       this.draggableElements = [];
-      this.draggableElements.push(document.getElementsByClassName('draggable'));
-      this.draggableElements.push(document.getElementsByClassName('free-draggable'));
+      this.draggableElements.push(document.getElementsByClassName('draggable')[0]);
+      this.draggableElements.push(document.getElementsByClassName('free-draggable')[0]);
+
+      if (this.draggableElements.length <= 0)
+        return;
 
       for (let i = 0; i < this.draggableElements.length; i++) {
-        this.draggableElements[i][0].setAttribute('draggable', 'true');
+        if (this.draggableElements[i])
+          this.draggableElements[i].setAttribute('draggable', 'true');
       }
     };
 
     // LISTENERS:
     this.updateDraggListeners = () => {
       const constrainedDraggableElems = document.getElementsByClassName('draggable');
+
+      if (constrainedDraggableElems.length <= 0)
+        return;
+
       for (let i = 0; i < constrainedDraggableElems.length; i++) {
         constrainedDraggableElems[i].removeEventListener('dragstart', (e) => { this.eventHandlers.dragstartHandler(e); });
         constrainedDraggableElems[i].addEventListener('dragstart', (e) => {
@@ -54,6 +64,10 @@
 
     this.updateDroppableListeners = () => {
       const droppableElems = document.getElementsByClassName('droppable');
+
+      if (droppableElems.length <= 0)
+        return;
+
       for (let i = 0; i < droppableElems.length; i++) {
         droppableElems[i].removeEventListener('dragover', (e) => { this.eventHandlers.dragoverHandler(e) });
         droppableElems[i].addEventListener('dragover', (e) => {
@@ -72,6 +86,9 @@
 
     this.updateFreeDraggListeners = () => {
       const freeDraggableElems = document.getElementsByClassName('free-draggable');
+
+      if (freeDraggableElems.length <= 0)
+        return;
 
       for (let i = 0; i < freeDraggableElems.length; i++) {
 
@@ -119,13 +136,12 @@
         that.insertAdjacentElement('afterbegin', newElement);
         this.updateDraggables();
         desktopManager.updateListeners();
-        this.currentFreeDragData = '';
       },
 
       freeDragHandler: (e) => {
         e.stopPropagation();
         e.preventDefault();
-        this.noDrag = false;
+        this.isDragging = true;
         this.currentFreeDragElem = DomUtils.getParentByTag(e.target, 'article');
     
         window.addEventListener('mousemove', (e) => {
@@ -137,12 +153,14 @@
 
       mousePositionHandler: (e) => {
         e.stopPropagation();
-        
-        if (this.noDrag)
+        if (!this.isDragging)
           return;
+      
+        const offset = DomUtils.getOffset(this.currentFreeDragElem);
 
-        this.currentFreeDragElem.style.top = (e.clientY).toString() + 'px';
-        this.currentFreeDragElem.style.left = (e.clientX - this.currentFreeDragElem.offsetTop).toString() + 'px';
+        this.currentFreeDragElem.style.top = (e.pageY).toString() + 'px';
+        this.currentFreeDragElem.style.left = (e.pageX).toString() + 'px';
+        // this.currentFreeDragElem.style.left = (e.pageX - this.currentFreeDragElem.offsetTop).toString() + 'px';
       },
 
       freeDragendHandler: (e) => {
@@ -151,11 +169,13 @@
           this.eventHandlers.mousePositionHandler(e)
         });
         // Hack.
-        this.noDrag = true;
+        this.isDragging = false;
+        this.currentFreeDragData = '';
         this.currentFreeDragElem = null;
       },
     };
 
+    // UTILITIES:
     this.utils = {
 
       populateDataTransfer: (e) => {
@@ -178,5 +198,9 @@
         e.dataTransfer.dropEffect = 'move';
       }
     };
+
+    this.init();
   }
 }
+
+const dragAndDrop = new DragAndDrop();

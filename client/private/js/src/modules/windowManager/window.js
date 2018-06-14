@@ -9,11 +9,11 @@
     if (!windowTitle) this.windowTitle = '';
 
     this.template = `
-      <article class="window-manager free-draggable" id="${this.id}">
+      <article class="window-manager" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
             <div class="cell large-10">
-              <p class="window-title">${this.windowTitle}</p>
+              <p class="window-title free-draggable">${this.windowTitle}</p>
             </div>
             <div class="cell auto"></div>
             <div class="cell large-1 icon-wrap">
@@ -34,6 +34,8 @@
       this.element = document.getElementById(this.id);
       this.isMinimized = false;
     }
+
+    this.init();
 
     this.kill = () => {
       document.getElementById(this.id).remove();
