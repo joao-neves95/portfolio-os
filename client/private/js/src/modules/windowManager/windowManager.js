@@ -18,6 +18,7 @@
     this.closeWindow = (windowId) => {
       this.utils.findWindowInstance(windowId).kill();
       taskbarManager.killIcon(windowId);
+      this.windows.remove(windowId);
       this.updateListeners();
     };
 
@@ -63,7 +64,6 @@
     this.eventHandlers = {
 
       closeWindowHandler: (e, closeWindowBtn) => {
-        console.debug('close')
         e.stopPropagation();
         const thisWindow = DomUtils.getParentByIdInclude(closeWindowBtn, 'win-');
         windowManager.closeWindow(thisWindow.id);
@@ -90,7 +90,7 @@
     this.utils = {
 
       findWindowInstance: (windowId, Callback) => {
-        thisWindow = this.windows.getByKey(windowId);
+        const thisWindow = this.windows.getByKey(windowId);
         if (Callback) Callback(thisWindow);
         else return thisWindow;
       }

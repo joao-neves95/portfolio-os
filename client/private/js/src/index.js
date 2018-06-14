@@ -12,10 +12,6 @@
 // @import './modules/desktopManager/desktopTemplates'
 // @import './modules/desktopManager/desktopIcon'
 // @import './modules/desktopManager/desktopManager'
-// @import './components/trash.js'
-// @import './components/calculator/calculator.html.js'
-// @import './components/calculator/calculator.handlers.js'
-// @import './components/calculator/calculator.listeners.js'
 // @import './main'
 //
 'use strict'

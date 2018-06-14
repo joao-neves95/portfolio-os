@@ -1,7 +1,7 @@
 ﻿class TaskbarManager {
   constructor() {
     this.iconContainerElem = document.getElementById('icon-container');
-    this.icons = [];
+    this.icons = new Dictionary();
 
     /**
      * 
@@ -10,34 +10,29 @@
      */
     this.addIcon = (windowId) => {
       const newIcon = new TaskbarIcon(windowId);
-      this.icons.push(newIcon);
-      newIcon.init();
+      this.icons.add(TaskbarIcon.idPrefix + windowId, newIcon);
       return newIcon;
     }
 
     this.killIcon = (windowId) => {
-      findIconInstance(windowId).kill();
+      this.utils.findIconInstance(windowId).kill();
+      this.icons.remove(TaskbarIcon.idPrefix + windowId);
     }
 
     this.minimizedIcon = (windowId) => {
-      findIconInstance(windowId).minimized();
+      this.utils.findIconInstance(windowId).minimized();
     }
 
     this.maximizedIcon = (windowId) => {
-      findIconInstance(windowId).maximized();
+      this.utils.findIconInstance(windowId).maximized();
+    }
+
+    this.utils = {
+      findIconInstance: (windowId) => {
+        return this.icons.getByKey(TaskbarIcon.idPrefix + windowId);
+      }
     }
   }
 }
 
 const taskbarManager = new TaskbarManager();
-
-// UTILITIES:
-const findIconInstance = (windowId, Callback) => {
-  const icons = taskbarManager.icons;
-  for (let i = 0; i < icons.length; i++) {
-    if (icons[i].windowId === windowId) {
-      if (Callback) Callback();
-      else return icons[i];
-    }
-  }
-}

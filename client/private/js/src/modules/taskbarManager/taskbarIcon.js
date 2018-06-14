@@ -1,4 +1,9 @@
 ﻿class TaskbarIcon {
+
+  static get idPrefix() {
+    return 'icn_';
+  }
+
   /**
    * 
    * @param {string} windowId
@@ -8,7 +13,7 @@
    * The image url of this icon.
    */
   constructor(windowId, iconUrl) {
-    this.id = 'icn_' + windowId;
+    this.id = TaskbarIcon.idPrefix + windowId;
     this.windowId = windowId;
     this.iconContainerElem = document.getElementById('icon-container');
     this.iconUrl = IMG_PATH + 'default-taskbar-icon-white.svg';
@@ -45,5 +50,7 @@
     this.clicked = () => {
       if (this.clicked) return;
     }
+
+    this.init();
   }
 }

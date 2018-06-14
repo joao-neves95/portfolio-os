@@ -12,10 +12,6 @@
 // @import './modules/desktopManager/desktopTemplates'
 // @import './modules/desktopManager/desktopIcon'
 // @import './modules/desktopManager/desktopManager'
-// @import './components/trash.js'
-// @import './components/calculator/calculator.html.js'
-// @import './components/calculator/calculator.handlers.js'
-// @import './components/calculator/calculator.listeners.js'
 // @import './main'
 //
 'use strict'
@@ -77,6 +73,12 @@ class Errors {
 }
 
 class Dictionary {
+  /**
+   * 
+   * @param {Boolean} uniqueKeys
+   * Whether the keys should be unique or not.
+   * Optional. It defaults to false.
+   */
   constructor(uniqueKeys) {
     this.elements = [];
 
@@ -87,6 +89,12 @@ class Dictionary {
       this.elements.length;
     };
 
+    /**
+     * 
+     * @param {any} key
+     * 
+     * @param {any} value
+     */
     this.add = (key, value) => {
       if (this.uniqueKeys && this.findIndexOfKey(key) !== undefined)
         throw new Error(Errors.existingKey);
@@ -104,6 +112,17 @@ class Dictionary {
 
     this.getByKey = (key) => {
       return this.elements[this.findIndexOfKey(key)][key];
+    };
+
+    /**
+     * 
+     * @param {int} index
+     * 
+     * @returns {array} value
+     * It returns an array with the values inside the input index.
+     */
+    this.getByIndex = (index) => {
+      return Object.values(this.elements[index]);
     };
 
     this.findIndexOfKey = (key, Callback) => {
@@ -321,7 +340,7 @@ class Dictionary {
       freeDragHandler: (e) => {
         e.stopPropagation();
         e.preventDefault();
-        this.isDragging = false;
+        this.isDragging = true;
         this.currentFreeDragElem = DomUtils.getParentByTag(e.target, 'article');
     
         window.addEventListener('mousemove', (e) => {
@@ -333,7 +352,7 @@ class Dictionary {
 
       mousePositionHandler: (e) => {
         e.stopPropagation();
-        if (this.isDragging)
+        if (!this.isDragging)
           return;
       
         const offset = DomUtils.getOffset(this.currentFreeDragElem);
@@ -349,7 +368,7 @@ class Dictionary {
           this.eventHandlers.mousePositionHandler(e)
         });
         // Hack.
-        this.isDragging = true;
+        this.isDragging = false;
         this.currentFreeDragData = '';
         this.currentFreeDragElem = null;
       },
@@ -385,6 +404,11 @@ class Dictionary {
 
 const dragAndDrop = new DragAndDrop();
 ﻿class TaskbarIcon {
+
+  static get idPrefix() {
+    return 'icn_';
+  }
+
   /**
    * 
    * @param {string} windowId
@@ -394,7 +418,7 @@ const dragAndDrop = new DragAndDrop();
    * The image url of this icon.
    */
   constructor(windowId, iconUrl) {
-    this.id = 'icn_' + windowId;
+    this.id = TaskbarIcon.idPrefix + windowId;
     this.windowId = windowId;
     this.iconContainerElem = document.getElementById('icon-container');
     this.iconUrl = IMG_PATH + 'default-taskbar-icon-white.svg';
@@ -431,12 +455,14 @@ const dragAndDrop = new DragAndDrop();
     this.clicked = () => {
       if (this.clicked) return;
     }
+
+    this.init();
   }
 }
 ﻿class TaskbarManager {
   constructor() {
     this.iconContainerElem = document.getElementById('icon-container');
-    this.icons = [];
+    this.icons = new Dictionary();
 
     /**
      * 
@@ -445,37 +471,32 @@ const dragAndDrop = new DragAndDrop();
      */
     this.addIcon = (windowId) => {
       const newIcon = new TaskbarIcon(windowId);
-      this.icons.push(newIcon);
-      newIcon.init();
+      this.icons.add(TaskbarIcon.idPrefix + windowId, newIcon);
       return newIcon;
     }
 
     this.killIcon = (windowId) => {
-      findIconInstance(windowId).kill();
+      this.utils.findIconInstance(windowId).kill();
+      this.icons.remove(TaskbarIcon.idPrefix + windowId);
     }
 
     this.minimizedIcon = (windowId) => {
-      findIconInstance(windowId).minimized();
+      this.utils.findIconInstance(windowId).minimized();
     }
 
     this.maximizedIcon = (windowId) => {
-      findIconInstance(windowId).maximized();
+      this.utils.findIconInstance(windowId).maximized();
+    }
+
+    this.utils = {
+      findIconInstance: (windowId) => {
+        return this.icons.getByKey(TaskbarIcon.idPrefix + windowId);
+      }
     }
   }
 }
 
 const taskbarManager = new TaskbarManager();
-
-// UTILITIES:
-const findIconInstance = (windowId, Callback) => {
-  const icons = taskbarManager.icons;
-  for (let i = 0; i < icons.length; i++) {
-    if (icons[i].windowId === windowId) {
-      if (Callback) Callback();
-      else return icons[i];
-    }
-  }
-}
 ﻿class Window {
   constructor (windowTitle) {
     this.id = 'win-' + Utils.randomString(5);
@@ -550,6 +571,7 @@ const findIconInstance = (windowId, Callback) => {
     this.closeWindow = (windowId) => {
       this.utils.findWindowInstance(windowId).kill();
       taskbarManager.killIcon(windowId);
+      this.windows.remove(windowId);
       this.updateListeners();
     };
 
@@ -622,8 +644,8 @@ const findIconInstance = (windowId, Callback) => {
     this.utils = {
 
       findWindowInstance: (windowId, Callback) => {
-        thisWindow = this.windows.getByKey('dffd');
-        console.debug(thisWindow);
+        console.debug(windowId)
+        const thisWindow = this.windows.getByKey(windowId);
         if (Callback) Callback(thisWindow);
         else return thisWindow;
       }
@@ -761,15 +783,7 @@ const desktopTemplates = new DesktopTemplates();
 }
 
 const desktopManager = new DesktopManager();
-﻿class Trash {
-  constructor() {
-    this.items = [];
-
-    this.open = () => {
-      windowManager.openNewWindow('Trash');
-    }
-  }
-}﻿﻿﻿﻿// Initializations.
+﻿// Initializations.
 
 whenDomReady(() => {
 

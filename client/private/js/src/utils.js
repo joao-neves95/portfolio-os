@@ -87,6 +87,17 @@ class Dictionary {
       return this.elements[this.findIndexOfKey(key)][key];
     };
 
+    /**
+     * 
+     * @param {int} index
+     * 
+     * @returns {array} value
+     * It returns an array with the values inside the input index.
+     */
+    this.getByIndex = (index) => {
+      return Object.values(this.elements[index]);
+    };
+
     this.findIndexOfKey = (key, Callback) => {
       for (let i = 0; i < this.elements.length; i++) {
         if (Object.keys(this.elements[i])[0] === key) {
