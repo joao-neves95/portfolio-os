@@ -1,11 +1,16 @@
 ﻿class CommandHandlers {
-  constructor() {
-    this.listCurrentDirectory = (value) => { };
 
-    this.changeDirectory = (value) => { };
+  listCurrentDirectory() {
+    return Object.keys(fileSystem['']);
+  };
 
-    this.createFile = () => { };
-  }
+  changeDirectory(value) { };
+
+  createFile() { };
 }
 
-commandHandlers = new CommandHandlers();
+const commandHandlers = new CommandHandlers();
+
+/*
+Object.keys(f2.model['C']["portfolioOs"])
+*/

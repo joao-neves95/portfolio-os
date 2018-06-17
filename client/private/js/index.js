@@ -12,11 +12,18 @@
 // @import './modules/desktopManager/desktopTemplates'
 // @import './modules/desktopManager/desktopIcon'
 // @import './modules/desktopManager/desktopManager'
+// @import './modules/fileSystem/fileSystem'
+// @import './modules/terminal/terminalTemplates'
+// @import './modules/terminal/commandHandler'
+// @import './modules/terminal/terminal'
+// @import './modules/processManager/process'
+// @import './modules/processManager/processManager'
 // @import './main'
 //
 'use strict'
 
-const SERVER_ROOT_PATH = 'http://localhost:3000/';
+// const SERVER_ROOT_PATH = 'http://localhost:3000/';
+const SERVER_ROOT_PATH = 'http://localhost:2000/';
 const IMG_PATH = `${SERVER_ROOT_PATH}img/`
 ﻿// when-dom-ready
 // https://github.com/lukechilds/when-dom-ready
@@ -68,72 +75,183 @@ class Utils {
   }
 }
 
+/*
+
+https://github.com/joao-neves95/Exercises_Challenges_Courses/blob/master/JavaScript/Collections.js
+
+Class Dictionary(): let dictionary = new Dictionary(uniqueKeys = false)
+
+Type safe Class List(): let list = new List('string' | 'number' | 'int' | 'float' | 'boolean')
+
+*/
+
 class Errors {
-  static get existingKey() { return 'An item with the same key has already been added.' };
+  static get existingKey() { throw new Error('An item with the same key has already been added.'); };
+
+  static get noTypeProvided() { throw new Error('No type provided on Collection instantiation.') };
+
+  static wrongType(type) { throw new Error(`The value is not from the same type as the List<${type}>`); };
 }
 
-class Dictionary {
-  /**
-   * 
-   * @param {Boolean} uniqueKeys
-   * Whether the keys should be unique or not.
-   * Optional. It defaults to false.
-   */
-  constructor(uniqueKeys) {
+class Collection {
+  constructor(uniqueKeys, type) {
     this.elements = [];
+    this.uniqueKeys = (uniqueKeys || false);
 
-    this.uniqueKeys = uniqueKeys;
-    if (!uniqueKeys) this.uniqueKeys = false;
+    if (!type) throw Errors.noTypeProvided;
+    this.type = type;
+  }
 
-    this.count = () => {
-      this.elements.length;
-    };
 
-    /**
-     * 
-     * @param {any} key
-     * 
-     * @param {any} value
-     */
-    this.add = (key, value) => {
-      if (this.uniqueKeys && this.findIndexOfKey(key) !== undefined)
-        throw new Error(Errors.existingKey);
+  get length() {
+    return this.elements.length;
+  };
 
-      this.elements.push({ [key]: value });
-    };
+  /**
+   * Get all elements from the Collection.
+   * @returns {any[]} elements
+   */
+  getAll() {
+    return this.elements;
+  }
 
-    this.remove = (key) => {
-      this.elements.splice(this.findIndexOfKey(key), 1);
-    };
+  /**
+   * Remove all elements from the Collection.
+   */
+  clear() {
+    this.elements = [];
+  };
 
-    this.clear = () => {
-      this.elements = [];
-    }
+  /**
+   * (private)
+   * No type safety. For private class use.
+   * @param {Type} value
+   */
+  push(value) {
+    this.elements.push(value);
+  }
 
-    this.getByKey = (key) => {
-      return this.elements[this.findIndexOfKey(key)][key];
-    };
-
-    /**
-     * 
-     * @param {int} index
-     * 
-     * @returns {array} value
-     * It returns an array with the values inside the input index.
-     */
-    this.getByIndex = (index) => {
-      return Object.values(this.elements[index]);
-    };
-
-    this.findIndexOfKey = (key, Callback) => {
-      for (let i = 0; i < this.elements.length; i++) {
-        if (Object.keys(this.elements[i])[0] === key) {
-          return i;
-        }
-      }
-    }
+  /**
+    * (private)
+    * No checks. For private class use.
+    * @param {Number} index
+    */
+  splice(index) {
+    this.elements.splice(index, 1);
   }
 }
+
+class Dictionary extends Collection {
+  /**
+   * Whether the keys should be unique or not.
+   * Optional. It defaults to false.
+   * @param {Boolean} uniqueKeys
+   * @default {false}
+   */
+  constructor(uniqueKeys) {
+    super(uniqueKeys, 'any');
+  };
+
+  add(key, value) {
+    if (this.uniqueKeys && this.findIndexOfKey(key) !== undefined)
+      throw new Error(Errors.existingKey);
+
+    this.push({ [key]: value });
+  };
+
+  remove(key) {
+    const index = this.findIndexOfKey(key);
+    if (!index)
+      return false;
+
+    this.splice(index);
+  };
+
+  getByIndex(index) {
+    return Object.values(this.elements[index]);
+  };
+
+  getByKey(key) {
+    return this.elements[this.findIndexOfKey(key)][key];
+  };
+
+  findIndexOfKey(key, Callback) {
+    for (let i = 0; i < this.elements.length; i++) {
+      if (Object.keys(this.elements[i])[0] === key) {
+        return i;
+      }
+    }
+    return false;
+  }
+}
+
+// Type safe list.
+class List extends Collection {
+  /**
+   * 
+   * The Type of the list.
+   * ('string' | 'number' | 'int' | 'float' | 'boolean')
+   * @param {String} type
+   */
+  constructor(type) {
+    super(false, type);
+  }
+
+  /**
+   * Add a new item to the List<T>.
+   * @param {Type} value
+   */
+  add(value) {
+    switch (this.type) {
+      case 'int':
+        if (this.isInt(value)) {
+          this.push(value);
+          break;
+        }
+      case 'float':
+        if (this.isFloat(value)) {
+          this.push(value);
+          break;
+        }
+      default:
+        if (typeof value === this.type && value !== 'float' && value !== 'int')
+          this.push(value);
+        else
+          throw Errors.wrongType(this.type);
+    }
+  };
+
+  /**
+   * Remove an new item from the List<T> by index.
+   * @param {Number} index
+   */
+  remove(index) {
+    this.splice(index);
+  };
+
+  /**
+   * (private)
+   * @param {Number} value
+   */
+  isInt(value) {
+    if (typeof value !== 'number')
+      return false;
+
+    return value % 1 === 0;
+  }
+
+  /**
+   * (private)
+   * @param {Number} value
+   */
+  isFloat(value) {
+    if (typeof value !== 'number')
+      return false;
+
+    return value % 1 !== 0;
+  }
+}
+
 ﻿class DomUtils {
 
   static getParentByIdInclude(elem, query) {
@@ -404,11 +522,6 @@ class Dictionary {
 
 const dragAndDrop = new DragAndDrop();
 ﻿class TaskbarIcon {
-
-  static get idPrefix() {
-    return 'icn_';
-  }
-
   /**
    * 
    * @param {string} windowId
@@ -426,230 +539,229 @@ const dragAndDrop = new DragAndDrop();
 
     if (iconUrl) this.iconUrl = iconUrl;
 
-    this.template = `
+    this.init();
+  }
+
+  static get idPrefix() {
+    return 'icn_';
+  }
+
+  get template() {
+    return `
       <li id="${this.id}">
         <img src="${this.iconUrl}" alt="Menu Icon" class="icon" />
       </li>`;
+  }
 
-    // METHODS:
-    this.init = () => {
-      this.iconContainerElem.innerHTML += this.template;
-      this.isMinimized = false;
-    }
+  // METHODS:
+  init () {
+    this.iconContainerElem.innerHTML += this.template;
+    this.isMinimized = false;
+  }
 
-    this.kill = () => {
-      document.getElementById(this.id).remove();
-    }
+  kill() {
+    document.getElementById(this.id).remove();
+  }
 
-    this.minimized = () => {
-      document.getElementById(this.id).children[0].classList.add('minimized');
-      this.isMinimized = true;
-    }
+  minimized() {
+    document.getElementById(this.id).children[0].classList.add('minimized');
+    this.isMinimized = true;
+  }
 
-    this.maximized = () => {
-      document.getElementById(this.id).children[0].classList.remove('minimized');
-      this.isMinimized = false;
-    }
-
-    // EVENT:
-    this.clicked = () => {
-      if (this.clicked) return;
-    }
-
-    this.init();
+  maximized() {
+    document.getElementById(this.id).children[0].classList.remove('minimized');
+    this.isMinimized = false;
   }
 }
 ﻿class TaskbarManager {
   constructor() {
     this.iconContainerElem = document.getElementById('icon-container');
     this.icons = new Dictionary();
+  }
 
-    /**
-     * 
-     * @param {string} windowId 
-     * The window that this icon is linked to.
-     */
-    this.addIcon = (windowId) => {
-      const newIcon = new TaskbarIcon(windowId);
-      this.icons.add(TaskbarIcon.idPrefix + windowId, newIcon);
-      return newIcon;
-    }
+  /**
+    * 
+    * @param {string} windowId 
+    * The window that this icon is linked to.
+    */
+  addIcon(windowId) {
+    const newIcon = new TaskbarIcon(windowId);
+    this.icons.add(TaskbarIcon.idPrefix + windowId, newIcon);
+    return newIcon;
+  }
 
-    this.killIcon = (windowId) => {
-      this.utils.findIconInstance(windowId).kill();
-      this.icons.remove(TaskbarIcon.idPrefix + windowId);
-    }
+  killIcon(windowId) {
+    this.findIconInstance(windowId).kill();
+    this.icons.remove(TaskbarIcon.idPrefix + windowId);
+  }
 
-    this.minimizedIcon = (windowId) => {
-      this.utils.findIconInstance(windowId).minimized();
-    }
+  minimizedIcon(windowId) {
+    this.findIconInstance(windowId).minimized();
+  }
 
-    this.maximizedIcon = (windowId) => {
-      this.utils.findIconInstance(windowId).maximized();
-    }
+  maximizedIcon(windowId) {
+    this.findIconInstance(windowId).maximized();
+  }
 
-    this.utils = {
-      findIconInstance: (windowId) => {
-        return this.icons.getByKey(TaskbarIcon.idPrefix + windowId);
-      }
-    }
+  // UTILITIES:
+  findIconInstance(windowId) {
+    return this.icons.getByKey(TaskbarIcon.idPrefix + windowId);
   }
 }
 
 const taskbarManager = new TaskbarManager();
 ﻿class Window {
-  constructor (windowTitle) {
+  constructor(title, content) {
+
     this.id = 'win-' + Utils.randomString(5);
-    this.windowTitle = windowTitle;
+    this.title = title;
+    this.content = content;
     this.element = HTMLElement;
     this.icon = TaskbarIcon;
+
     this.isMinimized = Boolean;
 
-    if (!windowTitle) this.windowTitle = '';
+    this.init();
+  }
 
-    this.template = `
-      <article class="window-manager" id="${this.id}">
+  get template() {
+    return `
+      <article class="window-manager grid-y" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
             <div class="cell large-10">
-              <p class="window-title free-draggable">${this.windowTitle}</p>
+              <p class="window-title free-draggable">${this.title}</p>
             </div>
             <div class="cell auto"></div>
             <div class="cell large-1 icon-wrap">
-              <img src="${SERVER_ROOT_PATH}img/minimize-white.svg" alt="Minimize Window Icon" class="minimize-window icon" />
+              <img src="${IMG_PATH}minimize-white.svg" alt="Minimize Window Icon" class="minimize-window icon" />
             </div>
             <div class="cell large-1 icon-wrap">
-              <img src="${SERVER_ROOT_PATH}img/maximize-white.svg" alt="Maximize Window Icon" class="icon" />
+              <img src="${IMG_PATH}maximize-white.svg" alt="Maximize Window Icon" class="icon" />
             </div>
             <div class="cell large-1 icon-wrap">
-              <img src="${SERVER_ROOT_PATH}img/close-white.svg" alt="Close Window Icon" class="close-window icon" />
+              <img src="${IMG_PATH}close-white.svg" alt="Close Window Icon" class="close-window icon" />
             </div>
           </div>
         </header>
-      </article>`
+        <section class="content">
+          ${this.content}
+        </section>
+      </article>`;
+  }
 
-    this.init = () => {
-      document.getElementById('window-manager-container').innerHTML += this.template;
-      this.element = document.getElementById(this.id);
-      this.isMinimized = false;
-    }
+  init() {
+    document.getElementById('window-manager-container').innerHTML += this.template;
+    this.element = document.getElementById(this.id);
+    this.isMinimized = false;
+  }
 
-    this.init();
+  kill() {
+    document.getElementById(this.id).remove();
+  }
 
-    this.kill = () => {
-      document.getElementById(this.id).remove();
-    }
+  minimize() {
+    document.getElementById(this.id).style.display = 'none';
+    this.isMinimized = true;
+  }
 
-    this.minimize = () => {
-      document.getElementById(this.id).style.display = 'none';
-      this.isMinimized = true;
-    }
-
-    this.maximize = () => {
-      document.getElementById(this.id).style.display = 'block';
-      this.isMinimized = false;
-    }
+  maximize() {
+    document.getElementById(this.id).style.display = 'block';
+    this.isMinimized = false;
   }
 }
 ﻿class WindowManager {
   constructor() {
     this.windows = new Dictionary();
+  }
 
-    this.openNewWindow = (windowTitle, content) => {
-      if (!content) content = '';
+  openNewWindow(title = '', content = '') {
+    const thisWindow = new Window(title, content);
+    const newIcon = taskbarManager.addIcon(thisWindow.id);
+    thisWindow.icon = newIcon;
+    this.windows.add(thisWindow.id, thisWindow);
+    this.updateListeners();
+    dragAndDrop.updateFreeDraggListeners()
 
-      const thisWindow = new Window(windowTitle);
-      const newIcon = taskbarManager.addIcon(thisWindow.id);
-      thisWindow.icon = newIcon;
-      this.windows.add(thisWindow.id, thisWindow);
-      this.updateListeners();
-      dragAndDrop.updateFreeDraggListeners()
+    console.info(this.windows)
+  };
 
-      console.info(this.windows)
+  closeWindow(windowId) {
+    this.findWindowInstance(windowId).kill();
+    taskbarManager.killIcon(windowId);
+    this.windows.remove(windowId);
+    this.updateListeners();
+  };
+
+  minimizeWindow(windowId) {
+    this.findWindowInstance(windowId).minimize();
+    taskbarManager.minimizedIcon(windowId);
+  };
+
+  maximizeWindow (windowId) {
+    this.findWindowInstance(windowId).maximize();
+    taskbarManager.maximizedIcon(windowId);
+  };
+
+  // LISTENERS:
+  updateListeners() {
+    const allCloseWindowsBtns = document.querySelectorAll('[id^="win-"] .close-window');
+
+    for (let i = 0; i < allCloseWindowsBtns.length; i++) {
+      allCloseWindowsBtns[i].removeEventListener('click', this.closeWindowHandler);
+      allCloseWindowsBtns[i].addEventListener('click', (e) => {
+        this.closeWindowHandler(e, allCloseWindowsBtns[i]);
+      });
     };
 
-    this.closeWindow = (windowId) => {
-      this.utils.findWindowInstance(windowId).kill();
-      taskbarManager.killIcon(windowId);
-      this.windows.remove(windowId);
-      this.updateListeners();
-    };
+    const allMinimizeWindowsBtns = document.querySelectorAll('[id^="win-"] .minimize-window');
 
-    this.minimizeWindow = (windowId) => {
-      this.utils.findWindowInstance(windowId).minimize();
-      taskbarManager.minimizedIcon(windowId);
-    };
-
-    this.maximizeWindow = (windowId) => {
-      this.utils.findWindowInstance(windowId).maximize();
-      taskbarManager.maximizedIcon(windowId);
-    };
-
-    this.updateListeners = () => {
-      const allCloseWindowsBtns = document.querySelectorAll('[id^="win-"] .close-window');
-
-      for (let i = 0; i < allCloseWindowsBtns.length; i++) {
-        allCloseWindowsBtns[i].removeEventListener('click', this.eventHandlers.closeWindowHandler);
-        allCloseWindowsBtns[i].addEventListener('click', (e) => {
-          this.eventHandlers.closeWindowHandler(e, allCloseWindowsBtns[i]);
-        });
-      };
-
-      const allMinimizeWindowsBtns = document.querySelectorAll('[id^="win-"] .minimize-window');
-
-      for (let i = 0; i < allMinimizeWindowsBtns.length; i++) {
-        allMinimizeWindowsBtns[i].removeEventListener('click', this.eventHandlers.minimizeWindowHandler);
-        allMinimizeWindowsBtns[i].addEventListener('click', (e) => {
-          this.eventHandlers.minimizeWindowHandler(e, allMinimizeWindowsBtns[i]);
-        });
-      }
-
-      const allTaskbarIcons = document.querySelectorAll('[id^="icn_"] .icon');
-
-      for (let i = 0; i < allTaskbarIcons.length; i++) {
-        allTaskbarIcons[i].removeEventListener('click', this.eventHandlers.taskbarIconsHandler);
-        allTaskbarIcons[i].addEventListener('click', (e) => {
-          this.eventHandlers.taskbarIconsHandler(e, allTaskbarIcons[i]);
-        });
-      }
-    };
-
-    this.eventHandlers = {
-
-      closeWindowHandler: (e, closeWindowBtn) => {
-        console.debug('close')
-        e.stopPropagation();
-        const thisWindow = DomUtils.getParentByIdInclude(closeWindowBtn, 'win-');
-        windowManager.closeWindow(thisWindow.id);
-      },
-
-      minimizeWindowHandler: (e, minimizeWindowBtn) => {
-        e.stopPropagation();
-        const thisWindow = DomUtils.getParentByIdInclude(minimizeWindowBtn, 'win-');
-        windowManager.minimizeWindow(thisWindow.id);
-      },
-
-      taskbarIconsHandler: (e, taskbarIcon) => {
-        e.stopPropagation();
-        const thisIconId = DomUtils.getParentByIdInclude(taskbarIcon, 'win-').id;
-        const thisWindowId = Utils.parseIDs(thisIconId)[1];
-        const thisWindow = this.utils.findWindowInstance(thisWindowId);
-        if (thisWindow.isMinimized)
-          windowManager.maximizeWindow(thisWindowId);
-        else
-          windowManager.minimizeWindow(thisWindowId);
-      }
-    };
-
-    this.utils = {
-
-      findWindowInstance: (windowId, Callback) => {
-        console.debug(windowId)
-        const thisWindow = this.windows.getByKey(windowId);
-        if (Callback) Callback(thisWindow);
-        else return thisWindow;
-      }
+    for (let i = 0; i < allMinimizeWindowsBtns.length; i++) {
+      allMinimizeWindowsBtns[i].removeEventListener('click', this.minimizeWindowHandler);
+      allMinimizeWindowsBtns[i].addEventListener('click', (e) => {
+        this.minimizeWindowHandler(e, allMinimizeWindowsBtns[i]);
+      });
     }
+
+    const allTaskbarIcons = document.querySelectorAll('[id^="icn_"] .icon');
+
+    for (let i = 0; i < allTaskbarIcons.length; i++) {
+      allTaskbarIcons[i].removeEventListener('click', this.taskbarIconsHandler);
+      allTaskbarIcons[i].addEventListener('click', (e) => {
+        this.taskbarIconsHandler(e, allTaskbarIcons[i]);
+      });
+    }
+  };
+
+  // EVENT HANDLERS:
+  closeWindowHandler (e, closeWindowBtn) {
+    e.stopPropagation();
+    const thisWindow = DomUtils.getParentByIdInclude(closeWindowBtn, 'win-');
+    this.closeWindow(thisWindow.id);
+  };
+
+  minimizeWindowHandler(e, minimizeWindowBtn) {
+    e.stopPropagation();
+    const thisWindow = DomUtils.getParentByIdInclude(minimizeWindowBtn, 'win-');
+    this.minimizeWindow(thisWindow.id);
+  };
+
+  taskbarIconsHandler(e, taskbarIcon) {
+    e.stopPropagation();
+    const thisIconId = DomUtils.getParentByIdInclude(taskbarIcon, 'win-').id;
+    const thisWindowId = Utils.parseIDs(thisIconId)[1];
+    const thisWindow = this.findWindowInstance(thisWindowId);
+    if (thisWindow.isMinimized)
+      this.maximizeWindow(thisWindowId);
+    else
+      this.minimizeWindow(thisWindowId);
+  };
+
+  // UTILITIES:
+  findWindowInstance(windowId, Callback) {
+    const thisWindow = this.windows.getByKey(windowId);
+    if (Callback) Callback(thisWindow);
+    else return thisWindow;
   }
 }
 
@@ -783,6 +895,143 @@ const desktopTemplates = new DesktopTemplates();
 }
 
 const desktopManager = new DesktopManager();
+﻿// Conect to server.
+class FileSystem {
+
+  get structure() {
+    return {
+      C: {
+        portfolioOs: {
+          documents: [],
+            images: [],
+              videos: []
+        },
+        applications: {
+          system: [],
+            appStore: [
+              { name: 'Example', creator: 'User231', codeUrl: 'www.kjhzdf.com' }
+            ]
+        },
+        user: {
+          documents: [],
+            images: [],
+              videos: []
+        }
+      }
+    }
+  };
+}
+
+const fileSystem = new FileSystem().structure;
+﻿class TerminalTemplates {
+
+  window(id) {
+    return `
+      <article class="grid-y" id="${id}">
+      
+      </article>
+    `;
+  }
+
+  info(content) {
+    return `
+      <p>${content}<p>
+    `;
+  }
+
+  addInput() {
+    return `
+      <span>&gt;<span><input type="text">
+    `;
+  }
+}
+
+const terminalTemplates = new TerminalTemplates();
+﻿class CommandHandlers {
+
+  listCurrentDirectory() {
+    return Object.keys(fileSystem['']);
+  };
+
+  changeDirectory(value) { };
+
+  createFile() { };
+}
+
+const commandHandlers = new CommandHandlers();
+
+/*
+Object.keys(f2.model['C']["portfolioOs"])
+*/
+﻿class Terminal {
+  contructor() {
+    this.id = 'terminal-1';
+    this.active = Boolean;
+
+    this.init();
+  }
+
+  init() {
+    console.debug('hi')
+    windowManager.openNewWindow('Terminal', terminalTemplates.window(this.id));
+
+    const thisTerminal = document.getElementById(this.id);
+    thisTerminal.innerHTML += terminalTemplates.info('Welcome to the Portfolio-OS Terminal!');
+    setTimeout(() => {
+      thisTerminal.innerHTML += terminalTemplates.addInput();
+    }, 2000);
+  };
+
+  executeCommand(input){
+    const parsedInput = this.parseInput(input);
+    const cmd = parsedInput.cmd;
+    const val = parsedInput.value;
+
+    switch (cmd) {
+      case 'dir':
+      case 'ls':
+        break;
+      case 'cd':
+        break;
+      case 'run':
+        break;
+      default:
+    }
+  };
+
+  /**
+    * @returns {object} { cmd: 'String', value: 'String[]' }
+    *
+  */
+  parseInput (input) {
+    const splitInput = cammand.split(/\s/);
+    return {
+      cmd: splitInput[0].toUpperCase(),
+      value: splitInput.slice(1, splitInput.lenght)
+    }
+  };
+}
+﻿class Process {
+  constructor(processName) {
+    this.id = '';
+    this.name = processName;
+  }
+}
+﻿class ProcessManager {
+  constructor() {
+    this.activeProcesses = new Dictionary();
+
+    this.launchNewProcess = (processName) => {
+      const newProcess = new Process(processName);
+      activeProcesses.add(newProcess.id, newProcess);
+      windowManager.openNewWindow(processName, processId);
+    }
+  }
+
+  get getActiveProcessesNum() {
+    return this.activeProcesses;
+  }
+}
 ﻿// Initializations.
 
 whenDomReady(() => {
@@ -790,8 +1039,9 @@ whenDomReady(() => {
   desktopManager.init();
   desktopManager.insertNewIcon(IMG_PATH + 'trash.svg', 'Trash');
  
-  windowManager.openNewWindow('A Window Title');
-
+  // windowManager.openNewWindow('A Window Title');
+  const newTerminal = new Terminal();
+  newTerminal.init();
 
   console.debug('Windows:', windowManager.windows);
   console.debug('Taskbar Icons:', taskbarManager.icons);

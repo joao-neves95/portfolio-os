@@ -1,9 +1,4 @@
 ﻿class TaskbarIcon {
-
-  static get idPrefix() {
-    return 'icn_';
-  }
-
   /**
    * 
    * @param {string} windowId
@@ -21,36 +16,37 @@
 
     if (iconUrl) this.iconUrl = iconUrl;
 
-    this.template = `
+    this.init();
+  }
+
+  static get idPrefix() {
+    return 'icn_';
+  }
+
+  get template() {
+    return `
       <li id="${this.id}">
         <img src="${this.iconUrl}" alt="Menu Icon" class="icon" />
       </li>`;
+  }
 
-    // METHODS:
-    this.init = () => {
-      this.iconContainerElem.innerHTML += this.template;
-      this.isMinimized = false;
-    }
+  // METHODS:
+  init () {
+    this.iconContainerElem.innerHTML += this.template;
+    this.isMinimized = false;
+  }
 
-    this.kill = () => {
-      document.getElementById(this.id).remove();
-    }
+  kill() {
+    document.getElementById(this.id).remove();
+  }
 
-    this.minimized = () => {
-      document.getElementById(this.id).children[0].classList.add('minimized');
-      this.isMinimized = true;
-    }
+  minimized() {
+    document.getElementById(this.id).children[0].classList.add('minimized');
+    this.isMinimized = true;
+  }
 
-    this.maximized = () => {
-      document.getElementById(this.id).children[0].classList.remove('minimized');
-      this.isMinimized = false;
-    }
-
-    // EVENT:
-    this.clicked = () => {
-      if (this.clicked) return;
-    }
-
-    this.init();
+  maximized() {
+    document.getElementById(this.id).children[0].classList.remove('minimized');
+    this.isMinimized = false;
   }
 }

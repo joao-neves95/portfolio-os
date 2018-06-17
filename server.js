@@ -5,7 +5,7 @@ const logger = require('morgan');
 const routes = require('./server/routes/index.js');
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = (process.env.PORT || 2000); // 3000
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
