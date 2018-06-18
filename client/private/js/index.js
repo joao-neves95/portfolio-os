@@ -109,7 +109,7 @@ class Collection {
 
   /**
    * Get all elements from the Collection.
-   * @returns {any[]} elements
+   * @returns {elements[]} elements
    */
   getAll() {
     return this.elements;
@@ -925,23 +925,34 @@ class FileSystem {
 const fileSystem = new FileSystem().structure;
 ﻿class TerminalTemplates {
 
+  get welcomeMessage() { return 'Welcome to the Portfolio - OS Terminal!'; };
+
   window(id) {
     return `
-      <article class="grid-y" id="${id}">
+      <section class="grid-y terminal" id="${id}">
       
+      </section>
+    `;
+  }
+
+ addLine(content) {
+    return `
+      <article class="grid-x input-group line">
+        ${content}
       </article>
     `;
   }
 
-  info(content) {
+  withInfo(content) {
     return `
       <p>${content}<p>
     `;
   }
 
-  addInput() {
+  withInput() {
     return `
-      <span>&gt;<span><input type="text">
+      <label class="cell medium-1 middle input-icon">&gt;</label>
+      <input id="active-input" class="cell medium-11 no-border input" type="text" autofocus>
     `;
   }
 }
@@ -964,50 +975,71 @@ const commandHandlers = new CommandHandlers();
 Object.keys(f2.model['C']["portfolioOs"])
 */
 ﻿class Terminal {
-  contructor() {
+  constructor() {
     this.id = 'terminal-1';
-    this.active = Boolean;
 
     this.init();
   }
 
+  activeInput() { return document.getElementsByClassName('active-input'); };
+
   init() {
-    console.debug('hi')
     windowManager.openNewWindow('Terminal', terminalTemplates.window(this.id));
 
     const thisTerminal = document.getElementById(this.id);
-    thisTerminal.innerHTML += terminalTemplates.info('Welcome to the Portfolio-OS Terminal!');
+    thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(terminalTemplates.welcomeMessage));
+
     setTimeout(() => {
-      thisTerminal.innerHTML += terminalTemplates.addInput();
+      thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
+      const activeInput = document.getElementById('active-input');
+      this.focusActiveInput()
+      thisTerminal.addEventListener('focus', this.focusActiveInput, true);
+      thisTerminal.addEventListener('click', this.focusActiveInput, true);
+      activeInput.addEventListener('blur', this.focusActiveInput, true);
+      activeInput.addEventListener('keypress', (e) => { this.executeCommand(e, activeInput.value) });
     }, 2000);
   };
 
-  executeCommand(input){
+  focusActiveInput() {
+    document.getElementById('active-input').focus();
+  }
+
+  executeCommand(e, input) {
+    e.preventDefault;
+    if (e.keyCode !== 13)
+      return;
+
     const parsedInput = this.parseInput(input);
     const cmd = parsedInput.cmd;
     const val = parsedInput.value;
 
-    switch (cmd) {
-      case 'dir':
-      case 'ls':
+    switch (cmd.toUpperCase()) {
+      case 'DIR':
+      case 'LS':
+        console.log('cmd: dir')
         break;
-      case 'cd':
+      case 'CD':
+        console.log('cmd: cd')
         break;
-      case 'run':
+      case 'RUN':
+        console.log('cmd: run')
         break;
       default:
+        document.getElementById(this.id).innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(`'${cmd}' is not recognized as an internal or external command, operable program or batch file.`));
     }
   };
 
   /**
-    * @returns {object} { cmd: 'String', value: 'String[]' }
-    *
-  */
+   * Terminal input parser.
+   * Returns:(object) { cmd: 'String', value: 'String[]' }
+   * @param {string} input
+   *
+   */
   parseInput (input) {
-    const splitInput = cammand.split(/\s/);
+    const splitInput = input.split(/\s/);
     return {
-      cmd: splitInput[0].toUpperCase(),
-      value: splitInput.slice(1, splitInput.lenght)
+      cmd: splitInput[0],
+      value: splitInput.slice(1, splitInput.length)
     }
   };
 }
@@ -1040,8 +1072,7 @@ whenDomReady(() => {
   desktopManager.insertNewIcon(IMG_PATH + 'trash.svg', 'Trash');
  
   // windowManager.openNewWindow('A Window Title');
-  const newTerminal = new Terminal();
-  newTerminal.init();
+  new Terminal();
 
   console.debug('Windows:', windowManager.windows);
   console.debug('Taskbar Icons:', taskbarManager.icons);

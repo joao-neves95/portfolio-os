@@ -75,7 +75,7 @@ class Collection {
 
   /**
    * Get all elements from the Collection.
-   * @returns {any[]} elements
+   * Returns elements[]
    */
   getAll() {
     return this.elements;
