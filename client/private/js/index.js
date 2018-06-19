@@ -109,7 +109,7 @@ class Collection {
 
   /**
    * Get all elements from the Collection.
-   * @returns {elements[]} elements
+   * Returns elements[]
    */
   getAll() {
     return this.elements;
@@ -935,17 +935,32 @@ const fileSystem = new FileSystem().structure;
     `;
   }
 
- addLine(content) {
-    return `
-      <article class="grid-x input-group line">
-        ${content}
-      </article>
-    `;
-  }
+  /**
+   * 
+   * param: ( withInfo() | withInput() ) content
+   */
+   addLine(content) {
+      return `
+        <article class="grid-x input-group line">
+          ${content}
+        </article>
+      `;
+   }
 
+  /**
+   * 
+   * @param {string} content
+   */
   withInfo(content) {
     return `
       <p>${content}<p>
+    `;
+  }
+
+  withLastInput(lastInput) {
+    return `
+      <label class="cell medium-1 middle input-icon">&gt;</label>
+      <p class="cell medium-11 no-border input" type="text" autofocus>${lastInput}<p>
     `;
   }
 
@@ -981,8 +996,6 @@ Object.keys(f2.model['C']["portfolioOs"])
     this.init();
   }
 
-  activeInput() { return document.getElementsByClassName('active-input'); };
-
   init() {
     windowManager.openNewWindow('Terminal', terminalTemplates.window(this.id));
 
@@ -990,18 +1003,33 @@ Object.keys(f2.model['C']["portfolioOs"])
     thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(terminalTemplates.welcomeMessage));
 
     setTimeout(() => {
-      thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
-      const activeInput = document.getElementById('active-input');
-      this.focusActiveInput()
-      thisTerminal.addEventListener('focus', this.focusActiveInput, true);
-      thisTerminal.addEventListener('click', this.focusActiveInput, true);
-      activeInput.addEventListener('blur', this.focusActiveInput, true);
-      activeInput.addEventListener('keypress', (e) => { this.executeCommand(e, activeInput.value) });
+      this.addNewInput();
     }, 2000);
   };
 
   focusActiveInput() {
     document.getElementById('active-input').focus();
+  }
+
+  addNewInput(insertInLastInput = '', aditionalInfo = '') {
+    const thisTerminal = document.getElementById(this.id);
+
+    // If there is one, first remove the last input.
+    const currentActiveInput = document.getElementById('active-input');
+    if (currentActiveInput) {
+      currentActiveInput.parentNode.remove();
+      thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withLastInput(insertInLastInput));
+      if (aditionalInfo !== '')
+        thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(aditionalInfo));
+    }
+    
+    thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
+    const activeInput = document.getElementById('active-input');
+    this.focusActiveInput()
+    thisTerminal.addEventListener('focus', this.focusActiveInput, true);
+    thisTerminal.addEventListener('click', this.focusActiveInput, true);
+    activeInput.addEventListener('blur', this.focusActiveInput, true);
+    activeInput.addEventListener('keypress', (e) => { this.executeCommand(e, activeInput.value) });
   }
 
   executeCommand(e, input) {
@@ -1016,16 +1044,14 @@ Object.keys(f2.model['C']["portfolioOs"])
     switch (cmd.toUpperCase()) {
       case 'DIR':
       case 'LS':
-        console.log('cmd: dir')
+        this.addNewInput(cmd + ' ' + val.toString());
         break;
       case 'CD':
-        console.log('cmd: cd')
         break;
       case 'RUN':
-        console.log('cmd: run')
         break;
       default:
-        document.getElementById(this.id).innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(`'${cmd}' is not recognized as an internal or external command, operable program or batch file.`));
+        this.addNewInput(`${cmd} ${val.toString()}`, `'${cmd}' is not recognized as an internal or external command, operable program or batch file.`);
     }
   };
 
