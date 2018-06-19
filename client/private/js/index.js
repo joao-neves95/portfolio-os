@@ -937,7 +937,7 @@ const fileSystem = new FileSystem().structure;
 
   /**
    * 
-   * param: ( withInfo() | withInput() ) content
+   * @param {function} content withInfo() | withInput()
    */
    addLine(content) {
       return `
@@ -1011,6 +1011,14 @@ Object.keys(f2.model['C']["portfolioOs"])
     document.getElementById('active-input').focus();
   }
 
+  /**
+   * 
+   * @param {string} insertInLastInput 
+   * (optional) The content of the last input.
+   * 
+   * @param {any} aditionalInfo 
+   * (optional) Additional information. (E.g. errors, warnings, etc).
+   */
   addNewInput(insertInLastInput = '', aditionalInfo = '') {
     const thisTerminal = document.getElementById(this.id);
 
