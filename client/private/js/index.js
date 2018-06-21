@@ -14,7 +14,6 @@
 // @import './modules/desktopManager/desktopManager'
 // @import './modules/fileSystem/fileSystem'
 // @import './modules/terminal/terminalTemplates'
-// @import './modules/terminal/commandHandler'
 // @import './modules/terminal/terminal'
 // @import './modules/processManager/process'
 // @import './modules/processManager/processManager'
@@ -269,6 +268,14 @@ class List extends Collection {
     }
     return that
   };
+
+  static getParentByClassInclude(elem, query) {
+    let that = elem;
+    while (that && !that.className.includes(query)) {
+      that = that.parentNode;
+    }
+    return that;
+  }
 
   static getDirectChildrenByTag(elem, tag) {
     if (elem.localName === tag) return elem;
@@ -670,7 +677,8 @@ const taskbarManager = new TaskbarManager();
     this.isMinimized = false;
   }
 }
-﻿class WindowManager {
+﻿// TODO: Refactor class.
+class WindowManager {
   constructor() {
     this.windows = new Dictionary();
   }
@@ -703,6 +711,7 @@ const taskbarManager = new TaskbarManager();
     taskbarManager.maximizedIcon(windowId);
   };
 
+  // TODO: Fix "removeEventListener"'s.
   // LISTENERS:
   updateListeners() {
     const allCloseWindowsBtns = document.querySelectorAll('[id^="win-"] .close-window');
@@ -937,9 +946,10 @@ const fileSystem = new FileSystem().structure;
 
   /**
    * 
-   * @param {function} content withInfo() | withInput()
+   * @param {function} content 
+   * withInfo() | withInput()
    */
-   addLine(content) {
+   addLine(content = '') {
       return `
         <article class="grid-x input-group line">
           ${content}
@@ -951,13 +961,13 @@ const fileSystem = new FileSystem().structure;
    * 
    * @param {string} content
    */
-  withInfo(content) {
+  withInfo(content = '') {
     return `
-      <p>${content}<p>
+      <p class="info">${content}<p>
     `;
   }
 
-  withLastInput(lastInput) {
+  withLastInput(lastInput = '') {
     return `
       <label class="cell medium-1 middle input-icon">&gt;</label>
       <p class="cell medium-11 no-border input" type="text" autofocus>${lastInput}<p>
@@ -973,71 +983,76 @@ const fileSystem = new FileSystem().structure;
 }
 
 const terminalTemplates = new TerminalTemplates();
-﻿class CommandHandlers {
+﻿let initAnimI = 0;
+const initAnimMessage = terminalTemplates.welcomeMessage;
+const initAnimDelay = 50;
+let initAnimTarget = HTMLElement;
 
-  listCurrentDirectory() {
-    return Object.keys(fileSystem['']);
-  };
-
-  changeDirectory(value) { };
-
-  createFile() { };
-}
-
-const commandHandlers = new CommandHandlers();
-
-/*
-Object.keys(f2.model['C']["portfolioOs"])
-*/
-﻿class Terminal {
+class Terminal {
   constructor() {
     this.id = 'terminal-1';
+
+    this.currentDir = 'C';
 
     this.init();
   }
 
+  get element() { return document.getElementById(this.id); };
+
   init() {
     windowManager.openNewWindow('Terminal', terminalTemplates.window(this.id));
 
-    const thisTerminal = document.getElementById(this.id);
-    thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(terminalTemplates.welcomeMessage));
-
-    setTimeout(() => {
-      this.addNewInput();
-    }, 2000);
+    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
+    initAnimTarget = document.querySelector('.terminal > .line > .info');
+    this.typeWriterAnimation();
   };
 
-  focusActiveInput() {
-    document.getElementById('active-input').focus();
+  typeWriterAnimation() {
+    if (initAnimI < initAnimMessage.length) {
+      initAnimTarget.innerHTML += initAnimMessage[initAnimI];
+      ++initAnimI;
+      setTimeout(this.typeWriterAnimation.bind(this), initAnimDelay);
+    }
+    else {
+      initAnimI = 0;
+      setTimeout(() => { this.addNewInput() }, 500)
+    }
   }
 
   /**
+   *
+   * @param {string} lastInput
+   * (optional) Default -> ""
    * 
-   * @param {string} insertInLastInput 
-   * (optional) The content of the last input.
-   * 
-   * @param {any} aditionalInfo 
-   * (optional) Additional information. (E.g. errors, warnings, etc).
+   * @param {string} aditionalInfo
+   * (optional) Default -> ""
    */
-  addNewInput(insertInLastInput = '', aditionalInfo = '') {
-    const thisTerminal = document.getElementById(this.id);
-
-    // If there is one, first remove the last input.
+  deativateLastInput(lastInput = '', aditionalInfo = '') {
     const currentActiveInput = document.getElementById('active-input');
+
     if (currentActiveInput) {
-      currentActiveInput.parentNode.remove();
-      thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withLastInput(insertInLastInput));
+      DomUtils.getParentByClassInclude(currentActiveInput, 'grid-x input-group line').remove();
+      this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withLastInput(lastInput));
+
       if (aditionalInfo !== '')
-        thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(aditionalInfo));
+        this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(aditionalInfo));
     }
-    
-    thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
+  }
+
+  addNewInput() {
+    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
     const activeInput = document.getElementById('active-input');
-    this.focusActiveInput()
-    thisTerminal.addEventListener('focus', this.focusActiveInput, true);
-    thisTerminal.addEventListener('click', this.focusActiveInput, true);
+    this.focusActiveInput();
+    this.element.removeEventListener('focus', this.focusActiveInput, true);
+    this.element.addEventListener('focus', this.focusActiveInput, true);
+    this.element.removeEventListener('click', this.focusActiveInput, true);
+    this.element.addEventListener('click', this.focusActiveInput, true);
     activeInput.addEventListener('blur', this.focusActiveInput, true);
     activeInput.addEventListener('keypress', (e) => { this.executeCommand(e, activeInput.value) });
+  }
+
+  focusActiveInput() {
+    document.getElementById('active-input').focus();
   }
 
   executeCommand(e, input) {
@@ -1052,14 +1067,17 @@ Object.keys(f2.model['C']["portfolioOs"])
     switch (cmd.toUpperCase()) {
       case 'DIR':
       case 'LS':
-        this.addNewInput(cmd + ' ' + val.toString());
+        this.deativateLastInput(cmd + ' ' + val.toString())
+        this.listCurrentDirectory();
+        this.addNewInput();
         break;
       case 'CD':
         break;
       case 'RUN':
         break;
       default:
-        this.addNewInput(`${cmd} ${val.toString()}`, `'${cmd}' is not recognized as an internal or external command, operable program or batch file.`);
+        this.deativateLastInput(`${cmd} ${val.toString()}`, `'${cmd}' is not recognized as an internal or external command, operable program or batch file.`);
+        this.addNewInput();
     }
   };
 
@@ -1076,6 +1094,16 @@ Object.keys(f2.model['C']["portfolioOs"])
       value: splitInput.slice(1, splitInput.length)
     }
   };
+
+  // COMMAND HANDLERS:
+  listCurrentDirectory() {
+    const dirInfo = Object.keys(fileSystem[this.currentDir]);
+    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(dirInfo));
+  };
+
+  changeDirectory(value) { };
+
+  createFile() { };
 }
 ﻿class Process {
   constructor(processName) {

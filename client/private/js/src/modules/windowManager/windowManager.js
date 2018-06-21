@@ -1,4 +1,5 @@
-﻿class WindowManager {
+﻿// TODO: Refactor class.
+class WindowManager {
   constructor() {
     this.windows = new Dictionary();
   }
@@ -31,6 +32,7 @@
     taskbarManager.maximizedIcon(windowId);
   };
 
+  // TODO: Fix "removeEventListener"'s.
   // LISTENERS:
   updateListeners() {
     const allCloseWindowsBtns = document.querySelectorAll('[id^="win-"] .close-window');

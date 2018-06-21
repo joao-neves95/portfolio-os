@@ -14,7 +14,6 @@
 // @import './modules/desktopManager/desktopManager'
 // @import './modules/fileSystem/fileSystem'
 // @import './modules/terminal/terminalTemplates'
-// @import './modules/terminal/commandHandler'
 // @import './modules/terminal/terminal'
 // @import './modules/processManager/process'
 // @import './modules/processManager/processManager'

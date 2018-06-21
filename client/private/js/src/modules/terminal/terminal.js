@@ -1,52 +1,73 @@
-﻿class Terminal {
+﻿let initAnimI = 0;
+const initAnimMessage = terminalTemplates.welcomeMessage;
+const initAnimDelay = 50;
+let initAnimTarget = HTMLElement;
+
+class Terminal {
   constructor() {
     this.id = 'terminal-1';
+
+    this.currentDir = 'C';
 
     this.init();
   }
 
+  get element() { return document.getElementById(this.id); };
+
   init() {
     windowManager.openNewWindow('Terminal', terminalTemplates.window(this.id));
 
-    const thisTerminal = document.getElementById(this.id);
-    thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(terminalTemplates.welcomeMessage));
-
-    setTimeout(() => {
-      this.addNewInput();
-    }, 2000);
+    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
+    initAnimTarget = document.querySelector('.terminal > .line > .info');
+    this.typeWriterAnimation();
   };
 
-  focusActiveInput() {
-    document.getElementById('active-input').focus();
+  typeWriterAnimation() {
+    if (initAnimI < initAnimMessage.length) {
+      initAnimTarget.innerHTML += initAnimMessage[initAnimI];
+      ++initAnimI;
+      setTimeout(this.typeWriterAnimation.bind(this), initAnimDelay);
+    }
+    else {
+      initAnimI = 0;
+      setTimeout(() => { this.addNewInput() }, 500)
+    }
   }
 
   /**
+   *
+   * @param {string} lastInput
+   * (optional) Default -> ""
    * 
-   * @param {string} insertInLastInput 
-   * (optional) The content of the last input.
-   * 
-   * @param {any} aditionalInfo 
-   * (optional) Additional information. (E.g. errors, warnings, etc).
+   * @param {string} aditionalInfo
+   * (optional) Default -> ""
    */
-  addNewInput(insertInLastInput = '', aditionalInfo = '') {
-    const thisTerminal = document.getElementById(this.id);
-
-    // If there is one, first remove the last input.
+  deativateLastInput(lastInput = '', aditionalInfo = '') {
     const currentActiveInput = document.getElementById('active-input');
+
     if (currentActiveInput) {
-      currentActiveInput.parentNode.remove();
-      thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withLastInput(insertInLastInput));
+      DomUtils.getParentByClassInclude(currentActiveInput, 'grid-x input-group line').remove();
+      this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withLastInput(lastInput));
+
       if (aditionalInfo !== '')
-        thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(aditionalInfo));
+        this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(aditionalInfo));
     }
-    
-    thisTerminal.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
+  }
+
+  addNewInput() {
+    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
     const activeInput = document.getElementById('active-input');
-    this.focusActiveInput()
-    thisTerminal.addEventListener('focus', this.focusActiveInput, true);
-    thisTerminal.addEventListener('click', this.focusActiveInput, true);
+    this.focusActiveInput();
+    this.element.removeEventListener('focus', this.focusActiveInput, true);
+    this.element.addEventListener('focus', this.focusActiveInput, true);
+    this.element.removeEventListener('click', this.focusActiveInput, true);
+    this.element.addEventListener('click', this.focusActiveInput, true);
     activeInput.addEventListener('blur', this.focusActiveInput, true);
     activeInput.addEventListener('keypress', (e) => { this.executeCommand(e, activeInput.value) });
+  }
+
+  focusActiveInput() {
+    document.getElementById('active-input').focus();
   }
 
   executeCommand(e, input) {
@@ -61,14 +82,17 @@
     switch (cmd.toUpperCase()) {
       case 'DIR':
       case 'LS':
-        this.addNewInput(cmd + ' ' + val.toString());
+        this.deativateLastInput(cmd + ' ' + val.toString())
+        this.listCurrentDirectory();
+        this.addNewInput();
         break;
       case 'CD':
         break;
       case 'RUN':
         break;
       default:
-        this.addNewInput(`${cmd} ${val.toString()}`, `'${cmd}' is not recognized as an internal or external command, operable program or batch file.`);
+        this.deativateLastInput(`${cmd} ${val.toString()}`, `'${cmd}' is not recognized as an internal or external command, operable program or batch file.`);
+        this.addNewInput();
     }
   };
 
@@ -85,4 +109,14 @@
       value: splitInput.slice(1, splitInput.length)
     }
   };
+
+  // COMMAND HANDLERS:
+  listCurrentDirectory() {
+    const dirInfo = Object.keys(fileSystem[this.currentDir]);
+    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(dirInfo));
+  };
+
+  changeDirectory(value) { };
+
+  createFile() { };
 }

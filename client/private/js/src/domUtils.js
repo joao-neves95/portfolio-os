@@ -16,6 +16,14 @@
     return that
   };
 
+  static getParentByClassInclude(elem, query) {
+    let that = elem;
+    while (that && !that.className.includes(query)) {
+      that = that.parentNode;
+    }
+    return that;
+  }
+
   static getDirectChildrenByTag(elem, tag) {
     if (elem.localName === tag) return elem;
 
