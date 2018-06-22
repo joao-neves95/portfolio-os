@@ -1,0 +1,50 @@
+﻿@import 'variables';
+
+.start-menu {
+    background-color: #4e4e4e;
+    height: 34em;
+    width: 22em;
+    position: absolute;
+    left: 0;
+    bottom: @taskbar-hight;
+    z-index: @taskbar-idx - 1;
+
+    .aside {
+        //background-color: yellow;
+        position: relative;
+    }
+
+    .apps {
+        position: relative;
+
+        > ul {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            display: inline-block;
+            list-style-type: none;
+
+            .start-menu-icon {
+                display: inline-block;
+                padding: .7em;
+                width: 100%;
+
+                &:hover {
+                    background-color: @hover-ligth-grey-color;
+                    cursor: pointer;
+                }
+
+                .icon {
+                    width: 2em;
+                    display: inline-block;
+                    margin-right: 1em;
+                }
+
+                label {
+                    display: inline-block;
+                    color: white;
+                }
+            }
+        }
+    }
+}

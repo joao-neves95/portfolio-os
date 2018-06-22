@@ -5,18 +5,23 @@
 // @import './domUtils'
 // @import './modules/networking'
 // @import './modules/dragAndDrop.js'
+// @import './modules/fileSystem/fileSystem'
 // @import './modules/taskbarManager/taskbarIcon'
 // @import './modules/taskbarManager/taskbarManager'
 // @import './modules/windowManager/window'
-// @import './modules/windowManager/windowManager.js'
+// @import './modules/windowManager/windowManager'
+// @import './userApps/userAppsManager'
+// @import './systemApps/systemApp'
+// @import './systemApps/systemAppsManager'
+// @import './systemApps/terminal/terminalTemplates'
+// @import './systemApps/terminal/terminal'
+// @import './modules/processManager/process'
+// @import './modules/processManager/processManager'
+// @import './modules/startMenuManager/startMenuApp'
+// @import './modules/startMenuManager/startMenuManager'
 // @import './modules/desktopManager/desktopTemplates'
 // @import './modules/desktopManager/desktopIcon'
 // @import './modules/desktopManager/desktopManager'
-// @import './modules/fileSystem/fileSystem'
-// @import './modules/terminal/terminalTemplates'
-// @import './modules/terminal/terminal'
-// @import './modules/processManager/process'
-// @import './modules/processManager/processManager'
 // @import './main'
 //
 'use strict'
@@ -46,6 +51,14 @@ class Utils {
   static parseIDs(id) {
     const split = id.split(/_/g);
     return split;
+  }
+
+  static parsePxToInt(pxString) {
+    try {
+      return parseInt(pxString.substring(0, pxString.length - 2));
+    } catch (e) {
+      console.error('Error:', e);
+    }
   }
 
   static calculateGrid(cellWidthPercent, cellHeightPercent) {
@@ -151,6 +164,16 @@ class Dictionary extends Collection {
     super(uniqueKeys, 'any');
   };
 
+  getAllValues() {
+    let allValues = [];
+
+    for (let i = 0; i < this.elements.length; ++i) {
+      allValues.push(Object.values(this.elements[i])[0]);
+    }
+
+    return allValues;
+  }
+
   add(key, value) {
     if (this.uniqueKeys && this.findIndexOfKey(key) !== undefined)
       throw new Error(Errors.existingKey);
@@ -171,7 +194,11 @@ class Dictionary extends Collection {
   };
 
   getByKey(key) {
-    return this.elements[this.findIndexOfKey(key)][key];
+    try {
+      return this.elements[this.findIndexOfKey(key)][key];
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   findIndexOfKey(key, Callback) {
@@ -322,7 +349,8 @@ class List extends Collection {
     }
   }
 }
-﻿﻿class DragAndDrop {
+﻿﻿// TODO: Refactor the class.
+class DragAndDrop {
   constructor() {
     this.draggableElements = [];
 
@@ -345,14 +373,17 @@ class List extends Collection {
 
     this.cancelNonDraggableElements = () => {
       let nonDraggableElements = [];
-      nonDraggableElements.push(document.getElementsByTagName('img')[0]);
-      nonDraggableElements.push(document.getElementsByTagName('a')[0]);
-
-      if (nonDraggableElements.length <= 0)
-        return;
+      nonDraggableElements.push(document.getElementsByTagName('img'));
+      nonDraggableElements.push(document.getElementsByTagName('a'));
 
       for (let i = 0; i < nonDraggableElements[0].length; i++) {
-        nonDraggableElements[i].setAttribute('draggable', 'false');
+        if (nonDraggableElements[0][i])
+          nonDraggableElements[0][i].setAttribute('draggable', 'false');
+      }
+
+      for (let i = 0; i < nonDraggableElements[1].length; i++) {
+        if (nonDraggableElements[1][i])
+          nonDraggableElements[1][i].setAttribute('draggable', 'false');
       }
     };
 
@@ -452,9 +483,11 @@ class List extends Collection {
 
       dropHandler: (e) => {
         e.stopPropagation();
+        e.preventDefault();
         const that = e.target;
 
         const newElement = new DOMParser().parseFromString(e.dataTransfer.getData('text/html'), 'text/html').body.firstChild;
+        console.debug(newElement)
         document.getElementById(newElement.id).remove();
         // data.classList.add('animated', 'bounceIn');
         that.insertAdjacentElement('afterbegin', newElement);
@@ -528,6 +561,34 @@ class List extends Collection {
 }
 
 const dragAndDrop = new DragAndDrop();
+﻿// Conect to server.
+class FileSystem {
+
+  get structure() {
+    return {
+      C: {
+        portfolioOs: {
+          documents: [],
+            images: [],
+              videos: []
+        },
+        applications: {
+          system: [],
+            appStore: [
+              { name: 'Example', creator: 'User231', codeUrl: 'www.kjhzdf.com' }
+            ]
+        },
+        user: {
+          documents: [],
+            images: [],
+              videos: []
+        }
+      }
+    }
+  };
+}
+
+const fileSystem = new FileSystem().structure;
 ﻿class TaskbarIcon {
   /**
    * 
@@ -580,10 +641,48 @@ const dragAndDrop = new DragAndDrop();
     this.isMinimized = false;
   }
 }
-﻿class TaskbarManager {
+﻿const START_MENU_ANIM_DELAY = 1;
+
+class TaskbarManager {
   constructor() {
     this.iconContainerElem = document.getElementById('icon-container');
     this.icons = new Dictionary();
+
+    this.startMenu.style.bottom = '-550px';
+    this.updateStartMenuListener();
+  }
+
+  get startMenuIcon() { return document.getElementsByClassName('menu-icon-wrap')[0]; };
+  get startMenu() { return document.getElementsByClassName('start-menu')[0]; };
+
+  updateStartMenuListener() {
+    // Start Menu animation.
+    this.startMenuIcon.addEventListener('click', () => {
+      if (this.startMenu.style.bottom !== '48px')
+        window.showMenu = setInterval(this.show.bind(this), START_MENU_ANIM_DELAY);
+      else
+        window.hideMenu = setInterval(this.hide.bind(this), START_MENU_ANIM_DELAY);
+    });
+  }
+
+  show() {
+    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
+    if (currentHeight >= 48) {
+      clearInterval(window.showMenu);
+      return;
+    }
+
+    this.startMenu.style.bottom = (currentHeight + 2).toString() + 'px';
+  }
+
+  hide() {
+    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
+    if (currentHeight <= -550) {
+      clearInterval(window.hideMenu);
+      return;
+    }
+
+    this.startMenu.style.bottom = (currentHeight - 2).toString() + 'px';;
   }
 
   /**
@@ -689,7 +788,8 @@ class WindowManager {
     thisWindow.icon = newIcon;
     this.windows.add(thisWindow.id, thisWindow);
     this.updateListeners();
-    dragAndDrop.updateFreeDraggListeners()
+    dragAndDrop.cancelNonDraggableElements();
+    dragAndDrop.updateFreeDraggListeners();
 
     console.info(this.windows)
   };
@@ -775,6 +875,295 @@ class WindowManager {
 }
 
 const windowManager = new WindowManager();
+﻿﻿class SystemApp {
+  constructor(appName, startMenuIconUrl, taskbarIconUrl, executeFunction) {
+    this.name = appName;
+    this.executeFunction = () => { executeFunction(); };
+    this.startMenuIconUrl = startMenuIconUrl;
+    this.taskbarIconUrl = taskbarIconUrl;
+  }
+}
+﻿class SystemAppsManager {
+  constructor() {
+    this.systemApps = new Dictionary();
+  }
+
+  /**
+   * 
+   * @param {string} appName
+   * @param {string} startMenuIconUrl
+   * @param {string} taskbarIconUrl
+   * @param {function} executeFunction
+   */
+  bindApplication(appName, startMenuIconUrl, taskbarIconUrl, executeFunction) {
+    const newApp = new SystemApp(appName, startMenuIconUrl, taskbarIconUrl, executeFunction);
+    this.systemApps.add(appName, newApp);
+  }
+
+  executeApplication(appName, processId) {
+    this.systemApps.getByKey(appName).executeFunction(processId);
+  }
+
+  getAllApps() {
+    return this.systemApps.getAllValues();
+  }
+}
+
+const systemAppsManager = new SystemAppsManager();
+﻿class TerminalTemplates {
+
+  get welcomeMessage() { return 'Welcome to the Portfolio - OS Terminal!'; };
+
+  window(id) {
+    return `
+      <section class="grid-y terminal" id="${id}">
+      
+      </section>
+    `;
+  }
+
+  /**
+   * 
+   * @param {function} content 
+   * withInfo() | withInput()
+   */
+   addLine(content = '') {
+      return `
+        <article class="grid-x input-group line">
+          ${content}
+        </article>
+      `;
+   }
+
+  /**
+   * 
+   * @param {string} content
+   */
+  withInfo(content = '') {
+    return `
+      <p class="info">${content}<p>
+    `;
+  }
+
+  withLastInput(lastInput = '') {
+    return `
+      <label class="cell medium-1 middle input-icon">&gt;</label>
+      <p class="cell medium-11 no-border input" type="text" autofocus>${lastInput}<p>
+    `;
+  }
+
+  withInput() {
+    return `
+      <label class="cell medium-1 middle input-icon">&gt;</label>
+      <input id="active-input" class="cell medium-11 no-border input" type="text" autofocus>
+    `;
+  }
+}
+
+const terminalTemplates = new TerminalTemplates();
+﻿let initAnimI = 0;
+const initAnimMessage = terminalTemplates.welcomeMessage;
+const initAnimDelay = 50;
+let initAnimTarget = HTMLElement;
+
+class Terminal {
+  constructor(processId) {
+    this.id = `terminal-${ processId }`;
+
+    this.currentDir = 'C';
+
+    this.init();
+  }
+
+  get element() { return document.getElementById(this.id); };
+
+  init() {
+    windowManager.openNewWindow('Terminal', terminalTemplates.window(this.id));
+    console.debug('init')
+
+    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
+    initAnimTarget = document.querySelector(`#${ this.id } > .line > .info`);
+    this.typeWriterAnimation();
+  };
+
+  typeWriterAnimation() {
+    if (initAnimI < initAnimMessage.length) {
+      initAnimTarget.innerHTML += initAnimMessage[initAnimI];
+      ++initAnimI;
+      setTimeout(this.typeWriterAnimation.bind(this), initAnimDelay);
+    }
+    else {
+      initAnimI = 0;
+      setTimeout(() => { this.addNewInput() }, 500)
+    }
+  }
+
+  /**
+   *
+   * @param {string} lastInput
+   * (optional) Default -> ""
+   * 
+   * @param {string} aditionalInfo
+   * (optional) Default -> ""
+   */
+  // TODO: Fix Id's.
+  deativateLastInput(lastInput = '', aditionalInfo = '') {
+    const currentActiveInput = document.getElementById('active-input');
+
+    if (currentActiveInput) {
+      DomUtils.getParentByClassInclude(currentActiveInput, 'grid-x input-group line').remove();
+      this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withLastInput(lastInput));
+
+      if (aditionalInfo !== '')
+        this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(aditionalInfo));
+    }
+  }
+
+  addNewInput() {
+    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
+    const activeInput = document.getElementById('active-input');
+    this.focusActiveInput();
+    this.element.removeEventListener('focus', this.focusActiveInput, true);
+    this.element.addEventListener('focus', this.focusActiveInput, true);
+    this.element.removeEventListener('click', this.focusActiveInput, true);
+    this.element.addEventListener('click', this.focusActiveInput, true);
+    activeInput.addEventListener('blur', this.focusActiveInput, true);
+    activeInput.addEventListener('keypress', (e) => { this.executeCommand(e, activeInput.value) });
+  }
+
+  focusActiveInput() {
+    document.getElementById('active-input').focus();
+  }
+
+  executeCommand(e, input) {
+    e.preventDefault;
+    if (e.keyCode !== 13)
+      return;
+
+    const parsedInput = this.parseInput(input);
+    const cmd = parsedInput.cmd;
+    const val = parsedInput.value;
+
+    switch (cmd.toUpperCase()) {
+      case 'DIR':
+      case 'LS':
+        this.deativateLastInput(cmd + ' ' + val.toString())
+        this.listCurrentDirectory();
+        this.addNewInput();
+        break;
+      case 'CD':
+        break;
+      case 'RUN':
+        break;
+      default:
+        this.deativateLastInput(`${cmd} ${val.toString()}`, `'${cmd}' is not recognized as an internal or external command, operable program or batch file.`);
+        this.addNewInput();
+    }
+  };
+
+  /**
+   * Terminal input parser.
+   * Returns:(object) { cmd: 'String', value: 'String[]' }
+   * @param {string} input
+   *
+   */
+  parseInput (input) {
+    const splitInput = input.split(/\s/);
+    return {
+      cmd: splitInput[0],
+      value: splitInput.slice(1, splitInput.length)
+    }
+  };
+
+  // COMMAND HANDLERS:
+  listCurrentDirectory() {
+    const dirInfo = Object.keys(fileSystem[this.currentDir]);
+    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(dirInfo));
+  };
+
+  changeDirectory(value) { };
+
+  createFile() { };
+}
+﻿class Process {
+  constructor(processName) {
+    this.id = Utils.randomString(5);
+    this.name = processName;
+  }
+}
+﻿class ProcessManager {
+  constructor() {
+    this.activeProcesses = new Dictionary();
+
+    /**
+     * 
+     * @param {string} processName
+     * The name of the application.
+     */
+    this.launchNewProcess = (processName) => {
+      const newProcess = new Process(processName);
+      this.activeProcesses.add(newProcess.id, newProcess);
+      // In the future find the app on systemAppsManager or userAppsManager.
+      systemAppsManager.executeApplication(processName, newProcess.id);
+    }
+  }
+
+  get getActiveProcessesNum() {
+    return this.activeProcesses.length;
+  }
+}
+
+const processManager = new ProcessManager();
+﻿class StartMenuApp {
+  constructor(iconUrl, appName) {
+    this.iconUrl = iconUrl;
+    this.appName = appName;
+  };
+
+  get template() {
+    return `
+      <li class="start-menu-icon">
+        <img src="${this.iconUrl}" alt="${this.appName} Icon" class="icon" /><label>${this.appName}</label>
+      </li>
+    `;
+  }
+}
+﻿class StartMenuManager {
+  constructor() {
+    this.init();
+  }
+
+  get appContainerElem() { return document.getElementById('start-menu-apps'); };
+
+  init() {
+    this.insertAllApps();
+  }
+
+  insertAllApps() {
+    const allApps = systemAppsManager.getAllApps();
+
+    this.appContainerElem.innerHTML = '';
+    for (let i = 0; i < allApps.length; ++i) {
+      const newApp = new StartMenuApp(allApps[i].startMenuIconUrl, allApps[i].name);
+      this.appContainerElem.innerHTML += newApp.template;
+    }
+
+    this.updateListeners();
+  }
+
+  updateListeners() {
+    const allApps = document.getElementsByClassName('start-menu-icon');
+    for (let i = 0; i < allApps.length; ++i) {
+      allApps[i].addEventListener('click', (e) => {
+        const clickedAppName = DomUtils.getDirectChildrenByTag(e.target, 'label').innerText;
+        processManager.launchNewProcess(clickedAppName);
+        // systemAppsManager.executeApplication(clickedAppName);
+      });
+    }
+  }
+}
+
+const startMenuManager = new StartMenuManager();
 ﻿class DesktopTemplates {
   constructor() {
     this.rowTemplate = (idx) => {
@@ -904,238 +1293,18 @@ const desktopTemplates = new DesktopTemplates();
 }
 
 const desktopManager = new DesktopManager();
-﻿// Conect to server.
-class FileSystem {
-
-  get structure() {
-    return {
-      C: {
-        portfolioOs: {
-          documents: [],
-            images: [],
-              videos: []
-        },
-        applications: {
-          system: [],
-            appStore: [
-              { name: 'Example', creator: 'User231', codeUrl: 'www.kjhzdf.com' }
-            ]
-        },
-        user: {
-          documents: [],
-            images: [],
-              videos: []
-        }
-      }
-    }
-  };
-}
-
-const fileSystem = new FileSystem().structure;
-﻿class TerminalTemplates {
-
-  get welcomeMessage() { return 'Welcome to the Portfolio - OS Terminal!'; };
-
-  window(id) {
-    return `
-      <section class="grid-y terminal" id="${id}">
-      
-      </section>
-    `;
-  }
-
-  /**
-   * 
-   * @param {function} content 
-   * withInfo() | withInput()
-   */
-   addLine(content = '') {
-      return `
-        <article class="grid-x input-group line">
-          ${content}
-        </article>
-      `;
-   }
-
-  /**
-   * 
-   * @param {string} content
-   */
-  withInfo(content = '') {
-    return `
-      <p class="info">${content}<p>
-    `;
-  }
-
-  withLastInput(lastInput = '') {
-    return `
-      <label class="cell medium-1 middle input-icon">&gt;</label>
-      <p class="cell medium-11 no-border input" type="text" autofocus>${lastInput}<p>
-    `;
-  }
-
-  withInput() {
-    return `
-      <label class="cell medium-1 middle input-icon">&gt;</label>
-      <input id="active-input" class="cell medium-11 no-border input" type="text" autofocus>
-    `;
-  }
-}
-
-const terminalTemplates = new TerminalTemplates();
-﻿let initAnimI = 0;
-const initAnimMessage = terminalTemplates.welcomeMessage;
-const initAnimDelay = 50;
-let initAnimTarget = HTMLElement;
-
-class Terminal {
-  constructor() {
-    this.id = 'terminal-1';
-
-    this.currentDir = 'C';
-
-    this.init();
-  }
-
-  get element() { return document.getElementById(this.id); };
-
-  init() {
-    windowManager.openNewWindow('Terminal', terminalTemplates.window(this.id));
-
-    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
-    initAnimTarget = document.querySelector('.terminal > .line > .info');
-    this.typeWriterAnimation();
-  };
-
-  typeWriterAnimation() {
-    if (initAnimI < initAnimMessage.length) {
-      initAnimTarget.innerHTML += initAnimMessage[initAnimI];
-      ++initAnimI;
-      setTimeout(this.typeWriterAnimation.bind(this), initAnimDelay);
-    }
-    else {
-      initAnimI = 0;
-      setTimeout(() => { this.addNewInput() }, 500)
-    }
-  }
-
-  /**
-   *
-   * @param {string} lastInput
-   * (optional) Default -> ""
-   * 
-   * @param {string} aditionalInfo
-   * (optional) Default -> ""
-   */
-  deativateLastInput(lastInput = '', aditionalInfo = '') {
-    const currentActiveInput = document.getElementById('active-input');
-
-    if (currentActiveInput) {
-      DomUtils.getParentByClassInclude(currentActiveInput, 'grid-x input-group line').remove();
-      this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withLastInput(lastInput));
-
-      if (aditionalInfo !== '')
-        this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(aditionalInfo));
-    }
-  }
-
-  addNewInput() {
-    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
-    const activeInput = document.getElementById('active-input');
-    this.focusActiveInput();
-    this.element.removeEventListener('focus', this.focusActiveInput, true);
-    this.element.addEventListener('focus', this.focusActiveInput, true);
-    this.element.removeEventListener('click', this.focusActiveInput, true);
-    this.element.addEventListener('click', this.focusActiveInput, true);
-    activeInput.addEventListener('blur', this.focusActiveInput, true);
-    activeInput.addEventListener('keypress', (e) => { this.executeCommand(e, activeInput.value) });
-  }
-
-  focusActiveInput() {
-    document.getElementById('active-input').focus();
-  }
-
-  executeCommand(e, input) {
-    e.preventDefault;
-    if (e.keyCode !== 13)
-      return;
-
-    const parsedInput = this.parseInput(input);
-    const cmd = parsedInput.cmd;
-    const val = parsedInput.value;
-
-    switch (cmd.toUpperCase()) {
-      case 'DIR':
-      case 'LS':
-        this.deativateLastInput(cmd + ' ' + val.toString())
-        this.listCurrentDirectory();
-        this.addNewInput();
-        break;
-      case 'CD':
-        break;
-      case 'RUN':
-        break;
-      default:
-        this.deativateLastInput(`${cmd} ${val.toString()}`, `'${cmd}' is not recognized as an internal or external command, operable program or batch file.`);
-        this.addNewInput();
-    }
-  };
-
-  /**
-   * Terminal input parser.
-   * Returns:(object) { cmd: 'String', value: 'String[]' }
-   * @param {string} input
-   *
-   */
-  parseInput (input) {
-    const splitInput = input.split(/\s/);
-    return {
-      cmd: splitInput[0],
-      value: splitInput.slice(1, splitInput.length)
-    }
-  };
-
-  // COMMAND HANDLERS:
-  listCurrentDirectory() {
-    const dirInfo = Object.keys(fileSystem[this.currentDir]);
-    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(dirInfo));
-  };
-
-  changeDirectory(value) { };
-
-  createFile() { };
-}
-﻿class Process {
-  constructor(processName) {
-    this.id = '';
-    this.name = processName;
-  }
-}
-﻿class ProcessManager {
-  constructor() {
-    this.activeProcesses = new Dictionary();
-
-    this.launchNewProcess = (processName) => {
-      const newProcess = new Process(processName);
-      activeProcesses.add(newProcess.id, newProcess);
-      windowManager.openNewWindow(processName, processId);
-    }
-  }
-
-  get getActiveProcessesNum() {
-    return this.activeProcesses;
-  }
-}
 ﻿// Initializations.
 
 whenDomReady(() => {
 
   desktopManager.init();
   desktopManager.insertNewIcon(IMG_PATH + 'trash.svg', 'Trash');
- 
-  // windowManager.openNewWindow('A Window Title');
-  new Terminal();
+
+  // Bind SystemApps:
+  systemAppsManager.bindApplication('Terminal', '/img/terminal-green.svg', '/img/terminal-white.svg', (processId) => { new Terminal(processId) });
+  startMenuManager.insertAllApps();
 
   console.debug('Windows:', windowManager.windows);
   console.debug('Taskbar Icons:', taskbarManager.icons);
+  dragAndDrop.updateDraggables();
 });

@@ -15,6 +15,14 @@ class Utils {
     return split;
   }
 
+  static parsePxToInt(pxString) {
+    try {
+      return parseInt(pxString.substring(0, pxString.length - 2));
+    } catch (e) {
+      console.error('Error:', e);
+    }
+  }
+
   static calculateGrid(cellWidthPercent, cellHeightPercent) {
     const x = Math.floor(100 / cellWidthPercent) - 1;
     const y = Math.floor(100 / cellHeightPercent) - 1;
@@ -118,6 +126,16 @@ class Dictionary extends Collection {
     super(uniqueKeys, 'any');
   };
 
+  getAllValues() {
+    let allValues = [];
+
+    for (let i = 0; i < this.elements.length; ++i) {
+      allValues.push(Object.values(this.elements[i])[0]);
+    }
+
+    return allValues;
+  }
+
   add(key, value) {
     if (this.uniqueKeys && this.findIndexOfKey(key) !== undefined)
       throw new Error(Errors.existingKey);
@@ -138,7 +156,11 @@ class Dictionary extends Collection {
   };
 
   getByKey(key) {
-    return this.elements[this.findIndexOfKey(key)][key];
+    try {
+      return this.elements[this.findIndexOfKey(key)][key];
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   findIndexOfKey(key, Callback) {

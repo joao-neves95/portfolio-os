@@ -1,4 +1,5 @@
-﻿class DragAndDrop {
+﻿// TODO: Refactor the class.
+class DragAndDrop {
   constructor() {
     this.draggableElements = [];
 
@@ -21,14 +22,17 @@
 
     this.cancelNonDraggableElements = () => {
       let nonDraggableElements = [];
-      nonDraggableElements.push(document.getElementsByTagName('img')[0]);
-      nonDraggableElements.push(document.getElementsByTagName('a')[0]);
-
-      if (nonDraggableElements.length <= 0)
-        return;
+      nonDraggableElements.push(document.getElementsByTagName('img'));
+      nonDraggableElements.push(document.getElementsByTagName('a'));
 
       for (let i = 0; i < nonDraggableElements[0].length; i++) {
-        nonDraggableElements[i].setAttribute('draggable', 'false');
+        if (nonDraggableElements[0][i])
+          nonDraggableElements[0][i].setAttribute('draggable', 'false');
+      }
+
+      for (let i = 0; i < nonDraggableElements[1].length; i++) {
+        if (nonDraggableElements[1][i])
+          nonDraggableElements[1][i].setAttribute('draggable', 'false');
       }
     };
 
@@ -128,9 +132,11 @@
 
       dropHandler: (e) => {
         e.stopPropagation();
+        e.preventDefault();
         const that = e.target;
 
         const newElement = new DOMParser().parseFromString(e.dataTransfer.getData('text/html'), 'text/html').body.firstChild;
+        console.debug(newElement)
         document.getElementById(newElement.id).remove();
         // data.classList.add('animated', 'bounceIn');
         that.insertAdjacentElement('afterbegin', newElement);

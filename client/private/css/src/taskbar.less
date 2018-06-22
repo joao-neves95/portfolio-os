@@ -1,19 +1,20 @@
-﻿@icons-width-height: 3em;
+﻿@import 'variables';
 
 .taskbar {
-    background-color: #4d4b4b;
-    height: @icons-width-height !important;
+    background-color: #3d3d3d;
+    height: @taskbar-hight !important;
     width: 100%;
     margin-bottom: 0;
     position: absolute;
     bottom: 0;
+    z-index: @taskbar-idx;
 
     .menu-icon-wrap {
-        width: @icons-width-height;
+        width: @taskbar-hight;
     }
 
     .icon-wrap {
-        height: @icons-width-height;
+        height: @taskbar-hight;
 
         ul {
             display: inline;
@@ -28,11 +29,11 @@
     }
 
     .icon {
-        width: @icons-width-height;
-        height: @icons-width-height;
+        width: @taskbar-hight;
+        height: @taskbar-hight;
 
         &:hover {
-            background-color: #626060;
+            background-color: @hover-ligth-grey-color;
             cursor: pointer;
         }
     }

@@ -10,7 +10,8 @@ class WindowManager {
     thisWindow.icon = newIcon;
     this.windows.add(thisWindow.id, thisWindow);
     this.updateListeners();
-    dragAndDrop.updateFreeDraggListeners()
+    dragAndDrop.cancelNonDraggableElements();
+    dragAndDrop.updateFreeDraggListeners();
 
     console.info(this.windows)
   };

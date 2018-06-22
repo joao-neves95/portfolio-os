@@ -4,8 +4,8 @@ const initAnimDelay = 50;
 let initAnimTarget = HTMLElement;
 
 class Terminal {
-  constructor() {
-    this.id = 'terminal-1';
+  constructor(processId) {
+    this.id = `terminal-${ processId }`;
 
     this.currentDir = 'C';
 
@@ -16,9 +16,10 @@ class Terminal {
 
   init() {
     windowManager.openNewWindow('Terminal', terminalTemplates.window(this.id));
+    console.debug('init')
 
     this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
-    initAnimTarget = document.querySelector('.terminal > .line > .info');
+    initAnimTarget = document.querySelector(`#${ this.id } > .line > .info`);
     this.typeWriterAnimation();
   };
 
@@ -42,6 +43,7 @@ class Terminal {
    * @param {string} aditionalInfo
    * (optional) Default -> ""
    */
+  // TODO: Fix Id's.
   deativateLastInput(lastInput = '', aditionalInfo = '') {
     const currentActiveInput = document.getElementById('active-input');
 
