@@ -3,8 +3,8 @@
 // @import './externalLibs'
 // @import './utils'
 // @import './domUtils'
-// @import './modules/networking'
-// @import './modules/dragAndDrop.js'
+// @import './systemLibs/networking'
+// @import './systemLibs/dragAndDrop.js'
 // @import './modules/fileSystem/fileSystem'
 // @import './modules/taskbarManager/taskbarIcon'
 // @import './modules/taskbarManager/taskbarManager'
@@ -22,6 +22,9 @@
 // @import './modules/desktopManager/desktopTemplates'
 // @import './modules/desktopManager/desktopIcon'
 // @import './modules/desktopManager/desktopManager'
+// @import './systemLibs/contextMenu/contextMenu.templates'
+// @import './systemLibs/contextMenu/contextMenu.controller'
+// @import './modules/globalEvents'
 // @import './main'
 //
 'use strict'
@@ -652,39 +655,7 @@ class TaskbarManager {
     this.updateStartMenuListener();
   }
 
-  get startMenuIcon() { return document.getElementsByClassName('menu-icon-wrap')[0]; };
-  get startMenu() { return document.getElementsByClassName('start-menu')[0]; };
-
-  updateStartMenuListener() {
-    // Start Menu animation.
-    this.startMenuIcon.addEventListener('click', () => {
-      if (this.startMenu.style.bottom !== '48px')
-        window.showMenu = setInterval(this.show.bind(this), START_MENU_ANIM_DELAY);
-      else
-        window.hideMenu = setInterval(this.hide.bind(this), START_MENU_ANIM_DELAY);
-    });
-  }
-
-  show() {
-    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
-    if (currentHeight >= 48) {
-      clearInterval(window.showMenu);
-      return;
-    }
-
-    this.startMenu.style.bottom = (currentHeight + 2).toString() + 'px';
-  }
-
-  hide() {
-    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
-    if (currentHeight <= -550) {
-      clearInterval(window.hideMenu);
-      return;
-    }
-
-    this.startMenu.style.bottom = (currentHeight - 2).toString() + 'px';;
-  }
-
+  // #region TASKBAR ICONS
   /**
     * It adds an icon to the taskbar.
     * Returns the new TaskbarIcon instance.
@@ -710,11 +681,59 @@ class TaskbarManager {
   maximizedIcon(windowId) {
     this.findIconInstance(windowId).maximized();
   }
+  // #endregion
 
-  // UTILITIES:
+  // #region START MENU
+  get startMenuIcon() { return document.getElementsByClassName('menu-icon-wrap')[0]; };
+  get startMenu() { return document.getElementsByClassName('start-menu')[0]; };
+
+  updateStartMenuListener() {
+    // Start Menu animation.
+    this.startMenuIcon.addEventListener('click', () => {
+      if (this.startMenu.style.bottom !== '48px')
+        window.showMenu = setInterval(this.showStartMenu.bind(this), START_MENU_ANIM_DELAY);
+      else
+        window.hideMenu = setInterval(this.hideStartMenu.bind(this), START_MENU_ANIM_DELAY);
+    });
+  }
+
+  showStartMenu() {
+    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
+    if (currentHeight >= 48) {
+      clearInterval(window.showMenu);
+      return;
+    }
+
+    this.startMenu.style.bottom = (currentHeight + 2).toString() + 'px';
+  }
+
+  hideStartMenu() {
+    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
+    if (currentHeight <= -550) {
+      if (!window.hideMenu)
+        return;
+
+      clearInterval(window.hideMenu);
+      return;
+    }
+
+    this.startMenu.style.bottom = (currentHeight - 2).toString() + 'px';;
+  }
+
+  outsideClickGlobalEvent(e) {
+    const that = e.target;
+    if (that.closest('.start-menu') || that.closest('.menu-icon-wrap'))
+      return;
+
+    window.hideMenu = setInterval(this.hideStartMenu.bind(this), START_MENU_ANIM_DELAY);
+  }
+  // #endregion
+
+  // #region UTILITIES:
   findIconInstance(windowId) {
     return this.icons.getByKey(TaskbarIcon.idPrefix + windowId);
   }
+  // #endregion
 }
 
 const taskbarManager = new TaskbarManager();
@@ -1155,10 +1174,10 @@ const processManager = new ProcessManager();
   get appContainerElem() { return document.getElementById('start-menu-apps'); };
 
   init() {
-    this.insertAllApps();
+    this.injectAllApps();
   }
 
-  insertAllApps() {
+  injectAllApps() {
     const allApps = systemAppsManager.getAllApps();
 
     this.appContainerElem.innerHTML = '';
@@ -1313,6 +1332,91 @@ const desktopTemplates = new DesktopTemplates();
 }
 
 const desktopManager = new DesktopManager();
+﻿class ContextMenuTemplates {
+  menuWindow(content = '') {
+    return `
+      <nav class="grid-y context-menu">
+        <ul>${content}</ul>
+      </nav>
+    `;
+  }
+
+  menuItem() {
+    return `
+      <li class="item">Remove</li>
+    `;
+  }
+}
+﻿const contextMenuTemplates = new ContextMenuTemplates();
+
+class ContextMenu {
+  constructor() {
+    this.init();
+  }
+
+  get element() { return document.getElementsByClassName('context-menu')[0]; };
+  get menuTargetContainer() { return document.getElementById('window-manager-container'); };
+
+  init() {
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+
+      if (!this.element)
+        this.inject(e);
+      else {
+        this.kill(e);
+        this.inject(e);
+      }
+    });
+  }
+
+  inject(e) {
+    this.menuTargetContainer.innerHTML += contextMenuTemplates.menuWindow(contextMenuTemplates.menuItem());
+    this.element.style.left = e.clientX + 'px';
+    this.element.style.top = e.clientY + 'px';
+  }
+
+  kill(e) {
+    if (!this.element)
+      return;
+
+    this.element.remove();
+  }
+
+  outsideClickGlobalEvent(e) {
+    const that = e.target;
+    if (that.closest('.context-menu'))
+      return;
+
+    this.kill(e);
+  }
+}
+
+const contextMenu = new ContextMenu();
+﻿class GlobalEvents {
+  constructor() {
+    this.clickEventFunctions = [];
+  }
+
+  init() {
+    document.addEventListener('click', (e) => {
+      for (let i = 0; i < this.clickEventFunctions.length; ++i) {
+        this.clickEventFunctions[i](e);
+      }
+    });
+  };
+
+  bindEvent(eventType, executeFunction) {
+    switch (eventType.toUpperCase()) {
+      case 'CLICK':
+        this.clickEventFunctions.push(executeFunction);
+      default:
+        return;
+    }
+  };
+}
+
+const globalEvents = new GlobalEvents();
 ﻿// Initializations.
 
 whenDomReady(() => {
@@ -1320,9 +1424,14 @@ whenDomReady(() => {
   desktopManager.init();
   desktopManager.insertNewIcon(IMG_PATH + 'trash.svg', 'Trash');
 
-  // Bind SystemApps:
+  // SystemApps bindings:
   systemAppsManager.bindApplication('Terminal', '/img/terminal-green.svg', '/img/terminal-white.svg', (processId) => { new Terminal(processId) });
-  startMenuManager.insertAllApps();
+  startMenuManager.injectAllApps();
+
+  // GlobalEvents bindings:
+  globalEvents.bindEvent('click', (e) => { contextMenu.outsideClickGlobalEvent(e); });
+  globalEvents.bindEvent('click', (e) => { taskbarManager.outsideClickGlobalEvent(e); });
+  globalEvents.init();
 
   console.debug('Windows:', windowManager.windows);
   console.debug('Taskbar Icons:', taskbarManager.icons);

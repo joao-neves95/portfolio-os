@@ -6,10 +6,10 @@
   get appContainerElem() { return document.getElementById('start-menu-apps'); };
 
   init() {
-    this.insertAllApps();
+    this.injectAllApps();
   }
 
-  insertAllApps() {
+  injectAllApps() {
     const allApps = systemAppsManager.getAllApps();
 
     this.appContainerElem.innerHTML = '';

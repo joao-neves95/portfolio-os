@@ -9,39 +9,7 @@ class TaskbarManager {
     this.updateStartMenuListener();
   }
 
-  get startMenuIcon() { return document.getElementsByClassName('menu-icon-wrap')[0]; };
-  get startMenu() { return document.getElementsByClassName('start-menu')[0]; };
-
-  updateStartMenuListener() {
-    // Start Menu animation.
-    this.startMenuIcon.addEventListener('click', () => {
-      if (this.startMenu.style.bottom !== '48px')
-        window.showMenu = setInterval(this.show.bind(this), START_MENU_ANIM_DELAY);
-      else
-        window.hideMenu = setInterval(this.hide.bind(this), START_MENU_ANIM_DELAY);
-    });
-  }
-
-  show() {
-    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
-    if (currentHeight >= 48) {
-      clearInterval(window.showMenu);
-      return;
-    }
-
-    this.startMenu.style.bottom = (currentHeight + 2).toString() + 'px';
-  }
-
-  hide() {
-    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
-    if (currentHeight <= -550) {
-      clearInterval(window.hideMenu);
-      return;
-    }
-
-    this.startMenu.style.bottom = (currentHeight - 2).toString() + 'px';;
-  }
-
+  // #region TASKBAR ICONS
   /**
     * It adds an icon to the taskbar.
     * Returns the new TaskbarIcon instance.
@@ -67,11 +35,59 @@ class TaskbarManager {
   maximizedIcon(windowId) {
     this.findIconInstance(windowId).maximized();
   }
+  // #endregion
 
-  // UTILITIES:
+  // #region START MENU
+  get startMenuIcon() { return document.getElementsByClassName('menu-icon-wrap')[0]; };
+  get startMenu() { return document.getElementsByClassName('start-menu')[0]; };
+
+  updateStartMenuListener() {
+    // Start Menu animation.
+    this.startMenuIcon.addEventListener('click', () => {
+      if (this.startMenu.style.bottom !== '48px')
+        window.showMenu = setInterval(this.showStartMenu.bind(this), START_MENU_ANIM_DELAY);
+      else
+        window.hideMenu = setInterval(this.hideStartMenu.bind(this), START_MENU_ANIM_DELAY);
+    });
+  }
+
+  showStartMenu() {
+    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
+    if (currentHeight >= 48) {
+      clearInterval(window.showMenu);
+      return;
+    }
+
+    this.startMenu.style.bottom = (currentHeight + 2).toString() + 'px';
+  }
+
+  hideStartMenu() {
+    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
+    if (currentHeight <= -550) {
+      if (!window.hideMenu)
+        return;
+
+      clearInterval(window.hideMenu);
+      return;
+    }
+
+    this.startMenu.style.bottom = (currentHeight - 2).toString() + 'px';;
+  }
+
+  outsideClickGlobalEvent(e) {
+    const that = e.target;
+    if (that.closest('.start-menu') || that.closest('.menu-icon-wrap'))
+      return;
+
+    window.hideMenu = setInterval(this.hideStartMenu.bind(this), START_MENU_ANIM_DELAY);
+  }
+  // #endregion
+
+  // #region UTILITIES:
   findIconInstance(windowId) {
     return this.icons.getByKey(TaskbarIcon.idPrefix + windowId);
   }
+  // #endregion
 }
 
 const taskbarManager = new TaskbarManager();
