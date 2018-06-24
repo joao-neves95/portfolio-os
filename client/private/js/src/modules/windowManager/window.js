@@ -1,7 +1,7 @@
 ﻿class Window {
-  constructor(title, content) {
+  constructor(processId, title, content) {
 
-    this.id = 'win-' + Utils.randomString(5);
+    this.id = `win-${ processId }`;
     this.title = title;
     this.content = content;
     this.element = HTMLElement;

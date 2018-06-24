@@ -4,11 +4,13 @@ class WindowManager {
     this.windows = new Dictionary();
   }
 
-  openNewWindow(title = '', content = '') {
-    const thisWindow = new Window(title, content);
-    const newIcon = taskbarManager.addIcon(thisWindow.id);
-    thisWindow.icon = newIcon;
+  openNewWindow(processId, content = '') {
+    const thisAppInstance = processManager.getAppInstance(processId);
+    const thisWindow = new Window(processId, thisAppInstance.name, content);
+    const newTaskbarIcon = taskbarManager.addIcon(thisWindow.id, thisAppInstance.taskbarIconUrl);
+    thisWindow.icon = newTaskbarIcon;
     this.windows.add(thisWindow.id, thisWindow);
+
     this.updateListeners();
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();

@@ -43,12 +43,14 @@ class TaskbarManager {
   }
 
   /**
+    * It adds an icon to the taskbar.
+    * Returns the new TaskbarIcon instance.
     * 
     * @param {string} windowId 
     * The window that this icon is linked to.
     */
-  addIcon(windowId) {
-    const newIcon = new TaskbarIcon(windowId);
+  addIcon(windowId, taskbarIconUrl) {
+    const newIcon = new TaskbarIcon(windowId, taskbarIconUrl);
     this.icons.add(TaskbarIcon.idPrefix + windowId, newIcon);
     return newIcon;
   }

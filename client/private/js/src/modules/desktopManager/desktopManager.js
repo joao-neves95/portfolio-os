@@ -39,7 +39,8 @@
         allIcons[i].addEventListener('dblclick', (e) => {
           const that = e.target;
           const icon = DomUtils.getDirectChildrenByTag(that, 'img');
-          windowManager.openNewWindow(icon.alt);
+          // windowManager.openNewWindow(icon.alt);
+          processManager.launchNewProcess(icon.alt);
         });
       }
     }

@@ -15,8 +15,18 @@
     this.systemApps.add(appName, newApp);
   }
 
+  /**
+   * It executes the system application specified with the its bind name.
+   * 
+   * @param {string} appName
+   * @param {string} processId
+   */
   executeApplication(appName, processId) {
     this.systemApps.getByKey(appName).executeFunction(processId);
+  }
+
+  getAppInstance(appName) {
+    return this.systemApps.getByKey(appName);
   }
 
   getAllApps() {

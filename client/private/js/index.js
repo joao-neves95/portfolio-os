@@ -40,7 +40,7 @@ const IMG_PATH = `${SERVER_ROOT_PATH}img/`
 class Utils {
   // From an external library.
   static randomString(length) {
-    return Random.string('qwertyuiopasdfghjklçzxcvbnmQWERTYUIOPÇLKJHGFDSAZXCVBNM1234567890?!#$%&/()«»<>;:^~=][*+')(Random.engines.browserCrypto, length);
+    return Random.string('qwertyuiopasdfghjklçzxcvbnmQWERTYUIOPÇLKJHGFDSAZXCVBNM1234567890«»')(Random.engines.browserCrypto, length);
   }
 
   // From an external library.
@@ -686,12 +686,14 @@ class TaskbarManager {
   }
 
   /**
+    * It adds an icon to the taskbar.
+    * Returns the new TaskbarIcon instance.
     * 
     * @param {string} windowId 
     * The window that this icon is linked to.
     */
-  addIcon(windowId) {
-    const newIcon = new TaskbarIcon(windowId);
+  addIcon(windowId, taskbarIconUrl) {
+    const newIcon = new TaskbarIcon(windowId, taskbarIconUrl);
     this.icons.add(TaskbarIcon.idPrefix + windowId, newIcon);
     return newIcon;
   }
@@ -717,9 +719,9 @@ class TaskbarManager {
 
 const taskbarManager = new TaskbarManager();
 ﻿class Window {
-  constructor(title, content) {
+  constructor(processId, title, content) {
 
-    this.id = 'win-' + Utils.randomString(5);
+    this.id = `win-${ processId }`;
     this.title = title;
     this.content = content;
     this.element = HTMLElement;
@@ -782,11 +784,13 @@ class WindowManager {
     this.windows = new Dictionary();
   }
 
-  openNewWindow(title = '', content = '') {
-    const thisWindow = new Window(title, content);
-    const newIcon = taskbarManager.addIcon(thisWindow.id);
-    thisWindow.icon = newIcon;
+  openNewWindow(processId, content = '') {
+    const thisAppInstance = processManager.getAppInstance(processId);
+    const thisWindow = new Window(processId, thisAppInstance.name, content);
+    const newTaskbarIcon = taskbarManager.addIcon(thisWindow.id, thisAppInstance.taskbarIconUrl);
+    thisWindow.icon = newTaskbarIcon;
     this.windows.add(thisWindow.id, thisWindow);
+
     this.updateListeners();
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
@@ -878,7 +882,7 @@ const windowManager = new WindowManager();
 ﻿﻿class SystemApp {
   constructor(appName, startMenuIconUrl, taskbarIconUrl, executeFunction) {
     this.name = appName;
-    this.executeFunction = () => { executeFunction(); };
+    this.executeFunction = (processId) => { executeFunction(processId); };
     this.startMenuIconUrl = startMenuIconUrl;
     this.taskbarIconUrl = taskbarIconUrl;
   }
@@ -900,8 +904,18 @@ const windowManager = new WindowManager();
     this.systemApps.add(appName, newApp);
   }
 
+  /**
+   * It executes the system application specified with the its bind name.
+   * 
+   * @param {string} appName
+   * @param {string} processId
+   */
   executeApplication(appName, processId) {
     this.systemApps.getByKey(appName).executeFunction(processId);
+  }
+
+  getAppInstance(appName) {
+    return this.systemApps.getByKey(appName);
   }
 
   getAllApps() {
@@ -969,6 +983,7 @@ let initAnimTarget = HTMLElement;
 class Terminal {
   constructor(processId) {
     this.id = `terminal-${ processId }`;
+    this.processId = processId;
 
     this.currentDir = 'C';
 
@@ -978,8 +993,7 @@ class Terminal {
   get element() { return document.getElementById(this.id); };
 
   init() {
-    windowManager.openNewWindow('Terminal', terminalTemplates.window(this.id));
-    console.debug('init')
+    windowManager.openNewWindow(this.processId, terminalTemplates.window(this.id));
 
     this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
     initAnimTarget = document.querySelector(`#${ this.id } > .line > .info`);
@@ -1102,14 +1116,19 @@ class Terminal {
      */
     this.launchNewProcess = (processName) => {
       const newProcess = new Process(processName);
-      this.activeProcesses.add(newProcess.id, newProcess);
       // In the future find the app on systemAppsManager or userAppsManager.
+      const thisAppInstance = systemAppsManager.getAppInstance(processName);
+      this.activeProcesses.add(newProcess.id, thisAppInstance);
       systemAppsManager.executeApplication(processName, newProcess.id);
     }
   }
 
-  get getActiveProcessesNum() {
+  getActiveProcessesCount() {
     return this.activeProcesses.length;
+  }
+
+  getAppInstance(processId) {
+    return this.activeProcesses.getByKey(processId);
   }
 }
 
@@ -1265,7 +1284,8 @@ const desktopTemplates = new DesktopTemplates();
         allIcons[i].addEventListener('dblclick', (e) => {
           const that = e.target;
           const icon = DomUtils.getDirectChildrenByTag(that, 'img');
-          windowManager.openNewWindow(icon.alt);
+          // windowManager.openNewWindow(icon.alt);
+          processManager.launchNewProcess(icon.alt);
         });
       }
     }

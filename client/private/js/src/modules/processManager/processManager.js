@@ -9,14 +9,19 @@
      */
     this.launchNewProcess = (processName) => {
       const newProcess = new Process(processName);
-      this.activeProcesses.add(newProcess.id, newProcess);
       // In the future find the app on systemAppsManager or userAppsManager.
+      const thisAppInstance = systemAppsManager.getAppInstance(processName);
+      this.activeProcesses.add(newProcess.id, thisAppInstance);
       systemAppsManager.executeApplication(processName, newProcess.id);
     }
   }
 
-  get getActiveProcessesNum() {
+  getActiveProcessesCount() {
     return this.activeProcesses.length;
+  }
+
+  getAppInstance(processId) {
+    return this.activeProcesses.getByKey(processId);
   }
 }
 

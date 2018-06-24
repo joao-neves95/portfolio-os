@@ -6,6 +6,7 @@ let initAnimTarget = HTMLElement;
 class Terminal {
   constructor(processId) {
     this.id = `terminal-${ processId }`;
+    this.processId = processId;
 
     this.currentDir = 'C';
 
@@ -15,8 +16,7 @@ class Terminal {
   get element() { return document.getElementById(this.id); };
 
   init() {
-    windowManager.openNewWindow('Terminal', terminalTemplates.window(this.id));
-    console.debug('init')
+    windowManager.openNewWindow(this.processId, terminalTemplates.window(this.id));
 
     this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
     initAnimTarget = document.querySelector(`#${ this.id } > .line > .info`);
