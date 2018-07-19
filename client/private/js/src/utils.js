@@ -1,5 +1,9 @@
 ﻿// Utilities.
 class Utils {
+  static log(message) {
+    console.log(message);
+  }
+
   // From an external library.
   static randomString(length) {
     return Random.string('qwertyuiopasdfghjklçzxcvbnmQWERTYUIOPÇLKJHGFDSAZXCVBNM1234567890«»')(Random.engines.browserCrypto, length);
@@ -151,9 +155,23 @@ class Dictionary extends Collection {
     this.splice(index);
   };
 
+  /**
+   * Get a value with its index. Returns an array with the values.
+   * @param {number} index
+   * @return {any[]}
+   */
   getByIndex(index) {
-    return Object.values(this.elements[index]);
+    return Object.values( this.elements[index] )[0];
   };
+
+  /**
+   * Get a key with its index.
+   * @param {number} index
+   * @return {any}
+   */
+  getKeyByIndex(index) {
+    return Object.keys( this.elements[index] )[0];
+  }
 
   getByKey(key) {
     try {

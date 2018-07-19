@@ -7,7 +7,10 @@ whenDomReady(() => {
 
   // SystemApps bindings:
   systemAppsManager.bindApplication('Terminal', '/img/terminal-green.svg', '/img/terminal-white.svg', (processId) => { new Terminal(processId) });
-  startMenuManager.injectAllApps();
+  startMenuManager.injectAllApps
+
+  // ContextMenu bindings:
+  contextMenu.bindItems('desktop-icon', [contextMenuTemplates.menuItem("Delete"), contextMenuTemplates.menuItem("Open")]);
 
   // GlobalEvents bindings:
   globalEvents.bindEvent('click', (e) => { contextMenu.outsideClickGlobalEvent(e); });

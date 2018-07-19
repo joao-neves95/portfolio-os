@@ -1,4 +1,7 @@
-﻿class GlobalEvents {
+﻿/**
+ * Document events.
+ * */
+class GlobalEvents {
   constructor() {
     this.clickEventFunctions = [];
   }
@@ -14,7 +17,7 @@
   bindEvent(eventType, executeFunction) {
     switch (eventType.toUpperCase()) {
       case 'CLICK':
-        this.clickEventFunctions.push(executeFunction);
+        this.clickEventFunctions.push( executeFunction );
       default:
         return;
     }

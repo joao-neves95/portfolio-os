@@ -1,9 +1,21 @@
 ﻿class DomUtils {
 
+  /**
+   * Get a parent element with an id include. If it's not found it returns false.
+   * 
+   * @param {any} elem Element that defines where the search starts.
+   * @param {any} query A query with part of, or the full id of the seeked element.
+   * @returns {Element | false}
+   */
   static getParentByIdInclude(elem, query) {
     let that = elem
-    while (that && !that.id.includes(query)) {
-      that = that.parentNode
+    while (that) {
+      if (that.id) {
+        if (that.id.includes(query))
+          break;
+        that = that.parentNode
+      }
+      that = false;
     }
     return that
   };
@@ -16,10 +28,22 @@
     return that
   };
 
+  /**
+   * Get a parent element with an class include. If it's not found it returns false.
+   * 
+   * @param {any} elem Element that defines where the search starts.
+   * @param {any} query Query with part of, or the full class of the seeked element.
+   * @returns {Element | false}
+   */
   static getParentByClassInclude(elem, query) {
     let that = elem;
-    while (that && !that.className.includes(query)) {
-      that = that.parentNode;
+    while (that) {
+      if (that.className) {
+        if (that.className.includes(query))
+          break;
+        that = that.parentNode
+      }
+      that = false;
     }
     return that;
   }

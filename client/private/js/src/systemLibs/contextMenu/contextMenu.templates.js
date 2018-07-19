@@ -7,9 +7,13 @@
     `;
   }
 
-  menuItem() {
+  /**
+   * 
+   * @param {string} label
+   */
+  menuItem(label) {
     return `
-      <li class="item">Remove</li>
+      <li class="item">${ label }</li>
     `;
   }
 }
