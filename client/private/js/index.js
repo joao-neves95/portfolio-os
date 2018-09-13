@@ -182,7 +182,7 @@ class Dictionary extends Collection {
   }
 
   add(key, value) {
-    if (this.uniqueKeys && this.findIndexOfKey(key) !== undefined)
+    if (this.uniqueKeys && this.findIndexOfKey(key) !== false)
       throw new Error(Errors.existingKey);
 
     this.push({ [key]: value });
