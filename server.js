@@ -1,7 +1,8 @@
-'use strict'
+'use strict';
 const path = require('path');
 const express = require('express');
-const logger = require('morgan');
+const logger = require( 'morgan' );
+const authConfig = require( './server/middleware/authConfig' );
 const routes = require('./server/routes/index.js');
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(logger('dev'));
 app.use('/', express.static(path.join(process.cwd(), './client/wwwroot')));
 
 // TODO: Add database connection.
+authConfig( app );
 app.use('/', routes);
 
 app.listen(PORT, () => {

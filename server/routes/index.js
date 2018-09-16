@@ -1,13 +1,12 @@
 ﻿// REST API ROUTES.
-'use strict'
+'use strict';
 const path = require('path');
-const router = require('express').Router();
+const router = require( 'express' ).Router();
 const authRoute = require('./auth');
 const desktopRoute = require('./desktop');
 
 // AUTH:
-router.post('/auth/login', authRoute.login);
-router.post('/auth/register', authRoute.register); 
+router.post( '/auth', authRoute );
 
 // DESKTOP:
 router.get('/desktop', desktopRoute.getDesktopHtmlPage);

@@ -1,13 +1,18 @@
-﻿'use strict'
+﻿'use strict';
+const router = require( 'express' ).Router();
+const passport = require( 'passport' );
 
-module.exports = {
-  login: (req, res) => {
-    console.info('\nEmail:', req.body.email, '\nPassword:', req.body.password, '\n');
-    res.status(202).redirect('/desktop');
-  },
+// GITHUB:
+router.get( '/github', passport.authenticate( 'github' ) );
 
-  register: (req, res) => {
-    console.info('\nEmail:', req.body.email, '\nPassword:', req.body.password, '\n');
-    res.status(202).redirect('/desktop');
-  }
-};
+router.get( '/github/callback', passport.authenticate( 'github', { failureRedirect: '/' } ), ( red, res ) => {
+  res.redirect( '/dashboard' );
+} );
+
+// LOGOUT:
+router.get( '/logout', ( req, res ) => {
+  req.logout();
+  res.status( 202 ).redirect( '/' );
+} );
+
+module.exports = router;
