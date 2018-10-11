@@ -15,8 +15,8 @@ app.use(logger('dev'));
 // Serve public files.
 app.use('/', express.static(path.join(process.cwd(), './client/wwwroot')));
 
+// authConfig( app );
 // TODO: Add database connection.
-authConfig( app );
 app.use('/', routes);
 
 app.listen(PORT, () => {
