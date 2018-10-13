@@ -21,8 +21,10 @@
    * @param {string} appName
    * @param {string} processId
    */
-  executeApplication(appName, processId) {
-    this.systemApps.getByKey(appName).executeFunction(processId);
+  executeApplication( appName, processId ) {
+    /** @type { SystemApp } */
+    const thisApp = this.systemApps.getByKey( appName );
+    !thisApp ? console.error( `Application not found ` ) : thisApp.executeFunction( processId );
   }
 
   getAppInstance(appName) {

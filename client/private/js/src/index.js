@@ -13,6 +13,8 @@
 // @import './userApps/userAppsManager'
 // @import './systemApps/systemApp'
 // @import './systemApps/systemAppsManager'
+// @import './systemApps/trash/trash'
+// @import './systemApps/trash/trashTemplates'
 // @import './systemApps/terminal/terminalTemplates'
 // @import './systemApps/terminal/terminal'
 // @import './modules/processManager/process'

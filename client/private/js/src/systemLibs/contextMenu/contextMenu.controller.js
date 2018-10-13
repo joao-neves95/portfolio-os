@@ -20,7 +20,8 @@ class ContextMenu {
       let that = e.target;
 
       for (let i = 0; i < this.menuBindings.length; ++i) {
-        const clickedBindedElem = DomUtils.getParentByClassInclude(that, this.menuBindings.getKeyByIndex(i));
+        const clickedBindedElem = DomUtils.getParentByClassInclude( that, this.menuBindings.getKeyByIndex( i ) );
+
         if (clickedBindedElem) {
           const currentBinding = this.menuBindings.getByIndex(i);
           for (let j = 0; j < currentBinding.length; ++j) {

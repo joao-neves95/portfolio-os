@@ -13,6 +13,8 @@
 // @import './userApps/userAppsManager'
 // @import './systemApps/systemApp'
 // @import './systemApps/systemAppsManager'
+// @import './systemApps/trash/trash'
+// @import './systemApps/trash/trashTemplates'
 // @import './systemApps/terminal/terminalTemplates'
 // @import './systemApps/terminal/terminal'
 // @import './modules/processManager/process'
@@ -27,11 +29,11 @@
 // @import './modules/globalEvents'
 // @import './main'
 //
-'use strict'
+'use strict';
 
 // const SERVER_ROOT_PATH = 'http://localhost:3000/';
 const SERVER_ROOT_PATH = 'http://localhost:2000/';
-const IMG_PATH = `${SERVER_ROOT_PATH}img/`
+const IMG_PATH = `${SERVER_ROOT_PATH}img/`;
 ﻿// when-dom-ready
 // https://github.com/lukechilds/when-dom-ready
 !function (e, n) { "object" == typeof exports && "undefined" != typeof module ? module.exports = n() : "function" == typeof define && define.amd ? define(n) : e.whenDomReady = n() }(this, function () { "use strict"; var e = ["interactive", "complete"], n = function (n, t) { return new Promise(function (o) { n && "function" != typeof n && (t = n, n = null), t = t || window.document; var i = function () { return o(void (n && setTimeout(n))) }; -1 !== e.indexOf(t.readyState) ? i() : t.addEventListener("DOMContentLoaded", i) }) }; return n.resume = function (e) { return function (t) { return n(e).then(function () { return t }) } }, n });
@@ -105,19 +107,19 @@ Type safe Class List(): let list = new List('string' | 'number' | 'int' | 'float
 */
 
 class Errors {
-  static get existingKey() { throw new Error('An item with the same key has already been added.'); };
+  static get existingKey() { throw new Error( 'An item with the same key has already been added.' ); };
 
-  static get noTypeProvided() { throw new Error('No type provided on Collection instantiation.') };
+  static get noTypeProvided() { throw new Error( 'No type provided on Collection instantiation.' ) };
 
-  static wrongType(type) { throw new Error(`The value is not from the same type as the List<${type}>`); };
+  static wrongType( type ) { throw new Error( `The value is not from the same type as the List<${type}>` ); };
 }
 
 class Collection {
-  constructor(uniqueKeys, type) {
+  constructor( uniqueKeys, type ) {
     this.elements = [];
-    this.uniqueKeys = (uniqueKeys || false);
+    this.uniqueKeys = ( uniqueKeys || false );
 
-    if (!type) throw Errors.noTypeProvided;
+    if ( !type ) throw Errors.noTypeProvided;
     this.type = type;
   }
 
@@ -135,6 +137,14 @@ class Collection {
   }
 
   /**
+   * 
+   * @param { number } index
+   */
+  get( index ) {
+    return this.elements[index];
+  }
+
+  /**
    * Remove all elements from the Collection.
    */
   clear() {
@@ -146,8 +156,8 @@ class Collection {
    * No type safety. For private class use.
    * @param {Type} value
    */
-  push(value) {
-    this.elements.push(value);
+  push( value ) {
+    this.elements.push( value );
   }
 
   /**
@@ -155,45 +165,45 @@ class Collection {
     * No checks. For private class use.
     * @param {Number} index
     */
-  splice(index) {
-    this.elements.splice(index, 1);
+  splice( index ) {
+    this.elements.splice( index, 1 );
   }
 }
 
 class Dictionary extends Collection {
   /**
-   * Whether the keys should be unique or not.
-   * Optional. It defaults to false.
-   * @param {Boolean} uniqueKeys
+   * Dictionary of key-value pairs.
+   * @param {Boolean} uniqueKeys Whether the keys should be unique or not.
+   * Optional. It defaults to false
    * @default {false}
    */
-  constructor(uniqueKeys) {
-    super(uniqueKeys, 'any');
-  };
+  constructor( uniqueKeys ) {
+    super( uniqueKeys, 'any' );
+  }
 
   getAllValues() {
     let allValues = [];
 
-    for (let i = 0; i < this.elements.length; ++i) {
-      allValues.push(Object.values(this.elements[i])[0]);
+    for ( let i = 0; i < this.elements.length; ++i ) {
+      allValues.push( Object.values( this.elements[i] )[0] );
     }
 
     return allValues;
   }
 
-  add(key, value) {
-    if (this.uniqueKeys && this.findIndexOfKey(key) !== false)
-      throw new Error(Errors.existingKey);
+  add( key, value ) {
+    if ( this.uniqueKeys && this.findIndexOfKey( key ) !== false )
+      throw new Error( Errors.existingKey );
 
-    this.push({ [key]: value });
+    this.push( { [key]: value } );
   };
 
-  remove(key) {
-    const index = this.findIndexOfKey(key);
-    if (!index)
+  remove( key ) {
+    const index = this.findIndexOfKey( key );
+    if ( index === false )
       return false;
 
-    this.splice(index);
+    this.splice( index );
   };
 
   /**
@@ -201,7 +211,7 @@ class Dictionary extends Collection {
    * @param {number} index
    * @return {any[]}
    */
-  getByIndex(index) {
+  getByIndex( index ) {
     return Object.values( this.elements[index] )[0];
   };
 
@@ -210,24 +220,35 @@ class Dictionary extends Collection {
    * @param {number} index
    * @return {any}
    */
-  getKeyByIndex(index) {
+  getKeyByIndex( index ) {
     return Object.keys( this.elements[index] )[0];
   }
 
-  getByKey(key) {
+  /**
+   * Returns the value by key or <false> if not found.
+   * @param { any } key
+   * @returns { any | false }
+   */
+  getByKey( key ) {
     try {
-      return this.elements[this.findIndexOfKey(key)][key];
-    } catch (e) {
-      console.error(e);
-    }
-  };
+      const keyIdx = this.findIndexOfKey( key );
 
-  findIndexOfKey(key, Callback) {
-    for (let i = 0; i < this.elements.length; i++) {
-      if (Object.keys(this.elements[i])[0] === key) {
-        return i;
-      }
+      if ( keyIdx === false )
+        return false;
+
+      return this.elements[keyIdx][key];
+
+    } catch ( e ) {
+      console.error( e );
     }
+  }
+
+  findIndexOfKey( key ) {
+    for ( let i = 0; i < this.elements.length; i++ ) {
+      if ( Object.keys( this.elements[i] )[0] === key )
+        return i;
+    }
+
     return false;
   }
 }
@@ -237,51 +258,54 @@ class List extends Collection {
   /**
    * 
    * The Type of the list.
-   * ('string' | 'number' | 'int' | 'float' | 'boolean')
+   * ('string' | 'number' | 'int' | 'float' | 'boolean' | 'any')
    * @param {String} type
    */
-  constructor(type) {
-    super(false, type);
+  constructor( type ) {
+    super( false, type );
   }
 
   /**
    * Add a new item to the List<T>.
    * @param {Type} value
    */
-  add(value) {
-    switch (this.type) {
+  add( value ) {
+    switch ( this.type ) {
+      case 'any':
+        this.push( value );
+        break;
       case 'int':
-        if (this.isInt(value)) {
-          this.push(value);
+        if ( this.isInt( value ) ) {
+          this.push( value );
           break;
         }
       case 'float':
-        if (this.isFloat(value)) {
-          this.push(value);
+        if ( this.isFloat( value ) ) {
+          this.push( value );
           break;
         }
       default:
-        if (typeof value === this.type && value !== 'float' && value !== 'int')
-          this.push(value);
+        if ( typeof value === this.type && value !== 'float' && value !== 'int' )
+          this.push( value );
         else
-          throw Errors.wrongType(this.type);
+          throw Errors.wrongType( this.type );
     }
-  };
+  }
 
   /**
    * Remove an new item from the List<T> by index.
    * @param {Number} index
    */
-  remove(index) {
-    this.splice(index);
+  remove( index ) {
+    this.splice( index );
   };
 
   /**
    * (private)
    * @param {Number} value
    */
-  isInt(value) {
-    if (typeof value !== 'number')
+  isInt( value ) {
+    if ( typeof value !== 'number' )
       return false;
 
     return value % 1 === 0;
@@ -291,14 +315,13 @@ class List extends Collection {
    * (private)
    * @param {Number} value
    */
-  isFloat(value) {
-    if (typeof value !== 'number')
+  isFloat( value ) {
+    if ( typeof value !== 'number' )
       return false;
 
     return value % 1 !== 0;
   }
 }
-
 ﻿class DomUtils {
 
   /**
@@ -309,25 +332,21 @@ class List extends Collection {
    * @returns {Element | false}
    */
   static getParentByIdInclude(elem, query) {
-    let that = elem
-    while (that) {
-      if (that.id) {
-        if (that.id.includes(query))
-          break;
-        that = that.parentNode
-      }
-      that = false;
+    let that = elem;
+    while ( that && !that.id.includes( query ) ) {
+      that = that.parentNode;
     }
-    return that
-  };
+
+    return that;
+  }
 
   static getParentByTag(elem, tag) {
-    let that = elem
+    let that = elem;
     while (that && that.localName !== tag) {
-      that = that.parentNode
+      that = that.parentNode;
     }
-    return that
-  };
+    return that;
+  }
 
   /**
    * Get a parent element with an class include. If it's not found it returns false.
@@ -612,25 +631,32 @@ class FileSystem {
   get structure() {
     return {
       C: {
+        // For shivayl (João Neves).
         portfolioOs: {
-          documents: [],
-            images: [],
-              videos: []
+          documents: [
+            { name: 'Curriculum' }
+          ],
+          images: [],
+          videos: []
         },
         applications: {
-          system: [],
-            appStore: [
-              { name: 'Example', creator: 'User231', codeUrl: 'www.kjhzdf.com' }
-            ]
+          system: [
+            { name: 'Terminal', initMethod: 'undefined' }
+          ],
+          appStore: [
+            // Just a model.
+            { name: 'Calculator', creator: 'shivayl', htmlIndexUrl: 'https://rawgit.com/' },
+            { name: 'Wikipedia Viewer', creator: 'shivayl', htmlIndexUrl: 'https://rawgit.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html' }
+          ]
         },
         user: {
           documents: [],
-            images: [],
-              videos: []
+          images: [],
+          videos: []
         }
       }
-    }
-  };
+    };
+  }
 }
 
 const fileSystem = new FileSystem().structure;
@@ -726,8 +752,8 @@ class TaskbarManager {
   // #endregion
 
   // #region START MENU
-  get startMenuIcon() { return document.getElementsByClassName('menu-icon-wrap')[0]; };
-  get startMenu() { return document.getElementsByClassName('start-menu')[0]; };
+  get startMenuIcon() { return document.getElementsByClassName('menu-icon-wrap')[0]; }
+  get startMenu() { return document.getElementsByClassName('start-menu')[0]; }
 
   updateStartMenuListener() {
     // Start Menu animation.
@@ -740,7 +766,8 @@ class TaskbarManager {
   }
 
   showStartMenu() {
-    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
+    let currentHeight = Utils.parsePxToInt( this.startMenu.style.bottom );
+
     if (currentHeight >= 48) {
       clearInterval(window.showMenu);
       return;
@@ -922,7 +949,7 @@ class WindowManager {
 
   taskbarIconsHandler(e, taskbarIcon) {
     e.stopPropagation();
-    const thisIconId = DomUtils.getParentByIdInclude(taskbarIcon, 'win-').id;
+    const thisIconId = DomUtils.getParentByIdInclude( taskbarIcon, 'icn_win-' ).id;
     const thisWindowId = Utils.parseIDs(thisIconId)[1];
     const thisWindow = this.findWindowInstance(thisWindowId);
     if (thisWindow.isMinimized)
@@ -971,8 +998,10 @@ const windowManager = new WindowManager();
    * @param {string} appName
    * @param {string} processId
    */
-  executeApplication(appName, processId) {
-    this.systemApps.getByKey(appName).executeFunction(processId);
+  executeApplication( appName, processId ) {
+    /** @type { SystemApp } */
+    const thisApp = this.systemApps.getByKey( appName );
+    !thisApp ? console.error( `Application not found ` ) : thisApp.executeFunction( processId );
   }
 
   getAppInstance(appName) {
@@ -985,7 +1014,21 @@ const windowManager = new WindowManager();
 }
 
 const systemAppsManager = new SystemAppsManager();
-﻿class TerminalTemplates {
+﻿class Trash {
+  constructor( processId ) {
+    this.id = `trash-${processId}`;
+    this.processId = processId;
+
+    this.items = [];
+
+    this.init();
+  }
+
+  init() {
+    windowManager.openNewWindow( this.processId, terminalTemplates.window( this.id ) );
+  }
+}
+﻿﻿class TerminalTemplates {
 
   get welcomeMessage() { return 'Welcome to the Portfolio - OS Terminal!'; };
 
@@ -1169,19 +1212,18 @@ class Terminal {
 ﻿class ProcessManager {
   constructor() {
     this.activeProcesses = new Dictionary();
+  }
 
-    /**
-     * 
-     * @param {string} processName
-     * The name of the application.
-     */
-    this.launchNewProcess = (processName) => {
-      const newProcess = new Process(processName);
-      // In the future find the app on systemAppsManager or userAppsManager.
-      const thisAppInstance = systemAppsManager.getAppInstance(processName);
-      this.activeProcesses.add(newProcess.id, thisAppInstance);
-      systemAppsManager.executeApplication(processName, newProcess.id);
-    }
+  /**
+   * @param {string} processName
+   * The name of the application.
+   */
+  launchNewProcess( processName ) {
+    const newProcess = new Process( processName );
+    // TODO: In the future find the app on systemAppsManager or userAppsManager.
+    const thisAppInstance = systemAppsManager.getAppInstance( processName );
+    this.activeProcesses.add( newProcess.id, thisAppInstance );
+    systemAppsManager.executeApplication( processName, newProcess.id );
   }
 
   getActiveProcessesCount() {
@@ -1276,32 +1318,35 @@ const startMenuManager = new StartMenuManager();
 const desktopTemplates = new DesktopTemplates();
 ﻿class DesktopIcon {
   constructor(emptyCell, iconUrl, label) {
-    this.id = 'd-icon-' + Utils.randomString(4);
+    this.id = 'd-icon-' + Utils.randomString( 4 );
+    this.iconUrl = iconUrl;
+    this.label = label;
+    this.emptyCell = emptyCell;
     this.isSelected = Boolean;
-
-    this.template = desktopTemplates.iconTemplate(this.id, iconUrl, label);
-
-    this.init = () => {
-      emptyCell.innerHTML += this.template;
-      this.isSelected = false;
-    };
 
     this.init();
 
-    this.selected = () => {
-      const thisIcon = document.getElementById(this.id);
-
-      if (this.isSelected)
-        thisIcon.classList.remove('selected');
-      else
-        thisIcon.classList.add('selected');
-
-      this.isSelected = !this.isSelected;
-    }
-
     this.getCellElem = () => {
-      const thisIcon = document.getElementById(this.id).offsetParent;
-    }
+      const thisIcon = document.getElementById( this.id ).offsetParent;
+    };
+  }
+
+  get template() { return desktopTemplates.iconTemplate( this.id, this.iconUrl, this.label ); }
+
+  init() {
+    this.emptyCell.innerHTML += this.template;
+    this.isSelected = false;
+  }
+
+  selected() {
+    const thisIcon = document.getElementById( this.id );
+
+    if ( this.isSelected )
+      thisIcon.classList.remove( 'selected' );
+    else
+      thisIcon.classList.add( 'selected' );
+
+    this.isSelected = !this.isSelected;
   }
 }
 ﻿class DesktopManager {
@@ -1309,47 +1354,6 @@ const desktopTemplates = new DesktopTemplates();
     this.rowCount = 0
     this.cellCount = 0;
     this.icons = new Dictionary();
-
-    this.init = () => {
-      const theDesktop = document.getElementById('desktop');
-      const grid = Utils.calculateGrid(5, 15);
-      this.rowCount = grid.y;
-      this.cellCount = grid.x;
-
-      Utils.insertGrid(grid.x, grid.y, theDesktop, desktopTemplates.rowTemplate, desktopTemplates.cellTemplate);
-    }
-
-    this.insertNewIcon = (iconUrl, label) => {
-      const emptyCell = this.utils.findEmptyCell();
-      const newIcon = new DesktopIcon(emptyCell, iconUrl, label);
-      this.icons.add(newIcon.id, newIcon);
-      this.updateListeners();
-      dragAndDrop.updateDraggables();
-    }
-
-    this.updateListeners = () => {
-      const allIcons = document.getElementsByClassName('desktop-icon');
-      if (!allIcons) return false;
-
-      for (let i = 0; i < allIcons.length; i++) {
-        allIcons[i].removeEventListener('click', this.utils.findIconInstance);
-        allIcons[i].addEventListener('click', (e) => {
-          const that = e.target;
-          const icon = DomUtils.getParentByTag(that, 'figure');
-          this.utils.findIconInstance(icon.id, (thisIcon) => {
-            thisIcon.selected();
-          });
-        });
-
-        allIcons[i].removeEventListener('dblclick', windowManager.openNewWindow);
-        allIcons[i].addEventListener('dblclick', (e) => {
-          const that = e.target;
-          const icon = DomUtils.getDirectChildrenByTag(that, 'img');
-          // windowManager.openNewWindow(icon.alt);
-          processManager.launchNewProcess(icon.alt);
-        });
-      }
-    }
 
     this.utils = {
 
@@ -1365,10 +1369,52 @@ const desktopTemplates = new DesktopTemplates();
       },
 
       findIconInstance: (iconId, Callback) => {
-        const thisIcon = this.icons.getByKey(iconId);
+        const thisIcon = this.icons.getByKey( iconId );
+
         if (Callback) Callback(thisIcon);
         else return thisIcon;
       }
+    }
+  }
+
+  init() {
+    const theDesktop = document.getElementById( 'desktop' );
+    const grid = Utils.calculateGrid( 5, 15 );
+    this.rowCount = grid.y;
+    this.cellCount = grid.x;
+
+    Utils.insertGrid( grid.x, grid.y, theDesktop, desktopTemplates.rowTemplate, desktopTemplates.cellTemplate );
+  }
+
+  insertNewIcon( iconUrl, label ) {
+    const emptyCell = this.utils.findEmptyCell();
+    const newIcon = new DesktopIcon( emptyCell, iconUrl, label );
+    this.icons.add( newIcon.id, newIcon );
+    this.updateListeners();
+    dragAndDrop.updateDraggables();
+  }
+
+  updateListeners() {
+    const allIcons = document.getElementsByClassName( 'desktop-icon' );
+    if ( !allIcons ) return false;
+
+    for ( let i = 0; i < allIcons.length; i++ ) {
+      allIcons[i].removeEventListener( 'click', this.utils.findIconInstance );
+      allIcons[i].addEventListener( 'click', ( e ) => {
+        const that = e.target;
+        const icon = DomUtils.getParentByTag( that, 'figure' );
+        this.utils.findIconInstance( icon.id, ( thisIcon ) => {
+          thisIcon.selected();
+        } );
+      } );
+
+      allIcons[i].removeEventListener( 'dblclick', windowManager.openNewWindow );
+      allIcons[i].addEventListener( 'dblclick', ( e ) => {
+        const that = e.target;
+        const icon = DomUtils.getDirectChildrenByTag( that, 'img' );
+        // windowManager.openNewWindow(icon.alt);
+        processManager.launchNewProcess( icon.alt );
+      } );
     }
   }
 }
@@ -1415,7 +1461,8 @@ class ContextMenu {
       let that = e.target;
 
       for (let i = 0; i < this.menuBindings.length; ++i) {
-        const clickedBindedElem = DomUtils.getParentByClassInclude(that, this.menuBindings.getKeyByIndex(i));
+        const clickedBindedElem = DomUtils.getParentByClassInclude( that, this.menuBindings.getKeyByIndex( i ) );
+
         if (clickedBindedElem) {
           const currentBinding = this.menuBindings.getByIndex(i);
           for (let j = 0; j < currentBinding.length; ++j) {
@@ -1499,24 +1546,25 @@ class GlobalEvents {
 const globalEvents = new GlobalEvents();
 ﻿// Initializations.
 
-whenDomReady(() => {
+whenDomReady( () => {
 
   desktopManager.init();
-  desktopManager.insertNewIcon(IMG_PATH + 'trash.svg', 'Trash');
+  desktopManager.insertNewIcon( IMG_PATH + 'trash.svg', 'Trash' );
 
   // SystemApps bindings:
-  systemAppsManager.bindApplication('Terminal', '/img/terminal-green.svg', '/img/terminal-white.svg', (processId) => { new Terminal(processId) });
-  startMenuManager.injectAllApps
+  systemAppsManager.bindApplication( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, ( processId ) => { new Terminal( processId ); } );
+  systemAppsManager.bindApplication( 'Trash', `${IMG_PATH}trash.svg`, `${IMG_PATH}trash.svg`, ( processId ) => { new Trash( processId ); } );
+  startMenuManager.init();
 
   // ContextMenu bindings:
-  contextMenu.bindItems('desktop-icon', [contextMenuTemplates.menuItem("Delete"), contextMenuTemplates.menuItem("Open")]);
+  contextMenu.bindItems( 'desktop-icon', [contextMenuTemplates.menuItem( "Delete" ), contextMenuTemplates.menuItem( "Open" )] );
 
   // GlobalEvents bindings:
-  globalEvents.bindEvent('click', (e) => { contextMenu.outsideClickGlobalEvent(e); });
-  globalEvents.bindEvent('click', (e) => { taskbarManager.outsideClickGlobalEvent(e); });
+  globalEvents.bindEvent( 'click', ( e ) => { contextMenu.outsideClickGlobalEvent( e ); } );
+  globalEvents.bindEvent( 'click', ( e ) => { taskbarManager.outsideClickGlobalEvent( e ); } );
   globalEvents.init();
 
-  console.debug('Windows:', windowManager.windows);
-  console.debug('Taskbar Icons:', taskbarManager.icons);
+  console.debug( 'Windows:', windowManager.windows );
+  console.debug( 'Taskbar Icons:', taskbarManager.icons );
   dragAndDrop.updateDraggables();
-});
+} );

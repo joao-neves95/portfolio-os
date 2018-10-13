@@ -17,8 +17,10 @@ app.use('/', express.static(path.join(process.cwd(), './client/wwwroot')));
 
 // authConfig( app );
 // TODO: Add database connection.
-app.use('/', routes);
+app.use( '/', routes );
+
+// TODO: Add 400 page.
 
 app.listen(PORT, () => {
-  console.info(`The server is listening on port ${PORT}`);
+  console.info(`The server is listening at http://localhost:${PORT}/`);
 });

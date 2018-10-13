@@ -81,7 +81,7 @@ class WindowManager {
 
   taskbarIconsHandler(e, taskbarIcon) {
     e.stopPropagation();
-    const thisIconId = DomUtils.getParentByIdInclude(taskbarIcon, 'win-').id;
+    const thisIconId = DomUtils.getParentByIdInclude( taskbarIcon, 'icn_win-' ).id;
     const thisWindowId = Utils.parseIDs(thisIconId)[1];
     const thisWindow = this.findWindowInstance(thisWindowId);
     if (thisWindow.isMinimized)

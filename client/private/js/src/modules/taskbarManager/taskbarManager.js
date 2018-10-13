@@ -38,8 +38,8 @@ class TaskbarManager {
   // #endregion
 
   // #region START MENU
-  get startMenuIcon() { return document.getElementsByClassName('menu-icon-wrap')[0]; };
-  get startMenu() { return document.getElementsByClassName('start-menu')[0]; };
+  get startMenuIcon() { return document.getElementsByClassName('menu-icon-wrap')[0]; }
+  get startMenu() { return document.getElementsByClassName('start-menu')[0]; }
 
   updateStartMenuListener() {
     // Start Menu animation.
@@ -52,7 +52,8 @@ class TaskbarManager {
   }
 
   showStartMenu() {
-    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
+    let currentHeight = Utils.parsePxToInt( this.startMenu.style.bottom );
+
     if (currentHeight >= 48) {
       clearInterval(window.showMenu);
       return;

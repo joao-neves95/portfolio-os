@@ -8,25 +8,21 @@
    * @returns {Element | false}
    */
   static getParentByIdInclude(elem, query) {
-    let that = elem
-    while (that) {
-      if (that.id) {
-        if (that.id.includes(query))
-          break;
-        that = that.parentNode
-      }
-      that = false;
+    let that = elem;
+    while ( that && !that.id.includes( query ) ) {
+      that = that.parentNode;
     }
-    return that
-  };
+
+    return that;
+  }
 
   static getParentByTag(elem, tag) {
-    let that = elem
+    let that = elem;
     while (that && that.localName !== tag) {
-      that = that.parentNode
+      that = that.parentNode;
     }
-    return that
-  };
+    return that;
+  }
 
   /**
    * Get a parent element with an class include. If it's not found it returns false.
