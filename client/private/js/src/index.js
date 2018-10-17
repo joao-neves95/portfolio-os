@@ -5,6 +5,7 @@
 // @import './domUtils'
 // @import './systemLibs/networking'
 // @import './systemLibs/dragAndDrop.js'
+// @import './systemLibs/windowResizer.js'
 // @import './modules/fileSystem/fileSystem'
 // @import './modules/taskbarManager/taskbarIcon'
 // @import './modules/taskbarManager/taskbarManager'

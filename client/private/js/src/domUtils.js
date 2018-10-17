@@ -9,6 +9,7 @@
    */
   static getParentByIdInclude(elem, query) {
     let that = elem;
+
     while ( that && !that.id.includes( query ) ) {
       that = that.parentNode;
     }
@@ -18,9 +19,11 @@
 
   static getParentByTag(elem, tag) {
     let that = elem;
+
     while (that && that.localName !== tag) {
       that = that.parentNode;
     }
+
     return that;
   }
 
@@ -29,18 +32,15 @@
    * 
    * @param {any} elem Element that defines where the search starts.
    * @param {any} query Query with part of, or the full class of the seeked element.
-   * @returns {Element | false}
+   * @returns {HTMLElement | false}
    */
-  static getParentByClassInclude(elem, query) {
+  static getParentByClassInclude( elem, query ) {
     let that = elem;
-    while (that) {
-      if (that.className) {
-        if (that.className.includes(query))
-          break;
-        that = that.parentNode
-      }
-      that = false;
+
+    while ( that && !that.className.includes( query ) ) {
+      that = that.parentNode;
     }
+
     return that;
   }
 
@@ -86,6 +86,6 @@
     return {
       top: y,
       left: x
-    }
+    };
   }
 }

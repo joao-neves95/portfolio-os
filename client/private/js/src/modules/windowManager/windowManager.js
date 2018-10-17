@@ -14,29 +14,29 @@ class WindowManager {
     this.updateListeners();
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
-
-    console.info(this.windows)
-  };
+    windowResizer.updateListeners();
+  }
 
   closeWindow(windowId) {
     this.findWindowInstance(windowId).kill();
     taskbarManager.killIcon(windowId);
     this.windows.remove(windowId);
     this.updateListeners();
-  };
+  }
 
   minimizeWindow(windowId) {
     this.findWindowInstance(windowId).minimize();
     taskbarManager.minimizedIcon(windowId);
-  };
+  }
 
   maximizeWindow (windowId) {
     this.findWindowInstance(windowId).maximize();
     taskbarManager.maximizedIcon(windowId);
-  };
+  }
+
+  // #region LISTENERS:
 
   // TODO: Fix "removeEventListener"'s.
-  // LISTENERS:
   updateListeners() {
     const allCloseWindowsBtns = document.querySelectorAll('[id^="win-"] .close-window');
 
@@ -45,7 +45,7 @@ class WindowManager {
       allCloseWindowsBtns[i].addEventListener('click', (e) => {
         this.closeWindowHandler(e, allCloseWindowsBtns[i]);
       });
-    };
+    }
 
     const allMinimizeWindowsBtns = document.querySelectorAll('[id^="win-"] .minimize-window');
 
@@ -64,20 +64,23 @@ class WindowManager {
         this.taskbarIconsHandler(e, allTaskbarIcons[i]);
       });
     }
-  };
+  }
 
-  // EVENT HANDLERS:
+  // #endregion
+
+  // #region EVENT HANDLERS:
+
   closeWindowHandler (e, closeWindowBtn) {
     e.stopPropagation();
     const thisWindow = DomUtils.getParentByIdInclude(closeWindowBtn, 'win-');
     this.closeWindow(thisWindow.id);
-  };
+  }
 
   minimizeWindowHandler(e, minimizeWindowBtn) {
     e.stopPropagation();
     const thisWindow = DomUtils.getParentByIdInclude(minimizeWindowBtn, 'win-');
     this.minimizeWindow(thisWindow.id);
-  };
+  }
 
   taskbarIconsHandler(e, taskbarIcon) {
     e.stopPropagation();
@@ -88,7 +91,9 @@ class WindowManager {
       this.maximizeWindow(thisWindowId);
     else
       this.minimizeWindow(thisWindowId);
-  };
+  }
+
+  // #endregion
 
   // UTILITIES:
   findWindowInstance(windowId, Callback) {

@@ -5,6 +5,7 @@
 // @import './domUtils'
 // @import './systemLibs/networking'
 // @import './systemLibs/dragAndDrop.js'
+// @import './systemLibs/windowResizer.js'
 // @import './modules/fileSystem/fileSystem'
 // @import './modules/taskbarManager/taskbarIcon'
 // @import './modules/taskbarManager/taskbarManager'
@@ -333,6 +334,7 @@ class List extends Collection {
    */
   static getParentByIdInclude(elem, query) {
     let that = elem;
+
     while ( that && !that.id.includes( query ) ) {
       that = that.parentNode;
     }
@@ -342,9 +344,11 @@ class List extends Collection {
 
   static getParentByTag(elem, tag) {
     let that = elem;
+
     while (that && that.localName !== tag) {
       that = that.parentNode;
     }
+
     return that;
   }
 
@@ -353,18 +357,15 @@ class List extends Collection {
    * 
    * @param {any} elem Element that defines where the search starts.
    * @param {any} query Query with part of, or the full class of the seeked element.
-   * @returns {Element | false}
+   * @returns {HTMLElement | false}
    */
-  static getParentByClassInclude(elem, query) {
+  static getParentByClassInclude( elem, query ) {
     let that = elem;
-    while (that) {
-      if (that.className) {
-        if (that.className.includes(query))
-          break;
-        that = that.parentNode
-      }
-      that = false;
+
+    while ( that && !that.className.includes( query ) ) {
+      that = that.parentNode;
     }
+
     return that;
   }
 
@@ -410,221 +411,282 @@ class List extends Collection {
     return {
       top: y,
       left: x
-    }
+    };
   }
 }
-﻿﻿// TODO: Refactor the class.
+﻿﻿let dragAndDrop = null;
+
 class DragAndDrop {
   constructor() {
+    if ( dragAndDrop )
+      throw new Error( 'There can only be one instance of DragAndDrop' );
+
     this.draggableElements = [];
 
     this.isDragging = Boolean;
     this.currentFreeDragElem = HTMLElement;
-    this.currentreeDragData = '';
+    this.currentFreeDragData = '';
 
-    this.init = () => {
-      this.updateDraggables();
-      this.updateFreeDraggListeners();
-    };
+    // #region UTILITIES
 
-    // UPDATES:
-    this.updateDraggables = () => {
-      this.cancelNonDraggableElements();
-      this.updateDraggableElements();
-      this.updateDraggListeners();
-      this.updateDroppableListeners();
-    };
-
-    this.cancelNonDraggableElements = () => {
-      let nonDraggableElements = [];
-      nonDraggableElements.push(document.getElementsByTagName('img'));
-      nonDraggableElements.push(document.getElementsByTagName('a'));
-
-      for (let i = 0; i < nonDraggableElements[0].length; i++) {
-        if (nonDraggableElements[0][i])
-          nonDraggableElements[0][i].setAttribute('draggable', 'false');
-      }
-
-      for (let i = 0; i < nonDraggableElements[1].length; i++) {
-        if (nonDraggableElements[1][i])
-          nonDraggableElements[1][i].setAttribute('draggable', 'false');
-      }
-    };
-
-    this.updateDraggableElements = () => {
-      this.draggableElements = [];
-      this.draggableElements.push(document.getElementsByClassName('draggable')[0]);
-      this.draggableElements.push(document.getElementsByClassName('free-draggable')[0]);
-
-      if (this.draggableElements.length <= 0)
-        return;
-
-      for (let i = 0; i < this.draggableElements.length; i++) {
-        if (this.draggableElements[i])
-          this.draggableElements[i].setAttribute('draggable', 'true');
-      }
-    };
-
-    // LISTENERS:
-    this.updateDraggListeners = () => {
-      const constrainedDraggableElems = document.getElementsByClassName('draggable');
-
-      if (constrainedDraggableElems.length <= 0)
-        return;
-
-      for (let i = 0; i < constrainedDraggableElems.length; i++) {
-        constrainedDraggableElems[i].removeEventListener('dragstart', (e) => { this.eventHandlers.dragstartHandler(e); });
-        constrainedDraggableElems[i].addEventListener('dragstart', (e) => {
-          e.stopPropagation();
-          this.eventHandlers.dragstartHandler(e);
-        });
-      }
-    };
-
-    this.updateDroppableListeners = () => {
-      const droppableElems = document.getElementsByClassName('droppable');
-
-      if (droppableElems.length <= 0)
-        return;
-
-      for (let i = 0; i < droppableElems.length; i++) {
-        droppableElems[i].removeEventListener('dragover', (e) => { this.eventHandlers.dragoverHandler(e) });
-        droppableElems[i].addEventListener('dragover', (e) => {
-          e.stopPropagation();
-          this.eventHandlers.dragoverHandler(e);
-        }, false);
-
-
-        droppableElems[i].removeEventListener('drop', (e) => { this.eventHandlers.dropHandler(e); });
-        droppableElems[i].addEventListener('drop', (e) => {
-          e.stopPropagation();
-          this.eventHandlers.dropHandler(e)
-        }, false);
-      }
-    };
-
-    this.updateFreeDraggListeners = () => {
-      const freeDraggableElems = document.getElementsByClassName('free-draggable');
-
-      if (freeDraggableElems.length <= 0)
-        return;
-
-      for (let i = 0; i < freeDraggableElems.length; i++) {
-
-        freeDraggableElems[i].removeEventListener('mousedown', (e) => { this.eventHandlers.freeDragHandler(e); });
-        freeDraggableElems[i].addEventListener('mousedown', (e) => {
-          this.eventHandlers.freeDragHandler(e);
-          return false;
-        });
-
-        window.removeEventListener('mouseup', (e) => { this.eventHandlers.freeDragendHandler(e); });
-        window.addEventListener('mouseup', (e) => {
-          this.eventHandlers.freeDragendHandler(e);
-        });
-      }
-    };
-
-    // HANDLERS:
-    this.eventHandlers = {
-
-      dragstartHandler: (e) => {
-        e.stopPropagation();
-        this.utils.populateDataTransfer(e);
-        return false;
-      },
-
-      dragoverHandler: (e) => {
-        e.stopPropagation();
-        const that = e.target;
-        const currentDragData = e.dataTransfer.getData('text/html');
-
-        if (that.children.length > 0 || that.localName !== 'article' || currentDragData === this.currentFreeDragData)
-          return;
-
-        this.utils.acceptDrop(e);
-        return false;
-      },
-
-      dropHandler: (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        const that = e.target;
-
-        const newElement = new DOMParser().parseFromString(e.dataTransfer.getData('text/html'), 'text/html').body.firstChild;
-        console.debug(newElement)
-        document.getElementById(newElement.id).remove();
-        // data.classList.add('animated', 'bounceIn');
-        that.insertAdjacentElement('afterbegin', newElement);
-        this.updateDraggables();
-        desktopManager.updateListeners();
-      },
-
-      freeDragHandler: (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        this.isDragging = true;
-        this.currentFreeDragElem = DomUtils.getParentByTag(e.target, 'article');
-    
-        window.addEventListener('mousemove', (e) => {
-          this.eventHandlers.mousePositionHandler(e);
-        });
-
-        return false;
-      },
-
-      mousePositionHandler: (e) => {
-        e.stopPropagation();
-        if (!this.isDragging)
-          return;
-      
-        const offset = DomUtils.getOffset(this.currentFreeDragElem);
-
-        this.currentFreeDragElem.style.top = (e.pageY).toString() + 'px';
-        this.currentFreeDragElem.style.left = (e.pageX).toString() + 'px';
-        // this.currentFreeDragElem.style.left = (e.pageX - this.currentFreeDragElem.offsetTop).toString() + 'px';
-      },
-
-      freeDragendHandler: (e) => {
-        e.stopPropagation();
-        window.removeEventListener('mousemove', (e) => {
-          this.eventHandlers.mousePositionHandler(e)
-        });
-        // Hack.
-        this.isDragging = false;
-        this.currentFreeDragData = '';
-        this.currentFreeDragElem = null;
-      },
-    };
-
-    // UTILITIES:
     this.utils = {
-
-      populateDataTransfer: (e) => {
+      populateDataTransfer: ( e ) => {
         const that = e.target;
         const id = that.id;
         const tag = that.localName;
         const classes = that.className;
         const data = `<${tag} id="${id}" class="${classes}"> ${that.innerHTML} </${tag}>`;
-        e.dataTransfer.setData('text/html', data);
+        e.dataTransfer.setData( 'text/html', data );
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.dropEffect = 'move';
 
-        if (classes.includes('window-manager'))
-          this.currentFreeDragData = e.dataTransfer.getData('text/html');
+        if ( classes.includes( 'window-manager' ) )
+          this.currentFreeDragData = e.dataTransfer.getData( 'text/html' );
       },
 
-      acceptDrop: (e) => {
+      acceptDrop: ( e ) => {
         e.preventDefault();
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.dropEffect = 'move';
       }
+
     };
+
+    // #endregion
+
+    dragAndDrop = this;
+    Object.seal( dragAndDrop );
 
     this.init();
   }
+
+  init() {
+    this.updateDraggables();
+    this.updateFreeDraggListeners();
+  }
+
+  // #region UPDATES
+
+  updateDraggables() {
+    this.cancelNonDraggableElements();
+    this.updateDraggableElements();
+    this.updateDraggListeners();
+    this.updateDroppableListeners();
+  }
+
+  cancelNonDraggableElements() {
+    let nonDraggableElements = [];
+    nonDraggableElements.push(document.getElementsByTagName('img'));
+    nonDraggableElements.push(document.getElementsByTagName('a'));
+
+    for (let i = 0; i < nonDraggableElements[0].length; i++) {
+      if (nonDraggableElements[0][i])
+        nonDraggableElements[0][i].setAttribute('draggable', 'false');
+    }
+
+    for (let i = 0; i < nonDraggableElements[1].length; i++) {
+      if (nonDraggableElements[1][i])
+        nonDraggableElements[1][i].setAttribute('draggable', 'false');
+    }
+  }
+
+  updateDraggableElements() {
+    this.draggableElements = [];
+    this.draggableElements.push(document.getElementsByClassName('draggable')[0]);
+    this.draggableElements.push(document.getElementsByClassName('free-draggable')[0]);
+
+    if (this.draggableElements.length <= 0)
+      return;
+
+    for (let i = 0; i < this.draggableElements.length; i++) {
+      if (this.draggableElements[i])
+        this.draggableElements[i].setAttribute('draggable', 'true');
+    }
+  }
+
+  // #endregion
+
+  // #region LISTENERS
+
+  updateDraggListeners() {
+    const constrainedDraggableElems = document.getElementsByClassName('draggable');
+
+    if (constrainedDraggableElems.length <= 0)
+      return;
+
+    for (let i = 0; i < constrainedDraggableElems.length; i++) {
+      constrainedDraggableElems[i].removeEventListener('dragstart', (e) => { this.dragstartHandler(e); });
+      constrainedDraggableElems[i].addEventListener('dragstart', (e) => {
+        e.stopPropagation();
+        this.dragstartHandler(e);
+      });
+    }
+  }
+
+  updateDroppableListeners() {
+    const droppableElems = document.getElementsByClassName('droppable');
+
+    if (droppableElems.length <= 0)
+      return;
+
+    for (let i = 0; i < droppableElems.length; i++) {
+      droppableElems[i].removeEventListener( 'dragover', ( e ) => { this.dragoverHandler( e ); });
+      droppableElems[i].addEventListener('dragover', (e) => {
+        e.stopPropagation();
+        this.dragoverHandler(e);
+      }, false);
+
+
+      droppableElems[i].removeEventListener( 'drop', ( e ) => { this.dropHandler( e ); });
+      droppableElems[i].addEventListener('drop', (e) => {
+        e.stopPropagation();
+        this.dropHandler(e)
+      }, false);
+    }
+  }
+
+  updateFreeDraggListeners() {
+    const freeDraggableElems = document.getElementsByClassName('free-draggable');
+
+    if (freeDraggableElems.length <= 0)
+      return;
+
+    for (let i = 0; i < freeDraggableElems.length; i++) {
+
+      freeDraggableElems[i].removeEventListener('mousedown', (e) => { this.freeDragHandler(e); });
+      freeDraggableElems[i].addEventListener('mousedown', (e) => {
+        this.freeDragHandler(e);
+        return false;
+      });
+
+      window.removeEventListener('mouseup', (e) => { this.freeDragendHandler(e); });
+      window.addEventListener('mouseup', (e) => {
+        this.freeDragendHandler(e);
+      });
+    }
+  }
+
+  // #endregion
+
+  // #region EVENT HANDLERS
+
+  dragstartHandler( e ) {
+    e.stopPropagation();
+    this.utils.populateDataTransfer( e );
+    return false;
+  }
+
+  dragoverHandler( e ) {
+    e.stopPropagation();
+    const that = e.target;
+    const currentDragData = e.dataTransfer.getData( 'text/html' );
+
+    if ( that.children.length > 0 || that.localName !== 'article' || currentDragData === this.currentFreeDragData )
+      return;
+
+    this.utils.acceptDrop( e );
+    return false;
+  }
+
+  dropHandler( e ) {
+    e.stopPropagation();
+    e.preventDefault();
+    const that = e.target;
+
+    const newElement = new DOMParser().parseFromString( e.dataTransfer.getData( 'text/html' ), 'text/html' ).body.firstChild;
+    document.getElementById( newElement.id ).remove();
+    // data.classList.add('animated', 'bounceIn');
+    that.insertAdjacentElement( 'afterbegin', newElement );
+    this.updateDraggables();
+    desktopManager.updateListeners();
+  }
+
+  freeDragHandler( e ) {
+    e.stopPropagation();
+    e.preventDefault();
+    this.isDragging = true;
+    this.currentFreeDragElem = DomUtils.getParentByTag( e.target, 'article' );
+
+    window.addEventListener( 'mousemove', ( e ) => {
+      this.mousePositionHandler( e );
+    } );
+
+    return false;
+  }
+
+  mousePositionHandler( e ) {
+    e.stopPropagation();
+    if ( !this.isDragging )
+      return;
+
+    const offset = DomUtils.getOffset( this.currentFreeDragElem );
+
+    this.currentFreeDragElem.style.top = ( e.pageY ).toString() + 'px';
+    this.currentFreeDragElem.style.left = ( e.pageX ).toString() + 'px';
+    // this.currentFreeDragElem.style.left = (e.pageX - this.currentFreeDragElem.offsetTop).toString() + 'px';
+  }
+
+  freeDragendHandler( e ) {
+    e.stopPropagation();
+    window.removeEventListener( 'mousemove', ( e ) => {
+      this.mousePositionHandler( e );
+    } );
+    // Hack.
+    this.isDragging = false;
+    this.currentFreeDragData = '';
+    this.currentFreeDragElem = null;
+  }
+
+  // #ENDREGION
 }
 
-const dragAndDrop = new DragAndDrop();
+new DragAndDrop();
+﻿let windowResizer = null;
+
+class WindowResizer {
+  constructor() {
+    if ( windowResizer )
+      throw new Error( 'There can only be one instance of WindowResizer' );
+
+    this.currentResizer = null;
+
+    windowResizer = this;
+    Object.seal( windowResizer );
+  }
+
+  get _() { return windowResizer; }
+
+  updateListeners() {
+    const resizers = document.getElementsByClassName( 'resizer' );
+
+    for ( let i = 0; i < resizers.length; ++i ) {
+      resizers[i].addEventListener( 'mousedown', ( e ) => {
+        e.preventDefault();
+        this.currentResizer = e.target;
+        window.addEventListener( 'mousemove', resizeWindowHandler );
+        // Multiple cancel events just to be sure.
+        window.addEventListener( 'mouseup', this.stopResizing );
+        window.addEventListener( 'mouseleave', this.stopResizing );
+        window.addEventListener( 'mousemouseout', this.stopResizing );
+      } );
+    }
+  }
+
+  stopResizing( e ) {
+    e.preventDefault();
+    window.removeEventListener( 'mousemove', resizeWindowHandler );
+    this.currentResizable = null;
+  }
+}
+
+const resizeWindowHandler = ( e ) => {
+  const thisWindow = DomUtils.getParentByClassInclude( windowResizer.currentResizer, 'resizable' );
+
+  thisWindow.style.width = ( e.pageX - thisWindow.getBoundingClientRect().left ).toString() + 'px';
+  thisWindow.style.height = ( e.pageY - thisWindow.getBoundingClientRect().top ).toString() + 'px';
+};
+
+new WindowResizer();
 ﻿// Conect to server.
 class FileSystem {
 
@@ -822,7 +884,7 @@ const taskbarManager = new TaskbarManager();
 
   get template() {
     return `
-      <article class="window-manager grid-y" id="${this.id}">
+      <article class="window-manager grid-y resizable" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
             <div class="cell large-10">
@@ -843,6 +905,7 @@ const taskbarManager = new TaskbarManager();
         <section class="content">
           ${this.content}
         </section>
+        <div class="resizer"></div>
       </article>`;
   }
 
@@ -882,29 +945,29 @@ class WindowManager {
     this.updateListeners();
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
-
-    console.info(this.windows)
-  };
+    windowResizer.updateListeners();
+  }
 
   closeWindow(windowId) {
     this.findWindowInstance(windowId).kill();
     taskbarManager.killIcon(windowId);
     this.windows.remove(windowId);
     this.updateListeners();
-  };
+  }
 
   minimizeWindow(windowId) {
     this.findWindowInstance(windowId).minimize();
     taskbarManager.minimizedIcon(windowId);
-  };
+  }
 
   maximizeWindow (windowId) {
     this.findWindowInstance(windowId).maximize();
     taskbarManager.maximizedIcon(windowId);
-  };
+  }
+
+  // #region LISTENERS:
 
   // TODO: Fix "removeEventListener"'s.
-  // LISTENERS:
   updateListeners() {
     const allCloseWindowsBtns = document.querySelectorAll('[id^="win-"] .close-window');
 
@@ -913,7 +976,7 @@ class WindowManager {
       allCloseWindowsBtns[i].addEventListener('click', (e) => {
         this.closeWindowHandler(e, allCloseWindowsBtns[i]);
       });
-    };
+    }
 
     const allMinimizeWindowsBtns = document.querySelectorAll('[id^="win-"] .minimize-window');
 
@@ -932,20 +995,23 @@ class WindowManager {
         this.taskbarIconsHandler(e, allTaskbarIcons[i]);
       });
     }
-  };
+  }
 
-  // EVENT HANDLERS:
+  // #endregion
+
+  // #region EVENT HANDLERS:
+
   closeWindowHandler (e, closeWindowBtn) {
     e.stopPropagation();
     const thisWindow = DomUtils.getParentByIdInclude(closeWindowBtn, 'win-');
     this.closeWindow(thisWindow.id);
-  };
+  }
 
   minimizeWindowHandler(e, minimizeWindowBtn) {
     e.stopPropagation();
     const thisWindow = DomUtils.getParentByIdInclude(minimizeWindowBtn, 'win-');
     this.minimizeWindow(thisWindow.id);
-  };
+  }
 
   taskbarIconsHandler(e, taskbarIcon) {
     e.stopPropagation();
@@ -956,7 +1022,9 @@ class WindowManager {
       this.maximizeWindow(thisWindowId);
     else
       this.minimizeWindow(thisWindowId);
-  };
+  }
+
+  // #endregion
 
   // UTILITIES:
   findWindowInstance(windowId, Callback) {

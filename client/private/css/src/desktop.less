@@ -1,16 +1,20 @@
 ﻿#desktop {
-    /*background-color: yellow;*/
     background-image: url('@{server-root-path}img/wallpaper-1.jpg');
     background-repeat: no-repeat;
     background-position: bottom;
-    background-position-y: -10vh;
-    background-size: 100%;
+    background-position-y: 0vh;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     height: 95vh;
     width: 100vw;
     overflow: hidden;
-    position: absolute;
-    bottom: 0;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
     .desktop-row {
         height: 100%;
@@ -47,6 +51,7 @@
 
                 .icon-label {
                     color: white;
+                    cursor: pointer;
                     display: block;
                 }
             }

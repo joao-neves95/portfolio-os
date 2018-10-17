@@ -14,7 +14,7 @@
 
   get template() {
     return `
-      <article class="window-manager grid-y" id="${this.id}">
+      <article class="window-manager grid-y resizable" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
             <div class="cell large-10">
@@ -35,6 +35,7 @@
         <section class="content">
           ${this.content}
         </section>
+        <div class="resizer"></div>
       </article>`;
   }
 
