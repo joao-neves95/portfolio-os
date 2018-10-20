@@ -1,4 +1,6 @@
-﻿class Window {
+﻿// TODO: Add the z-index of each each window.
+
+class Window {
   constructor(processId, title, content) {
 
     this.id = `win-${ processId }`;
