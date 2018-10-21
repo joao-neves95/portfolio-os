@@ -1,12 +1,16 @@
 ﻿// Conect to server.
 class FileSystem {
 
+  _fetchFileSystem() {
+
+  }
+
   get structure() {
 
     return {
       C: {
         // For shivayl (João Neves).
-        portfolioOs: {
+        portfolioOS: {
           documents: [
             { name: 'MyDocument', content: '' }
           ],
@@ -15,7 +19,8 @@ class FileSystem {
           ],
           videos: [
             { name: '', url: '' }
-          ]
+          ],
+          music: []
         },
         applications: {
           system: [
@@ -37,7 +42,8 @@ class FileSystem {
         user: {
           documents: [],
           images: [],
-          videos: []
+          videos: [],
+          music: []
         }
       }
     };

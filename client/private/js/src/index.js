@@ -3,6 +3,7 @@
 // @import './externalLibs'
 // @import './utils'
 // @import './domUtils'
+// @import<<DIR './enums/'
 // @import './systemLibs/networking'
 // @import './systemLibs/dragAndDrop.js'
 // @import './systemLibs/windowResizer.js'
@@ -25,8 +26,8 @@
 // @import './modules/desktopManager/desktopTemplates'
 // @import './modules/desktopManager/desktopIcon'
 // @import './modules/desktopManager/desktopManager'
-// @import './systemLibs/contextMenu/contextMenu.templates'
-// @import './systemLibs/contextMenu/contextMenu.controller'
+// @import './modules/contextMenu/contextMenu.templates'
+// @import './modules/contextMenu/contextMenu.controller'
 // @import './modules/globalEvents'
 // @import './main'
 //
