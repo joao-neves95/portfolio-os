@@ -1,4 +1,7 @@
 ﻿class TerminalTemplates {
+  constructor() {
+    this.lineContent = '';
+  }
 
   get welcomeMessage() { return 'Welcome to the Portfolio - OS Terminal!'; };
 
@@ -15,36 +18,44 @@
    * @param {function} content 
    * withInfo() | withInput()
    */
-   addLine(content = '') {
+   addLine() {
       return `
         <article class="grid-x input-group line">
-          ${content}
+          ${this.lineContent}
         </article>
       `;
+
+     this.lineContent = '';
    }
 
   /**
    * 
    * @param {string} content
    */
-  withInfo(content = '') {
-    return `
-      <p class="info">${content}<p>
+  withInfo( content = '', additionalClasses = '') {
+    this.lineContent = `
+      <p class="info ${additionalClasses}">${content}<p>
     `;
+
+    return this;
   }
 
   withLastInput(lastInput = '') {
-    return `
+    this.lineContent = `
       <label class="cell medium-1 middle input-icon">&gt;</label>
       <p class="cell medium-11 no-border input" type="text" autofocus>${lastInput}<p>
     `;
+
+    return this;
   }
 
   withInput() {
-    return `
+    this.lineContent = `
       <label class="cell medium-1 middle input-icon">&gt;</label>
       <input id="active-input" class="cell medium-11 no-border input" type="text" autofocus>
     `;
+
+    return this;
   }
 }
 

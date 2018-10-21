@@ -3,6 +3,8 @@
 // @import './externalLibs'
 // @import './utils'
 // @import './domUtils'
+// @import<<DIR './enums/'
+// @import<<DIR './models/'
 // @import './systemLibs/networking'
 // @import './systemLibs/dragAndDrop.js'
 // @import './systemLibs/windowResizer.js'
@@ -12,7 +14,6 @@
 // @import './modules/windowManager/window'
 // @import './modules/windowManager/windowManager'
 // @import './userApps/userAppsManager'
-// @import './systemApps/systemApp'
 // @import './systemApps/systemAppsManager'
 // @import './systemApps/trash/trash'
 // @import './systemApps/trash/trashTemplates'
@@ -25,8 +26,8 @@
 // @import './modules/desktopManager/desktopTemplates'
 // @import './modules/desktopManager/desktopIcon'
 // @import './modules/desktopManager/desktopManager'
-// @import './systemLibs/contextMenu/contextMenu.templates'
-// @import './systemLibs/contextMenu/contextMenu.controller'
+// @import './modules/contextMenu/contextMenu.templates'
+// @import './modules/contextMenu/contextMenu.controller'
 // @import './modules/globalEvents'
 // @import './main'
 //
@@ -414,6 +415,69 @@ class List extends Collection {
     };
   }
 }
+﻿const FileSystemItemType = Object.freeze( {
+  File: 1,
+  FileUrl: 2,
+  Executable: 3
+} );
+﻿const voteType = Object.freeze( {
+  DownVote: 0,
+  UpVote: 1
+} );
+﻿class AppRating {
+  constructor() {
+    this.upVotes = 0;
+    this.downVotes = 0;
+    this.voteRatio = 0;
+    this.userVotes = [];
+  }
+}
+﻿class AppStoreApplication {
+  /**
+   * @param { FileSystemItemType } type FileSystemItemType enum
+   * @param { string } name
+   * @param { string } creator
+   * @param { string } htmlIndexUrl
+   */
+  constructor( type, name, creator, htmlIndexUrl ) {
+    this.type = type;
+    this.name = name;
+    this.creator = creator;
+    this.htmlIndexUrl = htmlIndexUrl; // 'https://rawgit.com/'
+
+    this.rating = {};
+    this.creation = '';
+    this.lastUpdate = '';
+  }
+}
+﻿class FileModel {
+  /**
+   * 
+   * @param { FileSystemItemType } type FileSystemItemType enum
+   * @param { string } name
+   * @param { string } content
+   */
+  constructor( type, name, content ) {
+    this.type = type;
+    this.name = name;
+    this.content = content;
+  }
+}
+﻿class SystemApp {
+  constructor(appName, startMenuIconUrl, taskbarIconUrl, executeFunction) {
+    this.name = appName;
+    this.executeFunction = (processId) => { executeFunction(processId); };
+    this.startMenuIconUrl = startMenuIconUrl;
+    this.taskbarIconUrl = taskbarIconUrl;
+  }
+}
+﻿class UserVote {
+  constructor( user, voteType ) {
+    this.user = user;
+    this.voteType = voteType;
+    this.timestamp = '';
+  }
+}
 ﻿﻿let dragAndDrop = null;
 
 class DragAndDrop {
@@ -641,7 +705,9 @@ class DragAndDrop {
 }
 
 new DragAndDrop();
-﻿let windowResizer = null;
+﻿// https://medium.com/the-z/making-a-resizable-div-in-js-is-not-easy-as-you-think-bda19a1bc53d
+
+let windowResizer = null;
 
 class WindowResizer {
   constructor() {
@@ -690,38 +756,87 @@ new WindowResizer();
 ﻿// Conect to server.
 class FileSystem {
 
+  _fetchFileSystem() {
+
+  }
+
+  /**
+   * Get a directory using its complete path.
+   * 
+   * It returns false if the directory was not found.
+   * 
+   * @param { string[] } name
+   */
+  getDiretory( path ) {
+    let dir = this.structure;
+
+    for ( let i = 0; i < path.length; ++i ) {
+      try {
+        dir = dir[path[i] + '/'];
+
+        if ( !dir ) {
+          try {
+            dir = this.structure[path[i]];
+
+            if ( !dir )
+              return false;
+          } catch {
+            return false;
+          }
+        }
+      } catch {
+        return false;
+      }
+    }
+
+    return dir;
+  }
+
   get structure() {
+
     return {
-      C: {
+      "root/": {
         // For shivayl (João Neves).
-        portfolioOs: {
-          documents: [
-            { name: 'Curriculum' }
+        "portfolioOS/": {
+          "documents/": [
+            new FileModel( FileSystemItemType.File, 'My Document', 'Hello World.' )
           ],
-          images: [],
-          videos: []
+          "images/": [
+            new FileModel( FileSystemItemType.FileUrl, 'My Image', 'www' )
+          ],
+          "videos/": [
+            new FileModel( FileSystemItemType.FileUrl, 'My Video', 'www' )
+          ],
+          "music/": []
         },
-        applications: {
-          system: [
-            { name: 'Terminal', initMethod: 'undefined' }
+        "applications/": {
+          "system/": [
+            new SystemApp( 'Terminal', '', '', console.log )
           ],
-          appStore: [
-            // Just a model.
-            { name: 'Calculator', creator: 'shivayl', htmlIndexUrl: 'https://rawgit.com/' },
-            { name: 'Wikipedia Viewer', creator: 'shivayl', htmlIndexUrl: 'https://rawgit.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html' }
+          "appStore/": [
+            new AppStoreApplication( FileSystemItemType.Executable, 'Wikipedia Viewer', 'shivayl', 'https://rawgit.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html' )
           ]
         },
-        user: {
-          documents: [],
-          images: [],
-          videos: []
+        "user/": {
+          "documents/": [
+            new FileModel( FileSystemItemType.File, 'My Document', 'Hello World.' )
+          ],
+          "images/": [
+            new FileModel( FileSystemItemType.FileUrl, 'My Image', 'www' )
+          ],
+          "videos/": [
+            new FileModel( FileSystemItemType.FileUrl, 'My Video', 'www' )
+          ],
+          "music/": [],
+          "trash/": []
         }
       }
     };
+
   }
 }
 
-const fileSystem = new FileSystem().structure;
+const fileSystem = new FileSystem();
 ﻿class TaskbarIcon {
   /**
    * 
@@ -868,7 +983,9 @@ class TaskbarManager {
 }
 
 const taskbarManager = new TaskbarManager();
-﻿class Window {
+﻿// TODO: Add the z-index of each each window.
+
+class Window {
   constructor(processId, title, content) {
 
     this.id = `win-${ processId }`;
@@ -1035,15 +1152,7 @@ class WindowManager {
 }
 
 const windowManager = new WindowManager();
-﻿﻿class SystemApp {
-  constructor(appName, startMenuIconUrl, taskbarIconUrl, executeFunction) {
-    this.name = appName;
-    this.executeFunction = (processId) => { executeFunction(processId); };
-    this.startMenuIconUrl = startMenuIconUrl;
-    this.taskbarIconUrl = taskbarIconUrl;
-  }
-}
-﻿class SystemAppsManager {
+﻿﻿class SystemAppsManager {
   constructor() {
     this.systemApps = new Dictionary();
   }
@@ -1097,6 +1206,9 @@ const systemAppsManager = new SystemAppsManager();
   }
 }
 ﻿﻿class TerminalTemplates {
+  constructor() {
+    this.lineContent = '';
+  }
 
   get welcomeMessage() { return 'Welcome to the Portfolio - OS Terminal!'; };
 
@@ -1113,51 +1225,64 @@ const systemAppsManager = new SystemAppsManager();
    * @param {function} content 
    * withInfo() | withInput()
    */
-   addLine(content = '') {
+   addLine() {
       return `
         <article class="grid-x input-group line">
-          ${content}
+          ${this.lineContent}
         </article>
       `;
+
+     this.lineContent = '';
    }
 
   /**
    * 
    * @param {string} content
    */
-  withInfo(content = '') {
-    return `
-      <p class="info">${content}<p>
+  withInfo( content = '', additionalClasses = '') {
+    this.lineContent = `
+      <p class="info ${additionalClasses}">${content}<p>
     `;
+
+    return this;
   }
 
   withLastInput(lastInput = '') {
-    return `
+    this.lineContent = `
       <label class="cell medium-1 middle input-icon">&gt;</label>
       <p class="cell medium-11 no-border input" type="text" autofocus>${lastInput}<p>
     `;
+
+    return this;
   }
 
   withInput() {
-    return `
+    this.lineContent = `
       <label class="cell medium-1 middle input-icon">&gt;</label>
       <input id="active-input" class="cell medium-11 no-border input" type="text" autofocus>
     `;
+
+    return this;
   }
 }
 
 const terminalTemplates = new TerminalTemplates();
-﻿let initAnimI = 0;
-const initAnimMessage = terminalTemplates.welcomeMessage;
-const initAnimDelay = 50;
-let initAnimTarget = HTMLElement;
+﻿const initAnimMessage = terminalTemplates.welcomeMessage;
+const INIT_ANIM_DELAY = 50;
 
 class Terminal {
   constructor(processId) {
     this.id = `terminal-${ processId }`;
     this.processId = processId;
 
-    this.currentDir = 'C';
+    this.initAnimTarget = HTMLElement;
+    this.initAnimI = 0;
+
+    this.currentInput = '';
+    this.currentDir = fileSystem.structure["root/"];
+    this.currentDirName = 'root/';
+    this.currentPath = ['root/'];
+    /** @type { fileSystem.structure } */
 
     this.init();
   }
@@ -1168,19 +1293,19 @@ class Terminal {
     windowManager.openNewWindow(this.processId, terminalTemplates.window(this.id));
 
     this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
-    initAnimTarget = document.querySelector(`#${ this.id } > .line > .info`);
-    this.typeWriterAnimation();
-  };
+    this.initAnimTarget = document.querySelector(`#${ this.id } > .line > .info`);
+    this.__typeWriterAnimation();
+  }
 
-  typeWriterAnimation() {
-    if (initAnimI < initAnimMessage.length) {
-      initAnimTarget.innerHTML += initAnimMessage[initAnimI];
-      ++initAnimI;
-      setTimeout(this.typeWriterAnimation.bind(this), initAnimDelay);
-    }
-    else {
-      initAnimI = 0;
-      setTimeout(() => { this.addNewInput() }, 500)
+  __typeWriterAnimation() {
+    if (this.initAnimI < initAnimMessage.length) {
+      this.initAnimTarget.innerHTML += initAnimMessage[this.initAnimI];
+      ++this.initAnimI;
+      setTimeout( this.__typeWriterAnimation.bind( this ), INIT_ANIM_DELAY );
+
+    } else {
+      this.initAnimI = 0;
+      setTimeout( () => { this.addNewInput(); }, 500 );
     }
   }
 
@@ -1192,60 +1317,145 @@ class Terminal {
    * @param {string} aditionalInfo
    * (optional) Default -> ""
    */
-  // TODO: Fix Id's.
-  deativateLastInput(lastInput = '', aditionalInfo = '') {
-    const currentActiveInput = document.getElementById('active-input');
+  deativateLastInput( lastInput = null, aditionalInfo = '' ) {
+    const currentActiveInput = document.getElementById( 'active-input' );
 
     if (currentActiveInput) {
-      DomUtils.getParentByClassInclude(currentActiveInput, 'grid-x input-group line').remove();
-      this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withLastInput(lastInput));
+      if ( !lastInput )
+        lastInput = this.currentInput;
+
+      DomUtils.getParentByClassInclude( currentActiveInput, 'grid-x input-group line' ).remove();
+      this.element.innerHTML += terminalTemplates.withLastInput( lastInput ).addLine();
 
       if (aditionalInfo !== '')
-        this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(aditionalInfo));
+        this.element.innerHTML += terminalTemplates.withInfo( aditionalInfo ).addLine();
+
+      this.currentInput = '';
     }
   }
 
+  __addInfo( info ) {
+    this.element.innerHTML += terminalTemplates.withInfo( info ).addLine();
+  }
+
+  __addCurrentDirLine() {
+    this.element.innerHTML += terminalTemplates.withInfo( this.currentPath.join( '' ), 'current-path' ).addLine();
+  }
+
   addNewInput() {
-    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
+    this.__addCurrentDirLine();
+    this.element.innerHTML += terminalTemplates.withInput().addLine();
     const activeInput = document.getElementById('active-input');
     this.focusActiveInput();
     this.element.removeEventListener('focus', this.focusActiveInput, true);
     this.element.addEventListener('focus', this.focusActiveInput, true);
     this.element.removeEventListener('click', this.focusActiveInput, true);
     this.element.addEventListener('click', this.focusActiveInput, true);
-    activeInput.addEventListener('blur', this.focusActiveInput, true);
-    activeInput.addEventListener('keypress', (e) => { this.executeCommand(e, activeInput.value) });
+    activeInput.addEventListener( 'blur', this.focusActiveInput, true );
+
+    activeInput.addEventListener( 'keypress', ( e ) => {
+      if ( e.keyCode === 13 ) {
+        this.currentInput = activeInput.value;
+        this.executeCommand( e );
+      }
+    } );
   }
 
   focusActiveInput() {
     document.getElementById('active-input').focus();
   }
 
-  executeCommand(e, input) {
-    e.preventDefault;
-    if (e.keyCode !== 13)
-      return;
-
-    const parsedInput = this.parseInput(input);
+  executeCommand( e ) {
+    e.preventDefault();
+    const parsedInput = this.parseInput( this.currentInput );
     const cmd = parsedInput.cmd;
     const val = parsedInput.value;
+    this.deativateLastInput();
 
-    switch (cmd.toUpperCase()) {
+    switch ( cmd.toUpperCase() ) {
+      case 'CLEAR':
+        this.clear();
+        break;
       case 'DIR':
       case 'LS':
-        this.deativateLastInput(cmd + ' ' + val.toString())
         this.listCurrentDirectory();
-        this.addNewInput();
         break;
       case 'CD':
+        if ( !val[0] )
+          this.deativateLastInput( null, 'It was not provided any directory name.' );
+        else
+          this.changeDirectory( val[0] );
+        break;
+      case 'CD..':
+      case 'CD-':
+        this.previousDirectory();
+        break;
+      case 'HELP':
+      case 'H':
+        this.printHelp();
         break;
       case 'RUN':
         break;
       default:
-        this.deativateLastInput(`${cmd} ${val.toString()}`, `'${cmd}' is not recognized as an internal or external command, operable program or batch file.`);
-        this.addNewInput();
+        this.__addInfo( `"${cmd}" is not recognized as an internal or external command, operable program or executable file.` );
     }
-  };
+
+    this.addNewInput();
+  }
+
+  // COMMAND HANDLERS:
+  printHelp() {
+    this.__addInfo(
+      `Commands: </br>
+       </br>
+       dir / ls </br>
+       cd </br>
+       cd.. / cd- </br>
+       clear`
+    );
+  }
+
+  listCurrentDirectory() {
+    let dirInfo = '';
+
+    for ( let key in this.currentDir ) {
+      if ( this.currentDir[key] instanceof FileModel )
+        dirInfo += this.currentDir[key].name;
+      else
+        dirInfo += key + '<br>';
+    }
+
+    this.__addInfo( dirInfo );
+  }
+
+  changeDirectory( dirName ) {
+    const path = this.currentPath.slice();
+    path.push( dirName );
+    const newDir = fileSystem.getDiretory( path );
+
+    if ( !newDir )
+      return this.__addInfo( `'${dirName}' is not a valid directory name.` );
+
+    if ( !dirName.endsWith( '/' ) ) {
+      dirName += '/';
+    }
+
+    this.currentDirName = dirName;
+    this.currentPath.push( dirName );
+    this.currentDir = newDir;
+  }
+
+  previousDirectory() {
+    this.currentPath.pop();
+    this.currentDirName = this.currentPath[this.currentPath.length - 1];
+    // this.currentDir = 
+  }
+
+  clear() {
+    this.element.innerHTML = '';
+  }
+
+  createFile() { }
 
   /**
    * Terminal input parser.
@@ -1253,23 +1463,14 @@ class Terminal {
    * @param {string} input
    *
    */
-  parseInput (input) {
-    const splitInput = input.split(/\s/);
+  parseInput( input ) {
+    const splitInput = input.split( /\s/ );
+
     return {
       cmd: splitInput[0],
-      value: splitInput.slice(1, splitInput.length)
-    }
-  };
-
-  // COMMAND HANDLERS:
-  listCurrentDirectory() {
-    const dirInfo = Object.keys(fileSystem[this.currentDir]);
-    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(dirInfo));
-  };
-
-  changeDirectory(value) { };
-
-  createFile() { };
+      value: splitInput.slice( 1, splitInput.length )
+    };
+  }
 }
 ﻿class Process {
   constructor(processName) {

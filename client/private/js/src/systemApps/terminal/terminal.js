@@ -1,14 +1,19 @@
-﻿let initAnimI = 0;
-const initAnimMessage = terminalTemplates.welcomeMessage;
-const initAnimDelay = 50;
-let initAnimTarget = HTMLElement;
+﻿const initAnimMessage = terminalTemplates.welcomeMessage;
+const INIT_ANIM_DELAY = 50;
 
 class Terminal {
   constructor(processId) {
     this.id = `terminal-${ processId }`;
     this.processId = processId;
 
-    this.currentDir = 'C';
+    this.initAnimTarget = HTMLElement;
+    this.initAnimI = 0;
+
+    this.currentInput = '';
+    this.currentDir = fileSystem.structure["root/"];
+    this.currentDirName = 'root/';
+    this.currentPath = ['root/'];
+    /** @type { fileSystem.structure } */
 
     this.init();
   }
@@ -19,19 +24,19 @@ class Terminal {
     windowManager.openNewWindow(this.processId, terminalTemplates.window(this.id));
 
     this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
-    initAnimTarget = document.querySelector(`#${ this.id } > .line > .info`);
-    this.typeWriterAnimation();
-  };
+    this.initAnimTarget = document.querySelector(`#${ this.id } > .line > .info`);
+    this.__typeWriterAnimation();
+  }
 
-  typeWriterAnimation() {
-    if (initAnimI < initAnimMessage.length) {
-      initAnimTarget.innerHTML += initAnimMessage[initAnimI];
-      ++initAnimI;
-      setTimeout(this.typeWriterAnimation.bind(this), initAnimDelay);
-    }
-    else {
-      initAnimI = 0;
-      setTimeout(() => { this.addNewInput() }, 500)
+  __typeWriterAnimation() {
+    if (this.initAnimI < initAnimMessage.length) {
+      this.initAnimTarget.innerHTML += initAnimMessage[this.initAnimI];
+      ++this.initAnimI;
+      setTimeout( this.__typeWriterAnimation.bind( this ), INIT_ANIM_DELAY );
+
+    } else {
+      this.initAnimI = 0;
+      setTimeout( () => { this.addNewInput(); }, 500 );
     }
   }
 
@@ -43,60 +48,145 @@ class Terminal {
    * @param {string} aditionalInfo
    * (optional) Default -> ""
    */
-  // TODO: Fix Id's.
-  deativateLastInput(lastInput = '', aditionalInfo = '') {
-    const currentActiveInput = document.getElementById('active-input');
+  deativateLastInput( lastInput = null, aditionalInfo = '' ) {
+    const currentActiveInput = document.getElementById( 'active-input' );
 
     if (currentActiveInput) {
-      DomUtils.getParentByClassInclude(currentActiveInput, 'grid-x input-group line').remove();
-      this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withLastInput(lastInput));
+      if ( !lastInput )
+        lastInput = this.currentInput;
+
+      DomUtils.getParentByClassInclude( currentActiveInput, 'grid-x input-group line' ).remove();
+      this.element.innerHTML += terminalTemplates.withLastInput( lastInput ).addLine();
 
       if (aditionalInfo !== '')
-        this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(aditionalInfo));
+        this.element.innerHTML += terminalTemplates.withInfo( aditionalInfo ).addLine();
+
+      this.currentInput = '';
     }
   }
 
+  __addInfo( info ) {
+    this.element.innerHTML += terminalTemplates.withInfo( info ).addLine();
+  }
+
+  __addCurrentDirLine() {
+    this.element.innerHTML += terminalTemplates.withInfo( this.currentPath.join( '' ), 'current-path' ).addLine();
+  }
+
   addNewInput() {
-    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInput());
+    this.__addCurrentDirLine();
+    this.element.innerHTML += terminalTemplates.withInput().addLine();
     const activeInput = document.getElementById('active-input');
     this.focusActiveInput();
     this.element.removeEventListener('focus', this.focusActiveInput, true);
     this.element.addEventListener('focus', this.focusActiveInput, true);
     this.element.removeEventListener('click', this.focusActiveInput, true);
     this.element.addEventListener('click', this.focusActiveInput, true);
-    activeInput.addEventListener('blur', this.focusActiveInput, true);
-    activeInput.addEventListener('keypress', (e) => { this.executeCommand(e, activeInput.value) });
+    activeInput.addEventListener( 'blur', this.focusActiveInput, true );
+
+    activeInput.addEventListener( 'keypress', ( e ) => {
+      if ( e.keyCode === 13 ) {
+        this.currentInput = activeInput.value;
+        this.executeCommand( e );
+      }
+    } );
   }
 
   focusActiveInput() {
     document.getElementById('active-input').focus();
   }
 
-  executeCommand(e, input) {
-    e.preventDefault;
-    if (e.keyCode !== 13)
-      return;
-
-    const parsedInput = this.parseInput(input);
+  executeCommand( e ) {
+    e.preventDefault();
+    const parsedInput = this.parseInput( this.currentInput );
     const cmd = parsedInput.cmd;
     const val = parsedInput.value;
+    this.deativateLastInput();
 
-    switch (cmd.toUpperCase()) {
+    switch ( cmd.toUpperCase() ) {
+      case 'CLEAR':
+        this.clear();
+        break;
       case 'DIR':
       case 'LS':
-        this.deativateLastInput(cmd + ' ' + val.toString())
         this.listCurrentDirectory();
-        this.addNewInput();
         break;
       case 'CD':
+        if ( !val[0] )
+          this.deativateLastInput( null, 'It was not provided any directory name.' );
+        else
+          this.changeDirectory( val[0] );
+        break;
+      case 'CD..':
+      case 'CD-':
+        this.previousDirectory();
+        break;
+      case 'HELP':
+      case 'H':
+        this.printHelp();
         break;
       case 'RUN':
         break;
       default:
-        this.deativateLastInput(`${cmd} ${val.toString()}`, `'${cmd}' is not recognized as an internal or external command, operable program or batch file.`);
-        this.addNewInput();
+        this.__addInfo( `"${cmd}" is not recognized as an internal or external command, operable program or executable file.` );
     }
-  };
+
+    this.addNewInput();
+  }
+
+  // COMMAND HANDLERS:
+  printHelp() {
+    this.__addInfo(
+      `Commands: </br>
+       </br>
+       dir / ls </br>
+       cd </br>
+       cd.. / cd- </br>
+       clear`
+    );
+  }
+
+  listCurrentDirectory() {
+    let dirInfo = '';
+
+    for ( let key in this.currentDir ) {
+      if ( this.currentDir[key] instanceof FileModel )
+        dirInfo += this.currentDir[key].name;
+      else
+        dirInfo += key + '<br>';
+    }
+
+    this.__addInfo( dirInfo );
+  }
+
+  changeDirectory( dirName ) {
+    const path = this.currentPath.slice();
+    path.push( dirName );
+    const newDir = fileSystem.getDiretory( path );
+
+    if ( !newDir )
+      return this.__addInfo( `'${dirName}' is not a valid directory name.` );
+
+    if ( !dirName.endsWith( '/' ) ) {
+      dirName += '/';
+    }
+
+    this.currentDirName = dirName;
+    this.currentPath.push( dirName );
+    this.currentDir = newDir;
+  }
+
+  previousDirectory() {
+    this.currentPath.pop();
+    this.currentDirName = this.currentPath[this.currentPath.length - 1];
+    // this.currentDir = 
+  }
+
+  clear() {
+    this.element.innerHTML = '';
+  }
+
+  createFile() { }
 
   /**
    * Terminal input parser.
@@ -104,21 +194,12 @@ class Terminal {
    * @param {string} input
    *
    */
-  parseInput (input) {
-    const splitInput = input.split(/\s/);
+  parseInput( input ) {
+    const splitInput = input.split( /\s/ );
+
     return {
       cmd: splitInput[0],
-      value: splitInput.slice(1, splitInput.length)
-    }
-  };
-
-  // COMMAND HANDLERS:
-  listCurrentDirectory() {
-    const dirInfo = Object.keys(fileSystem[this.currentDir]);
-    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo(dirInfo));
-  };
-
-  changeDirectory(value) { };
-
-  createFile() { };
+      value: splitInput.slice( 1, splitInput.length )
+    };
+  }
 }

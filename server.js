@@ -23,7 +23,7 @@ app.use( '/', routes );
 
 // TODO: Add 400 page.
 
-app.get( '*', ( req, res ) => {
+app.use( ( req, res, next ) => {
   console.info( '404 - Not Found.' );
 } );
 

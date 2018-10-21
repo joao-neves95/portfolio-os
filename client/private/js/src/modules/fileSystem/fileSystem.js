@@ -5,46 +5,75 @@ class FileSystem {
 
   }
 
+  /**
+   * Get a directory using its complete path.
+   * 
+   * It returns false if the directory was not found.
+   * 
+   * @param { string[] } name
+   */
+  getDiretory( path ) {
+    let dir = this.structure;
+
+    for ( let i = 0; i < path.length; ++i ) {
+      try {
+        dir = dir[path[i] + '/'];
+
+        if ( !dir ) {
+          try {
+            dir = this.structure[path[i]];
+
+            if ( !dir )
+              return false;
+          } catch {
+            return false;
+          }
+        }
+      } catch {
+        return false;
+      }
+    }
+
+    return dir;
+  }
+
   get structure() {
 
     return {
-      C: {
+      "root/": {
         // For shivayl (João Neves).
-        portfolioOS: {
-          documents: [
-            { name: 'MyDocument', content: '' }
+        "portfolioOS/": {
+          "documents/": [
+            new FileModel( FileSystemItemType.File, 'My Document', 'Hello World.' )
           ],
-          images: [
-            { name: '', url: '' }
+          "images/": [
+            new FileModel( FileSystemItemType.FileUrl, 'My Image', 'www' )
           ],
-          videos: [
-            { name: '', url: '' }
+          "videos/": [
+            new FileModel( FileSystemItemType.FileUrl, 'My Video', 'www' )
           ],
-          music: []
+          "music/": []
         },
-        applications: {
-          system: [
-            { name: 'Terminal', initMethod: 'undefined' }
+        "applications/": {
+          "system/": [
+            new SystemApp( 'Terminal', '', '', console.log )
           ],
-          appStore: [
-            // Just a model.
-            { name: 'Calculator', creator: 'shivayl', htmlIndexUrl: 'https://rawgit.com/', upVotes: 0, downVotes: 0, ratio: 0 },
-            {
-              name: 'Wikipedia Viewer',
-              creator: 'shivayl',
-              htmlIndexUrl: 'https://rawgit.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html',
-              upVotes: 0,
-              downVotes: 0,
-              ratio: 0
-            }
+          "appStore/": [
+            new AppStoreApplication( FileSystemItemType.Executable, 'Wikipedia Viewer', 'shivayl', 'https://rawgit.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html' )
           ]
         },
-        user: {
-          documents: [],
-          images: [],
-          videos: [],
-          music: [],
-          trash: []
+        "user/": {
+          "documents/": [
+            new FileModel( FileSystemItemType.File, 'My Document', 'Hello World.' )
+          ],
+          "images/": [
+            new FileModel( FileSystemItemType.FileUrl, 'My Image', 'www' )
+          ],
+          "videos/": [
+            new FileModel( FileSystemItemType.FileUrl, 'My Video', 'www' )
+          ],
+          "music/": [],
+          "trash/": []
         }
       }
     };
@@ -52,4 +81,4 @@ class FileSystem {
   }
 }
 
-const fileSystem = new FileSystem().structure;
+const fileSystem = new FileSystem();
