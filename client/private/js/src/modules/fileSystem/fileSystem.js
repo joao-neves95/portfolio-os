@@ -43,7 +43,8 @@ class FileSystem {
           documents: [],
           images: [],
           videos: [],
-          music: []
+          music: [],
+          trash: []
         }
       }
     };
