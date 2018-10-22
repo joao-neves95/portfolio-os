@@ -14,21 +14,27 @@ class FileSystem {
    */
   getDiretory( path ) {
     let dir = this.structure;
+    let currDir = dir;
 
     for ( let i = 0; i < path.length; ++i ) {
       try {
-        dir = dir[path[i] + '/'];
+        currDir = dir[path[i]];
 
-        if ( !dir ) {
+        if ( !currDir ) {
           try {
-            dir = this.structure[path[i]];
+            currDir = dir;
+            currDir = dir[path[i] + '/'];
 
-            if ( !dir )
+            if ( !currDir )
               return false;
+
+            dir = currDir;
           } catch {
             return false;
           }
         }
+
+        dir = currDir;
       } catch {
         return false;
       }

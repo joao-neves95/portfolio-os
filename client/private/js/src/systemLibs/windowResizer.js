@@ -40,9 +40,14 @@ class WindowResizer {
 
 const resizeWindowHandler = ( e ) => {
   const thisWindow = DomUtils.getParentByClassInclude( windowResizer.currentResizer, 'resizable' );
+  const currWidth = e.pageX - thisWindow.getBoundingClientRect().left;
+  const currHigth = e.pageY - thisWindow.getBoundingClientRect().top;
 
-  thisWindow.style.width = ( e.pageX - thisWindow.getBoundingClientRect().left ).toString() + 'px';
-  thisWindow.style.height = ( e.pageY - thisWindow.getBoundingClientRect().top ).toString() + 'px';
+  if ( currWidth >= 799 )
+    thisWindow.style.width = currWidth.toString() + 'px';
+
+  if ( currHigth >= 418 )
+    thisWindow.style.height = currHigth.toString() + 'px';
 };
 
 new WindowResizer();

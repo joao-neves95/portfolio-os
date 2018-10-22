@@ -1,4 +1,9 @@
 ﻿// Utilities.
+
+Array.prototype.last = () => {
+  return this[this.length - 1];
+};
+
 class Utils {
   static log(message) {
     console.log(message);

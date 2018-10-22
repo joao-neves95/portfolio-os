@@ -1,4 +1,4 @@
-﻿const initAnimMessage = terminalTemplates.welcomeMessage;
+const initAnimMessage = terminalTemplates.welcomeMessage;
 const INIT_ANIM_DELAY = 50;
 
 class Terminal {
@@ -65,7 +65,7 @@ class Terminal {
     }
   }
 
-  __addInfo( info ) {
+  log( info ) {
     this.element.innerHTML += terminalTemplates.withInfo( info ).addLine();
   }
 
@@ -105,6 +105,7 @@ class Terminal {
 
     switch ( cmd.toUpperCase() ) {
       case 'CLEAR':
+      case 'CLS':
         this.clear();
         break;
       case 'DIR':
@@ -113,13 +114,23 @@ class Terminal {
         break;
       case 'CD':
         if ( !val[0] )
-          this.__addInfo( 'It was not provided any directory name.' );
-        else
-          this.changeDirectory( val[0] );
+          this.log( this.currentDirName );
+        else {
+          if ( val[0] === '..' || val[0] === '--' )
+            this.previousDirectory();
+          else if ( val[0] === '/' || val[0] === '\\' )
+            this.goToRoot();
+          else
+            this.changeDirectory( [val[0]] );
+        }
         break;
       case 'CD..':
       case 'CD-':
         this.previousDirectory();
+        break;
+      case 'CD/':
+      case 'CD\\':
+        this.goToRoot();
         break;
       case 'HELP':
       case 'H':
@@ -128,7 +139,7 @@ class Terminal {
       case 'RUN':
         break;
       default:
-        this.__addInfo( `"${cmd}" is not recognized as an internal or external command, operable program or executable file.` );
+        this.log( `"${cmd}" is not recognized as an internal or external command, operable program or executable file.` );
     }
 
     this.addNewInput();
@@ -136,13 +147,13 @@ class Terminal {
 
   // COMMAND HANDLERS:
   printHelp() {
-    this.__addInfo(
+    this.log(
       `Commands: </br>
-       </br>
-       dir / ls </br>
-       cd </br>
-       cd.. / cd- </br>
-       clear`
+       CD => Goes to a provided directory, or displays the current directory name</br>
+       CD.. (or) CD- => Goes to the previous directory</br>
+       CD/ (or) CD\\ => Goes to root</br>
+       CLEAR (or) CLS => Clear all previous console entries
+       DIR (or) LS => Lists all the files and subdirectories in the current directory</br>`
     );
   }
 
@@ -151,35 +162,57 @@ class Terminal {
 
     for ( let key in this.currentDir ) {
       if ( this.currentDir[key] instanceof FileModel )
-        dirInfo += this.currentDir[key].name;
+        dirInfo += this.currentDir[key].name + '<br>';
+      else if ( typeof this.currentDir[key] === 'function' )
+        continue;
       else
         dirInfo += key + '<br>';
     }
 
-    this.__addInfo( dirInfo );
+    this.log( dirInfo );
   }
 
+  goToRoot() {
+    this.currentPath = ['root/'];
+    this.currentDirName = 'root/';
+    this.currentDir = fileSystem.structure['root/'];
+  }
+
+  /**
+   * 
+   * @param { string[] } dirName
+   */
   changeDirectory( dirName ) {
-    const path = this.currentPath.slice();
-    path.push( dirName );
+    dirName = dirName[0].split( '/' );
+
+    let path;
+    if ( dirName[0] === 'root/' || dirName[0] === 'root' )
+      path = dirName;
+    else
+      path = this.currentPath.slice().concat( dirName );
+
     const newDir = fileSystem.getDiretory( path );
 
     if ( !newDir )
-      return this.__addInfo( `'${dirName}' is not a valid directory name.` );
+      return this.log( `'${dirName.join( '/' )}' is not a valid directory name.` );
 
-    if ( !dirName.endsWith( '/' ) ) {
-      dirName += '/';
+    for ( let i = 0; i < dirName.length; ++i) {
+      if ( !dirName[i].endsWith( '/' ) )
+        dirName[i] += '/';
     }
 
-    this.currentDirName = dirName;
-    this.currentPath.push( dirName );
+    this.currentDirName = dirName[dirName.length - 1];
+    this.currentPath = path;
     this.currentDir = newDir;
   }
 
   previousDirectory() {
+    if ( this.currentDirName === 'root/' )
+      return;
+
     this.currentPath.pop();
-    this.currentDirName = this.currentPath[this.currentPath.length - 1];
-    // this.currentDir = 
+    this.currentDirName = this.currentPath.last();
+    this.currentDir = fileSystem.getDiretory( this.currentPath );
   }
 
   clear() {
