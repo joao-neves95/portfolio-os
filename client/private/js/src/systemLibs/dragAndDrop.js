@@ -9,6 +9,9 @@ class DragAndDrop {
 
     this.isDragging = Boolean;
     this.currentFreeDragElem = HTMLElement;
+    // This is an hack because chrome only allows me to read dataTrasfer on the drop event
+    // and I need to access it before the drop...
+    this.currentDragData = '';
     this.currentFreeDragData = '';
 
     // #region UTILITIES
@@ -20,12 +23,13 @@ class DragAndDrop {
         const tag = that.localName;
         const classes = that.className;
         const data = `<${tag} id="${id}" class="${classes}"> ${that.innerHTML} </${tag}>`;
-        e.dataTransfer.setData( 'text/html', data );
+        e.dataTransfer.setData( 'text/plain', data );
+        this.currentDragData = data;
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.dropEffect = 'move';
 
         if ( classes.includes( 'window-manager' ) )
-          this.currentFreeDragData = e.dataTransfer.getData( 'text/html' );
+          this.currentFreeDragData = e.dataTransfer.getData( 'text/plain' );
       },
 
       acceptDrop: ( e ) => {
@@ -120,7 +124,6 @@ class DragAndDrop {
         this.dragoverHandler(e);
       }, false);
 
-
       droppableElems[i].removeEventListener( 'drop', ( e ) => { this.dropHandler( e ); });
       droppableElems[i].addEventListener('drop', (e) => {
         e.stopPropagation();
@@ -163,9 +166,8 @@ class DragAndDrop {
   dragoverHandler( e ) {
     e.stopPropagation();
     const that = e.target;
-    const currentDragData = e.dataTransfer.getData( 'text/html' );
 
-    if ( that.children.length > 0 || that.localName !== 'article' || currentDragData === this.currentFreeDragData )
+    if ( that.children.length > 0 || that.localName !== 'article' || this.currentDragData === this.currentFreeDragData )
       return;
 
     this.utils.acceptDrop( e );
@@ -177,7 +179,8 @@ class DragAndDrop {
     e.preventDefault();
     const that = e.target;
 
-    const newElement = new DOMParser().parseFromString( e.dataTransfer.getData( 'text/html' ), 'text/html' ).body.firstChild;
+    const newElement = new DOMParser().parseFromString( e.dataTransfer.getData( 'text/plain' ), 'text/html' ).body.firstChild;
+    e.dataTransfer.clearData();
     document.getElementById( newElement.id ).remove();
     // data.classList.add('animated', 'bounceIn');
     that.insertAdjacentElement( 'afterbegin', newElement );
