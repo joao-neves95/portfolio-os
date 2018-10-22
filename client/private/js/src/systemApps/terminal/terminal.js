@@ -113,7 +113,7 @@ class Terminal {
         break;
       case 'CD':
         if ( !val[0] )
-          this.deativateLastInput( null, 'It was not provided any directory name.' );
+          this.__addInfo( 'It was not provided any directory name.' );
         else
           this.changeDirectory( val[0] );
         break;

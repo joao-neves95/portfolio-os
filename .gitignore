@@ -295,3 +295,5 @@ obj/
 bin/
 node_modules/
 *.lnk
+
+merger-config.json

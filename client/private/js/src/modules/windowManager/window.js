@@ -6,13 +6,13 @@ class Window {
     this.id = `win-${ processId }`;
     this.title = title;
     this.content = content;
-    this.element = HTMLElement;
     this.icon = TaskbarIcon;
 
-    this.isMinimized = Boolean;
-
+    this.isMinimized = false;
     this.init();
   }
+
+  get element() { return document.getElementById( this.id ); }
 
   get template() {
     return `
@@ -27,7 +27,7 @@ class Window {
               <img src="${IMG_PATH}minimize-white.svg" alt="Minimize Window Icon" class="minimize-window icon" />
             </div>
             <div class="cell large-1 icon-wrap">
-              <img src="${IMG_PATH}maximize-white.svg" alt="Maximize Window Icon" class="icon" />
+              <img src="${IMG_PATH}maximize-white.svg" alt="Maximize Window Icon" class="max-size-window icon" />
             </div>
             <div class="cell large-1 icon-wrap">
               <img src="${IMG_PATH}close-white.svg" alt="Close Window Icon" class="close-window icon" />
@@ -43,21 +43,26 @@ class Window {
 
   init() {
     document.getElementById('window-manager-container').innerHTML += this.template;
-    this.element = document.getElementById(this.id);
-    this.isMinimized = false;
   }
 
   kill() {
-    document.getElementById(this.id).remove();
+    this.element.remove();
   }
 
   minimize() {
-    document.getElementById(this.id).style.display = 'none';
+    this.element.style.display = 'none';
     this.isMinimized = true;
   }
 
   maximize() {
-    document.getElementById(this.id).style.display = 'block';
+    this.element.style.display = 'block';
     this.isMinimized = false;
+  }
+
+  maxSize() {
+    this.element.style.width = '100%';
+    this.element.style.height = '92%';
+    this.element.style.top = '0%';
+    this.element.style.left = '0%';
   }
 }
