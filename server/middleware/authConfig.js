@@ -17,9 +17,9 @@ module.exports = ( app ) => {
   } );
 
   passport.use( new GitHubStrategy( {
-    clientID: '',
-    clientSecret: '',
-    callbackURL: ''
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: `http://localhost:${process.env.PORT}/auth/github/callback`
   }, ( accessToken, refreshToken, profile, cb ) => {
     // Find user or register new.
   }
