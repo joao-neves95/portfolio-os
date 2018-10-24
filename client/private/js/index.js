@@ -394,7 +394,16 @@ class List extends Collection {
         return elems;
     }
     return false;
-  };
+  }
+
+  /**
+   * 
+   * @param { HTMLElement } element
+   * @param { string } propertyName The CSS property element.
+   */
+  static getStyle( element, propertyName ) {
+    return window.getComputedStyle( element ).getPropertyValue( propertyName );
+  }
 
   static getAttributeFromElem(elem, attribute) {
     const attr = elem.attributes;
@@ -402,7 +411,7 @@ class List extends Collection {
       if (attr[i].localName === attribute)
         return attr[i].nodeValue;
     }
-  };
+  }
 
   static getOffset(elem) {
     let x = 0;
@@ -665,7 +674,6 @@ class DragAndDrop {
     const that = e.target;
 
     const newElement = new DOMParser().parseFromString( e.dataTransfer.getData( 'text/plain' ), 'text/html' ).body.firstChild;
-    e.dataTransfer.clearData();
     document.getElementById( newElement.id ).remove();
     // data.classList.add('animated', 'bounceIn');
     that.insertAdjacentElement( 'afterbegin', newElement );
@@ -756,13 +764,13 @@ class WindowResizer {
 const resizeWindowHandler = ( e ) => {
   const thisWindow = DomUtils.getParentByClassInclude( windowResizer.currentResizer, 'resizable' );
   const currWidth = e.pageX - thisWindow.getBoundingClientRect().left;
-  const currHigth = e.pageY - thisWindow.getBoundingClientRect().top;
+  const currHight = e.pageY - thisWindow.getBoundingClientRect().top;
 
   if ( currWidth >= 799 )
     thisWindow.style.width = currWidth.toString() + 'px';
 
-  if ( currHigth >= 418 )
-    thisWindow.style.height = currHigth.toString() + 'px';
+  if ( currHight >= 418 )
+    thisWindow.style.height = currHight.toString() + 'px';
 };
 
 new WindowResizer();
@@ -914,9 +922,6 @@ class TaskbarManager {
   constructor() {
     this.iconContainerElem = document.getElementById('icon-container');
     this.icons = new Dictionary();
-
-    this.startMenu.style.bottom = '-550px';
-    this.updateStartMenuListener();
   }
 
   // #region TASKBAR ICONS
@@ -944,53 +949,6 @@ class TaskbarManager {
 
   maximizedIcon(windowId) {
     this.findIconInstance(windowId).maximized();
-  }
-  // #endregion
-
-  // #region START MENU
-  get startMenuIcon() { return document.getElementsByClassName('menu-icon-wrap')[0]; }
-  get startMenu() { return document.getElementsByClassName('start-menu')[0]; }
-
-  updateStartMenuListener() {
-    // Start Menu animation.
-    this.startMenuIcon.addEventListener('click', () => {
-      if (this.startMenu.style.bottom !== '48px')
-        window.showMenu = setInterval(this.showStartMenu.bind(this), START_MENU_ANIM_DELAY);
-      else
-        window.hideMenu = setInterval(this.hideStartMenu.bind(this), START_MENU_ANIM_DELAY);
-    });
-  }
-
-  showStartMenu() {
-    let currentHeight = Utils.parsePxToInt( this.startMenu.style.bottom );
-
-    if (currentHeight >= 48) {
-      clearInterval(window.showMenu);
-      return;
-    }
-
-    this.startMenu.style.bottom = (currentHeight + 2).toString() + 'px';
-  }
-
-  hideStartMenu() {
-    let currentHeight = Utils.parsePxToInt(this.startMenu.style.bottom)
-    if (currentHeight <= -550) {
-      if (!window.hideMenu)
-        return;
-
-      clearInterval(window.hideMenu);
-      return;
-    }
-
-    this.startMenu.style.bottom = (currentHeight - 2).toString() + 'px';;
-  }
-
-  outsideClickGlobalEvent(e) {
-    const that = e.target;
-    if (that.closest('.start-menu') || that.closest('.menu-icon-wrap'))
-      return;
-
-    window.hideMenu = setInterval(this.hideStartMenu.bind(this), START_MENU_ANIM_DELAY);
   }
   // #endregion
 
@@ -1087,6 +1045,8 @@ class WindowManager {
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
     windowResizer.updateListeners();
+    document.getElementById( thisWindow.id ).classList.add( 'anim' );
+    document.getElementById( thisWindow.id ).classList.add( 'zoom-in' );
   }
 
   closeWindow(windowId) {
@@ -1600,6 +1560,8 @@ const processManager = new ProcessManager();
     this.init();
   }
 
+  get element() { return document.getElementsByClassName( 'start-menu' )[0]; }
+  get startMenuIcon() { return document.getElementsByClassName( 'menu-icon-wrap' )[0]; }
   get appContainerElem() { return document.getElementById('start-menu-apps'); };
 
   init() {
@@ -1619,7 +1581,18 @@ const processManager = new ProcessManager();
   }
 
   updateListeners() {
-    const allApps = document.getElementsByClassName('start-menu-icon');
+    this.startMenuIcon.addEventListener( 'click', () => {
+      const bottom = DomUtils.getStyle( this.element, 'bottom' );
+      const bottomValue = parseInt( bottom.substring( 0, bottom.length - 2 ) );
+
+      if ( bottomValue < 48 )
+        this.show();
+      else
+        this.hide();
+    } );
+
+    const allApps = document.getElementsByClassName( 'start-menu-icon' );
+
     for (let i = 0; i < allApps.length; ++i) {
       allApps[i].addEventListener('click', (e) => {
         const clickedAppName = DomUtils.getDirectChildrenByTag(e.target, 'label').innerText;
@@ -1627,6 +1600,30 @@ const processManager = new ProcessManager();
         // systemAppsManager.executeApplication(clickedAppName);
       });
     }
+  }
+
+  show() {
+    const that = this.element;
+    that.classList.remove( 'anim' );
+    that.classList.remove( 'start-menu-slide-down' );
+    that.classList.add( 'anim' );
+    that.classList.add( 'start-menu-slide-up' );
+  }
+
+  hide() {
+    const that = this.element;
+    that.classList.remove( 'anim' );
+    that.classList.remove( 'start-menu-slide-up' );
+    that.classList.add( 'anim' );
+    that.classList.add( 'start-menu-slide-down' );
+  }
+
+  outsideClickGlobalEvent( e ) {
+    const that = e.target;
+    if ( that.closest( '.start-menu' ) || that.closest( '.menu-icon-wrap' ) )
+      return;
+
+    this.hide();
   }
 }
 
@@ -1882,6 +1879,7 @@ class GlobalEvents {
     switch (eventType.toUpperCase()) {
       case 'CLICK':
         this.clickEventFunctions.push( executeFunction );
+        break;
       default:
         return;
     }
@@ -1906,7 +1904,7 @@ whenDomReady( () => {
 
   // GlobalEvents bindings:
   globalEvents.bindEvent( 'click', ( e ) => { contextMenu.outsideClickGlobalEvent( e ); } );
-  globalEvents.bindEvent( 'click', ( e ) => { taskbarManager.outsideClickGlobalEvent( e ); } );
+  globalEvents.bindEvent( 'click', ( e ) => { startMenuManager.outsideClickGlobalEvent( e ); } );
   globalEvents.init();
 
   console.debug( 'Windows:', windowManager.windows );

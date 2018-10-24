@@ -1,0 +1,58 @@
+﻿@import 'variables.less';
+
+.anim {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    -moz-transition: all 1s ease;
+    -webkit-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+// #region Source: https://github.com/daneden/animate.css
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.zoom-in {
+    animation-name: zoomIn;
+}
+
+// #endregion
+
+@keyframes startMenuSlideUp {
+    0% {
+        bottom: @hidden-start-menu-bottom;
+    }
+
+    100% {
+        bottom: @taskbar-hight;
+    }
+}
+
+.start-menu-slide-up {
+    animation-name: startMenuSlideUp;
+}
+
+@keyframes startMenuSlideDown {
+    0% {
+        bottom: @taskbar-hight;
+    }
+
+    100% {
+        bottom: @hidden-start-menu-bottom;
+    }
+}
+
+.start-menu-slide-down {
+    animation-name: startMenuSlideDown;
+}

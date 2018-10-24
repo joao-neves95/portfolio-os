@@ -15,6 +15,8 @@ class WindowManager {
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
     windowResizer.updateListeners();
+    document.getElementById( thisWindow.id ).classList.add( 'anim' );
+    document.getElementById( thisWindow.id ).classList.add( 'zoom-in' );
   }
 
   closeWindow(windowId) {

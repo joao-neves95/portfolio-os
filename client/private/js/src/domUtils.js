@@ -63,7 +63,16 @@
         return elems;
     }
     return false;
-  };
+  }
+
+  /**
+   * 
+   * @param { HTMLElement } element
+   * @param { string } propertyName The CSS property element.
+   */
+  static getStyle( element, propertyName ) {
+    return window.getComputedStyle( element ).getPropertyValue( propertyName );
+  }
 
   static getAttributeFromElem(elem, attribute) {
     const attr = elem.attributes;
@@ -71,7 +80,7 @@
       if (attr[i].localName === attribute)
         return attr[i].nodeValue;
     }
-  };
+  }
 
   static getOffset(elem) {
     let x = 0;

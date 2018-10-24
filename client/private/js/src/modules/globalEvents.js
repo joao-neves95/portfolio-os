@@ -18,6 +18,7 @@ class GlobalEvents {
     switch (eventType.toUpperCase()) {
       case 'CLICK':
         this.clickEventFunctions.push( executeFunction );
+        break;
       default:
         return;
     }

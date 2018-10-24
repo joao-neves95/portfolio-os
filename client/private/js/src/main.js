@@ -15,7 +15,7 @@ whenDomReady( () => {
 
   // GlobalEvents bindings:
   globalEvents.bindEvent( 'click', ( e ) => { contextMenu.outsideClickGlobalEvent( e ); } );
-  globalEvents.bindEvent( 'click', ( e ) => { taskbarManager.outsideClickGlobalEvent( e ); } );
+  globalEvents.bindEvent( 'click', ( e ) => { startMenuManager.outsideClickGlobalEvent( e ); } );
   globalEvents.init();
 
   console.debug( 'Windows:', windowManager.windows );

@@ -1,4 +1,4 @@
-﻿let dragAndDrop = null;
+let dragAndDrop = null;
 
 class DragAndDrop {
   constructor() {
@@ -170,6 +170,7 @@ class DragAndDrop {
     if ( that.children.length > 0 || that.localName !== 'article' || this.currentDragData === this.currentFreeDragData )
       return;
 
+    this.currentDragData = '';
     this.utils.acceptDrop( e );
     return false;
   }
@@ -180,7 +181,6 @@ class DragAndDrop {
     const that = e.target;
 
     const newElement = new DOMParser().parseFromString( e.dataTransfer.getData( 'text/plain' ), 'text/html' ).body.firstChild;
-    e.dataTransfer.clearData();
     document.getElementById( newElement.id ).remove();
     // data.classList.add('animated', 'bounceIn');
     that.insertAdjacentElement( 'afterbegin', newElement );
