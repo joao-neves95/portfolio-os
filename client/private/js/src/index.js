@@ -1,6 +1,7 @@
 ﻿// Imports for MergerJS.
 //
 // @import './externalLibs'
+// %import<<GH 'finom/vanillatree/master/vanillatree.min.js'
 // @import './utils'
 // @import './domUtils'
 // @import<<DIR './enums/'
@@ -19,6 +20,10 @@
 // @import './systemApps/trash/trashTemplates'
 // @import './systemApps/terminal/terminalTemplates'
 // @import './systemApps/terminal/terminal'
+// @import './systemApps/explorer/explorer.templates'
+// @import './systemApps/explorer/explorer.model'
+// @import './systemApps/explorer/explorer.view'
+// @import './systemApps/explorer/explorer.controller'
 // @import './modules/processManager/process'
 // @import './modules/processManager/processManager'
 // @import './modules/startMenuManager/startMenuApp'

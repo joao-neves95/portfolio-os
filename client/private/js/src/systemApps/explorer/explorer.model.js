@@ -1,4 +1,4 @@
-﻿class FileExplorer {
+﻿class ExplorerModel {
   constructor() {
 
   }
