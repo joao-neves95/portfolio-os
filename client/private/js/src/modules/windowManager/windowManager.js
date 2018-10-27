@@ -15,8 +15,13 @@ class WindowManager {
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
     windowResizer.updateListeners();
-    document.getElementById( thisWindow.id ).classList.add( 'anim' );
-    document.getElementById( thisWindow.id ).classList.add( 'zoom-in' );
+    const thisWindowElem = document.getElementById( thisWindow.id );
+    thisWindowElem.classList.add( 'anim' );
+    thisWindowElem.classList.add( 'zoom-in' );
+    setTimeout( () => {
+      thisWindowElem.classList.remove( 'anim' );
+      thisWindowElem.classList.remove( 'zoom-in' );
+    }, 1000 );
   }
 
   closeWindow(windowId) {
@@ -31,9 +36,9 @@ class WindowManager {
     taskbarManager.minimizedIcon(windowId);
   }
 
-  maximizeWindow (windowId) {
-    this.findWindowInstance(windowId).maximize();
-    taskbarManager.maximizedIcon(windowId);
+  unminimizeWindow(windowId) {
+    this.findWindowInstance( windowId ).unminimize();
+    taskbarManager.maximizedIcon( windowId );
   }
 
   maxSizeWindow( windowId ) {
@@ -109,7 +114,7 @@ class WindowManager {
     const thisWindow = this.findWindowInstance( thisWindowId );
 
     if (thisWindow.isMinimized)
-      this.maximizeWindow(thisWindowId);
+      this.unminimizeWindow(thisWindowId);
     else
       this.minimizeWindow(thisWindowId);
   }

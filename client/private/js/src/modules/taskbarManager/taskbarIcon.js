@@ -37,16 +37,16 @@
   }
 
   kill() {
-    document.getElementById(this.id).remove();
+    document.getElementById( this.id ).remove();
   }
 
   minimized() {
-    document.getElementById(this.id).children[0].classList.add('minimized');
+    document.getElementById( this.id ).classList.add( 'minimized' );
     this.isMinimized = true;
   }
 
   maximized() {
-    document.getElementById(this.id).children[0].classList.remove('minimized');
+    document.getElementById( this.id ).classList.remove( 'minimized' );
     this.isMinimized = false;
   }
 }

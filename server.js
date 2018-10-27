@@ -24,7 +24,7 @@ app.use( '/', routes );
 // TODO: Add 400 page.
 
 app.use( ( req, res, next ) => {
-  console.info( '404 - Not Found.' );
+  return res.status( 400 ).send( '404 - Not Found.' );
 } );
 
 app.listen(PORT, () => {

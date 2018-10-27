@@ -1,0 +1,41 @@
+﻿@header-height: 2.2em;
+
+.explorer {
+    height: 100%;
+    position: relative;
+
+    header {
+        position: relative;
+
+        .input-group {
+            height: @header-height;
+            margin: 0;
+
+            .input-group-label {
+                padding: 0.3em;
+                border-style: solid;
+
+                .input-icn {
+                    height: 1.2em;
+                    width: 1.2em;
+                    display: inline-block;
+                }
+            }
+
+            input {
+                &:hover {
+                    border: 1px solid #cacaca !important;
+                }
+            }
+        }
+    }
+
+    .exp-content {
+        position: relative;
+        height: calc( ~'100%' - @header-height );
+
+        .grid-x {
+            height: 100%;
+        }
+    }
+}

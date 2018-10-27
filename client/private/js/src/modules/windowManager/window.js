@@ -42,7 +42,7 @@ class Window {
   }
 
   init() {
-    document.getElementById('window-manager-container').innerHTML += this.template;
+    document.getElementById( 'window-manager-container' ).innerHTML += this.template;
   }
 
   kill() {
@@ -54,7 +54,7 @@ class Window {
     this.isMinimized = true;
   }
 
-  maximize() {
+  unminimize() {
     this.element.style.display = 'block';
     this.isMinimized = false;
   }

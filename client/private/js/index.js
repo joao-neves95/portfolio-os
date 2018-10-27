@@ -1,7 +1,7 @@
 ﻿// Imports for MergerJS.
 //
 // @import './externalLibs'
-// %import<<GH 'finom/vanillatree/master/vanillatree.min.js'
+// $import 'vanillatree/vanillatree.min.js'
 // @import './utils'
 // @import './domUtils'
 // @import<<DIR './enums/'
@@ -24,6 +24,7 @@
 // @import './systemApps/explorer/explorer.model'
 // @import './systemApps/explorer/explorer.view'
 // @import './systemApps/explorer/explorer.controller'
+// @import './systemApps/explorer/explorer'
 // @import './modules/processManager/process'
 // @import './modules/processManager/processManager'
 // @import './modules/startMenuManager/startMenuApp'
@@ -118,7 +119,7 @@ https://github.com/joao-neves95/Exercises_Challenges_Courses/blob/master/JavaScr
 
 Class Dictionary(): let dictionary = new Dictionary(uniqueKeys = false)
 
-Type safe Class List(): let list = new List('string' | 'number' | 'int' | 'float' | 'boolean')
+Type safe Class List(): let list = new List('string' | 'number' | 'int' | 'float' | 'boolean' | 'any')
 
 */
 
@@ -131,9 +132,9 @@ class Errors {
 }
 
 class Collection {
-  constructor( uniqueKeys, type ) {
+  constructor( uniqueKeys = false, type = 'any' ) {
     this.elements = [];
-    this.uniqueKeys = ( uniqueKeys || false );
+    this.uniqueKeys = uniqueKeys;
 
     if ( !type ) throw Errors.noTypeProvided;
     this.type = type;
@@ -142,7 +143,7 @@ class Collection {
 
   get length() {
     return this.elements.length;
-  };
+  }
 
   /**
    * Get all elements from the Collection.
@@ -212,7 +213,7 @@ class Dictionary extends Collection {
       throw new Error( Errors.existingKey );
 
     this.push( { [key]: value } );
-  };
+  }
 
   remove( key ) {
     const index = this.findIndexOfKey( key );
@@ -220,7 +221,7 @@ class Dictionary extends Collection {
       return false;
 
     this.splice( index );
-  };
+  }
 
   /**
    * Get a value with its index. Returns an array with the values.
@@ -229,7 +230,7 @@ class Dictionary extends Collection {
    */
   getByIndex( index ) {
     return Object.values( this.elements[index] )[0];
-  };
+  }
 
   /**
    * Get a key with its index.
@@ -288,24 +289,24 @@ class List extends Collection {
   add( value ) {
     switch ( this.type ) {
       case 'any':
-        this.push( value );
-        break;
+        return this.push( value );
       case 'int':
         if ( this.isInt( value ) ) {
-          this.push( value );
-          break;
+          return this.push( value );
         }
+        break;
       case 'float':
         if ( this.isFloat( value ) ) {
-          this.push( value );
-          break;
+          return this.push( value );
         }
+        break;
       default:
-        if ( typeof value === this.type && value !== 'float' && value !== 'int' )
-          this.push( value );
-        else
-          throw Errors.wrongType( this.type );
+        if ( typeof value === this.type )
+          return this.push( value );
+        break;
     }
+
+    throw Errors.wrongType( this.type );
   }
 
   /**
@@ -443,7 +444,9 @@ class List extends Collection {
 ﻿const FileSystemItemType = Object.freeze( {
   File: 1,
   FileUrl: 2,
-  Executable: 3
+  Executable: 3,
+  SystemDirectory: 4,
+  UserDirectory: 5
 } );
 
 ﻿const voteType = Object.freeze( {
@@ -476,6 +479,15 @@ class List extends Collection {
     this.rating = {};
     this.creation = '';
     this.lastUpdate = '';
+  }
+}
+
+﻿class DirectoryModel {
+  constructor( type, name, iconUrl, content ) {
+    this.type = type;
+    this.name = name;
+    this.iconUrl = iconUrl;
+    this.content = content;
   }
 }
 
@@ -683,7 +695,6 @@ class DragAndDrop {
     if ( that.children.length > 0 || that.localName !== 'article' || this.currentDragData === this.currentFreeDragData )
       return;
 
-    this.currentDragData = '';
     this.utils.acceptDrop( e );
     return false;
   }
@@ -695,6 +706,7 @@ class DragAndDrop {
 
     const newElement = new DOMParser().parseFromString( e.dataTransfer.getData( 'text/plain' ), 'text/html' ).body.firstChild;
     document.getElementById( newElement.id ).remove();
+    this.currentDragData = '';
     // data.classList.add('animated', 'bounceIn');
     that.insertAdjacentElement( 'afterbegin', newElement );
     this.updateDraggables();
@@ -926,16 +938,16 @@ const fileSystem = new FileSystem();
   }
 
   kill() {
-    document.getElementById(this.id).remove();
+    document.getElementById( this.id ).remove();
   }
 
   minimized() {
-    document.getElementById(this.id).children[0].classList.add('minimized');
+    document.getElementById( this.id ).classList.add( 'minimized' );
     this.isMinimized = true;
   }
 
   maximized() {
-    document.getElementById(this.id).children[0].classList.remove('minimized');
+    document.getElementById( this.id ).classList.remove( 'minimized' );
     this.isMinimized = false;
   }
 }
@@ -1029,7 +1041,7 @@ class Window {
   }
 
   init() {
-    document.getElementById('window-manager-container').innerHTML += this.template;
+    document.getElementById( 'window-manager-container' ).innerHTML += this.template;
   }
 
   kill() {
@@ -1041,7 +1053,7 @@ class Window {
     this.isMinimized = true;
   }
 
-  maximize() {
+  unminimize() {
     this.element.style.display = 'block';
     this.isMinimized = false;
   }
@@ -1071,8 +1083,13 @@ class WindowManager {
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
     windowResizer.updateListeners();
-    document.getElementById( thisWindow.id ).classList.add( 'anim' );
-    document.getElementById( thisWindow.id ).classList.add( 'zoom-in' );
+    const thisWindowElem = document.getElementById( thisWindow.id );
+    thisWindowElem.classList.add( 'anim' );
+    thisWindowElem.classList.add( 'zoom-in' );
+    setTimeout( () => {
+      thisWindowElem.classList.remove( 'anim' );
+      thisWindowElem.classList.remove( 'zoom-in' );
+    }, 1000 );
   }
 
   closeWindow(windowId) {
@@ -1087,9 +1104,9 @@ class WindowManager {
     taskbarManager.minimizedIcon(windowId);
   }
 
-  maximizeWindow (windowId) {
-    this.findWindowInstance(windowId).maximize();
-    taskbarManager.maximizedIcon(windowId);
+  unminimizeWindow(windowId) {
+    this.findWindowInstance( windowId ).unminimize();
+    taskbarManager.maximizedIcon( windowId );
   }
 
   maxSizeWindow( windowId ) {
@@ -1165,7 +1182,7 @@ class WindowManager {
     const thisWindow = this.findWindowInstance( thisWindowId );
 
     if (thisWindow.isMinimized)
-      this.maximizeWindow(thisWindowId);
+      this.unminimizeWindow(thisWindowId);
     else
       this.minimizeWindow(thisWindowId);
   }
@@ -1196,8 +1213,8 @@ const windowManager = new WindowManager();
    * @param {function} executeFunction
    */
   bindApplication(appName, startMenuIconUrl, taskbarIconUrl, executeFunction) {
-    const newApp = new SystemApp(appName, startMenuIconUrl, taskbarIconUrl, executeFunction);
-    this.systemApps.add(appName, newApp);
+    const newApp = new SystemApp( appName, startMenuIconUrl, taskbarIconUrl, executeFunction );
+    this.systemApps.add( appName, newApp );
   }
 
   /**
@@ -1317,17 +1334,23 @@ class Terminal {
     this.currentDir = fileSystem.structure["root/"];
     this.currentDirName = 'root/';
     this.currentPath = ['root/'];
-    /** @type { fileSystem.structure } */
+
+    this.commandHistory = new List( 'string' );
+    this.currentCmdHistIndex = 0;
+    this.insertedLastCmd = false;
+    this.maxCommandHistoryLength = 10;
 
     this.init();
   }
 
-  get element() { return document.getElementById(this.id); };
+  get element() { return document.getElementById( this.id ); }
+  get activeInput() { return document.getElementById( 'active-input' ); }
 
   init() {
-    windowManager.openNewWindow(this.processId, terminalTemplates.window(this.id));
+    windowManager.openNewWindow( this.processId, terminalTemplates.window( this.id ) );
 
-    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
+    this.element.innerHTML += terminalTemplates.withInfo().addLine();
+    this.element.addEventListener( 'click', () => { this.__focusActiveInput() } );
     this.initAnimTarget = document.querySelector(`#${ this.id } > .line > .info`);
     this.__typeWriterAnimation();
   }
@@ -1352,8 +1375,8 @@ class Terminal {
    * @param {string} aditionalInfo
    * (optional) Default -> ""
    */
-  deativateLastInput( lastInput = null, aditionalInfo = '' ) {
-    const currentActiveInput = document.getElementById( 'active-input' );
+  __deativateLastInput( lastInput = null, aditionalInfo = '' ) {
+    const currentActiveInput = this.activeInput;
 
     if (currentActiveInput) {
       if ( !lastInput )
@@ -1364,8 +1387,6 @@ class Terminal {
 
       if (aditionalInfo !== '')
         this.element.innerHTML += terminalTemplates.withInfo( aditionalInfo ).addLine();
-
-      this.currentInput = '';
     }
   }
 
@@ -1380,24 +1401,29 @@ class Terminal {
   addNewInput() {
     this.__addCurrentDirLine();
     this.element.innerHTML += terminalTemplates.withInput().addLine();
-    const activeInput = document.getElementById('active-input');
-    this.focusActiveInput();
-    this.element.removeEventListener('focus', this.focusActiveInput, true);
-    this.element.addEventListener('focus', this.focusActiveInput, true);
-    this.element.removeEventListener('click', this.focusActiveInput, true);
-    this.element.addEventListener('click', this.focusActiveInput, true);
-    activeInput.addEventListener( 'blur', this.focusActiveInput, true );
+    const activeInput = this.activeInput;
+    this.__focusActiveInput();
+    this.element.removeEventListener('focus', this.__focusActiveInput, true);
+    this.element.addEventListener('focus', this.__focusActiveInput, true);
+    this.element.removeEventListener('click', this.__focusActiveInput, true);
+    this.element.addEventListener('click', this.__focusActiveInput, true);
+    activeInput.addEventListener( 'blur', this.__focusActiveInput, true );
 
     activeInput.addEventListener( 'keypress', ( e ) => {
       if ( e.keyCode === 13 ) {
         this.currentInput = activeInput.value;
         this.executeCommand( e );
+      } else if ( e.keyCode === 38 ) {
+        this.givePreviousCommand( 'previous' );
+      } else if ( e.keyCode === 40 ) {
+        this.givePreviousCommand( 'next' );
       }
     } );
   }
 
-  focusActiveInput() {
-    document.getElementById('active-input').focus();
+  __focusActiveInput() {
+    if ( this.activeInput )
+      this.activeInput.focus();
   }
 
   executeCommand( e ) {
@@ -1405,7 +1431,7 @@ class Terminal {
     const parsedInput = this.parseInput( this.currentInput );
     const cmd = parsedInput.cmd;
     const val = parsedInput.value;
-    this.deativateLastInput();
+    this.__deativateLastInput();
 
     switch ( cmd.toUpperCase() ) {
       case 'CLEAR':
@@ -1446,10 +1472,34 @@ class Terminal {
         this.log( `"${cmd}" is not recognized as an internal or external command, operable program or executable file.` );
     }
 
+    this.__commandHistoryController( this.currentInput );
+    this.currentCmdHistIndex = this.commandHistory.length - 1;
+    this.insertedLastCmd = false;
     this.addNewInput();
   }
 
-  // COMMAND HANDLERS:
+  /**
+   * 
+   * @param { string } direction 'previous' | 'next'
+   */
+  givePreviousCommand( direction ) {
+    if ( this.insertedLastCmd ) {
+      if ( this.currentCmdHistIndex > 0 && direction === 'previous' )
+        --this.currentCmdHistIndex;
+      else if ( this.currentCmdHistIndex < this.commandHistory.length - 1 && direction === 'next' )
+        ++this.currentCmdHistIndex;
+    }
+
+    const cmd = this.commandHistory.get( this.currentCmdHistIndex );
+
+    if ( cmd !== undefined )
+      this.activeInput.value = cmd;
+
+    this.insertedLastCmd = true;
+  }
+
+  // #region COMMAND HANDLERS
+
   printHelp() {
     this.log(
       `Commands: </br>
@@ -1525,6 +1575,15 @@ class Terminal {
 
   createFile() { }
 
+  // #endregion
+
+  __commandHistoryController( cmd ) {
+    if ( this.commandHistory.length >= this.maxCommandHistoryLength )
+      this.commandHistory.remove( 0 );
+
+    this.commandHistory.add( cmd );
+  }
+
   /**
    * Terminal input parser.
    * Returns:(object) { cmd: 'String', value: 'String[]' }
@@ -1542,26 +1601,116 @@ class Terminal {
 }
 
 ﻿class ExplorerTemplates {
+  constructor() {
+    throw new Error( 'Con not intantiate static class "ExplorerTemplates"' );
+  }
+
+  static get treeNavElem() { return document.getElementById( 'exporer-tree-nav' ); }
+
+  static window( id ) {
+    return `
+      <section class="grid-y explorer" id="${id}">
+        <header class="cell">
+          <div class="input-group">
+            <span class="input-group-label"><img class="input-icn" id="input-icn_${id}" src="${IMG_PATH}folder.svg" alt="${id} Input Icon"></span>
+            <input class="input-group-field" type="text">
+          </div>
+        </header>
+        <div class="cell exp-content">
+          <div class="grid-x">
+            <nav id="exporer-tree-nav">
+            </nav>
+            <section>
+            </section>
+          </div>
+        <div>
+      </section>
+    `;
+  }
 }
 
 ﻿class ExplorerModel {
   constructor() {
+    this.processId = '';
+    this.id = '';
 
+    this.treeNav = {};
+
+    Object.seal( this );
+  }
+
+  initTreeNav() {
+    this.treeNav = new VanillaTree( ExplorerTemplates.treeNavElem, {
+      contextmenu: [{
+        label: '',
+        action: ( id ) => {
+        }
+      }]
+    } );
+
+    // Hardcoded for now.
+    // TODO: Loop the file system to include user created directories e.g. Tree Traversal.
+    this.treeNav.add( {
+      label: 'root/',
+      id: 'root/',
+      opened: true
+    } );
+
+    this.treeNav.add( {
+      label: 'portfolioOS/',
+      parent: 'root/',
+      id: 'portfolioOS/',
+      opened: true
+    } );
+
+    this.treeNav.add( {
+      label: 'applications/',
+      parent: 'root/',
+      id: 'applications/',
+      opened: true
+    } );
+
+    this.treeNav.add( {
+      label: 'user/',
+      parent: 'root/',
+      id: 'user/',
+      opened: true
+    } );
   }
 }
 
 ﻿class ExplorerView {
   constructor() {
-
+    Object.freeze( this );
   }
+
 }
 
 ﻿// TODO: Use the vanillatree library for the aside directory tree.
 
 class ExplorerController {
-  constructor() {
+  constructor( processId ) {
     this.model = new ExplorerModel();
     this.view = new ExplorerView();
+    this.templates = ExplorerTemplates;
+
+    this.model.id = `explorer-${processId}`;
+    this.model.processId = processId;
+    this.init();
+    Object.freeze( this );
+  }
+
+  init() {
+    windowManager.openNewWindow( this.model.processId, this.templates.window( this.model.id ) );
+    this.model.initTreeNav();
+  }
+}
+
+﻿class Explorer {
+  constructor( processId ) {
+    this.processId = processId;
+
+    this.controller = new ExplorerController( processId );
   }
 }
 
@@ -1618,6 +1767,8 @@ const processManager = new ProcessManager();
 ﻿class StartMenuManager {
   constructor() {
     this.init();
+
+    this.active = false;
   }
 
   get element() { return document.getElementsByClassName( 'start-menu' )[0]; }
@@ -1668,6 +1819,7 @@ const processManager = new ProcessManager();
     that.classList.remove( 'start-menu-slide-down' );
     that.classList.add( 'anim' );
     that.classList.add( 'start-menu-slide-up' );
+    this.active = true;
   }
 
   hide() {
@@ -1676,11 +1828,12 @@ const processManager = new ProcessManager();
     that.classList.remove( 'start-menu-slide-up' );
     that.classList.add( 'anim' );
     that.classList.add( 'start-menu-slide-down' );
+    this.active = false;
   }
 
   outsideClickGlobalEvent( e ) {
     const that = e.target;
-    if ( that.closest( '.start-menu' ) || that.closest( '.menu-icon-wrap' ) )
+    if ( that.closest( '.start-menu' ) || that.closest( '.menu-icon-wrap' ) || !this.active )
       return;
 
     this.hide();
@@ -1963,6 +2116,7 @@ whenDomReady( () => {
 
   // SystemApps bindings:
   systemAppsManager.bindApplication( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, ( processId ) => { new Terminal( processId ); } );
+  systemAppsManager.bindApplication( 'Explorer', `${IMG_PATH}folder.svg`, `${IMG_PATH}folder.svg`, ( processId ) => { new Explorer( processId ); } );
   systemAppsManager.bindApplication( 'Trash', `${IMG_PATH}trash.svg`, `${IMG_PATH}trash.svg`, ( processId ) => { new Trash( processId ); } );
   startMenuManager.init();
 

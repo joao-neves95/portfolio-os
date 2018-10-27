@@ -170,7 +170,6 @@ class DragAndDrop {
     if ( that.children.length > 0 || that.localName !== 'article' || this.currentDragData === this.currentFreeDragData )
       return;
 
-    this.currentDragData = '';
     this.utils.acceptDrop( e );
     return false;
   }
@@ -182,6 +181,7 @@ class DragAndDrop {
 
     const newElement = new DOMParser().parseFromString( e.dataTransfer.getData( 'text/plain' ), 'text/html' ).body.firstChild;
     document.getElementById( newElement.id ).remove();
+    this.currentDragData = '';
     // data.classList.add('animated', 'bounceIn');
     that.insertAdjacentElement( 'afterbegin', newElement );
     this.updateDraggables();

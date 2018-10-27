@@ -1,6 +1,8 @@
 ﻿class StartMenuManager {
   constructor() {
     this.init();
+
+    this.active = false;
   }
 
   get element() { return document.getElementsByClassName( 'start-menu' )[0]; }
@@ -51,6 +53,7 @@
     that.classList.remove( 'start-menu-slide-down' );
     that.classList.add( 'anim' );
     that.classList.add( 'start-menu-slide-up' );
+    this.active = true;
   }
 
   hide() {
@@ -59,11 +62,12 @@
     that.classList.remove( 'start-menu-slide-up' );
     that.classList.add( 'anim' );
     that.classList.add( 'start-menu-slide-down' );
+    this.active = false;
   }
 
   outsideClickGlobalEvent( e ) {
     const that = e.target;
-    if ( that.closest( '.start-menu' ) || that.closest( '.menu-icon-wrap' ) )
+    if ( that.closest( '.start-menu' ) || that.closest( '.menu-icon-wrap' ) || !this.active )
       return;
 
     this.hide();

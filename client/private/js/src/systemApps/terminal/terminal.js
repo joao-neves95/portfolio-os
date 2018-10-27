@@ -13,17 +13,23 @@ class Terminal {
     this.currentDir = fileSystem.structure["root/"];
     this.currentDirName = 'root/';
     this.currentPath = ['root/'];
-    /** @type { fileSystem.structure } */
+
+    this.commandHistory = new List( 'string' );
+    this.currentCmdHistIndex = 0;
+    this.insertedLastCmd = false;
+    this.maxCommandHistoryLength = 10;
 
     this.init();
   }
 
-  get element() { return document.getElementById(this.id); };
+  get element() { return document.getElementById( this.id ); }
+  get activeInput() { return document.getElementById( 'active-input' ); }
 
   init() {
-    windowManager.openNewWindow(this.processId, terminalTemplates.window(this.id));
+    windowManager.openNewWindow( this.processId, terminalTemplates.window( this.id ) );
 
-    this.element.innerHTML += terminalTemplates.addLine(terminalTemplates.withInfo());
+    this.element.innerHTML += terminalTemplates.withInfo().addLine();
+    this.element.addEventListener( 'click', () => { this.__focusActiveInput() } );
     this.initAnimTarget = document.querySelector(`#${ this.id } > .line > .info`);
     this.__typeWriterAnimation();
   }
@@ -48,8 +54,8 @@ class Terminal {
    * @param {string} aditionalInfo
    * (optional) Default -> ""
    */
-  deativateLastInput( lastInput = null, aditionalInfo = '' ) {
-    const currentActiveInput = document.getElementById( 'active-input' );
+  __deativateLastInput( lastInput = null, aditionalInfo = '' ) {
+    const currentActiveInput = this.activeInput;
 
     if (currentActiveInput) {
       if ( !lastInput )
@@ -60,8 +66,6 @@ class Terminal {
 
       if (aditionalInfo !== '')
         this.element.innerHTML += terminalTemplates.withInfo( aditionalInfo ).addLine();
-
-      this.currentInput = '';
     }
   }
 
@@ -76,24 +80,29 @@ class Terminal {
   addNewInput() {
     this.__addCurrentDirLine();
     this.element.innerHTML += terminalTemplates.withInput().addLine();
-    const activeInput = document.getElementById('active-input');
-    this.focusActiveInput();
-    this.element.removeEventListener('focus', this.focusActiveInput, true);
-    this.element.addEventListener('focus', this.focusActiveInput, true);
-    this.element.removeEventListener('click', this.focusActiveInput, true);
-    this.element.addEventListener('click', this.focusActiveInput, true);
-    activeInput.addEventListener( 'blur', this.focusActiveInput, true );
+    const activeInput = this.activeInput;
+    this.__focusActiveInput();
+    this.element.removeEventListener('focus', this.__focusActiveInput, true);
+    this.element.addEventListener('focus', this.__focusActiveInput, true);
+    this.element.removeEventListener('click', this.__focusActiveInput, true);
+    this.element.addEventListener('click', this.__focusActiveInput, true);
+    activeInput.addEventListener( 'blur', this.__focusActiveInput, true );
 
     activeInput.addEventListener( 'keypress', ( e ) => {
       if ( e.keyCode === 13 ) {
         this.currentInput = activeInput.value;
         this.executeCommand( e );
+      } else if ( e.keyCode === 38 ) {
+        this.givePreviousCommand( 'previous' );
+      } else if ( e.keyCode === 40 ) {
+        this.givePreviousCommand( 'next' );
       }
     } );
   }
 
-  focusActiveInput() {
-    document.getElementById('active-input').focus();
+  __focusActiveInput() {
+    if ( this.activeInput )
+      this.activeInput.focus();
   }
 
   executeCommand( e ) {
@@ -101,7 +110,7 @@ class Terminal {
     const parsedInput = this.parseInput( this.currentInput );
     const cmd = parsedInput.cmd;
     const val = parsedInput.value;
-    this.deativateLastInput();
+    this.__deativateLastInput();
 
     switch ( cmd.toUpperCase() ) {
       case 'CLEAR':
@@ -142,10 +151,34 @@ class Terminal {
         this.log( `"${cmd}" is not recognized as an internal or external command, operable program or executable file.` );
     }
 
+    this.__commandHistoryController( this.currentInput );
+    this.currentCmdHistIndex = this.commandHistory.length - 1;
+    this.insertedLastCmd = false;
     this.addNewInput();
   }
 
-  // COMMAND HANDLERS:
+  /**
+   * 
+   * @param { string } direction 'previous' | 'next'
+   */
+  givePreviousCommand( direction ) {
+    if ( this.insertedLastCmd ) {
+      if ( this.currentCmdHistIndex > 0 && direction === 'previous' )
+        --this.currentCmdHistIndex;
+      else if ( this.currentCmdHistIndex < this.commandHistory.length - 1 && direction === 'next' )
+        ++this.currentCmdHistIndex;
+    }
+
+    const cmd = this.commandHistory.get( this.currentCmdHistIndex );
+
+    if ( cmd !== undefined )
+      this.activeInput.value = cmd;
+
+    this.insertedLastCmd = true;
+  }
+
+  // #region COMMAND HANDLERS
+
   printHelp() {
     this.log(
       `Commands: </br>
@@ -220,6 +253,15 @@ class Terminal {
   }
 
   createFile() { }
+
+  // #endregion
+
+  __commandHistoryController( cmd ) {
+    if ( this.commandHistory.length >= this.maxCommandHistoryLength )
+      this.commandHistory.remove( 0 );
+
+    this.commandHistory.add( cmd );
+  }
 
   /**
    * Terminal input parser.

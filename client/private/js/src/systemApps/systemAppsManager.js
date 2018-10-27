@@ -11,8 +11,8 @@
    * @param {function} executeFunction
    */
   bindApplication(appName, startMenuIconUrl, taskbarIconUrl, executeFunction) {
-    const newApp = new SystemApp(appName, startMenuIconUrl, taskbarIconUrl, executeFunction);
-    this.systemApps.add(appName, newApp);
+    const newApp = new SystemApp( appName, startMenuIconUrl, taskbarIconUrl, executeFunction );
+    this.systemApps.add( appName, newApp );
   }
 
   /**
