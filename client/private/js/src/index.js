@@ -7,6 +7,8 @@
 // @import<<DIR './enums/'
 // @import<<DIR './models/'
 // @import './systemLibs/networking'
+// @import './systemLibs/gridSystem/gridSystemTemplates'
+// @import './systemLibs/gridSystem/gridSystem'
 // @import './systemLibs/dragAndDrop.js'
 // @import './systemLibs/windowResizer.js'
 // @import './modules/fileSystem/fileSystem'

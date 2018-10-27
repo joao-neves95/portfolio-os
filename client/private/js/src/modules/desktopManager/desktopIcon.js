@@ -9,7 +9,7 @@
     this.init();
 
     this.getCellElem = () => {
-      const thisIcon = document.getElementById( this.id ).offsetParent;
+      return document.getElementById( this.id ).offsetParent;
     };
   }
 

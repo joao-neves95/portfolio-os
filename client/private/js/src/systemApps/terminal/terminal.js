@@ -88,14 +88,14 @@ class Terminal {
     this.element.addEventListener('click', this.__focusActiveInput, true);
     activeInput.addEventListener( 'blur', this.__focusActiveInput, true );
 
-    activeInput.addEventListener( 'keypress', ( e ) => {
+    activeInput.addEventListener( 'keydown', ( e ) => {
       if ( e.keyCode === 13 ) {
         this.currentInput = activeInput.value;
         this.executeCommand( e );
       } else if ( e.keyCode === 38 ) {
-        this.givePreviousCommand( 'previous' );
+        this.givePreviousCommand( e, 'previous' );
       } else if ( e.keyCode === 40 ) {
-        this.givePreviousCommand( 'next' );
+        this.givePreviousCommand( e, 'next' );
       }
     } );
   }
@@ -159,9 +159,11 @@ class Terminal {
 
   /**
    * 
+   * @param { Event } e
    * @param { string } direction 'previous' | 'next'
    */
-  givePreviousCommand( direction ) {
+  givePreviousCommand( e, direction ) {
+    e.preventDefault();
     if ( this.insertedLastCmd ) {
       if ( this.currentCmdHistIndex > 0 && direction === 'previous' )
         --this.currentCmdHistIndex;
@@ -194,10 +196,12 @@ class Terminal {
     let dirInfo = '';
 
     for ( let key in this.currentDir ) {
-      if ( this.currentDir[key] instanceof FileModel )
-        dirInfo += this.currentDir[key].name + '<br>';
-      else if ( typeof this.currentDir[key] === 'function' )
+      if ( typeof this.currentDir[key] !== 'object' )
         continue;
+      else if ( this.currentDir[key] instanceof FileModel )
+        dirInfo += this.currentDir[key].name + '<br>';
+      else if ( this.currentDir[key] instanceof DirectoryModel )
+        dirInfo += this.currentDir[key].name + '/<br>';
       else
         dirInfo += key + '<br>';
     }
@@ -229,12 +233,12 @@ class Terminal {
     if ( !newDir )
       return this.log( `'${dirName.join( '/' )}' is not a valid directory name.` );
 
-    for ( let i = 0; i < dirName.length; ++i) {
-      if ( !dirName[i].endsWith( '/' ) )
-        dirName[i] += '/';
+    for ( let i = 0; i < path.length; ++i ) {
+      if ( !path[i].endsWith( '/' ) )
+        path[i] += '/';
     }
 
-    this.currentDirName = dirName[dirName.length - 1];
+    this.currentDirName = path[path.length - 1];
     this.currentPath = path;
     this.currentDir = newDir;
   }

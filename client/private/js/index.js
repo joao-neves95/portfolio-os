@@ -7,6 +7,8 @@
 // @import<<DIR './enums/'
 // @import<<DIR './models/'
 // @import './systemLibs/networking'
+// @import './systemLibs/gridSystem/gridSystemTemplates'
+// @import './systemLibs/gridSystem/gridSystem'
 // @import './systemLibs/dragAndDrop.js'
 // @import './systemLibs/windowResizer.js'
 // @import './modules/fileSystem/fileSystem'
@@ -89,27 +91,12 @@ class Utils {
 
   static calculateGrid(cellWidthPercent, cellHeightPercent) {
     const x = Math.floor(100 / cellWidthPercent) - 1;
-    const y = Math.floor(100 / cellHeightPercent) - 1;
+    const y = Math.floor( 100 / cellHeightPercent ) - 1;
+
     return {
       x: x,
       y: y
-    }
-  }
-
-  static insertGrid(gridX, gridY, target, rowTemplate, cellTemplate) {
-    let rowCount = 0;
-    let cellCount = 0;
-
-    for (let rowIdx = 0; rowIdx <= gridX; rowIdx++) {
-      target.innerHTML += rowTemplate(rowIdx + 1);
-      rowCount++;
-
-      for (let cellIdx = 0; cellIdx <= gridY; cellIdx++) {
-        const lastInsertedRow = document.getElementById(`row-${rowCount}`);
-        lastInsertedRow.innerHTML += cellTemplate(cellCount + 1);
-        cellCount++;
-      }
-    }
+    };
   }
 }
 
@@ -449,6 +436,13 @@ class List extends Collection {
   UserDirectory: 5
 } );
 
+﻿const GridType = Object.freeze( {
+  /** Horizontal. */
+  GridX: 'grid-x',
+  /** Vertical. */
+  GridY: 'grid-y'
+} );
+
 ﻿const voteType = Object.freeze( {
   DownVote: 0,
   UpVote: 1
@@ -523,6 +517,95 @@ class List extends Collection {
 }
 
 ﻿
+﻿class GridSystemTemplates {
+  constructor() {
+    throw new Error( 'Can not intantiate the static class \'GridSystemTemplates\'' );
+  }
+
+   /**
+    * If grid-y use width, if grid-x use height.
+    * 
+   * @param { string } id
+   * @param { GridType } gridType
+   * @param { number | null } widthPercent <number | null>
+   * @param { number | null } heightPercent <number | null>
+   */
+  static rowTemplate( id, gridType, widthPercent = null, heightPercent = null ) {
+    widthPercent = widthPercent === null ? '' : 'width:' + widthPercent.toString() + '%;';
+    heightPercent = heightPercent === null ? '' : 'height:' + heightPercent.toString() + '%;';
+    const gridTypeClass = gridType === GridType.GridY ? 'grid-system-row-y' : 'grid-system-row-x';
+
+    return `
+      <div id="${id}" class="${gridType} ${gridTypeClass}" style="${widthPercent}${heightPercent}"></div>
+    `;
+  };
+
+  /**
+    * If grid-y use height, if grid-x use width.
+    * 
+   * @param { string } id
+   * @param { number | null } widthPercent <number | null>
+   * @param { number | null } heightPercent <number | null>
+   * @param { boolean } droppable
+   */
+  static cellTemplate( id, widthPercent, heightPercent, droppable = false, additionalClasses ) {
+    widthPercent = widthPercent === null ? '' : 'width:' + widthPercent.toString() + '%;';
+    heightPercent = heightPercent === null ? '' : 'height:' + heightPercent.toString() + '%;';
+    droppable = droppable ? 'droppable' : '';
+
+    return `
+        <article id="${id}" class="cell grid-system-cell ${droppable} ${additionalClasses}" style="${widthPercent}${heightPercent}"></article>
+      `;
+  };
+}
+﻿/** @type { GridSystem } */
+let gridSystem = null;
+
+class GridSystem {
+  constructor() {
+    if ( gridSystem )
+      throw new Error( 'GridSystem can only have one instance (singleton)' );
+
+    gridSystem = this;
+    Object.freeze( gridSystem );
+  }
+
+  static _() { return gridSystem; }
+
+  // TODO: Change from parameters to a config object.
+  insertGrid( config ) {
+    let rowCount = 0;
+    let cellCount = 0;
+    const rowWidth = config.gridType === GridType.GridY ? config.cellWidthPercent : null;
+    const rowHeight = config.gridType === GridType.GridX ? config.cellHeightPercent : null;
+    const cellWidth = config.gridType === GridType.GridX ? config.cellWidthPercent : null;
+    const cellHeight = config.gridType === GridType.GridY ? config.cellHeightPercent : null;
+
+    for ( let rowIdx = 0; rowIdx <= config.gridXCount; rowIdx++ ) {
+      config.target.innerHTML += GridSystemTemplates.rowTemplate( config.rowIdsPrefix + ( rowIdx + 1 ).toString(), config.gridType, rowWidth, rowHeight );
+      rowCount++;
+
+      for ( let cellIdx = 0; cellIdx <= config.gridYCount; cellIdx++ ) {
+        const lastInsertedRow = document.getElementById( `${config.rowIdsPrefix}${rowCount}` );
+        lastInsertedRow.innerHTML += GridSystemTemplates.cellTemplate( config.cellIdsPrefix + ( cellCount + 1 ).toString(), cellWidth, cellHeight, config.droppableCell, config.additionalCellClasses );
+        cellCount++;
+      }
+    }
+  }
+
+  findEmptyCell( cellIdsPrefix, cellCount ) {
+    for ( let i = 0; i < cellCount; i++ ) {
+      let currentCell = document.getElementById( `${cellIdsPrefix}${i + 1}` );
+      if ( currentCell.childElementCount <= 0 )
+        return currentCell;
+    }
+
+    return false;
+  }
+}
+
+new GridSystem();
+
 let dragAndDrop = null;
 
 class DragAndDrop {
@@ -572,6 +655,8 @@ class DragAndDrop {
 
     this.init();
   }
+
+  static _() { return dragAndDrop; }
 
   init() {
     this.updateDraggables();
@@ -817,7 +902,6 @@ class FileSystem {
 
   /**
    * Get a directory using its complete path.
-   * 
    * It returns false if the directory was not found.
    * 
    * @param { string[] } name
@@ -878,18 +962,23 @@ class FileSystem {
             new AppStoreApplication( FileSystemItemType.Executable, 'Wikipedia Viewer', 'shivayl', 'https://rawgit.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html' )
           ]
         },
-        "user/": {
-          "documents/": [
-            new FileModel( FileSystemItemType.File, 'My Document', 'Hello World.' )
-          ],
-          "images/": [
-            new FileModel( FileSystemItemType.FileUrl, 'My Image', 'www' )
-          ],
-          "videos/": [
-            new FileModel( FileSystemItemType.FileUrl, 'My Video', 'www' )
-          ],
-          "music/": [],
-          "trash/": []
+        "users/": {
+          "local/": {
+            "documents/": [
+              new FileModel( FileSystemItemType.File, 'My Document', 'Hello World.' )
+            ],
+            "images/": [
+              new FileModel( FileSystemItemType.FileUrl, 'My Image', 'www' )
+            ],
+            "videos/": [
+              new FileModel( FileSystemItemType.FileUrl, 'My Video', 'www' )
+            ],
+            "music/": [],
+            "shared/": [],
+            "trash/": []
+          },
+          // "public" is the PortfolioOS's users profiles.
+          "public/": []
         }
       }
     };
@@ -1409,14 +1498,14 @@ class Terminal {
     this.element.addEventListener('click', this.__focusActiveInput, true);
     activeInput.addEventListener( 'blur', this.__focusActiveInput, true );
 
-    activeInput.addEventListener( 'keypress', ( e ) => {
+    activeInput.addEventListener( 'keydown', ( e ) => {
       if ( e.keyCode === 13 ) {
         this.currentInput = activeInput.value;
         this.executeCommand( e );
       } else if ( e.keyCode === 38 ) {
-        this.givePreviousCommand( 'previous' );
+        this.givePreviousCommand( e, 'previous' );
       } else if ( e.keyCode === 40 ) {
-        this.givePreviousCommand( 'next' );
+        this.givePreviousCommand( e, 'next' );
       }
     } );
   }
@@ -1480,9 +1569,11 @@ class Terminal {
 
   /**
    * 
+   * @param { Event } e
    * @param { string } direction 'previous' | 'next'
    */
-  givePreviousCommand( direction ) {
+  givePreviousCommand( e, direction ) {
+    e.preventDefault();
     if ( this.insertedLastCmd ) {
       if ( this.currentCmdHistIndex > 0 && direction === 'previous' )
         --this.currentCmdHistIndex;
@@ -1515,10 +1606,12 @@ class Terminal {
     let dirInfo = '';
 
     for ( let key in this.currentDir ) {
-      if ( this.currentDir[key] instanceof FileModel )
-        dirInfo += this.currentDir[key].name + '<br>';
-      else if ( typeof this.currentDir[key] === 'function' )
+      if ( typeof this.currentDir[key] !== 'object' )
         continue;
+      else if ( this.currentDir[key] instanceof FileModel )
+        dirInfo += this.currentDir[key].name + '<br>';
+      else if ( this.currentDir[key] instanceof DirectoryModel )
+        dirInfo += this.currentDir[key].name + '/<br>';
       else
         dirInfo += key + '<br>';
     }
@@ -1550,12 +1643,12 @@ class Terminal {
     if ( !newDir )
       return this.log( `'${dirName.join( '/' )}' is not a valid directory name.` );
 
-    for ( let i = 0; i < dirName.length; ++i) {
-      if ( !dirName[i].endsWith( '/' ) )
-        dirName[i] += '/';
+    for ( let i = 0; i < path.length; ++i ) {
+      if ( !path[i].endsWith( '/' ) )
+        path[i] += '/';
     }
 
-    this.currentDirName = dirName[dirName.length - 1];
+    this.currentDirName = path[path.length - 1];
     this.currentPath = path;
     this.currentDir = newDir;
   }
@@ -1605,6 +1698,8 @@ class Terminal {
     throw new Error( 'Con not intantiate static class "ExplorerTemplates"' );
   }
 
+  static get inputIconPrefix() { return 'input-icn_'; }
+  static get contentPrefix() { return 'cntnt_'; }
   static get treeNavElem() { return document.getElementById( 'exporer-tree-nav' ); }
 
   static window( id ) {
@@ -1612,7 +1707,7 @@ class Terminal {
       <section class="grid-y explorer" id="${id}">
         <header class="cell">
           <div class="input-group">
-            <span class="input-group-label"><img class="input-icn" id="input-icn_${id}" src="${IMG_PATH}folder.svg" alt="${id} Input Icon"></span>
+            <span class="input-group-label"><img class="input-icn" id="${ExplorerTemplates.inputIconPrefix}${id}" src="${IMG_PATH}folder.svg" alt="${id} Input Icon"></span>
             <input class="input-group-field" type="text">
           </div>
         </header>
@@ -1620,7 +1715,7 @@ class Terminal {
           <div class="grid-x">
             <nav id="exporer-tree-nav">
             </nav>
-            <section>
+            <section id="${ExplorerTemplates.contentPrefix}${id}">
             </section>
           </div>
         <div>
@@ -1663,6 +1758,27 @@ class Terminal {
       opened: true
     } );
 
+      this.treeNav.add( {
+        label: 'users/',
+        parent: 'portfolioOS/',
+        id: 'users/',
+        opened: true
+      } );
+
+        this.treeNav.add( {
+          label: 'local/',
+          parent: 'users/',
+          id: 'local/',
+          opened: true
+        } );
+
+        this.treeNav.add( {
+          label: 'public/',
+          parent: 'users/',
+          id: 'public/',
+          opened: true
+        } );
+
     this.treeNav.add( {
       label: 'applications/',
       parent: 'root/',
@@ -1684,6 +1800,26 @@ class Terminal {
     Object.freeze( this );
   }
 
+  /**
+   * 
+   * @param { string } id
+   * @returns { HTMLElement }
+   */
+  element( id ) { return document.getElementById( id ); }
+  /**
+   * 
+   * @param { string } id
+   * @returns { HTMLElement }
+   */
+  contentTarget( id ) { return element( id ).querySelector( `[id^='${ExplorerTemplates.contentPrefix}']` ); }
+
+  /**
+   * 
+   * @param { string } content
+   */
+  injectContent( id, content ) {
+    this.contentTarget( id ).innerHTML = content;
+  }
 }
 
 ﻿// TODO: Use the vanillatree library for the aside directory tree.
@@ -1844,22 +1980,8 @@ const startMenuManager = new StartMenuManager();
 
 ﻿class DesktopTemplates {
   constructor() {
-    this.rowTemplate = (idx) => {
-      return `
-        <div id="row-${idx}" class="grid-y desktop-row"></div>
-      `;
-    }
-
-    this.cellTemplate = (idx, content) => {
-      if (!content) content = '';
-
-      return `
-        <article id="cell-${idx}" class="cell desktop-cell droppable"></article>
-      `;
-    } 
-
-    this.iconTemplate = (id, iconUrl, label) => {
-      if (!label) label = 'Desktop Icon';
+    this.iconTemplate = ( id, iconUrl, label ) => {
+      if ( !label ) label = 'Desktop Icon';
 
       return `
         <figure class="desktop-icon draggable" id="${id}">
@@ -1867,7 +1989,7 @@ const startMenuManager = new StartMenuManager();
           <label class="unselectable icon-label">Trash</label>
         </figure>
       `;
-    }
+    };
   }
 }
 
@@ -1884,7 +2006,7 @@ const desktopTemplates = new DesktopTemplates();
     this.init();
 
     this.getCellElem = () => {
-      const thisIcon = document.getElementById( this.id ).offsetParent;
+      return document.getElementById( this.id ).offsetParent;
     };
   }
 
@@ -1909,43 +2031,40 @@ const desktopTemplates = new DesktopTemplates();
 
 ﻿class DesktopManager {
   constructor() {
-    this.rowCount = 0
+    this.rowCount = 0;
     this.cellCount = 0;
     this.icons = new Dictionary();
+    this.rowIdsPrefix = 'dsktp-row_';
+    this.cellIdsPrefix = 'dsktp-cell_';
 
-    this.utils = {
-
-      findEmptyCell: () => {
-        const cellCount = desktopManager.cellCount;
-
-        for (let i = 0; i < cellCount; i++) {
-          let currentCell = document.getElementById(`cell-${i + 1}`);
-          if (currentCell.childElementCount <= 0)
-            return currentCell;
-        }
-        return false;
-      },
-
-      findIconInstance: (iconId, Callback) => {
-        const thisIcon = this.icons.getByKey( iconId );
-
-        if (Callback) Callback(thisIcon);
-        else return thisIcon;
-      }
-    }
+    // 0 because it's added bellow.
+    this.gridSystemConfig = {
+      gridType: GridType.GridY,
+      cellWidthPercent: 5,
+      cellHeightPercent: 10,
+      gridXCount: 0,
+      gridYCount: 0,
+      target: document.getElementById( 'desktop' ),
+      rowIdsPrefix: this.rowIdsPrefix,
+      cellIdsPrefix: this.cellIdsPrefix,
+      additionalCellClasses: 'desktop-cell',
+      droppableCell: true
+    };
   }
 
   init() {
     const theDesktop = document.getElementById( 'desktop' );
     const grid = Utils.calculateGrid( 5, 15 );
     this.rowCount = grid.y;
+    this.gridSystemConfig.gridYCount = grid.y;
     this.cellCount = grid.x;
+    this.gridSystemConfig.gridXCount = grid.x;
 
-    Utils.insertGrid( grid.x, grid.y, theDesktop, desktopTemplates.rowTemplate, desktopTemplates.cellTemplate );
+    gridSystem.insertGrid( this.gridSystemConfig );
   }
 
   insertNewIcon( iconUrl, label ) {
-    const emptyCell = this.utils.findEmptyCell();
+    const emptyCell = gridSystem.findEmptyCell( this.cellIdsPrefix, desktopManager.cellCount );
     const newIcon = new DesktopIcon( emptyCell, iconUrl, label );
     this.icons.add( newIcon.id, newIcon );
     this.updateListeners();
@@ -1957,11 +2076,11 @@ const desktopTemplates = new DesktopTemplates();
     if ( !allIcons ) return false;
 
     for ( let i = 0; i < allIcons.length; i++ ) {
-      allIcons[i].removeEventListener( 'click', this.utils.findIconInstance );
+      allIcons[i].removeEventListener( 'click', this.__findIconInstance );
       allIcons[i].addEventListener( 'click', ( e ) => {
         const that = e.target;
         const icon = DomUtils.getParentByTag( that, 'figure' );
-        this.utils.findIconInstance( icon.id, ( thisIcon ) => {
+        this.__findIconInstance( icon.id, ( thisIcon ) => {
           thisIcon.selected();
         } );
       } );
@@ -1974,6 +2093,13 @@ const desktopTemplates = new DesktopTemplates();
         processManager.launchNewProcess( icon.alt );
       } );
     }
+  }
+
+  __findIconInstance( iconId, Callback ) {
+    const thisIcon = this.icons.getByKey( iconId );
+
+    if( Callback ) Callback( thisIcon );
+    else return thisIcon;
   }
 }
 
@@ -2115,8 +2241,8 @@ whenDomReady( () => {
   desktopManager.insertNewIcon( IMG_PATH + 'trash.svg', 'Trash' );
 
   // SystemApps bindings:
-  systemAppsManager.bindApplication( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, ( processId ) => { new Terminal( processId ); } );
   systemAppsManager.bindApplication( 'Explorer', `${IMG_PATH}folder.svg`, `${IMG_PATH}folder.svg`, ( processId ) => { new Explorer( processId ); } );
+  systemAppsManager.bindApplication( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, ( processId ) => { new Terminal( processId ); } );
   systemAppsManager.bindApplication( 'Trash', `${IMG_PATH}trash.svg`, `${IMG_PATH}trash.svg`, ( processId ) => { new Trash( processId ); } );
   startMenuManager.init();
 

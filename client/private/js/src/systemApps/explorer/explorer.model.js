@@ -32,6 +32,27 @@
       opened: true
     } );
 
+      this.treeNav.add( {
+        label: 'users/',
+        parent: 'portfolioOS/',
+        id: 'users/',
+        opened: true
+      } );
+
+        this.treeNav.add( {
+          label: 'local/',
+          parent: 'users/',
+          id: 'local/',
+          opened: true
+        } );
+
+        this.treeNav.add( {
+          label: 'public/',
+          parent: 'users/',
+          id: 'public/',
+          opened: true
+        } );
+
     this.treeNav.add( {
       label: 'applications/',
       parent: 'root/',

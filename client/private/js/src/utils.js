@@ -34,27 +34,12 @@ class Utils {
 
   static calculateGrid(cellWidthPercent, cellHeightPercent) {
     const x = Math.floor(100 / cellWidthPercent) - 1;
-    const y = Math.floor(100 / cellHeightPercent) - 1;
+    const y = Math.floor( 100 / cellHeightPercent ) - 1;
+
     return {
       x: x,
       y: y
-    }
-  }
-
-  static insertGrid(gridX, gridY, target, rowTemplate, cellTemplate) {
-    let rowCount = 0;
-    let cellCount = 0;
-
-    for (let rowIdx = 0; rowIdx <= gridX; rowIdx++) {
-      target.innerHTML += rowTemplate(rowIdx + 1);
-      rowCount++;
-
-      for (let cellIdx = 0; cellIdx <= gridY; cellIdx++) {
-        const lastInsertedRow = document.getElementById(`row-${rowCount}`);
-        lastInsertedRow.innerHTML += cellTemplate(cellCount + 1);
-        cellCount++;
-      }
-    }
+    };
   }
 }
 

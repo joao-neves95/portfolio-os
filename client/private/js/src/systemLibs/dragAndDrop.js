@@ -48,6 +48,8 @@ class DragAndDrop {
     this.init();
   }
 
+  static _() { return dragAndDrop; }
+
   init() {
     this.updateDraggables();
     this.updateFreeDraggListeners();
