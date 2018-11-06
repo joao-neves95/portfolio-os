@@ -1,4 +1,4 @@
-﻿// Conect to server.
+﻿// TODO: Pass to the server.
 class FileSystem {
 
   _fetchFileSystem() {
@@ -42,6 +42,60 @@ class FileSystem {
     return dir;
   }
 
+  /**
+   * [CONECTED TO THE DB]
+   * 
+   * @param { string } path E.g: "root/users/local/"
+   * @param { DirectoryModel } newDirectory
+   */
+  addDirectory( path, newDirectory ) {
+    // Get directory.
+    const dir = [];
+    dir.push( newDirectory );
+  }
+
+  /**
+   * IN DEVELOPMENT. ONLY A CONCEPT.
+   */
+  get ____fsv2() {
+    return new SystemDirectoryModel( FileSystemItemType.Directory, PermissionType.Admin, 'root/', null,
+      [
+
+        new SystemDirectoryModel( 'portfolioOS/', [
+          new SystemDirectoryModel( 'documents/', [] ),
+          new SystemDirectoryModel( 'images/', [] ),
+          new SystemDirectoryModel( 'videos/', [] ),
+          new SystemDirectoryModel( 'music/', [] )
+        ] ),
+        new SystemDirectoryModel( 'applications/', [
+          new SystemDirectoryModel( 'system/', [
+            new SystemApp( 'Explorer', `${IMG_PATH}folder.svg`, `${IMG_PATH}folder.svg`, console.log ),
+            new SystemApp( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, console.log )
+          ] ),
+          new DirectoryModel( PermissionType.UserWrite, 'appStore/', null, null, [
+            new AppStoreApplication( FileSystemItemType.Executable, 'Wikipedia Viewer', 'shivayl', 'https://rawgit.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html' )
+          ] )
+        ] ),
+        new SystemDirectoryModel( 'users/', [
+          new SystemDirectoryModel( 'local/', [
+            new DirectoryModel( PermissionType.UserWrite, 'desktop/', null, null, [] ),
+            new DirectoryModel( PermissionType.UserWrite, 'documents/', null, null, [
+              new FileModel( FileSystemItemType.File, PermissionType.UserDelete, 'My Document', 'Hello World.' )
+            ] ),
+            new DirectoryModel( PermissionType.UserWrite, 'images/', null, null, [
+              new FileModel( FileSystemItemType.FileUrl, PermissionType.UserDelete, 'My Image', 'www' )
+            ] ),
+            new DirectoryModel( PermissionType.UserWrite, 'videos/', null, null, [] ),
+            new DirectoryModel( PermissionType.UserWrite, 'music/', null, null, [] ),
+            new DirectoryModel( PermissionType.UserRead, 'shared/', null, null, [] )
+          ] ),
+          new DirectoryModel( PermissionType.Admin, 'public/', null, FileSystemItemType.ExecutableDirectory, [] )
+        ] )
+
+      ]
+    );
+  }
+
   get structure() {
 
     return {
@@ -49,13 +103,13 @@ class FileSystem {
         // For shivayl (João Neves).
         "portfolioOS/": {
           "documents/": [
-            new FileModel( FileSystemItemType.File, 'My Document', 'Hello World.' )
+            new FileModel( FileSystemItemType.File, PermissionType.UserRead, 'My Document', 'Hello World.' )
           ],
           "images/": [
-            new FileModel( FileSystemItemType.FileUrl, 'My Image', 'www' )
+            new FileModel( FileSystemItemType.FileUrl, PermissionType.UserRead, 'My Image', 'www' )
           ],
           "videos/": [
-            new FileModel( FileSystemItemType.FileUrl, 'My Video', 'www' )
+            new FileModel( FileSystemItemType.FileUrl, PermissionType.UserRead, 'My Video', 'www' )
           ],
           "music/": []
         },
@@ -71,13 +125,13 @@ class FileSystem {
         "users/": {
           "local/": {
             "documents/": [
-              new FileModel( FileSystemItemType.File, 'My Document', 'Hello World.' )
+              new FileModel( FileSystemItemType.File, PermissionType.UserDelete, 'My Document', 'Hello World.' )
             ],
             "images/": [
-              new FileModel( FileSystemItemType.FileUrl, 'My Image', 'www' )
+              new FileModel( FileSystemItemType.FileUrl, PermissionType.UserDelete, 'My Image', 'www' )
             ],
             "videos/": [
-              new FileModel( FileSystemItemType.FileUrl, 'My Video', 'www' )
+              new FileModel( FileSystemItemType.FileUrl, PermissionType.UserDelete, 'My Video', 'www' )
             ],
             "music/": [],
             "shared/": [],

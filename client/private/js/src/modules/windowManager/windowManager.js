@@ -1,5 +1,4 @@
-﻿// TODO: Refactor class.
-class WindowManager {
+﻿class WindowManager {
   constructor() {
     this.windows = new Dictionary();
   }

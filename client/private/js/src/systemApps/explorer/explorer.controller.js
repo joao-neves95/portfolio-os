@@ -1,6 +1,4 @@
-﻿// TODO: Use the vanillatree library for the aside directory tree.
-
-class ExplorerController {
+﻿class ExplorerController {
   constructor( processId ) {
     this.model = new ExplorerModel();
     this.view = new ExplorerView();

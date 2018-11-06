@@ -2,6 +2,6 @@
   File: 1,
   FileUrl: 2,
   Executable: 3,
-  SystemDirectory: 4,
-  UserDirectory: 5
+  Directory: 4,
+  ExecutableDirectory: 5
 } );
