@@ -4,7 +4,12 @@
 // $import 'vanillatree/vanillatree.min.js'
 // @import './utils'
 // @import './domUtils'
+// @import<<DIR '../../../../common/enums'
 // @import<<DIR './enums/'
+// @import '../../../../common/models/fsItemModelBase'
+// @import '../../../../common/models/fileModel'
+// @import '../../../../common/models/directoryModel'
+// @import '../../../../common/models/systemDirectoryModel'
 // @import<<DIR './models/'
 // @import './systemLibs/networking'
 // @import './systemLibs/gridSystem/gridSystemTemplates'
@@ -428,12 +433,31 @@ class List extends Collection {
   }
 }
 
+﻿const PermissionType = Object.freeze( {
+  /** Read only */
+  UserRead: 'user.read',
+  /** Read and write */
+  UserWrite: 'user.write',
+  /** Read, write, delete */
+  UserDelete: 'user.delete',
+  /** Admin only (Portfolio-OS) */
+  Admin: 'admin'
+} );
+
+try {
+  if ( process.env !== undefined )
+    module.exports = PermissionType;
+
+} catch {
+  // Do nothing, this is the browser.
+}
+
 ﻿const FileSystemItemType = Object.freeze( {
   File: 1,
   FileUrl: 2,
   Executable: 3,
-  SystemDirectory: 4,
-  UserDirectory: 5
+  Directory: 4,
+  ExecutableDirectory: 5
 } );
 
 ﻿const GridType = Object.freeze( {
@@ -447,6 +471,113 @@ class List extends Collection {
   DownVote: 0,
   UpVote: 1
 } );
+
+﻿// TODO: Chnage the parameter order.
+
+class FSItemModelBase {
+  constructor( type, permission, name, iconUrl = null, content ) {
+    this.type = type;
+    this.permission = permission;
+    this.name = name;
+    this.content = content;
+    this.iconUrl = iconUrl;
+  }
+}
+
+try {
+  if ( process.env !== undefined )
+    module.exports = FSItemModelBase;
+
+} catch {
+  // This is the browser.
+}
+
+
+﻿let fsItemModelBaseFile;
+
+try {
+  if ( process.env !== undefined )
+    fsItemModelBaseFile = require( './fsItemModelBase' );
+
+} catch {
+  // This is the browser.
+  fsItemModelBaseFile = FSItemModelBase;
+}
+
+class FileModel extends fsItemModelBaseFile {
+  /**
+   * 
+   * @param { FileSystemItemType } type FileSystemItemType enum
+   * @param { PermissionType } permission PermissionType enum
+   * @param { string } name
+   * @param { string } content
+   * @param { string } iconUrl "null" defaults to the default file icon.
+   */
+  constructor( type, permission, name, content, iconUrl = null ) {
+    super( type, permission, name, content, iconUrl );
+  }
+}
+
+try {
+  if ( process.env !== undefined )
+    module.exports = FileModel;
+
+} catch {
+  // Do nothing, this is the browser.
+}
+
+﻿let fsItemModelBaseDir;
+
+try {
+  if ( process.env !== undefined )
+    fsItemModelBaseDir = require( './fsItemModelBase' );
+
+} catch {
+  // This is the browser.
+  fsItemModelBaseDir = FSItemModelBase;
+}
+
+class DirectoryModel extends fsItemModelBaseDir {
+  /**
+   * 
+   * @param { FileSystemItemType } type FileSystemItemType enum
+   * @param { PermissionType } permission PermissionType enum
+   * @param { string } name
+   * @param { string } iconUrl "null" defaults to the default folder icon.
+   * @param { FileSystemItemType } type "null" defaults to "FileSystemItemType.Directory".
+   * @param { string } content
+   */
+  constructor( permission, name, iconUrl = null, type = null, content ) {
+    super( !type ? FileSystemItemType.Directory : type,
+      permission,
+      name,
+      !iconUrl ? '' : iconUrl,
+      content
+    );
+  }
+}
+
+try {
+  if ( process.env !== undefined )
+    module.exports = DirectoryModel;
+
+} catch {
+  // Do nothing, this is the browser.
+}
+
+﻿class SystemDirectoryModel extends DirectoryModel {
+  constructor( name, content ) {
+    super( PermissionType.UserRead, name, null, null, content );
+  }
+}
+
+try {
+  if ( process.env !== undefined )
+    module.exports = SystemDirectoryModel;
+
+} catch {
+  // Do nothing, this is the browser.
+}
 
 ﻿class AppRating {
   constructor() {
@@ -473,29 +604,6 @@ class List extends Collection {
     this.rating = {};
     this.creation = '';
     this.lastUpdate = '';
-  }
-}
-
-﻿class DirectoryModel {
-  constructor( type, name, iconUrl, content ) {
-    this.type = type;
-    this.name = name;
-    this.iconUrl = iconUrl;
-    this.content = content;
-  }
-}
-
-﻿class FileModel {
-  /**
-   * 
-   * @param { FileSystemItemType } type FileSystemItemType enum
-   * @param { string } name
-   * @param { string } content
-   */
-  constructor( type, name, content ) {
-    this.type = type;
-    this.name = name;
-    this.content = content;
   }
 }
 
@@ -893,10 +1001,10 @@ const resizeWindowHandler = ( e ) => {
 
 new WindowResizer();
 
-﻿// Conect to server.
+﻿// TODO: Pass to the server.
 class FileSystem {
 
-  _fetchFileSystem() {
+  __fetchFileSystem() {
 
   }
 
@@ -937,6 +1045,82 @@ class FileSystem {
     return dir;
   }
 
+  /**
+   * [CONNECT TO THE DB]
+   * 
+   * @param { string } path E.g: "root/users/local/"
+   * @param { DirectoryModel } newDirectory
+   */
+  addDirectory( path, newDirectory ) {
+    // Get directory.
+    const dir = [];
+    dir.push( newDirectory );
+  }
+
+  ____getDiretoryV2( path ) {
+    let dir = this.____fsv2;
+    let currDir = dir;
+
+    for ( let i = 0; i < path.length; ++i ) {
+      try {
+        const thisDirContent = dir.content;
+        for ( let j = 0; j < thisDirContent.length; ++j ) {
+          if ( thisDirContent[j].name === path[i] || thisDirContent[j].name === path[i] + '/' )
+            dir = thisDirContent[j];
+          else
+            return false;
+        }
+
+      } catch {
+        return false;
+      }
+    }
+
+    return dir;
+  }
+
+  /**
+   * IN DEVELOPMENT. ONLY A CONCEPT.
+   */
+  get ____fsv2() {
+    return new SystemDirectoryModel( 'root/',
+      [
+
+        new SystemDirectoryModel( 'portfolioOS/', [
+          new SystemDirectoryModel( 'documents/', [] ),
+          new SystemDirectoryModel( 'images/', [] ),
+          new SystemDirectoryModel( 'videos/', [] ),
+          new SystemDirectoryModel( 'music/', [] )
+        ] ),
+        new SystemDirectoryModel( 'applications/', [
+          new SystemDirectoryModel( 'system/', [
+            new SystemApp( 'Explorer', `${IMG_PATH}folder.svg`, `${IMG_PATH}folder.svg`, console.log ),
+            new SystemApp( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, console.log )
+          ] ),
+          new DirectoryModel( PermissionType.UserWrite, 'appStore/', null, null, [
+            new AppStoreApplication( FileSystemItemType.Executable, 'Wikipedia Viewer', 'shivayl', 'https://rawgit.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html' )
+          ] )
+        ] ),
+        new SystemDirectoryModel( 'users/', [
+          new SystemDirectoryModel( 'local/', [
+            new DirectoryModel( PermissionType.UserWrite, 'desktop/', null, null, [] ),
+            new DirectoryModel( PermissionType.UserWrite, 'documents/', null, null, [
+              new FileModel( FileSystemItemType.File, PermissionType.UserDelete, 'My Document', 'Hello World.' )
+            ] ),
+            new DirectoryModel( PermissionType.UserWrite, 'images/', null, null, [
+              new FileModel( FileSystemItemType.FileUrl, PermissionType.UserDelete, 'My Image', 'www' )
+            ] ),
+            new DirectoryModel( PermissionType.UserWrite, 'videos/', null, null, [] ),
+            new DirectoryModel( PermissionType.UserWrite, 'music/', null, null, [] ),
+            new DirectoryModel( PermissionType.UserRead, 'shared/', null, null, [] )
+          ] ),
+          new DirectoryModel( PermissionType.Admin, 'public/', null, FileSystemItemType.ExecutableDirectory, [] )
+        ] )
+
+      ]
+    );
+  }
+
   get structure() {
 
     return {
@@ -944,19 +1128,20 @@ class FileSystem {
         // For shivayl (João Neves).
         "portfolioOS/": {
           "documents/": [
-            new FileModel( FileSystemItemType.File, 'My Document', 'Hello World.' )
+            new FileModel( FileSystemItemType.File, PermissionType.UserRead, 'My Document', 'Hello World.' )
           ],
           "images/": [
-            new FileModel( FileSystemItemType.FileUrl, 'My Image', 'www' )
+            new FileModel( FileSystemItemType.FileUrl, PermissionType.UserRead, 'My Image', 'www' )
           ],
           "videos/": [
-            new FileModel( FileSystemItemType.FileUrl, 'My Video', 'www' )
+            new FileModel( FileSystemItemType.FileUrl, PermissionType.UserRead, 'My Video', 'www' )
           ],
           "music/": []
         },
         "applications/": {
           "system/": [
-            new SystemApp( 'Terminal', '', '', console.log )
+            new SystemApp( 'Terminal', '', '', console.log ),
+            new SystemApp( 'Explorer', '', '', console.log )
           ],
           "appStore/": [
             new AppStoreApplication( FileSystemItemType.Executable, 'Wikipedia Viewer', 'shivayl', 'https://rawgit.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html' )
@@ -965,13 +1150,13 @@ class FileSystem {
         "users/": {
           "local/": {
             "documents/": [
-              new FileModel( FileSystemItemType.File, 'My Document', 'Hello World.' )
+              new FileModel( FileSystemItemType.File, PermissionType.UserDelete, 'My Document', 'Hello World.' )
             ],
             "images/": [
-              new FileModel( FileSystemItemType.FileUrl, 'My Image', 'www' )
+              new FileModel( FileSystemItemType.FileUrl, PermissionType.UserDelete, 'My Image', 'www' )
             ],
             "videos/": [
-              new FileModel( FileSystemItemType.FileUrl, 'My Video', 'www' )
+              new FileModel( FileSystemItemType.FileUrl, PermissionType.UserDelete, 'My Video', 'www' )
             ],
             "music/": [],
             "shared/": [],
@@ -1155,8 +1340,7 @@ class Window {
   }
 }
 
-﻿// TODO: Refactor class.
-class WindowManager {
+﻿class WindowManager {
   constructor() {
     this.windows = new Dictionary();
   }
@@ -1822,9 +2006,7 @@ class Terminal {
   }
 }
 
-﻿// TODO: Use the vanillatree library for the aside directory tree.
-
-class ExplorerController {
+﻿class ExplorerController {
   constructor( processId ) {
     this.model = new ExplorerModel();
     this.view = new ExplorerView();
@@ -2254,6 +2436,7 @@ whenDomReady( () => {
   globalEvents.bindEvent( 'click', ( e ) => { startMenuManager.outsideClickGlobalEvent( e ); } );
   globalEvents.init();
 
+  console.debug( 'FS V2:', fileSystem.____fsv2 );
   console.debug( 'Windows:', windowManager.windows );
   console.debug( 'Taskbar Icons:', taskbarManager.icons );
   dragAndDrop.updateDraggables();

@@ -8,3 +8,11 @@
   /** Admin only (Portfolio-OS) */
   Admin: 'admin'
 } );
+
+try {
+  if ( process.env !== undefined )
+    module.exports = PermissionType;
+
+} catch {
+  // Do nothing, this is the browser.
+}

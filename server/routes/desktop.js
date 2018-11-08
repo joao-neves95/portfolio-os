@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 const path = require('path');
 
 const JS_FILES_PATH = './client/private/js/';

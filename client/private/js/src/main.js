@@ -19,6 +19,7 @@ whenDomReady( () => {
   globalEvents.bindEvent( 'click', ( e ) => { startMenuManager.outsideClickGlobalEvent( e ); } );
   globalEvents.init();
 
+  console.debug( 'FS V2:', fileSystem.____fsv2 );
   console.debug( 'Windows:', windowManager.windows );
   console.debug( 'Taskbar Icons:', taskbarManager.icons );
   dragAndDrop.updateDraggables();

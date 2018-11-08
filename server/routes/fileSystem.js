@@ -1,143 +1,101 @@
 ﻿'use strict';
+const DirectoryModel = require( '../../common/models/directoryModel' );
+const FileModel = require( '../../common/models/fileModel' );
+const PermissionType = require( '../../common/enums/permissionType' );
+
+// TODO: Find a way to not repeat code on every API method type (GET, POST, PUT, DELETE)
+
+// Common query: "?path=<path, to, the, fsItem>"
 
 module.exports = {
-  getFileSystem: ( req, res ) => {
+  getUserItem: ( req, res ) => {
+    const reqRouteArray = req.query.path.split( ',' );
 
+    // TODO: Get the item (directory/file) from the file system.
+    // This is temporary.
+    const fsItem = new DirectoryModel( PermissionType.UserWrite );
+
+    if ( !fsItem )
+      // TODO: Send not found response to the API.
+      return res.status( 404 );
+
+    const hasPermission = this.____checkFilePermissions( fsItem.permission, PermissionType.UserRead );
+    if ( !hasPermission )
+      // TODO: Send forbiden response to the API.
+      return res.status( 403 );
+
+    // GET DB row.
   },
 
-  getUserFolder: ( req, res ) => {
+  putUserItem: ( req, res ) => {
+    const requestedRoute = req.query.path.split( ',' );
 
+    // TODO: Get the item (directory/file) from the file system.
+    // This is temporary.
+    const fsItem = new DirectoryModel( PermissionType.UserWrite );
+
+    if ( !fsItem )
+      // TODO: Send not found response to the API.
+      return res.status( 404 );
+
+    const hasPermission = this.____checkFilePermissions( fsItem.permission, PermissionType.UserWrite );
+    if ( !hasPermission )
+      // TODO: Send forbiden response to the API.
+      return res.status( 403 );
+
+    // PUT DB row.
   },
 
-  getUserImages: ( req, res ) => {
+  postUserItem: ( req, res ) => {
+    const requestedRoute = req.query.path.split( ',' );
 
+    const hasPermission = this.____checkFilePermissions( fsItem.permission, PermissionType.UserWrite );
+    if ( !hasPermission )
+      // TODO: Send forbiden response to the API.
+      return res.status( 403 );
+
+    // POST new DB row.
   },
 
-  putUserImage: ( req, res ) => {
+  deleteUserItem: ( req, res ) => {
+    const requestedRoute = req.query.path.split( ',' );
 
+    const hasPermission = this.____checkFilePermissions( fsItem.permission, PermissionType.UserDelete );
+    if ( !hasPermission )
+      // TODO: Send forbiden response to the API.
+      return res.status( 403 );
+
+    // DELETE DB row.
   },
 
-  postUserImage: ( req, res ) => {
+  /**
+   * 
+   * @param { PermissionType } userPermission
+   * @param { PermissionType } requiredPermition
+   */
+  ____checkFilePermissions( userPermission, requiredPermition ) {
+    switch ( requiredPermition ) {
+      case PermissionType.UserRead:
+        if ( userPermission !== PermissionType.UserRead ||
+             fsItem.permission !== PermissionType.UserWrite ||
+             fsItem.permission !== PermissionType.UserDelete
+        ) return false;
+        break;
+      case PermissionType.UserWrite:
+        if ( fsItem.permission !== PermissionType.UserWrite ||
+             fsItem.permission !== PermissionType.UserDelete
+        ) return false;
+        break;
+      case PermissionType.UserDelete:
+        if ( fsItem.permission !== PermissionType.UserDelete )
+          return false;
+        break;
+      case PermissionType.Admin:
+        if ( fsItem.permission !== PermissionType.Admin )
+          return false;
+        break;
+    }
 
-  },
-
-  deleteUserImage: ( req, res ) => {
-
-  },
-
-  getUserVideos: ( req, res ) => {
-
-  },
-
-  putUserVideo: ( req, res ) => {
-
-  },
-
-  postUserVideo: ( req, res ) => {
-
-  },
-
-  deleteUserVideo: ( req, res ) => {
-
-  },
-
-  getUserDocuments: ( req, res ) => {
-
-  },
-
-  putUserDocument: ( req, res ) => {
-
-  },
-
-  postUserDocument: ( req, res ) => {
-
-  },
-
-  deleteUserDocument: ( req, res ) => {
-
-  },
-
-  getUserMusic: ( req, res ) => {
-
-  },
-
-  putUserMusic: ( req, res ) => {
-
-  },
-
-  postUserMusic: ( req, res ) => {
-
-  },
-
-  deletUserMusic: ( req, res ) => {
-
-  },
-
-  getPortfolioOSFolder: ( req, res ) => {
-
-  },
-
-  getPortfolioOSImages: ( req, res ) => {
-
-  },
-
-  putPortfolioOSImages: ( req, res ) => {
-
-  },
-
-  postPortfolioOSImages: ( req, res ) => {
-
-  },
-
-  deletePortfolioOSImages: ( req, res ) => {
-
-  },
-
-  getPortfolioOSVideos: ( req, res ) => {
-
-  },
-
-  putPortfolioOSVideos: ( req, res ) => {
-
-  },
-
-  postPortfolioOSVideos: ( req, res ) => {
-
-  },
-
-  deletePortfolioOSVideos: ( req, res ) => {
-
-  },
-
-  getPortfolioOSDocuments: ( req, res ) => {
-
-  },
-
-  putPortfolioOSDocuments: ( req, res ) => {
-
-  },
-
-  postPortfolioOSDocuments: ( req, res ) => {
-
-  },
-
-  deletePortfolioOSDocuments: ( req, res ) => {
-
-  },
-
-  getPortfolioOSMusic: ( req, res ) => {
-
-  },
-
-  putPortfolioOSMusic: ( req, res ) => {
-
-  },
-
-  postPortfolioOSMusic: ( req, res ) => {
-
-  },
-
-  deletePortfolioOSMusic: ( req, res ) => {
-
+    return true;
   }
 };

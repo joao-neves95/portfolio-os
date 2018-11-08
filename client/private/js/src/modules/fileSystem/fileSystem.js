@@ -1,7 +1,7 @@
 ﻿// TODO: Pass to the server.
 class FileSystem {
 
-  _fetchFileSystem() {
+  __fetchFileSystem() {
 
   }
 
@@ -43,7 +43,7 @@ class FileSystem {
   }
 
   /**
-   * [CONECTED TO THE DB]
+   * [CONNECT TO THE DB]
    * 
    * @param { string } path E.g: "root/users/local/"
    * @param { DirectoryModel } newDirectory
@@ -54,11 +54,33 @@ class FileSystem {
     dir.push( newDirectory );
   }
 
+  ____getDiretoryV2( path ) {
+    let dir = this.____fsv2;
+    let currDir = dir;
+
+    for ( let i = 0; i < path.length; ++i ) {
+      try {
+        const thisDirContent = dir.content;
+        for ( let j = 0; j < thisDirContent.length; ++j ) {
+          if ( thisDirContent[j].name === path[i] || thisDirContent[j].name === path[i] + '/' )
+            dir = thisDirContent[j];
+          else
+            return false;
+        }
+
+      } catch {
+        return false;
+      }
+    }
+
+    return dir;
+  }
+
   /**
    * IN DEVELOPMENT. ONLY A CONCEPT.
    */
   get ____fsv2() {
-    return new SystemDirectoryModel( FileSystemItemType.Directory, PermissionType.Admin, 'root/', null,
+    return new SystemDirectoryModel( 'root/',
       [
 
         new SystemDirectoryModel( 'portfolioOS/', [
