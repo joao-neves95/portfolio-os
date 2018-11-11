@@ -1,5 +1,6 @@
 ﻿// Imports for MergerJS.
 //
+// %import 'https://cdnjs.cloudflare.com/ajax/libs/ajv/6.5.5/ajv.min.js'
 // @import './externalLibs'
 // $import 'vanillatree/vanillatree.min.js'
 // @import './utils'
