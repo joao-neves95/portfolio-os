@@ -59,12 +59,5 @@
       id: 'applications/',
       opened: true
     } );
-
-    this.treeNav.add( {
-      label: 'user/',
-      parent: 'root/',
-      id: 'user/',
-      opened: true
-    } );
   }
 }
