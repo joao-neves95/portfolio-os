@@ -43,10 +43,10 @@ const resizeWindowHandler = ( e ) => {
   const currWidth = e.pageX - thisWindow.getBoundingClientRect().left;
   const currHight = e.pageY - thisWindow.getBoundingClientRect().top;
 
-  if ( currWidth >= 799 )
+  if ( currWidth >= 577 )
     thisWindow.style.width = currWidth.toString() + 'px';
 
-  if ( currHight >= 418 )
+  if ( currHight >= 268 )
     thisWindow.style.height = currHight.toString() + 'px';
 };
 

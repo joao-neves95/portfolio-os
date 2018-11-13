@@ -3,7 +3,7 @@
 class Window {
   constructor(processId, title, content) {
 
-    this.id = `win-${ processId }`;
+    this.id = `${Window.idPrefix}${processId}`;
     this.title = title;
     this.content = content;
     this.icon = TaskbarIcon;
@@ -13,23 +13,24 @@ class Window {
   }
 
   get element() { return document.getElementById( this.id ); }
+  static get idPrefix() { return 'win-'; }
 
   get template() {
     return `
       <article class="window-manager grid-y resizable" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
-            <div class="cell large-10">
+            <div class="cell small-10 medium-10 large-10">
               <p class="window-title free-draggable">${this.title}</p>
             </div>
             <div class="cell auto"></div>
-            <div class="cell large-1 icon-wrap">
+            <div class="cell small-1 medium-1 large-1 icon-wrap">
               <img src="${IMG_PATH}minimize-white.svg" alt="Minimize Window Icon" class="minimize-window icon" />
             </div>
-            <div class="cell large-1 icon-wrap">
+            <div class="cell small-1 medium-1 large-1 icon-wrap">
               <img src="${IMG_PATH}maximize-white.svg" alt="Maximize Window Icon" class="max-size-window icon" />
             </div>
-            <div class="cell large-1 icon-wrap">
+            <div class="cell small-1 medium-1 large-1 icon-wrap">
               <img src="${IMG_PATH}close-white.svg" alt="Close Window Icon" class="close-window icon" />
             </div>
           </div>

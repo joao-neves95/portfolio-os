@@ -2,4 +2,8 @@
   constructor() {
 
   }
+
+  getUserProfile() {
+    return '';
+  }
 }

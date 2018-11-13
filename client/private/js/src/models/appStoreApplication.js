@@ -12,6 +12,9 @@
     this.htmlIndexUrl = htmlIndexUrl; // 'https://rawgit.com/'
 
     this.rating = {};
+    /** An array ith the users id's
+     * @type { string[] } */
+    this.downloads = [];
     this.creation = '';
     this.lastUpdate = '';
   }

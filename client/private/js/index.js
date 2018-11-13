@@ -32,6 +32,7 @@
 // @import './systemApps/appStore/appStore.model'
 // @import './systemApps/appStore/appStore.view'
 // @import './systemApps/appStore/appStore.controller'
+// @import './systemApps/appStore/appStore'
 // @import './systemApps/profiles/myProfile/myProfile.templates'
 // @import './systemApps/profiles/myProfile/myProfile.model'
 // @import './systemApps/profiles/myProfile/myProfile.view'
@@ -353,6 +354,24 @@ class List extends Collection {
 class DomUtils {
 
   /**
+   * 
+   * @param {any} query
+   * @returns { HTMLElement }
+   */
+  static get( query ) {
+    return document.querySelector( query );
+  }
+
+  /**
+   * 
+   * @param {any} query
+   * @returns { HTMLElement[] }
+   */
+  static getAll( query ) {
+    return document.querySelectorAll( query );
+  }
+
+  /**
    * Get a parent element with an id include. If it's not found it returns false.
    * 
    * @param {any} elem Element that defines where the search starts.
@@ -625,6 +644,9 @@ class AppStoreApplication {
     this.htmlIndexUrl = htmlIndexUrl; // 'https://rawgit.com/'
 
     this.rating = {};
+    /** An array ith the users id's
+     * @type { string[] } */
+    this.downloads = [];
     this.creation = '';
     this.lastUpdate = '';
   }
@@ -1015,10 +1037,10 @@ const resizeWindowHandler = ( e ) => {
   const currWidth = e.pageX - thisWindow.getBoundingClientRect().left;
   const currHight = e.pageY - thisWindow.getBoundingClientRect().top;
 
-  if ( currWidth >= 799 )
+  if ( currWidth >= 577 )
     thisWindow.style.width = currWidth.toString() + 'px';
 
-  if ( currHight >= 418 )
+  if ( currHight >= 268 )
     thisWindow.style.height = currHight.toString() + 'px';
 };
 
@@ -1299,7 +1321,7 @@ const taskbarManager = new TaskbarManager();
 class Window {
   constructor(processId, title, content) {
 
-    this.id = `win-${ processId }`;
+    this.id = `${Window.idPrefix}${processId}`;
     this.title = title;
     this.content = content;
     this.icon = TaskbarIcon;
@@ -1309,23 +1331,24 @@ class Window {
   }
 
   get element() { return document.getElementById( this.id ); }
+  static get idPrefix() { return 'win-'; }
 
   get template() {
     return `
       <article class="window-manager grid-y resizable" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
-            <div class="cell large-10">
+            <div class="cell small-10 medium-10 large-10">
               <p class="window-title free-draggable">${this.title}</p>
             </div>
             <div class="cell auto"></div>
-            <div class="cell large-1 icon-wrap">
+            <div class="cell small-1 medium-1 large-1 icon-wrap">
               <img src="${IMG_PATH}minimize-white.svg" alt="Minimize Window Icon" class="minimize-window icon" />
             </div>
-            <div class="cell large-1 icon-wrap">
+            <div class="cell small-1 medium-1 large-1 icon-wrap">
               <img src="${IMG_PATH}maximize-white.svg" alt="Maximize Window Icon" class="max-size-window icon" />
             </div>
-            <div class="cell large-1 icon-wrap">
+            <div class="cell small-1 medium-1 large-1 icon-wrap">
               <img src="${IMG_PATH}close-white.svg" alt="Close Window Icon" class="close-window icon" />
             </div>
           </div>
@@ -1368,13 +1391,28 @@ class WindowManager {
     this.windows = new Dictionary();
   }
 
-  openNewWindow(processId, content = '') {
-    const thisAppInstance = processManager.getAppInstance(processId);
-    const thisWindow = new Window(processId, thisAppInstance.name, content);
-    const newTaskbarIcon = taskbarManager.addIcon(thisWindow.id, thisAppInstance.taskbarIconUrl);
-    thisWindow.icon = newTaskbarIcon;
-    this.windows.add(thisWindow.id, thisWindow);
+  /**
+   * Open a new window from a running process.
+   * @param {any} processId
+   * @param {any} content
+   */
+  openNewWindow( processId, content = '' ) {
+    const thisAppInstance = processManager.getAppInstance( processId );
+    this.openNewWindowCustom( processId, thisAppInstance.name, content, true, thisAppInstance.taskbarIconUrl );
+  }
 
+  /**
+   * To use as a modal. It does not add a taskabar icon by default. Use .openNewWindow() for application windows.
+   */
+  openNewWindowCustom( processId, title, content = '', addTaskbarIcon = false, taskbarIconUrl = null ) {
+    const thisWindow = new Window( processId, title, content );
+
+    if ( addTaskbarIcon ) {
+      const newTaskbarIcon = taskbarManager.addIcon( thisWindow.id, taskbarIconUrl );
+      thisWindow.icon = newTaskbarIcon;
+    }
+
+    this.windows.add( thisWindow.id, thisWindow );
     this.updateListeners();
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
@@ -1388,19 +1426,19 @@ class WindowManager {
     }, 1000 );
   }
 
-  closeWindow(windowId) {
+  closeWindow( windowId ) {
     this.findWindowInstance(windowId).kill();
     taskbarManager.killIcon(windowId);
     this.windows.remove(windowId);
     this.updateListeners();
   }
 
-  minimizeWindow(windowId) {
+  minimizeWindow( windowId ) {
     this.findWindowInstance(windowId).minimize();
     taskbarManager.minimizedIcon(windowId);
   }
 
-  unminimizeWindow(windowId) {
+  unminimizeWindow( windowId ) {
     this.findWindowInstance( windowId ).unminimize();
     taskbarManager.maximizedIcon( windowId );
   }
@@ -1495,6 +1533,17 @@ class WindowManager {
 
 const windowManager = new WindowManager();
 
+class UserAppsManager {
+  constructor() {
+    /** @type {AppStoreApplication[]} */
+    this.installedApps = [];
+  }
+
+  fetchAllInstalledApps() {
+    return;
+  }
+
+}
 
 class SystemAppsManager {
   constructor() {
@@ -1901,10 +1950,77 @@ class Terminal {
 }
 
 class AppStoreTemplates {
+  // TODO: Add the search panel as a dropdown under the top-bar, with filters (number of downloads; vote ratio).
   static window( id ) {
     return `
       <section class="grid-x app-store" id="${id}">
+
+        <div class="top-bar">
+          <div class="top-bar-left">
+            <ul class="dropdown menu" data-dropdown-menu>
+              <li>
+                <a href="#">Explore</a>
+                <ul class="menu vertical">
+                  <li><a href="#">Top Rated</a></li>
+                  <li><a href="#">Newest Apps</a></li>
+                </ul>
+              </li>
+              <li><a href="#" class="add-new">Add New App</a></li>
+            </ul>
+          </div>
+          <div class="top-bar-right">
+            <ul class="menu">
+              <li><input type="search" placeholder="Search"></li>
+              <li><button type="button" class="button">Search</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid-container fluid content">
+          <div class="grid-x content-grid">
+            ${
+      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' )
+            }
+          </div>
+        </div>
+
       </section>
+    `;
+  }
+
+  static appCard( appId, title, creator, downloadNum, voteRatio, description ) {
+    return `
+      <div class="cell">
+        <div class="card app-card" id="${appId}">
+          <div class="card-divider">
+            <h4>${title}</h4>
+          </div>
+          <img src="">
+          <div class="card-section">
+            <p>${description}</p>
+            <p class="meta">Creator: ${creator}</p>
+            <p class="meta">Downloads: ${downloadNum}</p>
+            <p class="meta">Vote Ratio: ${voteRatio}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static appDescriptionModal() {
+    return `
+    `;
+  }
+
+  static openAddNewAppWin() {
+    return `
     `;
   }
 }
@@ -1913,12 +2029,13 @@ class AppStoreModel {
   constructor() {
     this.processId = '';
     this.id = '';
+
+    this.openedAddNewAppWindow = false;
   }
 }
 
 class AppStoreView {
   constructor() {
-
   }
 }
 
@@ -1935,8 +2052,35 @@ class AppStoreController {
   }
 
   init() {
-    windowManager.openNewWindow( this.processId, AppStoreTemplates.window( this.id ) );
-    this.model.initTreeNav();
+    windowManager.openNewWindow( this.model.processId, AppStoreTemplates.window( this.model.id ) );
+    $( `#${this.model.id} .dropdown` ).foundation();
+
+    DomUtils.get( `#${this.model.id} .add-new` ).addEventListener( 'click', ( e ) => {
+      e.preventDefault();
+
+      this.openAddNewAppWindow();
+    } );
+  }
+
+  openAddNewAppWindow() {
+    if ( this.model.openedAddNewAppWindow )
+      return;
+
+    const processId = Utils.randomString( 4 );
+    windowManager.openNewWindowCustom( processId, 'Add New App', AppStoreTemplates.openAddNewAppWin() );
+    this.model.openedAddNewAppWindow = true;
+
+    DomUtils.get( `#${Window.idPrefix}${processId} .close-window` ).addEventListener( 'click', () => {
+      this.model.openedAddNewAppWindow = false;
+    } );
+  }
+}
+
+class AppStore {
+  constructor( processId ) {
+    this.processId = processId;
+
+    this.controller = new AppStoreController( processId );
   }
 }
 
@@ -1953,33 +2097,48 @@ class MyProfileTemplates {
           <div class="cell">
             <label>
               Summary
-              <textarea placeholder="None"></textarea>
+              <textarea class="summary" placeholder="None"></textarea>
             </label>
           </div>
 
           <button type="button" class="success button add-link-btn">Add Link</button>
-          <div class="grid-x">
-            <div class="medium-2 cell link-label-wrapper">
-              <label>Website
-                <select>
-                  <option value="instagram">Instagram</option>
-                  <option value="twitter">Twitter</option>
-                  <option value="facebook">Facebook</option>
-                  <option value="behance">Behance</option>
-                  <option value="github">GitHub</option>
-                  <option value="other">Other</option>
-                </select>
-              </label>
-            </div>
-            <div class="medium-9 cell link-slug-wrapper">
-              <label>Slug
-                <input type="text" placeholder="john-doe">
-              </label>
-            </div>
-          </div>
+          ${MyProfileTemplates.addLink}
+
+          <button type="button" class="success button add-link-btn">Add Skill</button>
+          <label>
+            <input type="text" placeholder="Type your skill">
+          </label>
+
+          <button type="button" class="success button add-link-btn">Add Image</button>
+          <button type="button" class="success button add-link-btn">Add Video</button>
+          <button type="button" class="success button add-link-btn">Add Document</button>
 
         </div>
       </form>
+    `;
+  }
+
+  static get addLink() {
+    return `
+      <div class="grid-x">
+        <div class="medium-2 cell link-label-wrapper">
+          <label>Website
+            <select>
+              <option value="instagram">Instagram</option>
+              <option value="twitter">Twitter</option>
+              <option value="facebook">Facebook</option>
+              <option value="behance">Behance</option>
+              <option value="github">GitHub</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+        </div>
+        <div class="medium-9 cell link-slug-wrapper">
+          <label>Slug
+            <input type="text" placeholder="john-doe">
+          </label>
+        </div>
+      </div>
     `;
   }
 }
@@ -1987,6 +2146,10 @@ class MyProfileTemplates {
 class MyProfileModel {
   constructor() {
 
+  }
+
+  getUserProfile() {
+    return '';
   }
 }
 
@@ -2258,8 +2421,13 @@ class ProcessManager {
     return this.activeProcesses.length;
   }
 
+  /**
+   * 
+   * @param { string } processId
+   * @returns { SystemApp }
+   */
   getAppInstance(processId) {
-    return this.activeProcesses.getByKey(processId);
+    return this.activeProcesses.getByKey( processId );
   }
 }
 
@@ -2617,6 +2785,7 @@ const globalEvents = new GlobalEvents();
 
 whenDomReady( () => {
 
+  $( document ).foundation();
   desktopManager.init();
   desktopManager.insertNewIcon( IMG_PATH + 'trash.svg', 'Trash' );
 

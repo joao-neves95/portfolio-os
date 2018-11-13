@@ -19,8 +19,13 @@
     return this.activeProcesses.length;
   }
 
+  /**
+   * 
+   * @param { string } processId
+   * @returns { SystemApp }
+   */
   getAppInstance(processId) {
-    return this.activeProcesses.getByKey(processId);
+    return this.activeProcesses.getByKey( processId );
   }
 }
 

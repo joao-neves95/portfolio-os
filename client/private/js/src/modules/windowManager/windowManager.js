@@ -1,15 +1,30 @@
-﻿class WindowManager {
+class WindowManager {
   constructor() {
     this.windows = new Dictionary();
   }
 
-  openNewWindow(processId, content = '') {
-    const thisAppInstance = processManager.getAppInstance(processId);
-    const thisWindow = new Window(processId, thisAppInstance.name, content);
-    const newTaskbarIcon = taskbarManager.addIcon(thisWindow.id, thisAppInstance.taskbarIconUrl);
-    thisWindow.icon = newTaskbarIcon;
-    this.windows.add(thisWindow.id, thisWindow);
+  /**
+   * Open a new window from a running process.
+   * @param { string } processId
+   * @param { string } content
+   */
+  openNewWindow( processId, content = '' ) {
+    const thisAppInstance = processManager.getAppInstance( processId );
+    this.openNewWindowCustom( processId, thisAppInstance.name, content, true, thisAppInstance.taskbarIconUrl );
+  }
 
+  /**
+   * To use as a modal. It does not add a taskabar icon by default. Use .openNewWindow() for application windows.
+   */
+  openNewWindowCustom( processId, title, content = '', addTaskbarIcon = false, taskbarIconUrl = null ) {
+    const thisWindow = new Window( processId, title, content );
+
+    if ( addTaskbarIcon ) {
+      const newTaskbarIcon = taskbarManager.addIcon( thisWindow.id, taskbarIconUrl );
+      thisWindow.icon = newTaskbarIcon;
+    }
+
+    this.windows.add( thisWindow.id, thisWindow );
     this.updateListeners();
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
@@ -23,19 +38,19 @@
     }, 1000 );
   }
 
-  closeWindow(windowId) {
+  closeWindow( windowId ) {
     this.findWindowInstance(windowId).kill();
     taskbarManager.killIcon(windowId);
     this.windows.remove(windowId);
     this.updateListeners();
   }
 
-  minimizeWindow(windowId) {
+  minimizeWindow( windowId ) {
     this.findWindowInstance(windowId).minimize();
     taskbarManager.minimizedIcon(windowId);
   }
 
-  unminimizeWindow(windowId) {
+  unminimizeWindow( windowId ) {
     this.findWindowInstance( windowId ).unminimize();
     taskbarManager.maximizedIcon( windowId );
   }

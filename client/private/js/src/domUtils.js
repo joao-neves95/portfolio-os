@@ -1,6 +1,24 @@
 ﻿class DomUtils {
 
   /**
+   * 
+   * @param {any} query
+   * @returns { HTMLElement }
+   */
+  static get( query ) {
+    return document.querySelector( query );
+  }
+
+  /**
+   * 
+   * @param {any} query
+   * @returns { HTMLElement[] }
+   */
+  static getAll( query ) {
+    return document.querySelectorAll( query );
+  }
+
+  /**
    * Get a parent element with an id include. If it's not found it returns false.
    * 
    * @param {any} elem Element that defines where the search starts.

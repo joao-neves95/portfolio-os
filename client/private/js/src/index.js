@@ -32,6 +32,7 @@
 // @import './systemApps/appStore/appStore.model'
 // @import './systemApps/appStore/appStore.view'
 // @import './systemApps/appStore/appStore.controller'
+// @import './systemApps/appStore/appStore'
 // @import './systemApps/profiles/myProfile/myProfile.templates'
 // @import './systemApps/profiles/myProfile/myProfile.model'
 // @import './systemApps/profiles/myProfile/myProfile.view'
