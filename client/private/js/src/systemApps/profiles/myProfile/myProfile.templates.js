@@ -3,6 +3,8 @@
     throw new Error( 'Can not instantiate the static class MyProfileTemplates' );
   }
 
+  // TODO: Eliminate.
+
   static myProfilePage() {
     return `
       <form class="grid-container my-profile">

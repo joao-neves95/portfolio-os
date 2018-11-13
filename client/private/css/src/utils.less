@@ -37,12 +37,34 @@
     display: none;
 }
 
+.disabled-input() {
+    background-color: white !important;
+    cursor: auto !important;
+    resize: none !important;
+
+    &:focus, &:hover {
+        border: 1px solid #cacaca !important;
+    }
+}
+
+.disabled-input {
+    .disabled-input();
+}
+
 .no-margin() {
     margin: 0;
 }
 
 .no-margin {
     .no-margin();
+}
+
+.pointer() {
+    cursor: pointer;
+}
+
+.pointer {
+    .pointer();
 }
 
 .unselectable {

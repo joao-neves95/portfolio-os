@@ -28,14 +28,14 @@
         <div class="grid-container fluid content">
           <div class="grid-x content-grid">
             ${
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' )
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' )
             }
           </div>
         </div>
@@ -57,6 +57,7 @@
             <p class="meta">Creator: ${creator}</p>
             <p class="meta">Downloads: ${downloadNum}</p>
             <p class="meta">Vote Ratio: ${voteRatio}</p>
+            <button type="button" class="install button primary">Install</button>
           </div>
         </div>
       </div>

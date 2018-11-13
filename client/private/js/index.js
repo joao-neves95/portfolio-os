@@ -489,6 +489,10 @@ try {
   // Do nothing, this is the browser.
 }
 
+const DefaultWebsiteHosts = Object.freeze( {
+  GitHub: 'github.com'
+} );
+
 const FileSystemItemType = Object.freeze( {
   File: 1,
   FileUrl: 2,
@@ -506,6 +510,7 @@ const GridType = Object.freeze( {
 
 const ProfilePageType = Object.freeze( {
   MyProfile: 'myProfile',
+  Explore: 'explore',
   UserProfiles: 'userProfiles'
 } );
 
@@ -1393,8 +1398,8 @@ class WindowManager {
 
   /**
    * Open a new window from a running process.
-   * @param {any} processId
-   * @param {any} content
+   * @param { string } processId
+   * @param { string } content
    */
   openNewWindow( processId, content = '' ) {
     const thisAppInstance = processManager.getAppInstance( processId );
@@ -1979,14 +1984,14 @@ class AppStoreTemplates {
         <div class="grid-container fluid content">
           <div class="grid-x content-grid">
             ${
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-      this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' )
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' )
             }
           </div>
         </div>
@@ -2008,6 +2013,7 @@ class AppStoreTemplates {
             <p class="meta">Creator: ${creator}</p>
             <p class="meta">Downloads: ${downloadNum}</p>
             <p class="meta">Vote Ratio: ${voteRatio}</p>
+            <button type="button" class="install button primary">Install</button>
           </div>
         </div>
       </div>
@@ -2088,6 +2094,8 @@ class MyProfileTemplates {
   constructor() {
     throw new Error( 'Can not instantiate the static class MyProfileTemplates' );
   }
+
+  // TODO: Eliminate.
 
   static myProfilePage() {
     return `
@@ -2188,8 +2196,8 @@ class ProfilesTemplates {
           <div class="top-bar-left">
             <ul class="dropdown menu" data-dropdown-menu>
               <!-- <li class="menu-text">Site Title</li> -->
-              <li><a href="#">My Profile</a></li>
-              <li><a href="#">Profiles</a></li>
+              <li><a href="#" class="my-profile">My Profile</a></li>
+              <li><a href="#" class="explore">Explore</a></li>
             </ul>
           </div>
           <div class="top-bar-right">
@@ -2202,7 +2210,115 @@ class ProfilesTemplates {
 
         <div class="cell content" id="cntnt_${id}">
         </div>
+
       </section>
+    `;
+  }
+
+  /**
+   * 
+   * @param {any} name
+   * @param {any} summary
+   * @param { string[] } websites string[string[]]: ( [['hostName', 'host', 'path']] )
+   * @param { string[] } skillSet
+   */
+  static userProfile( name, summary, websites, skillSet ) {
+    let skillSetHtml = '';
+    for ( let i = 0; i < skillSet.length; ++i ) {
+      skillSetHtml += ProfilesTemplates.disabledInput( skillSet[i] );
+    }
+
+    let websitesHtml = '';
+    for ( let i = 0; i < websites.length; ++i ) {
+      websitesHtml += ProfilesTemplates.link( websites[i][0], websites[i][1], websites[i][2] );
+    }
+
+    return `
+      <form class="grid-container my-profile">
+        <div class="grid-y inner-my-profile">
+
+          <div class="cell">
+            <h5>Name</h5>
+            <p>${name}</p>
+          </div>
+          
+          <div class="cell">
+            <h5>Summary</h5>
+            <textarea class="summary disabled-input" value="${summary}" disabled="true"></textarea>
+          </div>
+
+          <div class="cell">
+            <h5>Around The Web</h5>
+            ${websitesHtml}
+          </div>
+
+          <div class="cell">
+            <h5>Skill Set</h5>
+            <label>
+              ${skillSetHtml}
+            </label>
+          </div>
+
+          <h5>Images</h5>
+          <h5>Videos</h5>
+          <h5>Documents</h5>
+          <h5>Music</h5>
+
+        </div>
+      </form>
+    `;
+  }
+
+  static disabledInput( value = '' ) {
+    return `
+      <input class="disabled-input" type="text" value="${value}" disabled="true">
+    `;
+  }
+
+  static link( hostName, host, path ) {
+    return `
+      <div class="grid-x">
+        <div class="medium-2 cell link-label-wrapper">
+          <label class="lbl">Website</label>
+          <a class="pointer" href="https://${host}/${path}" target="_blank">
+            <p>${hostName}</p>
+          </a>
+        </div>
+        <div class="medium-9 cell link-slug-wrapper">
+          <label class="lbl">Slug
+            <input class="slug disabled-input" type="text" value="${path}" disabled="true">
+          </label>
+        </div>
+      </div>
+    `;
+  }
+
+  static get addLink() {
+    return `
+      <div class="grid-x">
+        <div class="medium-2 cell link-label-wrapper">
+          <label>Website
+            <select>
+              <option value="instagram">Instagram</option>
+              <option value="twitter">Twitter</option>
+              <option value="facebook">Facebook</option>
+              <option value="behance">Behance</option>
+              <option value="github">GitHub</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+        </div>
+        <div class="medium-9 cell link-slug-wrapper">
+          <label>Slug
+            <input type="text" placeholder="john-doe">
+          </label>
+        </div>
+      </div>
+    `;
+  }
+
+  static profileCard() {
+    return `
     `;
   }
 }
@@ -2241,7 +2357,17 @@ class Profiles {
 
   init() {
     windowManager.openNewWindow( this.processId, ProfilesTemplates.window( this.id ) );
-    this.view.injectContent( this.id, MyProfileTemplates.myProfilePage() );
+    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
+
+    DomUtils.get( `#${this.id} .my-profile` ).addEventListener( 'click', ( e ) => {
+      e.preventDefault( e );
+      this.currentPage = ProfilePageType.MyProfile;
+    } );
+
+    DomUtils.get( `#${this.id} .explore` ).addEventListener( 'click', ( e ) => {
+      e.preventDefault( e );
+      this.currentPage = ProfilePageType.Explore;
+    } );
   }
 }
 
