@@ -6,7 +6,7 @@
       return `
         <figure class="desktop-icon draggable" id="${id}">
           <img src="${iconUrl}" alt="${label}" class="unselectable icon" />
-          <label class="unselectable icon-label">Trash</label>
+          <label class="unselectable icon-label">${label}</label>
         </figure>
       `;
     };
