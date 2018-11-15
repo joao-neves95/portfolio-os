@@ -2,37 +2,7 @@
   constructor() {
     throw new Error( 'Can not instantiate the static class MyProfileTemplates' );
   }
-
   // TODO: Eliminate.
-
-  static myProfilePage() {
-    return `
-      <form class="grid-container my-profile">
-        <div class="grid-y inner-my-profile">
-
-          <div class="cell">
-            <label>
-              Summary
-              <textarea class="summary" placeholder="None"></textarea>
-            </label>
-          </div>
-
-          <button type="button" class="success button add-link-btn">Add Link</button>
-          ${MyProfileTemplates.addLink}
-
-          <button type="button" class="success button add-link-btn">Add Skill</button>
-          <label>
-            <input type="text" placeholder="Type your skill">
-          </label>
-
-          <button type="button" class="success button add-link-btn">Add Image</button>
-          <button type="button" class="success button add-link-btn">Add Video</button>
-          <button type="button" class="success button add-link-btn">Add Document</button>
-
-        </div>
-      </form>
-    `;
-  }
 
   static get addLink() {
     return `
@@ -44,17 +14,29 @@
               <option value="twitter">Twitter</option>
               <option value="facebook">Facebook</option>
               <option value="behance">Behance</option>
-              <option value="github">GitHub</option>
+              <option value="github.com">GitHub</option>
               <option value="other">Other</option>
             </select>
           </label>
         </div>
         <div class="medium-9 cell link-slug-wrapper">
-          <label>Slug
+          <label>Path
             <input type="text" placeholder="john-doe">
           </label>
         </div>
       </div>
+    `;
+  }
+
+  static get input() {
+    return `
+      <input type="text" placeholder="Saying foo and bar">
+    `;
+  }
+
+  static button( label, additionalClasses = '' ) {
+    return `
+      <button type="button" class="success button ${additionalClasses}">${label}</button>
     `;
   }
 }

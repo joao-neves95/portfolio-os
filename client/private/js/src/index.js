@@ -40,7 +40,7 @@
 // @import './systemApps/profiles/userProfiles/userProfiles.model'
 // @import './systemApps/profiles/userProfiles/userProfiles.view'
 // @import './systemApps/profiles/userProfiles/userProfiles.controller'
-// @import './systemApps/profiles/profilesTemplates'
+// @import './systemApps/profiles/profiles.templates'
 // @import './systemApps/profiles/profiles.view'
 // @import './systemApps/profiles/profiles'
 // @import './systemApps/explorer/explorer.templates'

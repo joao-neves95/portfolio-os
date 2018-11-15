@@ -52,22 +52,20 @@
             <h5>Name</h5>
             <p>${name}</p>
           </div>
-          
+
           <div class="cell">
             <h5>Summary</h5>
             <textarea class="summary disabled-input" value="${summary}" disabled="true"></textarea>
           </div>
 
-          <div class="cell">
+          <div class="cell links-container">
             <h5>Around The Web</h5>
             ${websitesHtml}
           </div>
 
-          <div class="cell">
+          <div class="cell skills-container">
             <h5>Skill Set</h5>
-            <label>
               ${skillSetHtml}
-            </label>
           </div>
 
           <h5>Images</h5>

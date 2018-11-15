@@ -40,7 +40,7 @@
 // @import './systemApps/profiles/userProfiles/userProfiles.model'
 // @import './systemApps/profiles/userProfiles/userProfiles.view'
 // @import './systemApps/profiles/userProfiles/userProfiles.controller'
-// @import './systemApps/profiles/profilesTemplates'
+// @import './systemApps/profiles/profiles.templates'
 // @import './systemApps/profiles/profiles.view'
 // @import './systemApps/profiles/profiles'
 // @import './systemApps/explorer/explorer.templates'
@@ -648,12 +648,12 @@ class AppStoreApplication {
     this.creator = creator;
     this.htmlIndexUrl = htmlIndexUrl; // 'https://rawgit.com/'
 
-    this.rating = {};
-    /** An array ith the users id's
+    this.rating = [];
+    /** An array with the users id's
      * @type { string[] } */
     this.downloads = [];
-    this.creation = '';
-    this.lastUpdate = '';
+    this.creationDate = '';
+    this.lastUpdateDate = '';
   }
 }
 
@@ -2094,37 +2094,7 @@ class MyProfileTemplates {
   constructor() {
     throw new Error( 'Can not instantiate the static class MyProfileTemplates' );
   }
-
   // TODO: Eliminate.
-
-  static myProfilePage() {
-    return `
-      <form class="grid-container my-profile">
-        <div class="grid-y inner-my-profile">
-
-          <div class="cell">
-            <label>
-              Summary
-              <textarea class="summary" placeholder="None"></textarea>
-            </label>
-          </div>
-
-          <button type="button" class="success button add-link-btn">Add Link</button>
-          ${MyProfileTemplates.addLink}
-
-          <button type="button" class="success button add-link-btn">Add Skill</button>
-          <label>
-            <input type="text" placeholder="Type your skill">
-          </label>
-
-          <button type="button" class="success button add-link-btn">Add Image</button>
-          <button type="button" class="success button add-link-btn">Add Video</button>
-          <button type="button" class="success button add-link-btn">Add Document</button>
-
-        </div>
-      </form>
-    `;
-  }
 
   static get addLink() {
     return `
@@ -2136,17 +2106,29 @@ class MyProfileTemplates {
               <option value="twitter">Twitter</option>
               <option value="facebook">Facebook</option>
               <option value="behance">Behance</option>
-              <option value="github">GitHub</option>
+              <option value="github.com">GitHub</option>
               <option value="other">Other</option>
             </select>
           </label>
         </div>
         <div class="medium-9 cell link-slug-wrapper">
-          <label>Slug
+          <label>Path
             <input type="text" placeholder="john-doe">
           </label>
         </div>
       </div>
+    `;
+  }
+
+  static get input() {
+    return `
+      <input type="text" placeholder="Saying foo and bar">
+    `;
+  }
+
+  static button( label, additionalClasses = '' ) {
+    return `
+      <button type="button" class="success button ${additionalClasses}">${label}</button>
     `;
   }
 }
@@ -2163,19 +2145,51 @@ class MyProfileModel {
 
 class MyProfileView {
   constructor() {
-
+    /** @type { HTMLElement } */
+    this.target = HTMLElement;
   }
 
-  /**
-   * 
-   * @param { string } id
-   * @returns { HTMLElement }
-   */
-  contentTarget( windowId ) { return document.getElementById( windowId ).querySelector( `[id^="cntnt_"] ` ); }
+  activateProfileEdition() {
+    const inputs = this.target.getElementsByTagName( 'input' );
+    for ( let i = 0; i < inputs.length; ++i ) {
+      inputs[i].classList.remove( 'disabled-input' );
+      inputs[i].disabled = false;
+    }
+
+    const summary = this.target.getElementsByTagName( 'textarea' )[0];
+    summary.classList.remove( 'disabled-input' );
+    summary.disabled = false;
+
+    const linksContainer = this.target.getElementsByClassName( 'links-container' )[0];
+    linksContainer.insertAdjacentHTML( 'beforeend', MyProfileTemplates.button( 'Add Link', 'add-link-btn' ) );
+        
+    const skillsContainer = this.target.getElementsByClassName( 'skills-container' )[0];
+    skillsContainer.insertAdjacentHTML( 'beforeend', MyProfileTemplates.button( 'Add Skill', 'add-skill-btn' ) );
+  }
 }
 
 class MyProfileController {
   constructor() {
+    this.model = new MyProfileModel();
+    this.view = new MyProfileView();
+  }
+
+  initPage( target ) {
+    this.view.target = target;
+    this.view.activateProfileEdition();
+    this.____addEventListeners();
+  }
+
+  ____addEventListeners() {
+    this.view.target.getElementsByClassName( 'add-link-btn' )[0].addEventListener( 'click', ( e ) => {
+      e.preventDefault();
+      e.target.insertAdjacentHTML( 'beforebegin', MyProfileTemplates.addLink );
+    } );
+
+    this.view.target.getElementsByClassName( 'add-skill-btn' )[0].addEventListener( 'click', ( e ) => {
+      e.preventDefault();
+      e.target.insertAdjacentHTML( 'beforebegin', MyProfileTemplates.input );
+    } );
   }
 }
 
@@ -2184,6 +2198,9 @@ class MyProfileController {
 class UserProfilesController {
   constructor() {
 
+  }
+
+  initPage() {
   }
 }
 
@@ -2241,22 +2258,20 @@ class ProfilesTemplates {
             <h5>Name</h5>
             <p>${name}</p>
           </div>
-          
+
           <div class="cell">
             <h5>Summary</h5>
             <textarea class="summary disabled-input" value="${summary}" disabled="true"></textarea>
           </div>
 
-          <div class="cell">
+          <div class="cell links-container">
             <h5>Around The Web</h5>
             ${websitesHtml}
           </div>
 
-          <div class="cell">
+          <div class="cell skills-container">
             <h5>Skill Set</h5>
-            <label>
               ${skillSetHtml}
-            </label>
           </div>
 
           <h5>Images</h5>
@@ -2342,6 +2357,7 @@ class ProfilesView {
 
 class Profiles {
   constructor( processId ) {
+    /** The window id */
     this.id = `profiles-${processId}`;
     this.processId = processId;
     this.view = new ProfilesView();
@@ -2357,17 +2373,32 @@ class Profiles {
 
   init() {
     windowManager.openNewWindow( this.processId, ProfilesTemplates.window( this.id ) );
-    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
+    this.injectMyProfile();
 
+    // Add Listeners.
     DomUtils.get( `#${this.id} .my-profile` ).addEventListener( 'click', ( e ) => {
       e.preventDefault( e );
-      this.currentPage = ProfilePageType.MyProfile;
+      this.injectMyProfile();
     } );
 
     DomUtils.get( `#${this.id} .explore` ).addEventListener( 'click', ( e ) => {
       e.preventDefault( e );
-      this.currentPage = ProfilePageType.Explore;
+      this.injectExploreProfiles();
     } );
+  }
+
+  injectMyProfile() {
+    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
+    this.myProfileController.initPage( this.view.contentTarget( this.id ) );
+    this.currentPage = ProfilePageType.MyProfile;
+  }
+
+  injectUserProfile() {
+    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
+  }
+
+  injectExploreProfiles() {
+    this.currentPage = ProfilePageType.Explore;
   }
 }
 
@@ -2914,12 +2945,13 @@ whenDomReady( () => {
   $( document ).foundation();
   desktopManager.init();
   desktopManager.insertNewIcon( IMG_PATH + 'trash.svg', 'Trash' );
+  desktopManager.insertNewIcon( IMG_PATH + 'profiles.svg', 'Profiles' );
 
   // SystemApps bindings:
   systemAppsManager.bindApplication( 'Explorer', `${IMG_PATH}folder.svg`, `${IMG_PATH}folder.svg`, ( processId ) => { new Explorer( processId ); } );
   systemAppsManager.bindApplication( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, ( processId ) => { new Terminal( processId ); } );
-  systemAppsManager.bindApplication( 'Profiles', `${IMG_PATH}default-taskbar-icon-white`, `${IMG_PATH}default-taskbar-icon-white`, ( processId ) => { new Profiles( processId ); } );
-  systemAppsManager.bindApplication( 'AppStore', `${IMG_PATH}default-taskbar-icon-white`, `${IMG_PATH}default-taskbar-icon-white`, ( processId ) => { new AppStore( processId ); } );
+  systemAppsManager.bindApplication( 'Profiles', `${IMG_PATH}profiles.svg`, `${IMG_PATH}profiles.svg`, ( processId ) => { new Profiles( processId ); } );
+  systemAppsManager.bindApplication( 'AppStore', `${IMG_PATH}default-taskbar-icon-white.svg`, `${IMG_PATH}default-taskbar-icon-white.svg`, ( processId ) => { new AppStore( processId ); } );
   // The trash is temporary.
   systemAppsManager.bindApplication( 'Trash', `${IMG_PATH}trash.svg`, `${IMG_PATH}trash.svg`, ( processId ) => { new Trash( processId ); } );
   startMenuManager.init();

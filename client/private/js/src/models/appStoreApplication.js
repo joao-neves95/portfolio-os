@@ -11,11 +11,11 @@
     this.creator = creator;
     this.htmlIndexUrl = htmlIndexUrl; // 'https://rawgit.com/'
 
-    this.rating = {};
-    /** An array ith the users id's
+    this.rating = [];
+    /** An array with the users id's
      * @type { string[] } */
     this.downloads = [];
-    this.creation = '';
-    this.lastUpdate = '';
+    this.creationDate = '';
+    this.lastUpdateDate = '';
   }
 }
