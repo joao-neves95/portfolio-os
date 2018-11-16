@@ -18,15 +18,14 @@ app.use( logger( 'dev' ) );
 app.use( '/', express.static( path.join( process.cwd(), './client/wwwroot' ) ) );
 
 // authConfig( app );
-// TODO: Add database connection.
+
 app.use( '/', routes );
 
 // TODO: Add 400 page.
-
 app.use( ( req, res, next ) => {
   return res.status( 400 ).send( '404 - Not Found.' );
 } );
 
-app.listen(PORT, () => {
+app.listen( PORT, () => {
   console.info( `The server is listening at http://localhost:${PORT}` );
-});
+} );
