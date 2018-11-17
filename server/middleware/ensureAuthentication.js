@@ -1,31 +1,29 @@
-﻿const jwt = require( 'jsonwebtoken' );
+﻿const verifyJWT = require( './verifyJWT' );
 
 /**
  * Its blocks the req and returns 401 res if not successfull.
  * 
- * @param {any} req
- * @param {any} res
- * @param {any} next Receives the decoded JWT token if successfull.
+ * @param { Request } req
+ * @param { Response } res
+ * @param { Function } next If successfull, receives the decoded JWT token.
  */
-module.exports = ( req, res, next ) => {
+module.exports = async ( req, res, next ) => {
   if ( !req.headers.authorization )
     return ____notAuthorized( res );
 
-  jwt.verify(
-    req.headers.authorization,
-    process.env.JWT_KEY,
-    {
-      audience: process.env.JWT_AUDIENCE,
-      issuer: process.env.JWT_ISSUER,
-      maxAge: process.env.JWT_EXPIRATION
-    },
-    ( err, decoded ) => {
-      if ( err || !decoded )
-        return ____notAuthorized( res );
+  let decoded;
+  try {
+    decoded = Object.freeze( await verifyJWT( req.headers.authorization ) );
 
-      global.user = decoded;
-      return next();
-    } );
+    if ( !decoded )
+      return ____notAuthorized();
+
+    req.user = decoded;
+    return next();
+
+  } catch {
+    return ____notAuthorized();
+  }
 };
 
 const ____notAuthorized = ( res ) => {

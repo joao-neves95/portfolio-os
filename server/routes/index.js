@@ -8,6 +8,8 @@ const fileSystemRoute = require( './fileSystem' );
 const appStoreRoute = require( './appStore' );
 const ensureAuthentication = require( '../middleware/ensureAuthentication' );
 
+const addAppDTOSchema = require( '../models/addAppDTO' );
+
 // AUTH:
 router.post( '/auth', authRoute );
 
@@ -22,16 +24,25 @@ router.get( ['/desktop/js/:fileName', '/desktop/css/:fileName'], ensureAuthentic
 
 router.get( '/users', ensureAuthentication, usersRoute.getUsers );
 router.get( '/users/:id', ensureAuthentication, usersRoute.getUser );
-router.get( '/users/:id/socialAccounts', ensureAuthentication, usersRoute.getUserSocialAccounts );
+router.get( '/users/social-accounts', ensureAuthentication, usersRoute.getUserSocialAccounts );
 
 // #endregion
 
-// #region FILE SYSTEM
+// #region USER FILE SYSTEM
 
-router.get( '/file-system', ensureAuthentication, fileSystemRoute.getUserItem );
-router.put( '/file-system', ensureAuthentication, fileSystemRoute.putUserItem );
-router.post( '/file-system', ensureAuthentication, fileSystemRoute.postUserItem );
-router.delete( '/file-system', ensureAuthentication, fileSystemRoute.deleteUserItem );
+router.get( '/users/file-system', ensureAuthentication, fileSystemRoute.getUserItem );
+router.put( '/users/file-system', ensureAuthentication, fileSystemRoute.putUserItem );
+router.post( '/users/file-system', ensureAuthentication, fileSystemRoute.postUserItem );
+router.delete( '/users/file-system', ensureAuthentication, fileSystemRoute.deleteUserItem );
+
+// #endregion
+
+// #region APP STORE
+
+router.get( '/app-store', ensureAuthentication, ( req, res, next ) => { req.schema = addAppDTOSchema; }, appStoreRoute.postApp );
+//router.put( '/file-system', ensureAuthentication, fileSystemRoute.putUserItem );
+//router.post( '/file-system', ensureAuthentication, fileSystemRoute.postUserItem );
+//router.delete( '/file-system', ensureAuthentication, fileSystemRoute.deleteUserItem );
 
 // #endregion
 

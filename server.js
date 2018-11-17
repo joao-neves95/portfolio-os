@@ -14,12 +14,19 @@ app.use( express.json() );
 app.use( express.urlencoded( { extended: true } ) );
 app.use( logger( 'dev' ) );
 
-// Serve public files.
+// #region PUBLIC FILES.
+
 app.use( '/', express.static( path.join( process.cwd(), './client/wwwroot' ) ) );
 
-// authConfig( app );
+// #endregion
+
+authConfig( app );
+
+// #region PRIVATE API ROUTE.
 
 app.use( '/', routes );
+
+// #endregion
 
 // TODO: Add 400 page.
 app.use( ( req, res, next ) => {

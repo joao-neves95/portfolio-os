@@ -8,7 +8,7 @@ router.get( '/github', passport.authenticate( 'github' ) );
 
 router.get( '/github/callback', passport.authenticate( 'github', { failureRedirect: '/' } ), ( req, res ) => {
   jwt.sign(
-    { Id: global.user.Id },
+    { Id: req.user.Id },
     process.env.JWT_KEY,
     {
       audience: process.env.JWT_AUDIENCE,

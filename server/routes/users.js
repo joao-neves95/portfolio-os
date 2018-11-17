@@ -1,4 +1,5 @@
 ﻿'use strict';
+const userStore = require( '../dataAccess/userStore' );
 
 module.exports = {
   // Queries:
@@ -24,6 +25,6 @@ module.exports = {
   },
 
   getUserSocialAccounts: ( req, res ) => {
-    console.info( 'GET: /users/' + req.params.id + '/files/documents' );
+    console.info( 'GET: /users/' + req.params.id + '/social-accounts' );
   }
 };
