@@ -1,7 +1,7 @@
 ﻿'use strict';
 const passport = require( 'passport' );
 const GitHubStrategy = require( 'passport-github' ).Strategy;
-const passportJWT = require( 'passport-jwt' );
+const GoogleStrategy = require( 'passport-google-oauth20' ).Strategy;
 const userStore = require( '../dataAccess/userStore' );
 const db = require( '../dataAccess/db' );
 const LoginType = require( '../enums/loginType' );
@@ -31,14 +31,14 @@ module.exports = async ( app ) => {
     const jsonProfile = profile._json;
 
     try {
-      const githubId = await db.query(
+      const queryResult = await db.query(
         `SELECT Github_Id
          FROM Users
          WHERE Users.Github_Id = '$1'`,
         [profile.id] );
 
       // No user
-      if ( data.rows.length <= 0 ) {
+      if ( queryResult.rows.length <= 0 ) {
         const newUser = await userStore.registerUserAsync( jsonProfile.name, jsonProfile.email, jsonProfile.bio, profile.id );
         global.user = newUser;
         return done( null, newUser );
@@ -56,4 +56,22 @@ module.exports = async ( app ) => {
     }
   }
   ) );
+
+  passport.use( new GoogleStrategy( {
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://www.example.com/auth/google/callback'
+  }, async ( accessToken, refreshToken, profile, done ) => {
+    try {
+      const queryResult = await db.query(
+        `SELECT Google_Id
+         FROM Users
+         WHERE Google_Id = '$1'`,
+        [profile.id]
+      );
+
+    } catch ( e ) {
+      return done( e, null );
+    }
+  } ) );
 };
