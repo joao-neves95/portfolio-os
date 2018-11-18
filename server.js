@@ -3,6 +3,7 @@ require( 'dotenv' ).config();
 const path = require('path');
 const express = require('express');
 const logger = require( 'morgan' );
+// TODO: Set up CORS.
 const cors = require( 'cors' );
 const authConfig = require( './server/middleware/authConfig' );
 const routes = require('./server/routes/index.js');

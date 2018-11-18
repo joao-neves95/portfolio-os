@@ -31,6 +31,47 @@ module.exports = {
     } );
   },
 
+  // TODO: Test this.
+  getUserProfileAsync: ( userId ) => {
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        const queryResult = await db.query(
+          `SELECT
+               Users.Name,
+               Users.Summary,
+               array_to_string(
+                   array_agg(
+                       (
+                           SELECT SocialLinks.Link
+                           FROM SocialLinks
+                           WHERE Users.Id = SocialLinks.UserId
+                           ORDER BY Id
+                       )
+                   ), ','
+               ),
+               array_to_string(
+                   array_agg(
+                       (
+                           SELECT SkillSet.Name
+                           FROM SkillSet
+                           WHERE Users.Id = SkillSet.UserId
+                           ORDER BY Id
+                       )
+                   ), ','
+               )
+           FROM Users
+           WHERE Users.Id = $1`,
+          [userId]
+        );
+
+        return resolve( queryResult.rows[0] );
+
+      } catch ( e ) {
+        return reject( e );
+      }
+    } );
+  },
+
   /**
    * @param { string } name
    * @param { string } email
@@ -98,7 +139,10 @@ module.exports = {
     } );
   },
 
-  insertSocialAccountId: ( userId, socialAccountType, accountId, getUser = true ) => {
+  /**
+   * Note: This method overides the current value.
+   */
+  updateSocialAccountId: ( userId, socialAccountType, accountId, getUser = true ) => {
     return new Promise( async ( resolve, reject ) => {
       try {
         getUser = getUser ? getUserQuery( loginType ) : '';

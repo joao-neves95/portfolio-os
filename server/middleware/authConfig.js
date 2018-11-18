@@ -137,7 +137,7 @@ const __linkAccountToUserIfTrue = ( req, profileId ) => {
         if ( !decoded )
           throw new Error();
 
-        return resolve( await userStore.insertSocialAccountId( decoded.Id, req.body.socialAccountType, profileId ) );
+        return resolve( await userStore.updateSocialAccountId( decoded.Id, req.body.socialAccountType, profileId ) );
       }
 
       return resolve( false );

@@ -61,8 +61,9 @@ class FileSystem {
     for ( let i = 0; i < path.length; ++i ) {
       try {
         const thisDirContent = dir.content;
+
         for ( let j = 0; j < thisDirContent.length; ++j ) {
-          if ( thisDirContent[j].name === path[i] || thisDirContent[j].name === path[i] + '/' )
+          if ( thisDirContent[j].name === path[i].trim() || thisDirContent[j].name === path[i].trim() + '/' )
             dir = thisDirContent[j];
           else
             return false;

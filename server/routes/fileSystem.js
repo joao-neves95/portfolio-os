@@ -7,6 +7,9 @@ const PermissionType = require( '../../common/enums/permissionType' );
 
 // Common query: "?path=<path, to, the, fsItem>"
 
+/**
+ * For the path " root/users/local "
+ */
 module.exports = {
   getUserItem: ( req, res ) => {
     const reqRouteArray = req.query.path.split( ',' );
