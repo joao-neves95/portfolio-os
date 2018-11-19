@@ -291,7 +291,6 @@ __pycache__/
 
 .env
 *.sln
-*.njsproj
 obj/
 bin/
 node_modules/
