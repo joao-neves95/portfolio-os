@@ -9,7 +9,7 @@
     this.myProfileController = new MyProfileController();
     this.userProfilesController = new UserProfilesController();
 
-    await this.init();
+    this.init();
     Object.freeze( this );
   }
 
@@ -18,12 +18,12 @@
     await this.injectMyProfile();
 
     // Add Listeners.
-    DomUtils.get( `#${this.id} .my-profile` ).addEventListener( 'click', ( e ) => {
+    DomUtils.get( `#${this.id} .my-profile-btn` ).addEventListener( 'click', ( e ) => {
       e.preventDefault( e );
-      await this.injectMyProfile();
+      this.injectMyProfile();
     } );
 
-    DomUtils.get( `#${this.id} .explore` ).addEventListener( 'click', ( e ) => {
+    DomUtils.get( `#${this.id} .explore-btn` ).addEventListener( 'click', ( e ) => {
       e.preventDefault( e );
       this.injectExploreProfiles( e );
     } );
@@ -32,7 +32,7 @@
   async injectMyProfile() {
     const thisUserProfile = await this.model.getThisUserProfile();
     console.debug( thisUserProfile );
-    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['Github', 'github.com', 'joao-neves95']], [['1', 'C#, .NET, ASP.NET Core'], ['2', 'JavaScript, Node.js']] ) );
+    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['1', 'Github', 'github.com', 'joao-neves95']], [['1', 'C#, .NET, ASP.NET Core'], ['2', 'JavaScript, Node.js']] ) );
     this.myProfileController.initPage( this.view.contentTarget( this.id ) );
     this.model.currentPage = ProfilePageType.MyProfile;
   }
@@ -40,7 +40,7 @@
   async injectUserProfile( e ) {
     // TODO: Get the user id from the user card.
     const userProfile = await this.model.getUserProfile( 1 );
-    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
+    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['1', 'Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
     this.model.currentPage = ProfilePageType.UserProfiles;
   }
 

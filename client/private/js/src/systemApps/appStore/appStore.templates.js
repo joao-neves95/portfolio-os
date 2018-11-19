@@ -28,14 +28,14 @@
         <div class="grid-container fluid content">
           <div class="grid-x content-grid">
             ${
-              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
-              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' )
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
+              this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' )
             }
           </div>
         </div>
@@ -44,7 +44,7 @@
     `;
   }
 
-  static appCard( appId, title, creator, downloadNum, voteRatio, description ) {
+  static appCard( appId, title, creator, appLink, downloadNum, voteRatio, description ) {
     return `
       <div class="cell">
         <div class="card app-card" id="${appId}">
@@ -57,7 +57,8 @@
             <p class="meta">Creator: ${creator}</p>
             <p class="meta">Downloads: ${downloadNum}</p>
             <p class="meta">Vote Ratio: ${voteRatio}</p>
-            <button type="button" class="install button primary">Install</button>
+            <a href="${appLink}" target="_blank" class="primary button">View on GitHub</a>
+            <button type="button" class="install primary button">Install</button>
           </div>
         </div>
       </div>
@@ -65,11 +66,6 @@
   }
 
   static appDescriptionModal() {
-    return `
-    `;
-  }
-
-  static openAddNewAppWin() {
     return `
     `;
   }

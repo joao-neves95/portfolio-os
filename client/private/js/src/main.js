@@ -17,7 +17,7 @@ whenDomReady( () => {
   startMenuManager.init();
 
   // ContextMenu bindings:
-  contextMenu.bindItems( 'desktop-icon', [contextMenuTemplates.menuItem( "Delete" ), contextMenuTemplates.menuItem( "Open" )] );
+  contextMenu.bindItems( 'desktop-icon', [contextMenuTemplates.menuItem( 'Delete' ), contextMenuTemplates.menuItem( 'Open' )] );
 
   // GlobalEvents bindings:
   globalEvents.bindEvent( 'click', ( e ) => { contextMenu.outsideClickGlobalEvent( e ); } );

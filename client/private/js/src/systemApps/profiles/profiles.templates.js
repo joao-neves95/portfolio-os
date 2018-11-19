@@ -7,8 +7,8 @@
           <div class="top-bar-left">
             <ul class="dropdown menu" data-dropdown-menu>
               <!-- <li class="menu-text">Site Title</li> -->
-              <li><a href="#" class="my-profile">My Profile</a></li>
-              <li><a href="#" class="explore">Explore</a></li>
+              <li><a href="#" class="my-profile-btn">My Profile</a></li>
+              <li><a href="#" class="explore-btn">Explore</a></li>
             </ul>
           </div>
           <div class="top-bar-right">
@@ -41,29 +41,29 @@
 
     let websitesHtml = '';
     for ( let i = 0; i < websites.length; ++i ) {
-      websitesHtml += ProfilesTemplates.link( websites[i][0], websites[i][1], websites[i][2] );
+      websitesHtml += ProfilesTemplates.link( websites[i][0], websites[i][1], websites[i][2], websites[i][3] );
     }
 
     return `
       <form class="grid-container my-profile">
         <div class="grid-y inner-my-profile">
 
-          <div class="cell">
+          <div class="cell block-item">
             <h5>Name</h5>
             <p>${name}</p>
           </div>
 
-          <div class="cell">
+          <div class="cell block-item">
             <h5>Summary</h5>
             <textarea class="summary disabled-input" value="${summary}" disabled="true"></textarea>
           </div>
 
-          <div class="cell links-container">
+          <div class="cell block-item links-container">
             <h5>Around The Web</h5>
             ${websitesHtml}
           </div>
 
-          <div class="cell skills-container">
+          <div class="cell block-item skills-container">
             <h5>Skill Set</h5>
             ${skillSetHtml}
           </div>

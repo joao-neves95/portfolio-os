@@ -1,7 +1,7 @@
 ﻿'use strict';
-const DirectoryModel = require( '../../common/models/directoryModel' );
-const FileModel = require( '../../common/models/fileModel' );
-const PermissionType = require( '../../common/enums/permissionType' );
+const DirectoryModel = require( '../../../common/models/directoryModel' );
+const FileModel = require( '../../../common/models/fileModel' );
+const PermissionType = require( '../../../common/enums/permissionType' );
 
 // TODO: Find a way to not repeat code on every API method type (GET, POST, PUT, DELETE)
 

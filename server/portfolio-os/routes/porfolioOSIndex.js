@@ -1,9 +1,9 @@
 ﻿// " /portfolio-os/ "
 'use strict';
 const router = require( 'express' ).Router();
-const authRoute = require('./portfolio-os/auth');
-const desktopRoute = require( './portfolio-os/desktop' );
-const portfolioOSAPIIndex = require( './portfolio-os/apiIndex' );
+const authRoute = require( './auth' );
+const desktopRoute = require( './desktop' );
+const portfolioOSAPIIndex = require( './apiIndex' );
 const ensureAuthentication = require( '../middleware/ensureAuthentication' );
 
 // AUTH:
@@ -16,6 +16,6 @@ router.get( ['/desktop/js/:fileName', '/desktop/css/:fileName'], ensureAuthentic
 
 // #endregion
 
-router.get( 'api', ensureAuthentication, portfolioOSAPIIndex );
+router.get( '/api', ensureAuthentication, portfolioOSAPIIndex );
 
 module.exports = router;

@@ -16,7 +16,7 @@ class WindowManager {
   /**
    * To use as a modal. It does not add a taskabar icon by default. Use .openNewWindow() for application windows.
    */
-  openNewWindowCustom( processId, title, content = '', addTaskbarIcon = false, taskbarIconUrl = null ) {
+  openNewWindowCustom( processId, title, content = '', addTaskbarIcon = false, taskbarIconUrl = null, width = null, heigth = null ) {
     const thisWindow = new Window( processId, title, content );
 
     if ( addTaskbarIcon ) {
@@ -29,7 +29,9 @@ class WindowManager {
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
     windowResizer.updateListeners();
-    const thisWindowElem = document.getElementById( thisWindow.id );
+    const thisWindowElem = document.getElementById(thisWindow.id);
+    thisWindowElem.style.width = !width ? '70%' : width;
+    thisWindowElem.style.height = !heigth ? '80%' : heigth;
     thisWindowElem.classList.add( 'anim' );
     thisWindowElem.classList.add( 'zoom-in' );
     setTimeout( () => {
@@ -134,6 +136,18 @@ class WindowManager {
   }
 
   // #endregion
+
+  openNewModal( content ) {
+    const target = document.getElementById( 'window-manager-container' );
+    target.innerHTML += Window.modalTemplate( content );
+    $( '#modal' ).foundation();
+    $( '#modal' ).foundation( 'open' );
+    document.querySelector( '[data-reveal]' ).addEventListener( 'closed.zf.reveal', () => {
+      console.debug('jgx')
+      this.updateListeners();
+      this.updateFreeDraggListeners();
+    } );
+  }
 
   // UTILITIES:
   findWindowInstance(windowId, Callback) {

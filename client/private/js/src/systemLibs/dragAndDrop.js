@@ -5,8 +5,6 @@ class DragAndDrop {
     if ( dragAndDrop )
       throw new Error( 'There can only be one instance of DragAndDrop' );
 
-    this.draggableElements = [];
-
     this.isDragging = Boolean;
     this.currentFreeDragElem = HTMLElement;
     // This is an hack because chrome only allows me to read dataTrasfer on the drop event
@@ -65,33 +63,23 @@ class DragAndDrop {
   }
 
   cancelNonDraggableElements() {
-    let nonDraggableElements = [];
-    nonDraggableElements.push(document.getElementsByTagName('img'));
-    nonDraggableElements.push(document.getElementsByTagName('a'));
+    Array.from(document.getElementsByTagName( 'img' )).forEach( value => {
+      value.setAttribute( 'draggable', 'false' );
+    } );
 
-    for (let i = 0; i < nonDraggableElements[0].length; i++) {
-      if (nonDraggableElements[0][i])
-        nonDraggableElements[0][i].setAttribute('draggable', 'false');
-    }
-
-    for (let i = 0; i < nonDraggableElements[1].length; i++) {
-      if (nonDraggableElements[1][i])
-        nonDraggableElements[1][i].setAttribute('draggable', 'false');
-    }
+    Array.from(document.getElementsByTagName( 'a' )).forEach( value => {
+      value.setAttribute( 'draggable', 'false' );
+    } );
   }
 
   updateDraggableElements() {
-    this.draggableElements = [];
-    this.draggableElements.push(document.getElementsByClassName('draggable')[0]);
-    this.draggableElements.push(document.getElementsByClassName('free-draggable')[0]);
+    Array.from(document.getElementsByClassName( 'draggable' )).forEach( value => {
+      value.setAttribute( 'draggable', 'true' );
+    } );
 
-    if (this.draggableElements.length <= 0)
-      return;
-
-    for (let i = 0; i < this.draggableElements.length; i++) {
-      if (this.draggableElements[i])
-        this.draggableElements[i].setAttribute('draggable', 'true');
-    }
+    Array.from(document.getElementsByClassName( 'free-draggable' )).forEach( value => {
+      value.setAttribute( 'draggable', 'true' );
+    } );
   }
 
   // #endregion
@@ -99,17 +87,17 @@ class DragAndDrop {
   // #region LISTENERS
 
   updateDraggListeners() {
-    const constrainedDraggableElems = document.getElementsByClassName('draggable');
+    const constrainedDraggableElems = document.getElementsByClassName( 'draggable' );
 
     if (constrainedDraggableElems.length <= 0)
       return;
 
     for (let i = 0; i < constrainedDraggableElems.length; i++) {
       constrainedDraggableElems[i].removeEventListener('dragstart', (e) => { this.dragstartHandler(e); });
-      constrainedDraggableElems[i].addEventListener('dragstart', (e) => {
+      constrainedDraggableElems[i].addEventListener( 'dragstart', ( e ) => {
         e.stopPropagation();
-        this.dragstartHandler(e);
-      });
+        this.dragstartHandler( e );
+      } );
     }
   }
 
@@ -208,7 +196,7 @@ class DragAndDrop {
     if ( !this.isDragging )
       return;
 
-    const offset = DomUtils.getOffset( this.currentFreeDragElem );
+    // const offset = DomUtils.getOffset( this.currentFreeDragElem );
 
     this.currentFreeDragElem.style.top = ( e.pageY ).toString() + 'px';
     this.currentFreeDragElem.style.left = ( e.pageX ).toString() + 'px';

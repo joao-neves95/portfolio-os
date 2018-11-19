@@ -20,7 +20,7 @@ class Window {
       <article class="window-manager grid-y resizable" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
-            <div class="cell small-10 medium-10 large-10">
+            <div class="cell small-8 medium-8 large-8">
               <p class="window-title free-draggable">${this.title}</p>
             </div>
             <div class="cell auto"></div>
@@ -40,6 +40,20 @@ class Window {
         </section>
         <div class="resizer"></div>
       </article>`;
+  }
+
+  /**
+   * Note: Currently in only supports having one modal.
+   * @param {any} content
+   */
+  static modalTemplate( content ) {
+    return `
+      <div class="reveal" id="modal" data-reveal>
+        ${content}
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`;
   }
 
   init() {

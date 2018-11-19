@@ -2,6 +2,7 @@
   constructor( processId ) {
     this.model = new AppStoreModel();
     this.view = new AppStoreView();
+    this.addNewAppController = new AddNewAppController();
 
     this.model.processId = processId;
     this.model.id = `app-store-${processId}`;
@@ -17,20 +18,7 @@
     DomUtils.get( `#${this.model.id} .add-new` ).addEventListener( 'click', ( e ) => {
       e.preventDefault();
 
-      this.openAddNewAppWindow();
-    } );
-  }
-
-  openAddNewAppWindow() {
-    if ( this.model.openedAddNewAppWindow )
-      return;
-
-    const processId = Utils.randomString( 4 );
-    windowManager.openNewWindowCustom( processId, 'Add New App', AppStoreTemplates.openAddNewAppWin() );
-    this.model.openedAddNewAppWindow = true;
-
-    DomUtils.get( `#${Window.idPrefix}${processId} .close-window` ).addEventListener( 'click', () => {
-      this.model.openedAddNewAppWindow = false;
+      this.addNewAppController.openWindow();
     } );
   }
 }

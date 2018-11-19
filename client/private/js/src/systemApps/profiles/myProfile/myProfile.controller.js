@@ -21,20 +21,25 @@
       e.target.insertAdjacentHTML( 'beforebegin', MyProfileTemplates.input );
     } );
 
+    // Update Portfolio (DB) values.
     this.view.summaryElem.addEventListener( 'blur', ( e ) => {
       e.preventDefault();
       this.___updatePortfolioValue( e );
     } );
 
-    let blurInputElems = [];
-    blurInputElems.push( document.querySelectorAll( '[id^="link_"].slug' ) );
-    blurInputElems.push( document.querySelectorAll( '[id^="skill_"].skill' ) );
-    for ( let i = 0; i < blurInputElems.length; ++i ) {
-      blurInputElems[i].addEventListener( 'blur', ( e ) => {
+    document.querySelectorAll( '[id^="link_"].slug' ).forEach( value => {
+      value.addEventListener( 'blur', ( e ) => {
         e.preventDefault();
         this.___updatePortfolioValue( e );
       } );
-    }
+    } );
+
+    document.querySelectorAll( '[id^="skill_"].skill' ).forEach( value => {
+      value.addEventListener( 'blur', ( e ) => {
+        e.preventDefault();
+        this.___updatePortfolioValue( e );
+      } );
+    } );
   }
 
   ___updatePortfolioValue( e ) {

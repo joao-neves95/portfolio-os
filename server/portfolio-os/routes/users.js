@@ -24,7 +24,6 @@ module.exports = {
     console.info( 'GET: /users/recent-sign-ups' );
   },
 
-
   getUserProfile: ( req, res ) => {
     console.info( 'GET: /user/profile' );
   },

@@ -1,13 +1,18 @@
-﻿.my-profile {
+﻿@import 'material-shadows.less';
+
+.my-profile {
+    background-color: #F5F5F5;
     position: relative;
-    width: 100%;
     max-width: 100%;
+    width: 100%;
 
     .inner-my-profile {
-        padding: .5em;
+        padding: 2em;
 
         .cell {
+            background-color: white;
             margin-bottom: .7em;
+            padding: 1em;
 
             .summary {
                 resize: vertical;
@@ -23,12 +28,16 @@
 
             .link-label-wrapper {
                 margin-right: .2em;
-
+                min-width: 10em;
             }
 
             .slug, .skill {
                 height: 1.7rem;
             }
+        }
+
+        .block-item {
+            .z-depth(4);
         }
     }
 }
