@@ -1,29 +1,17 @@
-﻿// REST API ROUTES.
-'use strict';
+﻿// " portfolio-os/api/ "
 const router = require( 'express' ).Router();
-const authRoute = require('./auth');
-const desktopRoute = require( './desktop' );
 const usersRoute = require( './users' );
 const fileSystemRoute = require( './fileSystem' );
 const appStoreRoute = require( './appStore' );
-const ensureAuthentication = require( '../middleware/ensureAuthentication' );
-
 const addAppDTOSchema = require( '../models/addAppDTO' );
 
-// AUTH:
-router.post( '/auth', authRoute );
-
-// #region DESKTOP FILES (CSS / JS / IMG)
-
-router.get( '/desktop', ensureAuthentication, desktopRoute.getDesktopHtmlPage );
-router.get( ['/desktop/js/:fileName', '/desktop/css/:fileName'], ensureAuthentication, desktopRoute.getDesktopFiles );
-
-// #endregion
 
 // #region USER PROFILES
 
 router.get( '/users', ensureAuthentication, usersRoute.getUsers );
 router.get( '/users/:id', ensureAuthentication, usersRoute.getUser );
+router.get( '/users/:id/profile', ensureAuthentication, usersRoute.getUser );
+router.get( '/user/profile', ensureAuthentication, usersRoute.getUserProfile );
 router.get( '/users/social-accounts', ensureAuthentication, usersRoute.getUserSocialAccounts );
 
 // #endregion
@@ -47,3 +35,4 @@ router.get( '/app-store', ensureAuthentication, ( req, res, next ) => { req.sche
 // #endregion
 
 module.exports = router;
+

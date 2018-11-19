@@ -6,7 +6,7 @@ const logger = require( 'morgan' );
 // TODO: Set up CORS.
 const cors = require( 'cors' );
 const authConfig = require( './server/middleware/authConfig' );
-const routes = require('./server/routes/index.js');
+const portfolioOSRoutes = require( './server/portfolio-os/routes/porfolioOSIndex' );
 const app = express();
 
 const PORT = process.env.PORT; // 3000
@@ -25,7 +25,7 @@ authConfig( app );
 
 // #region PRIVATE API ROUTE.
 
-app.use( '/', routes );
+app.use( '/portfolio-os', portfolioOSRoutes );
 
 // #endregion
 

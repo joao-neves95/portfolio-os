@@ -1,9 +1,5 @@
 ﻿class MyProfileModel {
   constructor() {
-
-  }
-
-  getUserProfile() {
-    return '';
+    this.userId;
   }
 }

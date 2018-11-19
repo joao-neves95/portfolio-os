@@ -1,1 +1,81 @@
-html{height:100%}html body{background-color:#cecbcb;height:100vh;overflow:hidden}html img{user-select:none;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none}main{width:20vw;max-width:95vw!important}@media only screen and (max-width:1370px){main{width:30vw}}#auth{height:100%}#auth li{height:2.5em!important}#auth li a{height:100%;padding:1em;font-weight:700}.tabs-content{background-color:#cecbcb;border-style:none!important;margin-top:20vh}.tabs-content form{transition:all 5s ease-in-out}.tabs-content form .input-group-label{display:inline-block}.tabs-content form .input-group-label>img{width:1.2em;margin-top:50%;margin-bottom:50%}.tabs-content form .pass-visibility-span{cursor:pointer;width:3em}.tabs-content form .submit{float:right!important}.tabs-content form input:focus{border-style:none!important}.tabs-content form .icon-wrap{margin-top:1em;text-align:center;width:100%}.tabs-content form .icon{width:3.2em;text-align:center;transition:all .1s ease-in-out}.tabs-content form .icon:hover{cursor:pointer;transform:scale(1.1)}.shadow-1{box-shadow:0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);transition:all .3s cubic-bezier(.25,.8,.25,1)}.shadow-1:hover{box-shadow:0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22)}.shadow-2{box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)}.shadow-3{box-shadow:0 10px 20px rgba(0,0,0,.19),0 6px 6px rgba(0,0,0,.23)}.shadow-4{box-shadow:0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22)}.shadow-5{box-shadow:0 19px 38px rgba(0,0,0,.3),0 15px 12px rgba(0,0,0,.22)}
+﻿#body-style {
+  background-color: #A8ABAD;
+  height: 700px;
+  overflow-y: scroll;
+  position: relative;
+}
+
+#header {
+  box-shadow: 0 3px 15px 3px gray;
+  padding: 1.5em;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+}
+
+.logo {
+  color: white;
+  font-family: 'Kaushan Script', cursive;
+  font-size: 2em;
+}
+
+.title-font {
+  font-family: 'Poiret One', cursive;
+}
+
+.text-font {
+  font-family: 'Quicksand', sans-serif;
+}
+
+.text-black-mate {
+  color: #212529;
+}
+
+.mt-2em {
+  margin-top: 2em;
+}
+
+.mt-4em {
+  margin-top: 4em;
+}
+
+.mt-6em {
+  margin-top: 6em;
+}
+
+.pt-5em {
+  padding-top: 7em;
+}
+
+.bg-soft-orange {
+  background-color: #FF9030;
+}
+
+.bg-light-grey {
+  background-color: #CAC8C8;
+}
+
+/* Google Icons*/
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/materialicons/v29/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -moz-font-feature-settings: 'liga';
+  -moz-osx-font-smoothing: grayscale;
+}

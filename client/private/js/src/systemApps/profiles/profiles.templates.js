@@ -36,7 +36,7 @@
   static userProfile( name, summary, websites, skillSet ) {
     let skillSetHtml = '';
     for ( let i = 0; i < skillSet.length; ++i ) {
-      skillSetHtml += ProfilesTemplates.disabledInput( skillSet[i] );
+      skillSetHtml += ProfilesTemplates.disabledInput( skillSet[i][1], 'skill_' + skillSet[i][0], 'skill' );
     }
 
     let websitesHtml = '';
@@ -65,7 +65,7 @@
 
           <div class="cell skills-container">
             <h5>Skill Set</h5>
-              ${skillSetHtml}
+            ${skillSetHtml}
           </div>
 
           <h5>Images</h5>
@@ -78,13 +78,13 @@
     `;
   }
 
-  static disabledInput( value = '' ) {
+  static disabledInput( value = '', id = '', additionalClasses = '' ) {
     return `
-      <input class="disabled-input" type="text" value="${value}" disabled="true">
+      <input id="${id}" class="disabled-input ${additionalClasses}" type="text" value="${value}" disabled="true">
     `;
   }
 
-  static link( hostName, host, path ) {
+  static link( linkId, hostName, host, path ) {
     return `
       <div class="grid-x">
         <div class="medium-2 cell link-label-wrapper">
@@ -95,31 +95,7 @@
         </div>
         <div class="medium-9 cell link-slug-wrapper">
           <label class="lbl">Slug
-            <input class="slug disabled-input" type="text" value="${path}" disabled="true">
-          </label>
-        </div>
-      </div>
-    `;
-  }
-
-  static get addLink() {
-    return `
-      <div class="grid-x">
-        <div class="medium-2 cell link-label-wrapper">
-          <label>Website
-            <select>
-              <option value="instagram">Instagram</option>
-              <option value="twitter">Twitter</option>
-              <option value="facebook">Facebook</option>
-              <option value="behance">Behance</option>
-              <option value="github">GitHub</option>
-              <option value="other">Other</option>
-            </select>
-          </label>
-        </div>
-        <div class="medium-9 cell link-slug-wrapper">
-          <label>Slug
-            <input type="text" placeholder="john-doe">
+            <input id="link_${linkId}" class="slug disabled-input" type="text" value="${path}" disabled="true">
           </label>
         </div>
       </div>

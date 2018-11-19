@@ -15,7 +15,7 @@
               <option value="facebook">Facebook</option>
               <option value="behance">Behance</option>
               <option value="github.com">GitHub</option>
-              <option value="other">Other</option>
+              <option value="custom-url">Other</option>
             </select>
           </label>
         </div>

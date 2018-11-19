@@ -4,6 +4,8 @@
     this.target = HTMLElement;
   }
 
+  get summaryElem() { return this.target.getElementsByTagName( 'textarea' )[0]; }
+
   activateProfileEdition() {
     const inputs = this.target.getElementsByTagName( 'input' );
     for ( let i = 0; i < inputs.length; ++i ) {
@@ -11,7 +13,7 @@
       inputs[i].disabled = false;
     }
 
-    const summary = this.target.getElementsByTagName( 'textarea' )[0];
+    const summary = this.summaryElem;
     summary.classList.remove( 'disabled-input' );
     summary.disabled = false;
 

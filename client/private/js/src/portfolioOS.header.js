@@ -1,5 +1,6 @@
 ﻿// Imports for MergerJS.
 //
+// @import './constants'
 // %import 'https://cdnjs.cloudflare.com/ajax/libs/ajv/6.5.5/ajv.min.js'
 // @import './externalLibs'
 // $import 'vanillatree/vanillatree.min.js'
@@ -61,7 +62,3 @@
 // @import './main'
 //
 'use strict';
-
-// const SERVER_ROOT_PATH = 'http://localhost:3000/';
-const SERVER_ROOT_PATH = 'http://localhost:2000/';
-const IMG_PATH = `${SERVER_ROOT_PATH}img/`;

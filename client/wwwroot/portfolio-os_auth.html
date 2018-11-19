@@ -1,0 +1,131 @@
+﻿<!-- Login/Register Page -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title></title>
+  <meta name="application-name" content="">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Tells Google not to provide a translation for this page -->
+  <meta name="google" content="notranslate">
+  <!-- FOUNDATION CSS -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css"
+        integrity="sha256-GSio8qamaXapM8Fq9JYdGNTvk/dgs+cMLgPeevOYEx0="
+        crossorigin="anonymous" />
+  <!-- HINT CSS -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/hint.css/2.5.0/hint.min.css"
+        integrity="sha256-EaR2e3c1FypmKsKDNZmWB6cSPqi+c/wXPX0eQQKwj70="
+        crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/portfolio-os_auth_style.css" type="text/css" />
+</head>
+
+<body>
+  <main class="grid-container">
+
+    <ul class="tabs align-center" data-deep-link="true" data-update-history="true" data-tabs id="auth">
+      <li class="tabs-title left is-active"><a href="#login" aria-selected="true">Login</a></li>
+      <li class="tabs-title right"><a href="#register">Register</a></li>
+    </ul>
+
+    <section class="tabs-content" data-tabs-content="auth">
+
+      <!-- Login -->
+      <form action="/auth/login" method="post" class="tabs-panel is-active" id="login">
+        <div class="grid-y">
+          <!-- Email Login Input -->
+          <div class="cell large-12">
+            <div class="input-group">
+              <span class="input-group-label"><img src="img/at.svg" alt="A Lock Icon" /></span>
+              <input class="input-group-field" type="email" placeholder="Email" name="email" required>
+            </div>
+          </div>
+          <!-- Password Login Input -->
+          <div class="cell large-12">
+            <div class="input-group">
+              <span class="input-group-label"><img src="img/lock.svg" alt="A Lock Icon" /></span>
+              <input id="login-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" required>
+              <span class="input-group-label pass-visibility-span"><img src="img/show.svg" alt="Show/Hide Password Icon" draggable="false" /></span>
+            </div>
+          </div>
+          <div class="cell large-6">
+            <button type="submit" class="submit button success">Login</button>
+          </div>
+          <!-- Social Login -->
+          <div class="grid-x icon-wrap">
+            <div class="cell large-4 large-offset-2">
+              <span class="hint--top hint--bounce" aria-label="Login with Google."><img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" id="google-btn" /></span>
+            </div>
+            <div class="cell large-4">
+              <span class="hint--top hint--bounce" aria-label="Login with GitHub."><img src="img/github.svg" alt="Github Icon" class="icon" draggable="false" /></span>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Register -->
+      <form action="/auth/register" method="post" class="tabs-panel" id="register">
+        <div class="grid-y">
+          <!-- Email Register Input -->
+          <div class="cell large-12">
+            <div class="input-group">
+              <span class="input-group-label"><img src="img/at.svg" alt="A Lock Icon" /></span>
+              <input class="input-group-field" type="email" placeholder="Email" name="email" required>
+            </div>
+          </div>
+          <!-- Password Register Input -->
+          <div class="cell large-12">
+            <div class="input-group">
+              <span class="input-group-label"><img src="img/lock.svg" alt="A Lock Icon" /></span>
+              <input id="register-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" required>
+              <span class="input-group-label pass-visibility-span"><img src="img/show.svg" alt="Show/Hide Password Icon" draggable="false" /></span>
+            </div>
+          </div>
+          <!-- Repeat Password Register Input -->
+          <div class="cell large-12">
+            <div class="input-group">
+              <span class="input-group-label"><img src="img/lock.svg" alt="A Lock Icon" /></span>
+              <input id="register-password-repeat" class="input-group-field hvr-float-shadow" type="password" placeholder="Repeat your password" required>
+              <span class="input-group-label pass-visibility-span"><img src="img/show.svg" alt="Show/Hide Password Icon" draggable="false" /></span>
+            </div>
+          </div>
+          <div class="cell large-6">
+            <button id="register-btn" type="submit" class="submit button success hvr-float-shadow" value="Register">Register</button>
+          </div>
+          <!-- Social Register -->
+          <div class="grid-x icon-wrap">
+            <div class="cell large-4 large-offset-2">
+              <span class="hint--top hint--bounce" aria-label="Register with Google."><img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" /></span>
+            </div>
+            <div class="cell large-4">
+              <span class="hint--top hint--bounce" aria-label="Register with GitHub."><img src="img/github.svg" alt="Github Icon" class="icon" /></span>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </section>
+
+  </main>
+
+  <!-- JQuery SLIM JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"
+          integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+          crossorigin="anonymous">
+  </script>
+  <!-- FOUNDATION JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"
+          integrity="sha256-mRYlCu5EG+ouD07WxLF8v4ZAZYCA6WrmdIXyn1Bv9Vk="
+          crossorigin="anonymous">
+  </script>
+  <!-- PORTFOLIO-OS JS -->
+  <script type="text/javascript" src="portfolio-os_auth_main.js"></script>
+</body>
+
+</html>

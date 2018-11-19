@@ -3,44 +3,48 @@
     /** The window id */
     this.id = `profiles-${processId}`;
     this.processId = processId;
+    this.model = new ProfilesModel();
     this.view = new ProfilesView();
 
     this.myProfileController = new MyProfileController();
     this.userProfilesController = new UserProfilesController();
 
-    this.currentPage = ProfilePageType.MyProfile;
-
-    this.init();
+    await this.init();
     Object.freeze( this );
   }
 
-  init() {
+  async init() {
     windowManager.openNewWindow( this.processId, ProfilesTemplates.window( this.id ) );
-    this.injectMyProfile();
+    await this.injectMyProfile();
 
     // Add Listeners.
     DomUtils.get( `#${this.id} .my-profile` ).addEventListener( 'click', ( e ) => {
       e.preventDefault( e );
-      this.injectMyProfile();
+      await this.injectMyProfile();
     } );
 
     DomUtils.get( `#${this.id} .explore` ).addEventListener( 'click', ( e ) => {
       e.preventDefault( e );
-      this.injectExploreProfiles();
+      this.injectExploreProfiles( e );
     } );
   }
 
-  injectMyProfile() {
-    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
+  async injectMyProfile() {
+    const thisUserProfile = await this.model.getThisUserProfile();
+    console.debug( thisUserProfile );
+    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['Github', 'github.com', 'joao-neves95']], [['1', 'C#, .NET, ASP.NET Core'], ['2', 'JavaScript, Node.js']] ) );
     this.myProfileController.initPage( this.view.contentTarget( this.id ) );
-    this.currentPage = ProfilePageType.MyProfile;
+    this.model.currentPage = ProfilePageType.MyProfile;
   }
 
-  injectUserProfile() {
+  async injectUserProfile( e ) {
+    // TODO: Get the user id from the user card.
+    const userProfile = await this.model.getUserProfile( 1 );
     this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
+    this.model.currentPage = ProfilePageType.UserProfiles;
   }
 
   injectExploreProfiles() {
-    this.currentPage = ProfilePageType.Explore;
+    this.model.currentPage = ProfilePageType.Explore;
   }
 }
