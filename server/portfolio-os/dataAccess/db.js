@@ -35,7 +35,38 @@ module.exports = {
     } );
   },
 
-  utcDateFunc() {
+  /**
+   * 
+   * @param { string[][] } commands [ [ <string> , (params)[] ] ]
+   */
+  transaction: ( commands ) => {
+    return new Promise( async ( _resolve, _reject ) => {
+      let client;
+
+      try {
+        let queryResults = [];
+        client = await pool.connect();
+        Object.seal( client );
+        await client.query( 'BEGIN' );
+
+        for ( let i = 0; i < commands.length; ++i ) {
+          queryResults.push( await client.query( commands[i][0], commands[i][1] ) );
+        }
+
+        await client.query( 'COMMIT' );
+        _resolve( queryResults );
+
+      } catch ( e ) {
+        await client.query( 'ROLLBACK' );
+        _reject( e );
+
+      } finally {
+        client.release();
+      }
+    } );
+  },
+
+  utcDateFunc: () => {
     return "NOW() at time zone 'UTC'";
   }
 };

@@ -72,8 +72,9 @@ module.exports = {
     } );
   },
 
-  // TODO: Turn this into a transaction.
+  // TODO: Test.
   /**
+   * Returns the new user (TO TEST)
    * @param { string } name
    * @param { string } email
    * @param { string } email Defaults to '' (empty <string>)
@@ -86,16 +87,23 @@ module.exports = {
   registerUserAsync: ( name, email, summary = '', githubId = '', googleId = '', Callback ) => {
     return new Promise( async ( resolve, reject ) => {
       try {
-        const queryResult = await db.query(
-          `INSERT INTO Users (Email, Github_Id, Google_Id, CreationDate, LastLogin, Name, Summary)
-           VALUES ($1, $2, $3, ${db.utcDateFunc()}, ${db.utcDateFunc()}, $6, $7)`,
-          [email, githubId, googleId, name, summary]
-        );
+        const queryResults = await db.transaction( [
+          [
+            `INSERT INTO Users (Email, Github_Id, Google_Id, LastLogin, Name, Summary)
+             VALUES ($1, $2, $3, ${db.utcDateFunc()}, $6, $7)`,
+            [email, githubId, googleId, name, summary]
+          ],
+          [
+            `INSERT INTO FS_Local (UserId)
+             VALUES ( ( SELECT currval( pg_get_serial_sequence('Users','Id') ) )`,
+            []
+          ]
+        ] );
 
         if ( Callback )
-          return Callback( null, queryResult.rows[0] );
+          return Callback( null, queryResults[0].rows[0] );
 
-        return resolve( queryResult.rows[0] );
+        return resolve( queryResult[0].rows[0] );
 
       } catch ( e ) {
         if ( Callback )
