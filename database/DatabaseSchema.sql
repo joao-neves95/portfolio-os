@@ -13,9 +13,15 @@ CREATE TABLE Users (
     Summary TEXT NULL
 )
 
+CREATE TABLE EventType (
+    Id SERIAL PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL
+)
+
 CREATE TABLE UserIp (
     Id SERIAL PRIMARY KEY,
     UserId INT NOT NULL REFERENCES Users(Id),
+    EventId INT NOT NULL REFERENCES EventType(Id),
     IP CIDR NOT NULL,
     Datestamp WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC')
 )
