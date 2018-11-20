@@ -1,4 +1,4 @@
-﻿const { Pool } = require( 'pg' );
+const { Pool } = require( 'pg' );
 
 const pool = new Pool( {
   // connectionString: 'postgresql://dbuser:secretpassword@database.server.com:3211/mydb',
@@ -46,7 +46,6 @@ module.exports = {
       try {
         let queryResults = [];
         client = await pool.connect();
-        Object.seal( client );
         await client.query( 'BEGIN' );
 
         for ( let i = 0; i < commands.length; ++i ) {
