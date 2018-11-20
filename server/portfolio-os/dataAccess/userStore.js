@@ -72,6 +72,7 @@ module.exports = {
     } );
   },
 
+  // TODO: Turn this into a transaction.
   /**
    * @param { string } name
    * @param { string } email
