@@ -95,10 +95,52 @@ module.exports = {
 
     } catch ( e ) {
       console.debug( e );
-      return res.status( 500 ).json( 'Unknown Error' );
+      return res.status( 500 ).json( -1 );
     }
   },
 
-  getUserSocialAccounts: async ( req, res ) => {
+  addLink: async ( req, res ) => {
+    try {
+      const result = await userStore.addLinkAsync( req.user.id, sanitizeHTML( req.body.hostId ), sanitizeHTML( req.body.urlPath ) );
+
+      if ( result[0] > 0 )
+        return res.status( 200 ).json( result[1] );
+
+      return res.status( 500 ).json( -1 );
+
+    } catch ( e ) {
+      console.debug( e );
+      return res.status( 500 ).json( -1 );
+    }
+  },
+
+  updateLink: async ( req, res ) => {
+    try {
+      const result = await userStore.updateLinkAsync( req.user.id, sanitizeHTML( req.params.linkId ), sanitizeHTML( req.body.newPath ) );
+
+      if ( result > 0 )
+        return res.status( 200 ).json( result );
+
+      return res.status( 500 ).json( -1 );
+
+    } catch ( e ) {
+      console.debug( e );
+      return res.status( 500 ).json( -1 );
+    }
+  },
+
+  deleteLink: async ( req, res ) => {
+    try {
+      const result = await userStore.deleteLinkAsync( req.user.id, sanitizeHTML( req.params.linkId ) );
+
+      if ( result > 0 )
+        return res.status( 200 ).json( result );
+
+      return res.status( 500 ).json( -1 );
+
+    } catch ( e ) {
+      console.debug( e );
+      return res.status( 500 ).json( -1 );
+    }
   }
 };

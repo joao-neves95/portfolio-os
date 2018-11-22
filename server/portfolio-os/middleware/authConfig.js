@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
@@ -14,7 +14,7 @@ const GoogleStrategy = require( 'passport-google-oauth20' ).Strategy;
 const userStore = require( '../dataAccess/userStore' );
 const db = require( '../../db' );
 const verifyJWT = require( './verifyJWT' );
-const LoginType = require( '../enums/loginType' );
+const LoginType = require( '../../../common/enums/loginType' );
 
 module.exports = ( app ) => {
   app.use( passport.initialize() );
@@ -45,15 +45,10 @@ module.exports = ( app ) => {
 
     try {
       // Link account to existing user, if the request has a JWT token.
-      try {
-        const userOrNot = await __linkAccountToUserIfTrue( req, profile.id, done );
+      const userOrNot = await __linkAccountToUserIfTrue( req, profile.id, done );
 
-        if ( typeof userOrNot === 'object' )
-          return done( null, userOrNot );
-
-      } catch ( e ) {
-        return done( e, null );
-      }
+      if ( typeof userOrNot === 'object' )
+        return done( null, userOrNot );
 
       const queryResult = await db.query(
         `SELECT Github_Id
@@ -61,6 +56,7 @@ module.exports = ( app ) => {
          WHERE Users.Github_Id = $1`,
         [profile.id]
       );
+
 
       let user;
 
@@ -78,7 +74,6 @@ module.exports = ( app ) => {
 
       // This catch block catches any possible exceptions that may occure from above.
     } catch ( e ) {
-      console.debug( e );
       return done( e, null );
     }
   }
@@ -98,20 +93,15 @@ module.exports = ( app ) => {
 
     try {
       // Link account to existing user, if the request has a JWT token.
-      try {
-        const userOrNot = await __linkAccountToUserIfTrue( req, profile.id, done );
+      const userOrNot = await __linkAccountToUserIfTrue( req, profile.id, done );
 
-        if ( typeof userOrNot === 'object' )
-          return done( null, userOrNot );
-
-      } catch ( e ) {
-        return done( e, null );
-      }
+      if ( typeof userOrNot === 'object' )
+        return done( null, userOrNot );
 
       const queryResult = await db.query(
         `SELECT Google_Id
          FROM Users
-         WHERE Google_Id = '$1'`,
+         WHERE Google_Id = $1`,
         [profile.id]
       );
 
@@ -142,13 +132,18 @@ const __linkAccountToUserIfTrue = ( req, profileId ) => {
   return new Promise( async ( resolve, reject ) => {
     try {
       // Add to existing account.
-      if ( req.headers.authorization ) {
-        const decoded = await verifyJWT( req.headers.authorization );
+      if ( req.cookies.JWT !== undefined ) {
+        const cookie = JSON.parse( req.cookies.JWT );
+        const decoded = Object.freeze( await verifyJWT( cookie.JWT ) );
 
         if ( !decoded )
           throw new Error();
 
-        return resolve( await userStore.updateSocialAccountId( decoded.Id, req.body.socialAccountType, profileId ) );
+        const queryResult = await userStore.updateSocialAccountId( decoded.id, cookie.accountType, profileId );
+        if ( queryResult.rowCount <= 0 )
+          reject();
+
+        return resolve( queryResult );
       }
 
       return resolve( false );

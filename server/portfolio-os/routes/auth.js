@@ -31,7 +31,7 @@ router.get( '/github/callback', passport.authenticate( 'github', { failureRedire
 
 // #region GOOGLE AUTH
 
-router.get( '/google', passport.authenticate( 'google' ) );
+router.get( '/google', passport.authenticate( 'google', { scope: ['profile', 'email', 'openid'] } ) );
 
 router.get( '/google/callback', passport.authenticate( 'google', { failureRedirect: '/' } ), async ( req, res ) => {
   return ____setJWTCookie( req, res );
@@ -57,9 +57,12 @@ module.exports = router;
  */
 const ____setJWTCookie = async ( req, res ) => {
   try {
+    const jwt = await signJWT( { id: req.user.id } );
+
     res.cookie(
       'JWT',
-      await signJWT( { id: req.user.id } ),
+      //await signJWT( { id: req.user.id } ),
+    jwt,
       {
         maxAge: 999999,
         path: '/',

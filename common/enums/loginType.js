@@ -13,4 +13,10 @@ const LoginType = Object.freeze( {
   Google: 'Google_Id'
 } );
 
-module.exports = LoginType;
+try {
+  if ( process.env !== undefined )
+    module.exports = LoginType;
+
+} catch {
+  // Do nothing, this is the browser.
+}

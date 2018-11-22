@@ -8,16 +8,9 @@
  */
 
 const db = require( '../../db' );
-const LoginType = require( '../enums/loginType' );
+const LoginType = require( '../../../common/enums/loginType' );
 
 module.exports = {
-
-  getUserQuery: ( loginType ) => {
-    return `SELECT *
-            FROM Users
-            WHERE Users.${loginType} = $1`;
-  },
-
   /**
    * @param { number } lastIdOfLastPage Defaults to 0.
    * @param { number } limit Defaults to 10.
@@ -47,7 +40,9 @@ module.exports = {
     return new Promise( async ( resolve, reject ) => {
       try {
         const queryResult = await db.query(
-          getUserQuery( loginType ),
+          `SELECT *
+           FROM Users
+           WHERE ${loginType} = $1`,
           [userId]
         );
 
@@ -65,7 +60,6 @@ module.exports = {
     } );
   },
 
-  // TODO: Test this.
   getProfileAsync: ( userId ) => {
     return new Promise( async ( resolve, reject ) => {
       /** @type {PoolClient} */
@@ -75,17 +69,17 @@ module.exports = {
         const queryResult = await dbClient.query(
           `SELECT Users.Name, Users.Summary
            FROM Users
-           WHERE Users.Id = $1
-           GROUP BY Id`,
+           WHERE Users.Id = $1`,
           [userId]
         );
 
         const queryResult2 = await dbClient.query(
-          `SELECT SocialLinks.Id, Hosts.Name AS HostName, SocialLinks.UrlPath
+          `SELECT SocialLinks.Id, Hosts.Label AS HostLabel, Hosts.Url AS HostUrl, SocialLinks.UrlPath
            FROM SocialLinks
                INNER JOIN Hosts
                ON SocialLinks.HostId = Hosts.Id
-           WHERE SocialLinks.UserId = $1`,
+           WHERE SocialLinks.UserId = $1
+           ORDER BY Id ASC`,
           [userId]
         );
 
@@ -93,7 +87,7 @@ module.exports = {
           `SELECT SkillSet.Id, SkillSet.Name
            FROM SkillSet
            WHERE SkillSet.UserId = $1
-           ORDER BY Id`,
+           ORDER BY Id ASC`,
           [userId]
         );
 
@@ -121,12 +115,41 @@ module.exports = {
           [summary, userId]
         );
 
-        //const queryResult3 = await dbClient.query(
-        //  `UPDATE SkillSet
-        //   SET Name = $1
-        //   WHERE Id = $2 AND UserId = $3`,
-        //  [userId]
-        //);
+        return resolve( queryResult.rowCount );
+
+      } catch ( e ) {
+        return reject( e );
+      }
+    } );
+  },
+
+  addLinkAsync: ( userId, hostId, urlPath ) => {
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        const queryResult = await db.query(
+          `INSERT INTO SocialLinks (UserId, HostId, UrlPath)
+           VALUES ($1, $2, $3)
+           RETURNING Id`,
+          [userId, hostId, urlPath]
+        );
+
+        return resolve( [queryResult.rowCount, queryResult.rows[0]] );
+
+      } catch ( e ) {
+        return reject( e );
+      }
+    } );
+  },
+
+  updateLinkAsync: ( userId, linkId, newPath ) => {
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        const queryResult = await db.query(
+          `UPDATE SocialLinks
+           SET UrlPath = $1
+           WHERE Id = $2 AND UserId = $3`,
+          [newPath, linkId, userId]
+        );
 
         return resolve( queryResult.rowCount );
 
@@ -136,13 +159,13 @@ module.exports = {
     } );
   },
 
-  addSocialLinkAsync: ( userId, hostId, urlPath ) => {
+  deleteLinkAsync: ( userId, linkId ) => {
     return new Promise( async ( resolve, reject ) => {
       try {
         const queryResult = await db.query(
-          `INSERT INTO SocialLinks (UserId, HostId, UrlPath)
-           VALUES ($1, $2, $3)`,
-          [userId, hostId, urlPath]
+          `DELETE FROM SocialLinks
+           WHERE Id = $1 AND UserId = $2`,
+          [linkId, userId]
         );
 
         return resolve( queryResult.rowCount );
@@ -239,9 +262,6 @@ module.exports = {
           ]
         ] );
 
-        console.debug( queryResults[0].rows );
-        console.debug( queryResults[0].rows[0] );
-
         if ( Callback )
           return Callback( null, queryResults[0].rows[0] );
 
@@ -262,18 +282,17 @@ module.exports = {
    * @param { boolean } getUser Defaults to true.
    * @param { string } timestamp Optional. A custom timestamp.
    */
-  updateLastLoginAsync: ( userId, loginType, getUser = true, timestamp = null ) => {
+  updateLastLoginAsync: ( userId, loginType, timestamp = null ) => {
     return new Promise( async ( resolve, reject ) => {
       try {
         timestamp = !timestamp ? db.utcDateFunc() : timestamp;
-        getUser = getUser ? getUserQuery( loginType ) : '';
 
         const queryResult = await db.query(
           `UPDATE Users
-           SET Users.LastLogin = (${db.utcDateFunc()})
-           WHERE Users.${loginType} = $2;
-           ${getUser}`,
-          [userId, userId]
+           SET LastLogin = (${timestamp})
+           WHERE ${loginType} = $1
+           RETURNING *`,
+          [userId]
         );
 
         return resolve( queryResult.rows[0] );
@@ -287,20 +306,18 @@ module.exports = {
   /**
    * Note: This method overides the current value.
    */
-  updateSocialAccountId: ( userId, socialAccountType, accountId, getUser = true ) => {
+  updateSocialAccountId: ( userId, socialAccountType, accountId ) => {
     return new Promise( async ( resolve, reject ) => {
       try {
-        getUser = getUser ? getUserQuery( loginType ) : '';
-
         const queryResult = await db.query(
           `UPDATE Users
-           SET Users.${socialAccountType} = $2
-           WHERE Users.Id = $3
-           ${getUser}`,
-          [userId, accountId, userId]
+           SET ${socialAccountType} = $1
+           WHERE Id = $2
+           RETURNING *`,
+          [accountId, userId]
         );
 
-        return resolve( queryResult );
+        return resolve( queryResult.rows[0] );
 
       } catch ( e ) {
         return reject( e );

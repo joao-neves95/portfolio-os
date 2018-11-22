@@ -15,7 +15,7 @@ class CommonUtils {
    * @returns { string }
    */
   static sanitizeHTML( input ) {
-    return input.toString().trim().replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /'/g, '&#x27;' ).replace( /"/g, '&#34;' ).replace( /&/g, '&amp;' ).replce( /\//g, '&#x2F;' );
+    return input.toString().trim().replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /'/g, '&#x27;' ).replace( /"/g, '&#34;' ).replace( /&/g, '&amp;' ).replace( /\//g, '&#x2F;' );
   }
 }
 

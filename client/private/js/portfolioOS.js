@@ -14,10 +14,11 @@
 // %import<<GH 'js-cookie/js-cookie/master/src/js.cookie.js'
 // @import './externalLibs'
 // $import 'vanillatree/vanillatree.min.js'
-// @import './utils'
-// @import './domUtils'
 // @import<<DIR '../../../../common/enums'
 // @import<<DIR './enums/'
+// @import '../../../../common/commonUtils'
+// @import './utils'
+// @import './domUtils'
 // @import '../../../../common/models/fsItemModelBase'
 // @import '../../../../common/models/fileModel'
 // @import '../../../../common/models/directoryModel'
@@ -78,6 +79,15 @@
 // @import './main'
 //
 'use strict';
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 // const SERVER_ROOT_PATH = 'http://localhost:3000/';
 const AUTH_TOKEN_ID = 'JWT';
@@ -252,6 +262,15 @@ const IMG_PATH = `${SERVER_ROOT_PATH}img/`;
 	return init(function () {});
 }));
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 // when-dom-ready
 // https://github.com/lukechilds/when-dom-ready
 !function (e, n) { "object" == typeof exports && "undefined" != typeof module ? module.exports = n() : "function" == typeof define && define.amd ? define(n) : e.whenDomReady = n() }(this, function () { "use strict"; var e = ["interactive", "complete"], n = function (n, t) { return new Promise(function (o) { n && "function" != typeof n && (t = n, n = null), t = t || window.document; var i = function () { return o(void (n && setTimeout(n))) }; -1 !== e.indexOf(t.readyState) ? i() : t.addEventListener("DOMContentLoaded", i) }) }; return n.resume = function (e) { return function (t) { return n(e).then(function () { return t }) } }, n });
@@ -261,6 +280,193 @@ const IMG_PATH = `${SERVER_ROOT_PATH}img/`;
 !function (n) { "use strict"; function t(n) { if (!(this instanceof t)) return new t(n); if (null == n) n = t.engines.nativeMath; else if ("function" != typeof n) throw new TypeError("Expected engine to be a function, got " + typeof n); this.engine = n } function r(n) { return function () { return n } } function e(n, t) { return 0 === t ? n : function (r) { return n(r) + t } } function i(n) { var t = +n; return 0 > t ? Math.ceil(t) : Math.floor(t) } function u(n, t) { return 0 > n ? Math.max(n + t, 0) : Math.min(n, t) } function o() { return void 0 } var f = "Random", c = "function" != typeof Math.imul || -5 !== Math.imul(4294967295, 5) ? function (n, t) { var r = n >>> 16 & 65535, e = 65535 & n, i = t >>> 16 & 65535, u = 65535 & t; return e * u + (r * u + e * i << 16 >>> 0) | 0 } : Math.imul, a = "function" == typeof String.prototype.repeat && "xxx" === "x".repeat(3) ? function (n, t) { return n.repeat(t) } : function (n, t) { for (var r = ""; t > 0;)1 & t && (r += n), t >>= 1, n += n; return r }, l = t.prototype; t.engines = { nativeMath: function () { return 4294967296 * Math.random() | 0 }, mt19937: function (n) { function r(n) { for (var t = 0, r = 0; 227 > (0 | t); t = t + 1 | 0)r = 2147483648 & n[t] | 2147483647 & n[t + 1 | 0], n[t] = n[t + 397 | 0] ^ r >>> 1 ^ (1 & r ? 2567483615 : 0); for (; 623 > (0 | t); t = t + 1 | 0)r = 2147483648 & n[t] | 2147483647 & n[t + 1 | 0], n[t] = n[t - 227 | 0] ^ r >>> 1 ^ (1 & r ? 2567483615 : 0); r = 2147483648 & n[623] | 2147483647 & n[0], n[623] = n[396] ^ r >>> 1 ^ (1 & r ? 2567483615 : 0) } function e(n) { return n ^= n >>> 11, n ^= n << 7 & 2636928640, n ^= n << 15 & 4022730752, n ^ n >>> 18 } function i(n, t) { for (var r = 1, e = 0, i = t.length, u = 0 | Math.max(i, 624), o = 0 | n[0]; (0 | u) > 0; --u)n[r] = o = (n[r] ^ c(o ^ o >>> 30, 1664525)) + (0 | t[e]) + (0 | e) | 0, r = r + 1 | 0, ++e, (0 | r) > 623 && (n[0] = n[623], r = 1), e >= i && (e = 0); for (u = 623; (0 | u) > 0; --u)n[r] = o = (n[r] ^ c(o ^ o >>> 30, 1566083941)) - r | 0, r = r + 1 | 0, (0 | r) > 623 && (n[0] = n[623], r = 1); n[0] = 2147483648 } function u() { function u() { (0 | f) >= 624 && (r(o), f = 0); var n = o[f]; return f = f + 1 | 0, 0 | e(n) } var o = new n(624), f = 0; return u.discard = function (n) { for ((0 | f) >= 624 && (r(o), f = 0); n - f > 624;)n -= 624 - f, r(o), f = 0; return f = f + n | 0, u }, u.seed = function (n) { var t = 0; o[0] = t = 0 | n; for (var r = 1; 624 > r; r = r + 1 | 0)o[r] = t = c(t ^ t >>> 30, 1812433253) + r | 0; return f = 624, u }, u.seedWithArray = function (n) { return u.seed(19650218), i(o, n), u }, u.autoSeed = function () { return u.seedWithArray(t.generateEntropyArray()) }, u } return u }("function" == typeof Int32Array ? Int32Array : Array), browserCrypto: "undefined" != typeof crypto && "function" == typeof crypto.getRandomValues && "function" == typeof Int32Array ? function () { var n = null, t = 128; return function () { return t >= 128 && (null === n && (n = new Int32Array(128)), crypto.getRandomValues(n), t = 0), 0 | n[t++] } }() : null }, t.generateEntropyArray = function () { for (var n = [], r = t.engines.nativeMath, e = 0; 16 > e; ++e)n[e] = 0 | r(); return n.push(0 | (new Date).getTime()), n }, t.int32 = function (n) { return 0 | n() }, l.int32 = function () { return t.int32(this.engine) }, t.uint32 = function (n) { return n() >>> 0 }, l.uint32 = function () { return t.uint32(this.engine) }, t.uint53 = function (n) { var t = 2097151 & n(), r = n() >>> 0; return 4294967296 * t + r }, l.uint53 = function () { return t.uint53(this.engine) }, t.uint53Full = function (n) { for (; ;) { var t = 0 | n(); if (!(2097152 & t)) { var r = n() >>> 0; return 4294967296 * (2097151 & t) + r } if (2097152 === (4194303 & t) && 0 === (0 | n())) return 9007199254740992 } }, l.uint53Full = function () { return t.uint53Full(this.engine) }, t.int53 = function (n) { var t = 0 | n(), r = n() >>> 0; return 4294967296 * (2097151 & t) + r + (2097152 & t ? -9007199254740992 : 0) }, l.int53 = function () { return t.int53(this.engine) }, t.int53Full = function (n) { for (; ;) { var t = 0 | n(); if (!(4194304 & t)) { var r = n() >>> 0; return 4294967296 * (2097151 & t) + r + (2097152 & t ? -9007199254740992 : 0) } if (4194304 === (8388607 & t) && 0 === (0 | n())) return 9007199254740992 } }, l.int53Full = function () { return t.int53Full(this.engine) }, t.integer = function () { function n(n) { return 0 === (n + 1 & n) } function i(n) { return function (t) { return t() & n } } function u(n) { var t = n + 1, r = t * Math.floor(4294967296 / t); return function (n) { var e = 0; do e = n() >>> 0; while (e >= r); return e % t } } function o(t) { return n(t) ? i(t) : u(t) } function f(n) { return 0 === (0 | n) } function c(n) { return function (t) { var r = t() & n, e = t() >>> 0; return 4294967296 * r + e } } function a(n) { var t = n * Math.floor(9007199254740992 / n); return function (r) { var e = 0; do { var i = 2097151 & r(), u = r() >>> 0; e = 4294967296 * i + u } while (e >= t); return e % n } } function l(t) { var r = t + 1; if (f(r)) { var e = (r / 4294967296 | 0) - 1; if (n(e)) return c(e) } return a(r) } function h(n, t) { return function (r) { var e = 0; do { var i = 0 | r(), u = r() >>> 0; e = 4294967296 * (2097151 & i) + u + (2097152 & i ? -9007199254740992 : 0) } while (n > e || e > t); return e } } return function (n, i) { if (n = Math.floor(n), i = Math.floor(i), -9007199254740992 > n || !isFinite(n)) throw new RangeError("Expected min to be at least -9007199254740992"); if (i > 9007199254740992 || !isFinite(i)) throw new RangeError("Expected max to be at most 9007199254740992"); var u = i - n; return 0 >= u || !isFinite(u) ? r(n) : 4294967295 === u ? 0 === n ? t.uint32 : e(t.int32, n + 2147483648) : 4294967295 > u ? e(o(u), n) : 9007199254740991 === u ? e(t.uint53, n) : 9007199254740991 > u ? e(l(u), n) : i - 1 - n === 9007199254740991 ? e(t.uint53Full, n) : -9007199254740992 === n && 9007199254740992 === i ? t.int53Full : -9007199254740992 === n && 9007199254740991 === i ? t.int53 : -9007199254740991 === n && 9007199254740992 === i ? e(t.int53, 1) : 9007199254740992 === i ? e(h(n - 1, i - 1), 1) : h(n, i) } }(), l.integer = function (n, r) { return t.integer(n, r)(this.engine) }, t.realZeroToOneInclusive = function (n) { return t.uint53Full(n) / 9007199254740992 }, l.realZeroToOneInclusive = function () { return t.realZeroToOneInclusive(this.engine) }, t.realZeroToOneExclusive = function (n) { return t.uint53(n) / 9007199254740992 }, l.realZeroToOneExclusive = function () { return t.realZeroToOneExclusive(this.engine) }, t.real = function () { function n(n, t) { return 1 === t ? n : 0 === t ? function () { return 0 } : function (r) { return n(r) * t } } return function (r, i, u) { if (!isFinite(r)) throw new RangeError("Expected left to be a finite number"); if (!isFinite(i)) throw new RangeError("Expected right to be a finite number"); return e(n(u ? t.realZeroToOneInclusive : t.realZeroToOneExclusive, i - r), r) } }(), l.real = function (n, r, e) { return t.real(n, r, e)(this.engine) }, t.bool = function () { function n(n) { return 1 === (1 & n()) } function e(n, t) { return function (r) { return n(r) < t } } function i(n) { if (0 >= n) return r(!1); if (n >= 1) return r(!0); var i = 4294967296 * n; return i % 1 === 0 ? e(t.int32, i - 2147483648 | 0) : e(t.uint53, Math.round(9007199254740992 * n)) } return function (u, o) { return null == o ? null == u ? n : i(u) : 0 >= u ? r(!1) : u >= o ? r(!0) : e(t.integer(0, o - 1), u) } }(), l.bool = function (n, r) { return t.bool(n, r)(this.engine) }, t.pick = function (n, r, e, o) { var f = r.length, c = null == e ? 0 : u(i(e), f), a = void 0 === o ? f : u(i(o), f); if (c >= a) return void 0; var l = t.integer(c, a - 1); return r[l(n)] }, l.pick = function (n, r, e) { return t.pick(this.engine, n, r, e) }; var h = Array.prototype.slice; t.picker = function (n, r, e) { var i = h.call(n, r, e); if (!i.length) return o; var u = t.integer(0, i.length - 1); return function (n) { return i[u(n)] } }, t.shuffle = function (n, r, e) { var i = r.length; if (i) { null == e && (e = 0); for (var u = i - 1 >>> 0; u > e; --u) { var o = t.integer(0, u), f = o(n); if (u !== f) { var c = r[u]; r[u] = r[f], r[f] = c } } } return r }, l.shuffle = function (n) { return t.shuffle(this.engine, n) }, t.sample = function (n, r, e) { if (0 > e || e > r.length || !isFinite(e)) throw new RangeError("Expected sampleSize to be within 0 and the length of the population"); if (0 === e) return []; var i = h.call(r), u = i.length; if (u === e) return t.shuffle(n, i, 0); var o = u - e; return t.shuffle(n, i, o - 1).slice(o) }, l.sample = function (n, r) { return t.sample(this.engine, n, r) }, t.die = function (n) { return t.integer(1, n) }, l.die = function (n) { return t.die(n)(this.engine) }, t.dice = function (n, r) { var e = t.die(n); return function (n) { var t = []; t.length = r; for (var i = 0; r > i; ++i)t[i] = e(n); return t } }, l.dice = function (n, r) { return t.dice(n, r)(this.engine) }, t.uuid4 = function () { function n(n, t) { return a("0", t - n.length) + n } return function (t) { var r = t() >>> 0, e = 0 | t(), i = 0 | t(), u = t() >>> 0; return n(r.toString(16), 8) + "-" + n((65535 & e).toString(16), 4) + "-" + n((e >> 4 & 4095 | 16384).toString(16), 4) + "-" + n((16383 & i | 32768).toString(16), 4) + "-" + n((i >> 4 & 65535).toString(16), 4) + n(u.toString(16), 8) } }(), l.uuid4 = function () { return t.uuid4(this.engine) }, t.string = function () { var n = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-"; return function (r) { null == r && (r = n); var e = r.length; if (!e) throw new Error("Expected pool not to be an empty string"); var i = t.integer(0, e - 1); return function (n, t) { for (var e = "", u = 0; t > u; ++u) { var o = i(n); e += r.charAt(o) } return e } } }(), l.string = function (n, r) { return t.string(r)(this.engine, n) }, t.hex = function () { var n = "0123456789abcdef", r = t.string(n), e = t.string(n.toUpperCase()); return function (n) { return n ? e : r } }(), l.hex = function (n, r) { return t.hex(r)(this.engine, n) }, t.date = function (n, r) { if (!(n instanceof Date)) throw new TypeError("Expected start to be a Date, got " + typeof n); if (!(r instanceof Date)) throw new TypeError("Expected end to be a Date, got " + typeof r); var e = t.integer(n.getTime(), r.getTime()); return function (n) { return new Date(e(n)) } }, l.date = function (n, r) { return t.date(n, r)(this.engine) }, "function" == typeof define && define.amd ? define(function () { return t }) : "undefined" != typeof module && "function" == typeof require ? module.exports = t : (!function () { var r = n[f]; t.noConflict = function () { return n[f] = r, this } }(), n[f] = t) }(this);
 
 !function(e,t){"function"==typeof define&&define.amd?define(t):"object"==typeof module&&module.exports?module.exports=t():e.VanillaTree=t()}(this,function(){"use strict";var n,i,r,a,s,l,t,o,c,d,h,u,p=(n=window,i=document,r=[],a=/\.(.+)/,s=0,l="EventListener",t="MatchesSelector",(u=function(e,t){return new u.i(e,t)}).i=function(e,t){r.push.apply(this,e?e.nodeType||e==n?[e]:""+e===e?/</.test(e)?((o=i.createElement(t||"q")).innerHTML=e,o.children):(t&&u(t)[0]||i).querySelectorAll(e):/f/.test(typeof e)?/c/.test(i.readyState)?e():u(i).on("DOMContentLoaded",e):e:r)},u.i[h="prototype"]=(u.extend=function(e){for(d=arguments,o=1;o<d.length;o++)if(h=d[o])for(c in h)e[c]=h[c];return e})(u.fn=u[h]=r,{on:function(t,n){return t=t.split(a),this.map(function(e){(a[o=t[0]+(e.b$=e.b$||++s)]=a[o]||[]).push([n,t[1]]),e["add"+l](t[0],n)}),this},off:function(t,n){return t=t.split(a),h="remove"+l,this.map(function(e){if(o=(d=a[t[0]+e.b$])&&d.length)for(;c=d[--o];)n&&n!=c[0]||t[1]&&t[1]!=c[1]||(e[h](t[0],c[0]),d.splice(o,1));else!t[1]&&e[h](t[0],n)}),this},is:function(e){return!!(c=(o=this[0])&&(o.matches||o["webkit"+t]||o["moz"+t]||o["ms"+t]))&&c.call(o,e)}}),u),f=function(e,t){return p.extend(document.createElement(e),t)},e=function(e,i){var t=this,n=t.container=p(e)[0],r=t.tree=n.appendChild(f("ul",{className:"vtree"}));t.placeholder=i&&i.placeholder,t._placeholder(),t.leafs={},r.addEventListener("click",function(e){p(e.target).is(".vtree-leaf-label")?t.select(e.target.parentNode.getAttribute("data-vtree-id")):p(e.target).is(".vtree-toggle")&&t.toggle(e.target.parentNode.getAttribute("data-vtree-id"))}),i&&i.contextmenu&&(r.addEventListener("contextmenu",function(t){var n;if(p(".vtree-contextmenu").forEach(function(e){e.parentNode.removeChild(e)}),p(t.target).is(".vtree-leaf-label")){t.preventDefault(),t.stopPropagation(),n=f("menu",{className:"vtree-contextmenu"});var e=t.target.getBoundingClientRect();p.extend(n.style,{top:(t.target.offsetTop+e.height).toString()+"px",left:t.target.offsetLeft.toString()+"px",display:"block"}),i.contextmenu.forEach(function(e){n.appendChild(f("li",{className:"vtree-contextmenu-item",innerHTML:e.label})).addEventListener("click",e.action.bind(e,t.target.parentNode.getAttribute("data-vtree-id")))}),t.target.parentNode.appendChild(n)}}),document.addEventListener("click",function(e){2!==e.button&&p(".vtree-contextmenu").forEach(function(e){e.parentNode.removeChild(e)})}))};return e.prototype={constructor:e,_dispatch:function(t,n){var i;try{i=new CustomEvent("vtree-"+t,{bubbles:!0,cancelable:!0,detail:{id:n}})}catch(e){(i=document.createEvent("CustomEvent")).initCustomEvent("vtree-"+t,!0,!0,{id:n})}return(this.getLeaf(n,!0)||this.tree).dispatchEvent(i),this},_placeholder:function(){var e;return!this.tree.children.length&&this.placeholder?this.tree.innerHTML='<li class="vtree-placeholder">'+this.placeholder+"</li>":(e=this.tree.querySelector(".vtree-placeholder"))&&this.tree.removeChild(e),this},getLeaf:function(e,t){var n=p('[data-vtree-id="'+e+'"]',this.tree)[0];if(!t&&!n)throw Error('No VanillaTree leaf with id "'+e+'"');return n},getChildList:function(e){var t,n;return e?(n=this.getLeaf(e),(t=p("ul",n)[0])||(t=n.appendChild(f("ul",{className:"vtree-subtree"})))):t=this.tree,t},add:function(e){var t,n=f("li",{className:"vtree-leaf"}),i=this.getChildList(e.parent);return n.setAttribute("data-vtree-id",t=e.id||Math.random()),n.appendChild(f("span",{className:"vtree-toggle"})),n.appendChild(f("a",{className:"vtree-leaf-label",innerHTML:e.label})),i.appendChild(n),i!==this.tree&&i.parentNode.classList.add("vtree-has-children"),(this.leafs[t]=e).opened||this.close(t),e.selected&&this.select(t),this._placeholder()._dispatch("add",t)},move:function(e,t){var n=this.getLeaf(e),i=n.parentNode,r=this.getLeaf(t,!0);return r&&r.classList.add("vtree-has-children"),this.getChildList(t).appendChild(n),i.parentNode.classList.toggle("vtree-has-children",!!i.children.length),this._dispatch("move",e)},remove:function(e){var t=this.getLeaf(e),n=t.parentNode;return n.removeChild(t),n.parentNode.classList.toggle("vtree-has-children",!!n.children.length),this._placeholder()._dispatch("remove",e)},open:function(e){return this.getLeaf(e).classList.remove("closed"),this._dispatch("open",e)},close:function(e){return this.getLeaf(e).classList.add("closed"),this._dispatch("close",e)},toggle:function(e){return this[this.getLeaf(e).classList.contains("closed")?"open":"close"](e)},select:function(e){var t=this.getLeaf(e);return t.classList.contains("vtree-selected")||(p("li.vtree-leaf",this.tree).forEach(function(e){e.classList.remove("vtree-selected")}),t.classList.add("vtree-selected"),this._dispatch("select",e)),this}},e});
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+const LoginType = Object.freeze( {
+  Local: 'Id',
+  GitHub: 'Github_Id',
+  Google: 'Google_Id'
+} );
+
+try {
+  if ( process.env !== undefined )
+    module.exports = LoginType;
+
+} catch {
+  // Do nothing, this is the browser.
+}
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+const PermissionType = Object.freeze( {
+  /** Read only */
+  UserRead: 'user.read',
+  /** Read and write */
+  UserWrite: 'user.write',
+  /** Read, write, delete */
+  UserDelete: 'user.delete',
+  /** Admin only (Portfolio-OS) */
+  Admin: 'admin'
+} );
+
+try {
+  if ( process.env !== undefined )
+    module.exports = PermissionType;
+
+} catch {
+  // Do nothing, this is the browser.
+}
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+const DefaultWebsiteHosts = Object.freeze( {
+  GitHub: 'github.com'
+} );
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+const FileSystemItemType = Object.freeze( {
+  File: 1,
+  FileUrl: 2,
+  Executable: 3,
+  Directory: 4,
+  ExecutableDirectory: 5
+} );
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+const GridType = Object.freeze( {
+  /** Horizontal. */
+  GridX: 'grid-x',
+  /** Vertical. */
+  GridY: 'grid-y'
+} );
+
+const HostId = Object.freeze( {
+  GitHub: 1,
+  Behance: 2,
+  Twitter: 3,
+  Instagram: 4
+} );
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+const ProfilePageType = Object.freeze( {
+  MyProfile: 'myProfile',
+  Explore: 'explore',
+  UserProfiles: 'userProfiles'
+} );
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+const RequestType = Object.freeze( {
+  Get: 'GET',
+  Post: 'POST',
+  Put: 'PUT',
+  Delete: 'DELETE'
+} );
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+const voteType = Object.freeze( {
+  DownVote: 0,
+  UpVote: 1
+} );
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+class CommonUtils {
+  /**
+   * Escaping following OWASP's rules.
+   * https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet#RULE_.231_-_HTML_Escape_Before_Inserting_Untrusted_Data_into_HTML_Element_Content
+   * @param { any } input
+   * @returns { string }
+   */
+  static sanitizeHTML( input ) {
+    return input.toString().trim().replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /'/g, '&#x27;' ).replace( /"/g, '&#34;' ).replace( /&/g, '&amp;' ).replace( /\//g, '&#x2F;' );
+  }
+}
+
+try {
+  if ( process.env !== undefined )
+    module.exports = CommonUtils;
+
+} catch {
+  // Do nothing, this is the browser.
+}
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 Array.prototype.last = () => {
   return this[this.length - 1];
@@ -532,6 +738,15 @@ class List extends Collection {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class DomUtils {
 
   /**
@@ -651,61 +866,14 @@ class DomUtils {
   }
 }
 
-const PermissionType = Object.freeze( {
-  /** Read only */
-  UserRead: 'user.read',
-  /** Read and write */
-  UserWrite: 'user.write',
-  /** Read, write, delete */
-  UserDelete: 'user.delete',
-  /** Admin only (Portfolio-OS) */
-  Admin: 'admin'
-} );
-
-try {
-  if ( process.env !== undefined )
-    module.exports = PermissionType;
-
-} catch {
-  // Do nothing, this is the browser.
-}
-
-const DefaultWebsiteHosts = Object.freeze( {
-  GitHub: 'github.com'
-} );
-
-const FileSystemItemType = Object.freeze( {
-  File: 1,
-  FileUrl: 2,
-  Executable: 3,
-  Directory: 4,
-  ExecutableDirectory: 5
-} );
-
-const GridType = Object.freeze( {
-  /** Horizontal. */
-  GridX: 'grid-x',
-  /** Vertical. */
-  GridY: 'grid-y'
-} );
-
-const ProfilePageType = Object.freeze( {
-  MyProfile: 'myProfile',
-  Explore: 'explore',
-  UserProfiles: 'userProfiles'
-} );
-
-const RequestType = Object.freeze( {
-  Get: 'GET',
-  Post: 'POST',
-  Put: 'PUT',
-  Delete: 'DELETE'
-} );
-
-const voteType = Object.freeze( {
-  DownVote: 0,
-  UpVote: 1
-} );
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 // TODO: Chnage the parameter order.
 
@@ -727,6 +895,15 @@ try {
   // This is the browser.
 }
 
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 let fsItemModelBaseFile;
 
@@ -760,6 +937,15 @@ try {
 } catch {
   // Do nothing, this is the browser.
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 let fsItemModelBaseDir;
 
@@ -800,6 +986,15 @@ try {
   // Do nothing, this is the browser.
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class SystemDirectoryModel extends DirectoryModel {
   constructor( name, content ) {
     super( PermissionType.UserRead, name, null, null, content );
@@ -814,6 +1009,15 @@ try {
   // Do nothing, this is the browser.
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class AppRating {
   constructor() {
     this.upVotes = 0;
@@ -822,6 +1026,15 @@ class AppRating {
     this.userVotes = [];
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class AppStoreApplication {
   /**
@@ -845,6 +1058,15 @@ class AppStoreApplication {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class SystemApp {
   constructor(appName, startMenuIconUrl, taskbarIconUrl, executeFunction) {
     this.name = appName;
@@ -854,6 +1076,15 @@ class SystemApp {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class UserVote {
   constructor( user, voteType ) {
     this.user = user;
@@ -861,6 +1092,15 @@ class UserVote {
     this.timestamp = '';
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 /**
  * Note: All methods are asynchronous.
@@ -965,6 +1205,15 @@ class HttpClient {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class Authentication {
   constructor() {
 
@@ -986,15 +1235,41 @@ class Authentication {
       //
     } finally {
       Cookies.remove( 'JWT' );
-      localStorage.setItem( AUTH_TOKEN_ID, jwt );
+      if ( jwt !== undefined )
+        localStorage.setItem( AUTH_TOKEN_ID, jwt );
     }
+  }
+
+  /**
+   * 
+   * @param { object } additionalData <object> ( {} ) or null. Defaults to null.
+   */
+  JWTLocalStorageToCookie( additionalData = null ) {
+    let data = !additionalData ? this.getJWT() : JSON.stringify( Object.assign( { JWT: this.getJWT() }, additionalData ) );
+    Cookies.set( 'JWT', data );
+    localStorage.removeItem( AUTH_TOKEN_ID );
   }
 
   getJWT() {
     return localStorage.getItem( AUTH_TOKEN_ID );
   }
+
+  logout() {
+    localStorage.removeItem( AUTH_TOKEN_ID );
+    Cookies.remove( 'JWT' );
+  }
+
 }
 const authentication = new Authentication();
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class GridSystemTemplates {
   constructor() {
@@ -1037,6 +1312,15 @@ class GridSystemTemplates {
       `;
   };
 }
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 /** @type { GridSystem } */
 let gridSystem = null;
 
@@ -1084,6 +1368,15 @@ class GridSystem {
 }
 
 new GridSystem();
+
+/*
+ *
+ * Copyright (c) 2018 Jo�o Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 let dragAndDrop = null;
 
@@ -1306,6 +1599,15 @@ class DragAndDrop {
 
 new DragAndDrop();
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 // https://medium.com/the-z/making-a-resizable-div-in-js-is-not-easy-as-you-think-bda19a1bc53d
 
 let windowResizer = null;
@@ -1359,6 +1661,15 @@ const resizeWindowHandler = ( e ) => {
 };
 
 new WindowResizer();
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 // TODO: Pass to the server.
 class FileSystem {
@@ -1533,6 +1844,15 @@ class FileSystem {
 
 const fileSystem = new FileSystem();
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class TaskbarIcon {
   /**
    * 
@@ -1586,6 +1906,15 @@ class TaskbarIcon {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 const START_MENU_ANIM_DELAY = 1;
 
 class TaskbarManager {
@@ -1630,6 +1959,15 @@ class TaskbarManager {
 }
 
 const taskbarManager = new TaskbarManager();
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 // TODO: Add the z-index of each each window.
 
@@ -1714,6 +2052,15 @@ class Window {
     this.element.style.left = '0%';
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 Jo�o Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class WindowManager {
   constructor() {
@@ -1876,6 +2223,15 @@ class WindowManager {
 
 const windowManager = new WindowManager();
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class UserAppsManager {
   constructor() {
     /** @type {AppStoreApplication[]} */
@@ -1887,6 +2243,15 @@ class UserAppsManager {
   }
 
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class SystemAppsManager {
   constructor() {
@@ -1928,6 +2293,15 @@ class SystemAppsManager {
 
 const systemAppsManager = new SystemAppsManager();
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class Trash {
   constructor( processId ) {
     this.id = `trash-${processId}`;
@@ -1943,6 +2317,24 @@ class Trash {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class TerminalTemplates {
   constructor() {
@@ -2006,6 +2398,15 @@ class TerminalTemplates {
 }
 
 const terminalTemplates = new TerminalTemplates();
+
+/*
+ *
+ * Copyright (c) 2018 Jo�o Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 const initAnimMessage = terminalTemplates.welcomeMessage;
 const INIT_ANIM_DELAY = 50;
@@ -2292,6 +2693,15 @@ class Terminal {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class AddNewAppTemplates {
   constructor() {
     throw new Error( 'Can not instantiate the static class AddNewAppTemplate.' );
@@ -2340,12 +2750,39 @@ class AddNewAppTemplates {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class AddNewAppModel {
   constructor() {
     this.isOpen = false;
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class AddNewAppController {
   constructor() {
@@ -2375,6 +2812,15 @@ class AddNewAppController {
     });
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class AppStoreTemplates {
   // TODO: Add the search panel as a dropdown under the top-bar, with filters (number of downloads; vote ratio).
@@ -2449,6 +2895,15 @@ class AppStoreTemplates {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class AppStoreModel {
   constructor() {
     this.processId = '';
@@ -2456,10 +2911,28 @@ class AppStoreModel {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class AppStoreView {
   constructor() {
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class AppStoreController {
   constructor( processId ) {
@@ -2486,6 +2959,15 @@ class AppStoreController {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class AppStore {
   constructor( processId ) {
     this.processId = processId;
@@ -2494,9 +2976,43 @@ class AppStore {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class MyProfileTemplates {
   constructor() {
     throw new Error( 'Can not instantiate the static class MyProfileTemplates' );
+  }
+
+  static get linkSocialAccounts() {
+    return `
+      <div class="grid-x">
+        <div class="cell large-4 large-offset-2">
+          <a href="/portfolio-os/auth/google" class="link-account">
+            <span class="hint--top hint--bounce" aria-label="Link Google Account.">
+              <span class="hint--bottom hint--warning hint--bounce" aria-label="WARNING: This overrides any current linked Google account.">
+                <img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" id="google-btn" />
+              </span>
+            </span>
+          </a>
+        </div>
+        <div class="cell large-4">
+          <a href="/portfolio-os/auth/github" class="link-account">
+            <span class="hint--top hint--bounce" aria-label="Link GitHub Account.">
+              <span class="hint--bottom hint--warning hint--bounce" aria-label="WARNING: This overrides any current linked GitHub account.">
+                <img src="img/github.svg" alt="Github Icon" class="icon" draggable="false" />
+              </span>
+            </span>
+          </a>
+        </div>
+      </div>
+    `;
   }
 
   static get addLink() {
@@ -2505,18 +3021,16 @@ class MyProfileTemplates {
         <div class="medium-2 cell link-label-wrapper">
           <label>Website
             <select>
-              <option value="instagram">Instagram</option>
-              <option value="twitter">Twitter</option>
-              <option value="facebook">Facebook</option>
-              <option value="behance">Behance</option>
-              <option value="github.com">GitHub</option>
-              <option value="custom-url">Other</option>
+              <option value="${HostId.GitHub}">GitHub</option>
+              <option value="${HostId.Behance}">Behance</option>
+              <option value="${HostId.Twitter}">Twitter</option>
+              <option value="${HostId.Instagram}">Instagram</option>
             </select>
           </label>
         </div>
         <div class="medium-9 cell link-slug-wrapper">
           <label>Path
-            <input type="text" placeholder="john-doe">
+            <input class="slug new-link" type="text" placeholder="john-doe">
           </label>
         </div>
       </div>
@@ -2536,27 +3050,57 @@ class MyProfileTemplates {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class MyProfileModel {
   constructor() {
     this.userId;
   }
 
+  async updateSummary( summary ) {
+    return await HttpClient.put( `${API_ROOT_PATH}user/profile/summary`, { summary: CommonUtils.sanitizeHTML( summary ) } );
+  }
+
   async postNewSkill( skill ) {
-    return await HttpClient.post( `${API_ROOT_PATH}user/profile/skills`, { skill: skill } );
+    return await HttpClient.post( `${API_ROOT_PATH}user/profile/skills`, { skill: CommonUtils.sanitizeHTML( skill ) } );
   }
 
   async updateSkill( skillId, skill ) {
-    return await HttpClient.put( `${API_ROOT_PATH}user/profile/skills/${skillId}`, { skill: skill } );
+    return await HttpClient.put( `${API_ROOT_PATH}user/profile/skills/${CommonUtils.sanitizeHTML(skillId)}`, { skill: CommonUtils.sanitizeHTML( skill ) } );
   }
 
   async deleteSkill( skillId ) {
-    return await HttpClient.delete( `${API_ROOT_PATH}user/profile/skills/${skillId}` );
+    return await HttpClient.delete( `${API_ROOT_PATH}user/profile/skills/${CommonUtils.sanitizeHTML(skillId)}` );
   }
 
-  async updateSummary( summary ) {
-    return await HttpClient.put( `${API_ROOT_PATH}user/profile/summary`, { summary: summary } );
+  async postNewLink( hostId, urlPath ) {
+    return await HttpClient.post( `${API_ROOT_PATH}user/profile/links`, { hostId: CommonUtils.sanitizeHTML( hostId ), urlPath: CommonUtils.sanitizeHTML( urlPath ) } );
+  }
+
+  async updateLink( linkId, newPath ) {
+    return await HttpClient.put( `${API_ROOT_PATH}user/profile/links/${CommonUtils.sanitizeHTML(linkId)}`, { newPath: CommonUtils.sanitizeHTML( newPath ) } );
+  }
+
+  async deleteLink( linkId ) {
+    return await HttpClient.delete( `${API_ROOT_PATH}user/profile/links/${CommonUtils.sanitizeHTML(linkId)}` );
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class MyProfileView {
   constructor() {
@@ -2587,8 +3131,19 @@ class MyProfileView {
     for ( let i = 0; i < delBtns.length; ++i ) {
       delBtns[i].classList.remove( 'disabled' );
     }
+
+    document.getElementById( 'link-social-accounts-wrapper' ).innerHTML = MyProfileTemplates.linkSocialAccounts;
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 // TODO: Refectoring. Pass view logic to the view.
 
@@ -2605,14 +3160,37 @@ class MyProfileController {
   }
 
   ____addEventListeners() {
+    Array.from( this.view.target.getElementsByClassName( 'link-account' ) ).forEach( elem => {
+      elem.addEventListener( 'click', ( e ) => {
+        const that = e.target.parentElement.parentElement.parentElement;
+
+        let loginType;
+        if ( that.href.includes( '/portfolio-os/auth/github' ) )
+          loginType = LoginType.GitHub;
+        else
+          loginType = LoginType.Google;
+
+        authentication.JWTLocalStorageToCookie( { accountType: loginType } );
+      } );
+    } );
+
     this.view.target.getElementsByClassName( 'add-link-btn' )[0].addEventListener( 'click', ( e ) => {
       e.preventDefault();
-      e.target.insertAdjacentHTML( 'beforebegin', MyProfileTemplates.addLink );
+      e.target.insertAdjacentHTML( 'beforebegin', ProfilesTemplates.removableElem( MyProfileTemplates.addLink ) );
+
+      Array.from( this.view.target.getElementsByClassName( 'new-link' ) ).forEach( elem => {
+        elem.removeEventListener( 'blur', this.___updatePortfolioValue );
+
+        elem.addEventListener( 'blur', ( e ) => {
+          e.preventDefault();
+          this.___updatePortfolioValue( e );
+        } );
+      } );
     } );
 
     this.view.target.getElementsByClassName( 'add-skill-btn' )[0].addEventListener( 'click', ( e ) => {
       e.preventDefault();
-      e.target.insertAdjacentHTML( 'beforebegin', MyProfileTemplates.newSkillInput );
+      e.target.insertAdjacentHTML( 'beforebegin', ProfilesTemplates.removableElem( MyProfileTemplates.newSkillInput ) );
 
       Array.from( this.view.target.getElementsByClassName( 'new-skill' ) ).forEach( elem => {
         elem.removeEventListener( 'blur', this.___updatePortfolioValue );
@@ -2624,6 +3202,7 @@ class MyProfileController {
       } );
     } );
 
+    // Update Portfolio (DB) values.
     Array.from( this.view.target.getElementsByClassName( 'close-button' ) ).forEach( elem => {
       elem.addEventListener( 'click', ( e ) => {
         e.preventDefault();
@@ -2631,7 +3210,6 @@ class MyProfileController {
       } );
     } );
 
-    // Update Portfolio (DB) values.
     this.view.summaryElem.addEventListener( 'blur', ( e ) => {
       e.preventDefault();
       this.___updatePortfolioValue( e );
@@ -2655,40 +3233,88 @@ class MyProfileController {
   // TODO: Prevent user from updating if the value is the same.
   async ___updatePortfolioValue( e ) {
     /** @type { HTMLElement } */
-    const that = e.target.parentElement;
+    const that = e.target;
     const valueElemId = that.id;
 
-    if ( valueElemId.startsWith( 'link_' ) )
-      ;
-    else if ( valueElemId.startsWith( 'skill_' ) ) {
+    if ( valueElemId.startsWith( 'link_' ) ) {
+      if ( that.value === '' )
+        return;
+
+      const res = await this.model.updateLink( valueElemId.substring( 5 ), that.value );
+
+    } else if ( valueElemId.startsWith( 'skill_' ) ) {
+      if ( target.value === '' )
+        return;
+
       const res = await this.model.updateSkill( valueElemId.substring( 6 ), that.value );
       if ( res <= 0 )
-        // TODO: Show notification.
+        // TODO: (FRONTEND) Show notification.
         console.info( 'Error updating skill' );
-    }
-    else if ( that.className.includes( 'new-skill' ) ) {
+
+    } else if ( that.className.includes( 'new-skill' ) ) {
       const res = await this.model.postNewSkill( that.value );
       that.id = 'skill_' + res.id;
-    }
-    else if ( that.className.includes( 'close-button' ) ) {
+
+    } else if ( that.className.includes( 'new-link' ) ) {
+      const res = await this.model.postNewLink( that.parentElement.parentElement.parentElement.firstElementChild.firstElementChild.firstElementChild.value, that.value );
+      that.id = 'link_' + res.id;
+
+    } else if ( that.parentElement.className.includes( 'close-button' ) ) {
        if ( that.className.includes( 'disabled' ) )
-         return;
+        return;
 
-      const res = await this.model.deleteSkill( that.parentElement.firstElementChild.id.substring( 6 ) );
+
+      const target = that.parentElement.parentElement;
+      let res;
+
+      // DELETE SKILL
+      if ( target.firstElementChild.classList.contains( 'skill' ) || target.firstElementChild.classList.contains( 'new-skill' ) ) {
+        res = await this.model.deleteSkill( target.firstElementChild.id.substring( 6 ) );
+
+      // DELETE LINK
+      } else {
+        res = await this.model.deleteLink( target.firstElementChild.lastElementChild.firstElementChild.firstElementChild.id.substring( 5 ) );
+      }
+
       if ( res <= 0 )
-        // TODO: Show notification.
-        console.info( 'Error deleting skill' );
+        // TODO: (FRONTEND) Show notification.
+        console.info( 'Error Deleting.' );
       else
-        that.parentElement.remove();
-    }
-    else if ( that.className.includes( 'summary' ) )
-      await this.model.updateSummary( that.value );
+        target.remove();
 
-    // TODO: Rerender the profile after the update;
+    } else if ( that.className.includes( 'summary' ) )
+      await this.model.updateSummary( that.value );
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class UserProfilesController {
   constructor() {
@@ -2698,6 +3324,15 @@ class UserProfilesController {
   initPage() {
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class ProfilesTemplates {
   static window( id ) {
@@ -2737,12 +3372,18 @@ class ProfilesTemplates {
   static userProfile( name, summary, websites, skillSet ) {
     let skillSetHtml = '';
     for ( let i = 0; i < skillSet.length; ++i ) {
-      skillSetHtml += ProfilesTemplates.removableElem( ProfilesTemplates.disabledInput( skillSet[i].name, 'skill_' + skillSet[i].id, 'skill' ) );
+      skillSetHtml += ProfilesTemplates.removableElem(
+        ProfilesTemplates.disabledInput( skillSet[i].name, 'skill_' + skillSet[i].id, 'skill' ),
+        true
+      );
     }
 
     let websitesHtml = '';
     for ( let i = 0; i < websites.length; ++i ) {
-      websitesHtml += ProfilesTemplates.link( websites[i].id, websites[i].hostName, '', websites[i].urlPath );
+      websitesHtml += ProfilesTemplates.removableElem(
+        ProfilesTemplates.link( websites[i].id, websites[i].hostlabel, websites[i].hosturl, websites[i].urlpath ),
+        true
+      );
     }
 
     return `
@@ -2750,8 +3391,12 @@ class ProfilesTemplates {
         <div class="grid-y inner-my-profile">
 
           <div class="cell block-item">
-            <h5>Name</h5>
-            <p>${name}</p>
+            <div id="name-wrapper">
+              <h5>Name</h5><br/>
+              <p>${name}</p>
+            </div>
+            <div id="link-social-accounts-wrapper">
+            </div>
           </div>
 
           <div class="cell block-item">
@@ -2787,11 +3432,13 @@ class ProfilesTemplates {
     `;
   }
 
-  static removableElem( content ) {
+  static removableElem( content, disabled = false ) {
+    disabled = !disabled ? '' : 'disabled';
+
     return `
       <div class="callout">
         ${content}
-        <button class="close-button disabled" type="button">
+        <button class="close-button ${disabled}" type="button">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -2804,18 +3451,18 @@ class ProfilesTemplates {
     `;
   }
 
-  static link( linkId, hostName, host, path ) {
+  static link( linkId, hostLabel, hostUrl, urlPath ) {
     return `
       <div class="grid-x">
         <div class="medium-2 cell link-label-wrapper">
           <label class="lbl">Website</label>
-          <a class="pointer" href="https://${host}/${path}" target="_blank">
-            <p>${hostName}</p>
+          <a class="pointer" href="https://${hostUrl}/${urlPath}" target="_blank">
+            <p>${hostLabel}</p>
           </a>
         </div>
         <div class="medium-9 cell link-slug-wrapper">
           <label class="lbl">Slug
-            <input id="link_${linkId}" class="slug disabled-input" type="text" value="${path}" disabled="true">
+            <input id="link_${linkId}" class="slug disabled-input" type="text" value="${urlPath}" disabled="true">
           </label>
         </div>
       </div>
@@ -2827,6 +3474,15 @@ class ProfilesTemplates {
     `;
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class ProfilesModel {
   constructor() {
@@ -2847,6 +3503,15 @@ class ProfilesModel {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class ProfilesView {
   constructor() {
 
@@ -2863,6 +3528,15 @@ class ProfilesView {
     this.contentTarget( windowId ).innerHTML = content;
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class Profiles {
   constructor( processId ) {
@@ -2897,7 +3571,6 @@ class Profiles {
 
   async injectMyProfile() {
     const thisUserProfile = await this.model.getThisUserProfile();
-    // console.debug( thisUserProfile );
     this.view.injectContent( this.id, ProfilesTemplates.userProfile( thisUserProfile.name, thisUserProfile.summary, thisUserProfile.socialLinks, thisUserProfile.skillSet ) );
     this.myProfileController.initPage( this.view.contentTarget( this.id ) );
     this.model.currentPage = ProfilePageType.MyProfile;
@@ -2910,10 +3583,20 @@ class Profiles {
     this.model.currentPage = ProfilePageType.UserProfiles;
   }
 
+  // TODO: (FRONTENd) Add the user cards (explore profiles)
   injectExploreProfiles() {
     this.model.currentPage = ProfilePageType.Explore;
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class ExplorerTemplates {
   constructor() {
@@ -2945,6 +3628,15 @@ class ExplorerTemplates {
     `;
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class ExplorerModel {
   constructor() {
@@ -3010,6 +3702,15 @@ class ExplorerModel {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class ExplorerView {
   constructor() {
     Object.freeze( this );
@@ -3037,6 +3738,15 @@ class ExplorerView {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class ExplorerController {
   constructor( processId ) {
     this.model = new ExplorerModel();
@@ -3055,6 +3765,15 @@ class ExplorerController {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class Explorer {
   constructor( processId ) {
     this.processId = processId;
@@ -3063,12 +3782,30 @@ class Explorer {
   }
 }
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class Process {
   constructor(processName) {
     this.id = Utils.randomString(5);
     this.name = processName;
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class ProcessManager {
   constructor() {
@@ -3103,6 +3840,15 @@ class ProcessManager {
 
 const processManager = new ProcessManager();
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class StartMenuApp {
   constructor(iconUrl, appName) {
     this.iconUrl = iconUrl;
@@ -3117,6 +3863,15 @@ class StartMenuApp {
     `;
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class StartMenuManager {
   constructor() {
@@ -3196,6 +3951,15 @@ class StartMenuManager {
 
 const startMenuManager = new StartMenuManager();
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class DesktopTemplates {
   constructor() {
     this.iconTemplate = ( id, iconUrl, label ) => {
@@ -3212,6 +3976,15 @@ class DesktopTemplates {
 }
 
 const desktopTemplates = new DesktopTemplates();
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class DesktopIcon {
   constructor(emptyCell, iconUrl, label) {
@@ -3246,6 +4019,15 @@ class DesktopIcon {
     this.isSelected = !this.isSelected;
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 class DesktopManager {
   constructor() {
@@ -3323,6 +4105,15 @@ class DesktopManager {
 
 const desktopManager = new DesktopManager();
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 class ContextMenuTemplates {
   menuWindow(content = '') {
     return `
@@ -3342,6 +4133,15 @@ class ContextMenuTemplates {
     `;
   }
 }
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 // http://ignitersworld.com/lab/contextMenu.html
 const contextMenuTemplates = new ContextMenuTemplates();
@@ -3422,6 +4222,15 @@ class ContextMenu {
 
 const contextMenu = new ContextMenu();
 
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
 /**
  * Document events.
  * */
@@ -3450,6 +4259,15 @@ class GlobalEvents {
 }
 
 const globalEvents = new GlobalEvents();
+
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
 
 // Initializations.
 

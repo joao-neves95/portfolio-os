@@ -28,12 +28,29 @@ class Authentication {
       //
     } finally {
       Cookies.remove( 'JWT' );
-      localStorage.setItem( AUTH_TOKEN_ID, jwt );
+      if ( jwt !== undefined )
+        localStorage.setItem( AUTH_TOKEN_ID, jwt );
     }
+  }
+
+  /**
+   * 
+   * @param { object } additionalData <object> ( {} ) or null. Defaults to null.
+   */
+  JWTLocalStorageToCookie( additionalData = null ) {
+    let data = !additionalData ? this.getJWT() : JSON.stringify( Object.assign( { JWT: this.getJWT() }, additionalData ) );
+    Cookies.set( 'JWT', data );
+    localStorage.removeItem( AUTH_TOKEN_ID );
   }
 
   getJWT() {
     return localStorage.getItem( AUTH_TOKEN_ID );
   }
+
+  logout() {
+    localStorage.removeItem( AUTH_TOKEN_ID );
+    Cookies.remove( 'JWT' );
+  }
+
 }
 const authentication = new Authentication();

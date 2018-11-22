@@ -12,19 +12,31 @@ class MyProfileModel {
     this.userId;
   }
 
+  async updateSummary( summary ) {
+    return await HttpClient.put( `${API_ROOT_PATH}user/profile/summary`, { summary: CommonUtils.sanitizeHTML( summary ) } );
+  }
+
   async postNewSkill( skill ) {
-    return await HttpClient.post( `${API_ROOT_PATH}user/profile/skills`, { skill: skill } );
+    return await HttpClient.post( `${API_ROOT_PATH}user/profile/skills`, { skill: CommonUtils.sanitizeHTML( skill ) } );
   }
 
   async updateSkill( skillId, skill ) {
-    return await HttpClient.put( `${API_ROOT_PATH}user/profile/skills/${skillId}`, { skill: skill } );
+    return await HttpClient.put( `${API_ROOT_PATH}user/profile/skills/${CommonUtils.sanitizeHTML(skillId)}`, { skill: CommonUtils.sanitizeHTML( skill ) } );
   }
 
   async deleteSkill( skillId ) {
-    return await HttpClient.delete( `${API_ROOT_PATH}user/profile/skills/${skillId}` );
+    return await HttpClient.delete( `${API_ROOT_PATH}user/profile/skills/${CommonUtils.sanitizeHTML(skillId)}` );
   }
 
-  async updateSummary( summary ) {
-    return await HttpClient.put( `${API_ROOT_PATH}user/profile/summary`, { summary: summary } );
+  async postNewLink( hostId, urlPath ) {
+    return await HttpClient.post( `${API_ROOT_PATH}user/profile/links`, { hostId: CommonUtils.sanitizeHTML( hostId ), urlPath: CommonUtils.sanitizeHTML( urlPath ) } );
+  }
+
+  async updateLink( linkId, newPath ) {
+    return await HttpClient.put( `${API_ROOT_PATH}user/profile/links/${CommonUtils.sanitizeHTML(linkId)}`, { newPath: CommonUtils.sanitizeHTML( newPath ) } );
+  }
+
+  async deleteLink( linkId ) {
+    return await HttpClient.delete( `${API_ROOT_PATH}user/profile/links/${CommonUtils.sanitizeHTML(linkId)}` );
   }
 }

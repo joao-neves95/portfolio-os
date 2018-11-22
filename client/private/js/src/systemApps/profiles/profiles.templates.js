@@ -45,12 +45,18 @@ class ProfilesTemplates {
   static userProfile( name, summary, websites, skillSet ) {
     let skillSetHtml = '';
     for ( let i = 0; i < skillSet.length; ++i ) {
-      skillSetHtml += ProfilesTemplates.removableElem( ProfilesTemplates.disabledInput( skillSet[i].name, 'skill_' + skillSet[i].id, 'skill' ) );
+      skillSetHtml += ProfilesTemplates.removableElem(
+        ProfilesTemplates.disabledInput( skillSet[i].name, 'skill_' + skillSet[i].id, 'skill' ),
+        true
+      );
     }
 
     let websitesHtml = '';
     for ( let i = 0; i < websites.length; ++i ) {
-      websitesHtml += ProfilesTemplates.link( websites[i].id, websites[i].hostName, '', websites[i].urlPath );
+      websitesHtml += ProfilesTemplates.removableElem(
+        ProfilesTemplates.link( websites[i].id, websites[i].hostlabel, websites[i].hosturl, websites[i].urlpath ),
+        true
+      );
     }
 
     return `
@@ -58,8 +64,12 @@ class ProfilesTemplates {
         <div class="grid-y inner-my-profile">
 
           <div class="cell block-item">
-            <h5>Name</h5>
-            <p>${name}</p>
+            <div id="name-wrapper">
+              <h5>Name</h5><br/>
+              <p>${name}</p>
+            </div>
+            <div id="link-social-accounts-wrapper">
+            </div>
           </div>
 
           <div class="cell block-item">
@@ -95,11 +105,13 @@ class ProfilesTemplates {
     `;
   }
 
-  static removableElem( content ) {
+  static removableElem( content, disabled = false ) {
+    disabled = !disabled ? '' : 'disabled';
+
     return `
       <div class="callout">
         ${content}
-        <button class="close-button disabled" type="button">
+        <button class="close-button ${disabled}" type="button">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -112,18 +124,18 @@ class ProfilesTemplates {
     `;
   }
 
-  static link( linkId, hostName, host, path ) {
+  static link( linkId, hostLabel, hostUrl, urlPath ) {
     return `
       <div class="grid-x">
         <div class="medium-2 cell link-label-wrapper">
           <label class="lbl">Website</label>
-          <a class="pointer" href="https://${host}/${path}" target="_blank">
-            <p>${hostName}</p>
+          <a class="pointer" href="https://${hostUrl}/${urlPath}" target="_blank">
+            <p>${hostLabel}</p>
           </a>
         </div>
         <div class="medium-9 cell link-slug-wrapper">
           <label class="lbl">Slug
-            <input id="link_${linkId}" class="slug disabled-input" type="text" value="${path}" disabled="true">
+            <input id="link_${linkId}" class="slug disabled-input" type="text" value="${urlPath}" disabled="true">
           </label>
         </div>
       </div>

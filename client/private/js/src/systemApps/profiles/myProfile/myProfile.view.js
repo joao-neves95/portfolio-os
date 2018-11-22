@@ -36,5 +36,7 @@ class MyProfileView {
     for ( let i = 0; i < delBtns.length; ++i ) {
       delBtns[i].classList.remove( 'disabled' );
     }
+
+    document.getElementById( 'link-social-accounts-wrapper' ).innerHTML = MyProfileTemplates.linkSocialAccounts;
   }
 }

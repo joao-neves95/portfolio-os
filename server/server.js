@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ * Copyright (c) 2018 Joï¿½o Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
  * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
  * project, under the name "LICENSE.md".
@@ -18,6 +18,7 @@ const corsConfig = require( './portfolio-os/middleware/corsConfig' );
 const authConfig = require( './portfolio-os/middleware/authConfig' );
 const portfolioOSRoutes = require( './portfolio-os/routes/porfolioOSIndex' );
 const app = express();
+const EnvironmentType = require( './portfolio-os/enums/environmentType' );
 
 const PORT = process.env.PORT; // 3000
 
@@ -41,9 +42,9 @@ app.use( '/portfolio-os', portfolioOSRoutes );
 
 // #endregion
 
-// TODO: Add 400 page.
 app.use( ( req, res, next ) => {
-  return res.status( 400 ).send( '404 - Not Found.' );
+  // TODO: (SERVER) Send 404 page.
+  return res.status( 404 ).send( '404 - Not Found.' );
 } );
 
 app.listen( PORT, () => {

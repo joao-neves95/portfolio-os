@@ -133,6 +133,9 @@
     <Compile Include="client\private\js\src\enums\defaultWebsiteHosts.js" />
     <Compile Include="client\private\js\src\enums\fileSystemItemType.js" />
     <Compile Include="client\private\js\src\enums\gridType.js" />
+    <Compile Include="client\private\js\src\enums\hostId.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="client\private\js\src\enums\profilePageType.js" />
     <Compile Include="client\private\js\src\enums\requestType.js" />
     <Compile Include="client\private\js\src\enums\voteType.js" />
@@ -211,6 +214,9 @@
     <Compile Include="common\models\fileModel.js" />
     <Compile Include="common\models\fsItemModelBase.js" />
     <Compile Include="common\models\systemDirectoryModel.js" />
+    <Compile Include="server\portfolio-os\enums\environmentType.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="server\server.js" />
     <Compile Include="server\portfolio-os\dataAccess\appStoreStore.js" />
     <Compile Include="server\db.js" />
@@ -219,7 +225,7 @@
     <Compile Include="server\portfolio-os\enums\eventType.js">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="server\portfolio-os\enums\loginType.js" />
+    <Compile Include="common\enums\loginType.js" />
     <Compile Include="server\portfolio-os\middleware\authConfig.js" />
     <Compile Include="server\portfolio-os\middleware\corsConfig.js">
       <SubType>Code</SubType>

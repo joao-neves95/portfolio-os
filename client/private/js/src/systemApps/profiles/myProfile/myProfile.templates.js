@@ -12,24 +12,47 @@ class MyProfileTemplates {
     throw new Error( 'Can not instantiate the static class MyProfileTemplates' );
   }
 
+  static get linkSocialAccounts() {
+    return `
+      <div class="grid-x">
+        <div class="cell large-4 large-offset-2">
+          <a href="/portfolio-os/auth/google" class="link-account">
+            <span class="hint--top hint--bounce" aria-label="Link Google Account.">
+              <span class="hint--bottom hint--warning hint--bounce" aria-label="WARNING: This overrides any current linked Google account.">
+                <img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" id="google-btn" />
+              </span>
+            </span>
+          </a>
+        </div>
+        <div class="cell large-4">
+          <a href="/portfolio-os/auth/github" class="link-account">
+            <span class="hint--top hint--bounce" aria-label="Link GitHub Account.">
+              <span class="hint--bottom hint--warning hint--bounce" aria-label="WARNING: This overrides any current linked GitHub account.">
+                <img src="img/github.svg" alt="Github Icon" class="icon" draggable="false" />
+              </span>
+            </span>
+          </a>
+        </div>
+      </div>
+    `;
+  }
+
   static get addLink() {
     return `
       <div class="grid-x">
         <div class="medium-2 cell link-label-wrapper">
           <label>Website
             <select>
-              <option value="instagram">Instagram</option>
-              <option value="twitter">Twitter</option>
-              <option value="facebook">Facebook</option>
-              <option value="behance">Behance</option>
-              <option value="github.com">GitHub</option>
-              <option value="custom-url">Other</option>
+              <option value="${HostId.GitHub}">GitHub</option>
+              <option value="${HostId.Behance}">Behance</option>
+              <option value="${HostId.Twitter}">Twitter</option>
+              <option value="${HostId.Instagram}">Instagram</option>
             </select>
           </label>
         </div>
         <div class="medium-9 cell link-slug-wrapper">
           <label>Path
-            <input type="text" placeholder="john-doe">
+            <input class="slug new-link" type="text" placeholder="john-doe">
           </label>
         </div>
       </div>

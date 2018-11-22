@@ -52,6 +52,7 @@ class Profiles {
     this.model.currentPage = ProfilePageType.UserProfiles;
   }
 
+  // TODO: (FRONTEND) Add the user cards (explore profiles)
   injectExploreProfiles() {
     this.model.currentPage = ProfilePageType.Explore;
   }
