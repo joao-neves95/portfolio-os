@@ -1,25 +1,25 @@
-﻿<!-- TODO: Download new icons -->
+<!-- TODO: Download new icons -->
+<!-- TODO: Add the curriculum vitae-->
 <!DOCTYPE html>
 <html>
 
 <head>
   <meta charset="utf-8">
-  <title>João Neves</title>
+  <title>João Neves (shivayl)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet" crossorigin="anonymous">
   <!-- Bootstrap CSS (CDN) -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
-        crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <!-- Amimate.css (CDN) -->
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"
         crossorigin="anonymous">
   <!-- Font Awesome CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        crossorigin="anonymous">
-  <!-- style.css file link -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 
@@ -30,22 +30,22 @@
       <div class="row">
         <div class="col-md-4 col-sm-12 col-12">
           <a href="#">
-            <h4 class="logo">João Neves<h4>
+            <h4 class="logo">João Neves (_shivayl_)</h4>
           </a>
         </div>
         <nav class="col-md-8 col-sm-12 col-12 text-right" role="navigation" id="spy">
-          <ul class="nav justify-content-end" role="tablist">
-            <li>
+          <ul class="nav nav-pills justify-content-end" role="tablist">
+            <li class="nav-item">
               <a type="button" class="btn btn-outline-success nav-link" href="#personal-info">Personal Info</a>
             </li>
-            <li>
+            <li class="nav-item">
               <a type="button" class="btn btn-outline-success nav-link" href="#education">Education</a>
             </li>
-            <li>
+            <li class="nav-item">
               <a type="button" class="btn btn-outline-success nav-link" href="#know-how">Know-How</a>
             </li>
-            <li>
-              <a type="button" class="btn btn-outline-success" href="#find-me">Contacts</a>
+            <li class="nav-item">
+              <a type="button" class="btn btn-outline-success nav-link" href="#find-me">Contacts</a>
             </li>
           </ul>
         </nav>
@@ -55,11 +55,11 @@
   <!-- CONTENT -->
   <!-- role=”main” - Indicates the significance of this element to programs that don’t yet support the <main> element (such as some screen readers). -->
   <main role="main">
-    <!-- Personal Info -->
+    <!-- PERSONAL INFO -->
     <div class="container bg-white p-4" id="personal-info">
       <div class="row mb-5 mt-5">
         <div class="col-md-5 col-sm-12 pt-5em">
-          <h2 class="title-font" id="p-info"><i class="fa fa-address-card-o" aria-hidden="true"></i> Personal Info</h2>
+          <h2 class="title-font" id="p-info"><i class="far fa-address-card"></i> Personal Info</h2>
           <dl class="row mt-5 text-font">
             <dt class="col-sm-3 col-6">Name:</dt>
             <dd class="col-sm-9 col-6 text-right">João Neves</dd>
@@ -71,53 +71,36 @@
         </div>
         <div class="col-md-7 text-right col-sm-12 pt-5em">
           <p class="lead text-font" id="currently">
-            <i class="fa fa-graduation-cap" aria-hidden="true"></i> Currently studing Multimedia Products Development
-            at
+            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+            Currently studing Multimedia Products Development at
             <a href="http://www.istec.pt/" class="text-dark" target="_blank">
               <u>ISTEC</u>
             </a> (Instituto Superior de Tecnologias Avançadas)
           </p>
+          <!-- Curriculum Vitae BTN -->
+          <p class="text-font" id="curriculum">
+            <i class="far fa-file-alt"></i>
+            <a href="#">
+              <u>Curriculum Vitae</u>
+            </a>
+          </p>
         </div>
       </div>
     </div>
-    <!-- End of Personal Info -->
+    <!-- End of PERSONAL INFO -->
+    <!-- PORTFOLIO-OS LOGIN BUTTON -->
+    <div class="container jumbotron" id="portfolio-os-login-btn">
+      <div class="row">
+        <a href="/portfolio-os/auth" role="button" class="btn btn-outline-primary btn-lg anim popping">Login to Portfolio-OS</a>
+      </div>
+    </div>
+    <!-- End of PORTFOLIO-OS LOGIN BUTTON -->
     <!-- EDUCATION -->
     <div class="container" id="education">
       <div class="row">
-        <!-- Education -->
-        <div class="col-sm-7 p-4 bg-primary">
-          <h2 class="title-font mt-4" id="edu"><i class="fa fa-university" aria-hidden="true"></i> Education</h2>
-          <h5 class="text-font mt-5">
-            <a href="http://www.istec.pt/" target="_blank" class="text-dark">
-              <u>ISTEC (Instituto Superior de Tecnologias Avançadas)</u>
-            </a>
-          </h5>
-          <ul>
-            <li class="text-font">Multimedia Products Development</li>
-            <p class="text-font"><strong>Current Status:</strong> On Going</p>
-          </ul>
-          <h5 class="text-font mt-4">
-            <a href="https://www.epi.edu.pt/" target="_blank" class="text-dark">
-              <u>EPI (Escola Profissional de Imagem)</u>
-            </a>
-          </h5>
-          <ul>
-            <li class="text-font">Graphic Design</li>
-            <p class="text-font"><strong>Current Status:</strong> Complete</p>
-          </ul>
-          <h5 class="text-font mt-4">
-            <a href="https://www.flag.pt/oferta/especializado-design-grafico-lisboa-pos-laboral-20171009/" target="_blank"
-              class="text-dark">
-              <u>FLAG</u>
-            </a>
-          </h5>
-          <ul>
-            <li class="text-font">Graphic Design</li>
-            <p class="text-font"><strong>Current Status:</strong> Complete</p>
-          </ul>
-        </div>
+
         <!-- Alternative Education -->
-        <div class="col-sm-5 p-4 bg-success">
+        <div class="col-sm-6 p-4 bg-success">
           <!-- Alt Edu Title Row -->
           <div class="row mt-4">
             <div class="col-lg-1 col-md-2 col-sm-2 col-1">
@@ -128,6 +111,22 @@
             </div>
           </div>
           <!-- End of Alt Edu Title Row -->
+          <!-- Courses/Tutorials/Exercises -->
+          <h5 class="text-font mt-2em">
+            <span class="text-dark">
+              <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses" target="_blank" class="text-dark">
+                <u>Other Courses/Tutorials/Exercises/Challenges/Experiments</u>
+              </a>
+            </span>
+          </h5>
+          <ul>
+            <li class="text-font"><strong>Content:</strong> C++/Blockchain; C; C#/.NET/ASP.NET/WPF; JavaScript and Node.js; Others</li>
+            <li class="text-font">
+              <strong>Repository:</strong>
+              <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses" target="_blank" class="text-dark">GitHub</a>
+            </li>
+          </ul>
+          <!-- freeCodeCamp.com -->
           <h5 class="text-font mt-2em">
             <a href="https://www.freecodecamp.org/joao-neves95" target="_blank" class="text-dark">
               <u>FreeCodeCamp.com</u>
@@ -135,26 +134,74 @@
           </h5>
           <ul>
             <li class="text-font"><strong>Current Status:</strong> In Progress</li>
+            <li class="text-font">
+              <strong>Repository:</strong>
+              <a href="https://github.com/joao-neves95/freeCodeCampProjects" target="_blank" class="text-dark">GitHub</a>
+            </li>
           </ul>
+          <!-- Alison/Microsoft -->
+          <h5 class="text-font mt-2em">
+            <a href="https://alison.com/" target="_blank" class="text-dark">
+              <u>Alison.com</u>
+            </a>
+          </h5>
+          <ul>
+            <li class="text-font">
+              <strong>
+                <a href="https://alison.com/course/diploma-in-c-sharp-programming" target="_blank" class="text-dark">
+                  Diploma in C# Programming (Alison/Microsoft)
+                </a>
+              </strong>
+              <ul class="list-unstyled">
+                <li class="text-font"><strong>Current Status:</strong> Complete (2/2018)</li>
+                <li class="text-font">
+                  <strong>Repository:</strong>
+                  <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses/tree/master/CSharp/Diploma-in-CSharp-Programming_Alison-Microsoft" target="_blank" class="text-dark">GitHub</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <!-- edX.com -->
           <h5 class="text-font mt-2em">
             <a href="https://www.edx.org/" target="_blank" class="text-dark">
               <u>edx.org</u>
             </a>
           </h5>
           <ul>
-            <li class="text-font"><strong>
-              <a href="https://www.edx.org/course/introduction-node-js-microsoft-dev283x" target="_blank" class="text-dark">
-                Introduction to Node.js, Express.js and MongoDB (Microsoft)
-              </a></strong>
+            <li class="text-font">
+              <strong>
+                <a href="https://www.edx.org/course/introduction-node-js-microsoft-dev283x" target="_blank" class="text-dark">
+                  Introduction to Node.js, Express.js and MongoDB (Microsoft)
+                </a>
+              </strong>
               <ul class="list-unstyled">
-                <li><p class="text-font"><strong>Current Status:</strong> Complete (12/2017)</p></li>
-                <li><p class="text-font"><strong>Repository:</strong> <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses/tree/master/Node.js/Introduction-to-NodeJS-edX_Microsoft" target="_blank" class="text-dark">GitHub</a></p></li>
+                <li class="text-font"><strong>Current Status:</strong> Complete (12/2017)</li>
+                <li class="text-font">
+                  <strong>Repository:</strong>
+                  <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses/tree/master/Node.js/Introduction-to-NodeJS-edX_Microsoft" target="_blank" class="text-dark">GitHub</a>
+                </li>
               </ul>
             </li>
-            <li class="text-font mt-4"><strong>
-              <a href="https://www.edx.org/course/developing-sql-databases-microsoft-dat215-1x-2" target="_blank" class="text-dark">
-                Developing SQL Databases (Microsoft)
-              </a></strong>
+            <li class="text-font">
+              <strong>
+                <a href="https://www.edx.org/course/build-web-apis-using-asp-net-microsoft-dev247x" target="_blank" class="text-dark">
+                  Build Web APIs using ASP.NET (Microsoft)
+                </a>
+              </strong>
+              <ul class="list-unstyled">
+                <li class="text-font"><strong>Current Status:</strong> Complete (4/2018)</li>
+                <li class="text-font">
+                  <strong>Repository:</strong>
+                  <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses/tree/master/CSharp/Build-Web-APIs-using-ASP.NET_edX-Microsoft" target="_blank" class="text-dark">GitHub</a>
+                </li>
+              </ul>
+            </li>
+            <li class="text-font mt-4">
+              <strong>
+                <a href="https://www.edx.org/course/developing-sql-databases-microsoft-dat215-1x-2" target="_blank" class="text-dark">
+                  Developing SQL Databases (Microsoft)
+                </a>
+              </strong>
               <ul class="list-unstyled">
                 <li><p class="text-font"><strong>Current Status:</strong> Complete (12/2017)</p></li>
               </ul>
@@ -167,43 +214,98 @@
           </h5>
           <ul>
             <li class="text-font"><strong>Learn JavaScript (ECMAScript 5+)</strong></li>
-            <p class="text-font"><strong>Current Status:</strong> Complete (7/2017)</p>
+            <li class="text-font">
+              <p class="text-font"><strong>Current Status:</strong> Complete (7/2017)</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Education -->
+        <div class="col-sm-6 p-4 bg-primary">
+          <h2 class="title-font mt-4" id="edu"><i class="fa fa-university" aria-hidden="true"></i> Education</h2>
+          <h5 class="text-font mt-5">
+            <a href="http://www.istec.pt/" target="_blank" class="text-dark">
+              <u>ISTEC (Instituto Superior de Tecnologias Avançadas)</u>
+            </a>
+          </h5>
+          <ul>
+            <li class="text-font">Multimedia Products Development</li>
+            <li class="text-font">
+              <p class="text-font"><strong>Current Status:</strong> On Going</p>
+            </li>
+          </ul>
+          <h5 class="text-font mt-4">
+            <a href="https://www.epi.edu.pt/" target="_blank" class="text-dark">
+              <u>EPI (Escola Profissional de Imagem)</u>
+            </a>
+          </h5>
+          <ul>
+            <li class="text-font">Graphic Design</li>
+            <li class="text-font">
+              <p class="text-font"><strong>Current Status:</strong> Complete</p>
+            </li>
+          </ul>
+          <h5 class="text-font mt-4">
+            <a href="https://www.flag.pt/oferta/especializado-design-grafico-lisboa-pos-laboral-20171009/" target="_blank"
+               class="text-dark">
+              <u>FLAG</u>
+            </a>
+          </h5>
+          <ul>
+            <li class="text-font">Graphic Design</li>
+            <li class="text-font">
+              <p class="text-font"><strong>Current Status:</strong> Complete</p>
+            </li>
           </ul>
         </div>
       </div>
     </div>
     <!-- End of EDUCATION -->
+
     <!-- KNOW-HOW -->
     <div class="container bg-white" id="know-how">
       <div class="row">
         <!-- Tool Stack -->
-        <div class="col-md-7 border border-top-0 border-bottom-0 border-left-0 border-dark p-4">
+        <div class="col-md-6 border border-top-0 border-bottom-0 border-left-0 border-dark p-4">
           <h2 class="title-font mt-2">
-            <img src="https://png.icons8.com/wrench/dotty/80" title="Wrench" width="45" height="45">Tool Stack
+            <img src="https://png.icons8.com/wrench/dotty/80" title="Wrench" width="45" height="45">
+            Tool Stack
           </h2>
           <ul class="list-unstyled list-inline mt-3">
             <li class="list-inline-item">
-              <img src="https://png.icons8.com/adobe-illustrator/Dusk_Wired/64" alt="Adobe Illustrator Logo" title="Adobe Illustrator" width="64"
-                height="64">
+              <img src="https://img.icons8.com/windows/70/000000/visual-studio.png" alt="Visual Studio Logo" title="Visual Studio" width="64"
+                   height="64">
             </li>
             <li class="list-inline-item">
-              <img src="https://png.icons8.com/adobe-photoshop/Dusk_Wired/64" alt="Adobe Photoshop Logo" title="Adobe Photoshop" width="64" height="64">
+              <img src="https://img.icons8.com/ios/70/000000/unity-filled.png" alt="Unity Logo" title="Unity" width="64"
+                   height="64">
             </li>
             <li class="list-inline-item">
-              <img src="https://png.icons8.com/adobe-indesign/Dusk_Wired/64" alt="Adobe Indesign Logo" title="Adobe Indesign" width="64" height="64">
+              <img src="https://img.icons8.com/color/70/000000/adobe-creative-cloud.png" alt="Adobe Creative Cloud Logo" title="Adobe Creative Cloud" width="64"
+                   height="64">
             </li>
-            <li class="list-inline-item ml-1">
-              <img src="https://png.icons8.com/adobe-after-effects/ios7/75" alt="Adobe After Effects Logo" title="Adobe After Effects" width="53"
-                height="53">
-            </li>
-            <li class="list-inline-item ml-2">
-              <img src="https://cdn4.iconfinder.com/data/icons/smashicons-file-types-outline/54/34_-_Adobe_Premiere_Pro_Outline-512.png"
-                alt="Adobe Premiere Pro Logo" title="Adobe Premiere Pro" width="54" height="54">
-            </li>
-            <ul>
+            <!--<li class="list-inline-item">
+            <img src="https://png.icons8.com/adobe-illustrator/Dusk_Wired/64" alt="Adobe Illustrator Logo" title="Adobe Illustrator" width="64"
+                 height="64">
+          </li>
+          <li class="list-inline-item">
+            <img src="https://png.icons8.com/adobe-photoshop/Dusk_Wired/64" alt="Adobe Photoshop Logo" title="Adobe Photoshop" width="64" height="64">
+          </li>
+          <li class="list-inline-item">
+            <img src="https://png.icons8.com/adobe-indesign/Dusk_Wired/64" alt="Adobe Indesign Logo" title="Adobe Indesign" width="64" height="64">
+          </li>
+          <li class="list-inline-item ml-1">
+            <img src="https://png.icons8.com/adobe-after-effects/ios7/75" alt="Adobe After Effects Logo" title="Adobe After Effects" width="53"
+                 height="53">
+          </li>
+          <li class="list-inline-item ml-2">
+            <img src="https://cdn4.iconfinder.com/data/icons/smashicons-file-types-outline/54/34_-_Adobe_Premiere_Pro_Outline-512.png"
+                 alt="Adobe Premiere Pro Logo" title="Adobe Premiere Pro" width="54" height="54">
+          </li>-->
+          </ul>
         </div>
         <!-- Skill Stack -->
-        <div class="col-md-5 p-4 mt-2">
+        <div class="col-md-6 p-4 mt-2">
           <h2 class="title-font">
             <img src="https://png.icons8.com/cv/dotty/80" title="CV" width="45" height="45">Skill Stack
           </h2>
@@ -211,10 +313,10 @@
             <div class="col-md-6">
               <ul class="text-font mt-3">
                 <li>Backend Software Development</li>
-                <li>Software Programming</li>
-                <li>Web Development</li>
+                <li>Frontend Web Development</li>
                 <li>Web Design</li>
                 <li>Graphic Design</li>
+                <li>Video and Animation</li>
               </ul>
             </div>
             <div class="col-md-6">
@@ -223,17 +325,32 @@
                   <img src="https://img.icons8.com/color/75/000000/c-sharp-logo-2.png" alt="C# Logo" title="C#" width="53" height="53">
                 </li>
                 <li class="list-inline-item">
-                  <img src="https://png.icons8.com/html/ios7/75" alt="HTML Logo" title="HTML" width="53" height="53">
+                  <img src="https://img.icons8.com/color/70/000000/nodejs.png" alt="Node.js Logo" title="Node.js" width="53" height="53">
                 </li>
                 <li class="list-inline-item">
-                  <img src="https://img.icons8.com/ios/50/000000/html.png" alt="HTML Logo" title="HTML" width="53" height="53">
+                  <img src="https://img.icons8.com/ios/70/000000/javascript.png" alt="JavaScript Logo" title="JavaScript" width="53" height="53">
+                </li>
+                <li class="list-inline-item">
+                  <img src="https://img.icons8.com/ios/70/000000/sql.png" alt="SQL Logo" title="SQL" width="53" height="53">
+                </li>
+                <li class="list-inline-item">
+                  <img src="https://img.icons8.com/color/70/000000/mongodb.png" alt="MongoDB Logo" title="MongoDB" width="53" height="53">
+                </li>
+                <li class="list-inline-item">
+                  <img src="https://img.icons8.com/color/70/000000/c-plus-plus-logo.png" alt="C++ Logo" title="C++" width="53" height="53">
+                </li>
+                <li class="list-inline-item">
+                  <img src="https://img.icons8.com/ios/70/000000/git.png" alt="Git Logo" title="Git" width="53" height="53">
+                </li>
+                <li class="list-inline-item">
+                  <img src="https://png.icons8.com/html/ios7/75" alt="HTML Logo" title="HTML" width="53" height="53">
                 </li>
                 <li class="list-inline-item">
                   <img src="https://png.icons8.com/css/ios7/75" alt="CSS Logo" title="CSS" width="53" height="53">
                 </li>
-                <li class="list-inline-item">
+                <!--<li class="list-inline-item">
                   <img src="https://i.imgur.com/WIdR658.png" alt="Bootstrap Stack" title="Bootstrap Stack" width="53" height="53">
-                </li>
+                </li>-->
               </ul>
             </div>
           </div>
@@ -242,6 +359,7 @@
     </div>
     <!-- End of KNOW-HOW -->
   </main>
+
   <!-- FOOTER -->
   <footer>
     <div class="container-fluid bg-light-grey">
@@ -255,23 +373,18 @@
         <div class="col-md-12">
           <ul class="list-unstyled list-inline text-center mt-4 mb-5">
             <li class="list-inline-item">
-              <a href="https://pt.linkedin.com/in/jo%C3%A3o-neves-1995-dg" target="_blank">
-                <i class="fa fa-linkedin-square fa-3x text-black-mate" aria-hidden="true"></i>
+              <a href="https://github.com/joao-neves95" target="_blank" title="GitHub">
+                <i class="fab fa-github-square fa-3x text-black-mate" aria-hidden="true"></i>
               </a>
             </li>
             <li class="list-inline-item">
-              <a href="https://www.behance.net/joao-neves25" target="_blank">
-                <i class="fa fa-behance-square fa-3x text-black-mate" aria-hidden="true"></i>
+              <a href="www.linkedin.com/in/joao-neves95" target="_blank" title="LinkedIn">
+                <i class="fab fab fa-linkedin fa-3x text-black-mate" aria-hidden="true"></i>
               </a>
             </li>
             <li class="list-inline-item">
-              <a href="https://github.com/joao-neves95" target="_blank">
-                <i class="fa fa-github-square fa-3x text-black-mate" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="list-inline-item">
-              <a href="https://www.freecodecamp.org/joao-neves95" target="_blank">
-                <i class="fa fa-free-code-camp fa-3x text-black-mate" aria-hidden="true"></i>
+              <a href="https://www.behance.net/joao-neves25" target="_blank" title="Behance">
+                <i class="fab fa-behance-square fa-3x text-black-mate" aria-hidden="true"></i>
               </a>
             </li>
           </ul>
@@ -280,29 +393,23 @@
       <!-- Copyright -->
       <div class="row bg-soft-orange p-4">
         <div class=" col-sm-6 mt-2">
-          <p class="text-font text-center">&copy; 2017. All Rights Reserved, João Neves.</p>
+          <p class="text-font text-center">&copy; 2018. All Rights Reserved, João Neves.</p>
         </div>
         <div class="col-sm-6 text-right">
           <p>
-            <a href="https://github.com/joao-neves95/Personal_Website" target="_blank"><i class="fa fa-github-square fa-lg text-dark"></i></a>
+            <a href="https://github.com/joao-neves95/portfolio-os" target="_blank"><i class="fab fa-github-square fa-lg text-dark"></i></a>
           </p>
         </div>
       </div>
     </div>
   </footer>
   <!-- End of FOOTER -->
-  <!-- Jquery CDN -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-          crossorigin="anonymous">
-  </script>
-  <!-- Popper.js CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-          crossorigin="anonymous">
-  </script>
-  <!-- Bootstrap JS CDN -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
-          crossorigin="anonymous">
-  </script>
+  <!-- JQUERY JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <!-- POPPER JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <!-- BOOTSTRAP JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   <!-- main.js file -->
   <script src="js/main.js"></script>
 </body>

@@ -18,7 +18,7 @@ const jsonValidator = require( '../middleware/jsonValidator' );
 // #region USER PROFILES
 
 router.get( '/users/last-logged-in', usersRoute.getUsersLastLoggedIn );
-router.get( '/users/:id/profile', usersRoute.getUser );
+//router.get( '/users/:id/profile', usersRoute.getUser );
 router.get( '/users/social-accounts', usersRoute.getUserSocialAccounts );
 
 router.get( '/user/profile', usersRoute.getUserProfile );

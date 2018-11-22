@@ -19,6 +19,49 @@
   font-size: 2em;
 }
 
+#curriculum {
+  margin-top: 2em;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+#portfolio-os-login-btn {
+  margin-bottom: 0;
+}
+
+#portfolio-os-login-btn a {
+  margin: auto;
+}
+
+.anim {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  -moz-transition: all 1s ease-in-out;
+  -webkit-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
+}
+
+@keyframes popping {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    transform: scale3d(1.2, 1.2, 1.2);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.popping {
+  animation-name: popping;
+  animation-iteration-count: infinite;
+}
+
 .title-font {
   font-family: 'Poiret One', cursive;
 }
