@@ -10,9 +10,9 @@
   "notifications": true,
   "sourceFiles": [
     {
-      "source": "C:\\Users\\Utilizador1\\Documents\\DEV\\REPO\\portfolio-os\\client\\private\\\\js\\src\\portfolioOS.header.js",
+      "source": "C:\\Users\\Utilizador1\\Documents\\DEV\\REPO\\portfolio-os\\client\\private\\js\\src\\portfolioOS.header.js",
       "output": {
-        "path": "C:\\Users\\Utilizador1\\Documents\\DEV\\REPO\\portfolio-os\\client\\private\\\\js\\",
+        "path": "C:\\Users\\Utilizador1\\Documents\\DEV\\REPO\\portfolio-os\\client\\private\\js\\",
         "name": "portfolioOS.js"
       }
     }
