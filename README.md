@@ -1,4 +1,6 @@
 ﻿# Portfolio-OS
+ 
+Portfolio-OS is an online operating system where users can have their profile.
 
 ## NOTE
 
