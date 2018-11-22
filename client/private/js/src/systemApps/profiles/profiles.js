@@ -1,4 +1,4 @@
-﻿class Profiles {
+class Profiles {
   constructor( processId ) {
     /** The window id */
     this.id = `profiles-${processId}`;
@@ -31,8 +31,7 @@
 
   async injectMyProfile() {
     const thisUserProfile = await this.model.getThisUserProfile();
-    console.debug( thisUserProfile );
-    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['1', 'Github', 'github.com', 'joao-neves95']], [['1', 'C#, .NET, ASP.NET Core'], ['2', 'JavaScript, Node.js']] ) );
+    this.view.injectContent( this.id, ProfilesTemplates.userProfile( thisUserProfile.name, thisUserProfile.summary, thisUserProfile.socialLinks, thisUserProfile.skillSet ) );
     this.myProfileController.initPage( this.view.contentTarget( this.id ) );
     this.model.currentPage = ProfilePageType.MyProfile;
   }

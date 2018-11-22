@@ -2,6 +2,7 @@
 //
 // @import './constants'
 // %import 'https://cdnjs.cloudflare.com/ajax/libs/ajv/6.5.5/ajv.min.js'
+// %import<<GH 'js-cookie/js-cookie/master/src/js.cookie.js'
 // @import './externalLibs'
 // $import 'vanillatree/vanillatree.min.js'
 // @import './utils'
@@ -14,6 +15,7 @@
 // @import '../../../../common/models/systemDirectoryModel'
 // @import<<DIR './models/'
 // @import './systemLibs/httpClient'
+// @import './systemLibs/authentication'
 // @import './systemLibs/gridSystem/gridSystemTemplates'
 // @import './systemLibs/gridSystem/gridSystem'
 // @import './systemLibs/dragAndDrop.js'

@@ -2,7 +2,6 @@
   constructor() {
     throw new Error( 'Can not instantiate the static class MyProfileTemplates' );
   }
-  // TODO: Eliminate.
 
   static get addLink() {
     return `
@@ -28,9 +27,9 @@
     `;
   }
 
-  static get input() {
+  static get newSkillInput() {
     return `
-      <input type="text" placeholder="Saying foo and bar">
+      <input class="new-skill" type="text" placeholder="Saying foo and bar">
     `;
   }
 

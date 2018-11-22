@@ -1,18 +1,22 @@
 'use strict';
 require( 'dotenv' ).config();
 const path = require('path');
-const express = require('express');
+const express = require( 'express' );
+const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
 // TODO: Set up CORS.
 const cors = require( 'cors' );
+const corsConfig = require( './server/portfolio-os/middleware/corsConfig' );
 const authConfig = require( './server/portfolio-os/middleware/authConfig' );
 const portfolioOSRoutes = require( './server/portfolio-os/routes/porfolioOSIndex' );
 const app = express();
 
 const PORT = process.env.PORT; // 3000
 
+app.use( cors( corsConfig ) );
 app.use( express.json() );
 app.use( express.urlencoded( { extended: true } ) );
+app.use( cookieParser( process.env.COOKIE_SECRET ) );
 app.use( logger( 'dev' ) );
 
 // #region PUBLIC FILES.
@@ -21,7 +25,7 @@ app.use( '/', express.static( path.join( process.cwd(), './client/wwwroot' ) ) )
 
 // #endregion
 
-// authConfig( app );
+authConfig( app );
 
 // #region PRIVATE API ROUTE.
 

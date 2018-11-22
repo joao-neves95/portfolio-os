@@ -11,8 +11,13 @@ const addAppDTOSchema = require( '../models/addAppDTO' );
 router.get( '/users', usersRoute.getUsers );
 router.get( '/users/:id', usersRoute.getUser );
 router.get( '/users/:id/profile', usersRoute.getUser );
-router.get( '/user/profile', usersRoute.getUserProfile );
 router.get( '/users/social-accounts', usersRoute.getUserSocialAccounts );
+
+router.get( '/user/profile', usersRoute.getUserProfile );
+router.put( '/user/profile/summary', usersRoute.putUserSummary );
+router.post( '/user/profile/skills', usersRoute.addSkill );
+router.put( '/user/profile/skills/:skillId', usersRoute.updateSkill );
+router.delete( '/user/profile/skills/:skillId', usersRoute.deleteSkill );
 
 // #endregion
 

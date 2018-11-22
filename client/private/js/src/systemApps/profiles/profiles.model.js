@@ -4,10 +4,15 @@
   }
 
   async getThisUserProfile() {
-    return await HttpClient.get( SERVER_ROOT_PATH + 'portfolio-os/api/user/profile' );
+    try {
+      return await HttpClient.get( `${SERVER_ROOT_PATH}portfolio-os/api/user/profile` );
+
+    } catch ( e ) {
+      console.error( e );
+    }
   }
 
   async getUserProfile( userId ) {
-    return await HttpClient.get( SERVER_ROOT_PATH + 'portfolio-os/api/users/' + userId + '/profile' );
+    return await HttpClient.get( `${SERVER_ROOT_PATH}portfolio-os/api/users/${userId}/profile` );
   }
 }

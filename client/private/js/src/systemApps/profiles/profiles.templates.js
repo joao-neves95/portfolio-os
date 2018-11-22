@@ -36,12 +36,12 @@
   static userProfile( name, summary, websites, skillSet ) {
     let skillSetHtml = '';
     for ( let i = 0; i < skillSet.length; ++i ) {
-      skillSetHtml += ProfilesTemplates.disabledInput( skillSet[i][1], 'skill_' + skillSet[i][0], 'skill' );
+      skillSetHtml += ProfilesTemplates.removableElem( ProfilesTemplates.disabledInput( skillSet[i].name, 'skill_' + skillSet[i].id, 'skill' ) );
     }
 
     let websitesHtml = '';
     for ( let i = 0; i < websites.length; ++i ) {
-      websitesHtml += ProfilesTemplates.link( websites[i][0], websites[i][1], websites[i][2], websites[i][3] );
+      websitesHtml += ProfilesTemplates.link( websites[i].id, websites[i].hostName, '', websites[i].urlPath );
     }
 
     return `
@@ -55,7 +55,7 @@
 
           <div class="cell block-item">
             <h5>Summary</h5>
-            <textarea class="summary disabled-input" value="${summary}" disabled="true"></textarea>
+            <textarea class="summary disabled-input" disabled="true">${summary}</textarea>
           </div>
 
           <div class="cell block-item links-container">
@@ -68,13 +68,32 @@
             ${skillSetHtml}
           </div>
 
-          <h5>Images</h5>
-          <h5>Videos</h5>
-          <h5>Documents</h5>
-          <h5>Music</h5>
+          <div class="cell block-item skills-container">
+            <h5>Images</h5>
+          </div>
+          <div class="cell block-item skills-container">
+            <h5>Videos</h5>
+          </div>
+          <div class="cell block-item skills-container">
+            <h5>Documents</h5>
+          </div>
+          <div class="cell block-item skills-container">
+            <h5>Music</h5>
+          </div>
 
         </div>
       </form>
+    `;
+  }
+
+  static removableElem( content ) {
+    return `
+      <div class="callout">
+        ${content}
+        <button class="close-button disabled" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
     `;
   }
 

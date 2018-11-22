@@ -15,6 +15,7 @@
             padding: 1em;
 
             .summary {
+                min-height: 8em;
                 resize: vertical;
             }
 
@@ -29,6 +30,20 @@
             .link-label-wrapper {
                 margin-right: .2em;
                 min-width: 10em;
+            }
+
+            .callout {
+                border: none;
+                margin: 0;
+                padding: .3em;
+
+                .close-button {
+                    color: red;
+                }
+
+                .disabled {
+                    display: none;
+                }
             }
 
             .slug, .skill, input, select {

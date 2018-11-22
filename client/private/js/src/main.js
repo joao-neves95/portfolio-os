@@ -2,6 +2,7 @@
 
 whenDomReady( () => {
 
+  authentication.init();
   $( document ).foundation();
   desktopManager.init();
   desktopManager.insertNewIcon( IMG_PATH + 'trash.svg', 'Trash' );

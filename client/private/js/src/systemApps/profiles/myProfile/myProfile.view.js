@@ -22,5 +22,10 @@
         
     const skillsContainer = this.target.getElementsByClassName( 'skills-container' )[0];
     skillsContainer.insertAdjacentHTML( 'beforeend', MyProfileTemplates.button( 'Add Skill', 'add-skill-btn' ) );
+
+    const delBtns = this.target.getElementsByClassName( 'close-button' );
+    for ( let i = 0; i < delBtns.length; ++i ) {
+      delBtns[i].classList.remove( 'disabled' );
+    }
   }
 }

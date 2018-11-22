@@ -6,19 +6,18 @@ class HttpClient {
     throw new Error( 'Can not instantiate the static classs HttpClient' );
   }
 
-  // res.json()
   /**
-   * Awaitable (async/await) Fetch Response object or an error.
+   * Awaitable (async/await) Fetch JSON object or an error.
    * 
    * @param { string } url
    * @param { boolean } jwtAuth
    * 
-   * @return { Promise<Response | Error> }
+   * @return { Promise<JSON | Error> }
    */
   static get( url, jwtAuth = true ) {
     return new Promise( async ( resolve, reject ) => {
       HttpClient.request( RequestType.Get, url, null, jwtAuth )
-        .then( res => resolve( res ) )
+        .then( res => resolve( res.json() ) )
         .catch( e => reject( e ) );
     } );
   }
@@ -33,10 +32,12 @@ class HttpClient {
    * 
    * @return { Response }
    */
-  static post( url, body, jwtAuth = true, Callback ) {
-    //HttpClient.request( RequestType.Post, url, body, jwtAuth )
-    //  .then( res => { Callback( null, res ); } )
-    //  .catch( err => { Callback( err, null ); } );
+  static post( url, body, jwtAuth = true ) {
+    return new Promise( async ( resolve, reject ) => {
+      HttpClient.request( RequestType.Post, url, body, jwtAuth )
+        .then( res => { resolve( res.json() ); } )
+        .catch( err => { reject( err ); } );
+    } );
   }
 
   /**
@@ -45,14 +46,23 @@ class HttpClient {
    * @param {any} url
    * @param {any} body
    * @param {any} jwtAuth
-   * @param {any} Callback
    * 
-   * @return { Response }
+   * @return { Promise<JSON | Error> }
    */
-  static put( url, body, jwtAuth = true, Callback ) {
-    //HttpClient.request( RequestType.Put, url, body, jwtAuth )
-    //  .then( res => { Callback( null, res ); } )
-    //  .catch( err => { Callback( err, null ); } );
+  static put( url, body, jwtAuth = true ) {
+    return new Promise( async ( resolve, reject ) => {
+      HttpClient.request( RequestType.Put, url, body, jwtAuth )
+        .then( res => { resolve( res.json() ); } )
+        .catch( err => { reject( err ); } );
+    } );
+  }
+
+  static delete( url, jwtAuth = true ) {
+    return new Promise( async ( resolve, reject ) => {
+      HttpClient.request( RequestType.Delete, url, null, jwtAuth )
+        .then( res => { resolve( res.json() ); } )
+        .catch( err => { reject( err ); } );
+    } );
   }
 
   /**
@@ -71,14 +81,14 @@ class HttpClient {
 
       let requestObject = {
         method: requestType,
-        headers: new Headers()
+        headers: {}
       };
 
       if ( jwtAuth )
         requestObject.headers['Authorization'] = 'Bearer ' + localStorage.getItem( AUTH_TOKEN_ID );
 
       if ( requestType === RequestType.Post || requestType === RequestType.Put ) {
-        requestObject.body = body | '';
+        requestObject.body = !body ? '' : JSON.stringify( body );
         requestObject.headers['Content-Type'] = 'application/json;charset=utf-8';
       }
 

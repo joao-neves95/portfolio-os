@@ -28,14 +28,11 @@
 
 <body>
   <main class="grid-container">
-
     <ul class="tabs align-center" data-deep-link="true" data-update-history="true" data-tabs id="auth">
       <li class="tabs-title left is-active"><a href="#login" aria-selected="true">Login</a></li>
       <li class="tabs-title right"><a href="#register">Register</a></li>
     </ul>
-
     <section class="tabs-content" data-tabs-content="auth">
-
       <!-- Login -->
       <form action="/auth/login" method="post" class="tabs-panel is-active" id="login">
         <div class="grid-y">
@@ -43,32 +40,31 @@
           <div class="cell large-12">
             <div class="input-group">
               <span class="input-group-label"><img src="img/at.svg" alt="A Lock Icon" /></span>
-              <input class="input-group-field" type="email" placeholder="Email" name="email" required>
+              <input class="input-group-field" type="email" placeholder="Email" name="email" disabled>
             </div>
           </div>
           <!-- Password Login Input -->
           <div class="cell large-12">
             <div class="input-group">
               <span class="input-group-label"><img src="img/lock.svg" alt="A Lock Icon" /></span>
-              <input id="login-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" required>
+              <input id="login-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" disabled>
               <span class="input-group-label pass-visibility-span"><img src="img/show.svg" alt="Show/Hide Password Icon" draggable="false" /></span>
             </div>
           </div>
           <div class="cell large-6">
-            <button type="submit" class="submit button success">Login</button>
+            <button type="submit" class="submit button success" disabled>Login</button>
           </div>
           <!-- Social Login -->
           <div class="grid-x icon-wrap">
             <div class="cell large-4 large-offset-2">
-              <span class="hint--top hint--bounce" aria-label="Login with Google."><img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" id="google-btn" /></span>
+              <a href="/portfolio-os/auth/google"><span class="hint--top hint--bounce" aria-label="Login with Google."><img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" id="google-btn" /></span></a>
             </div>
             <div class="cell large-4">
-              <span class="hint--top hint--bounce" aria-label="Login with GitHub."><img src="img/github.svg" alt="Github Icon" class="icon" draggable="false" /></span>
+              <a href="/portfolio-os/auth/github"><span class="hint--top hint--bounce" aria-label="Login with GitHub."><img src="img/github.svg" alt="Github Icon" class="icon" draggable="false" /></span></a>
             </div>
           </div>
         </div>
       </form>
-
       <!-- Register -->
       <form action="/auth/register" method="post" class="tabs-panel" id="register">
         <div class="grid-y">
@@ -76,14 +72,14 @@
           <div class="cell large-12">
             <div class="input-group">
               <span class="input-group-label"><img src="img/at.svg" alt="A Lock Icon" /></span>
-              <input class="input-group-field" type="email" placeholder="Email" name="email" required>
+              <input class="input-group-field" type="email" placeholder="Email" name="email" disabled>
             </div>
           </div>
           <!-- Password Register Input -->
           <div class="cell large-12">
             <div class="input-group">
               <span class="input-group-label"><img src="img/lock.svg" alt="A Lock Icon" /></span>
-              <input id="register-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" required>
+              <input id="register-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" disabled>
               <span class="input-group-label pass-visibility-span"><img src="img/show.svg" alt="Show/Hide Password Icon" draggable="false" /></span>
             </div>
           </div>
@@ -91,12 +87,12 @@
           <div class="cell large-12">
             <div class="input-group">
               <span class="input-group-label"><img src="img/lock.svg" alt="A Lock Icon" /></span>
-              <input id="register-password-repeat" class="input-group-field hvr-float-shadow" type="password" placeholder="Repeat your password" required>
+              <input id="register-password-repeat" class="input-group-field hvr-float-shadow" type="password" placeholder="Repeat your password" disabled>
               <span class="input-group-label pass-visibility-span"><img src="img/show.svg" alt="Show/Hide Password Icon" draggable="false" /></span>
             </div>
           </div>
           <div class="cell large-6">
-            <button id="register-btn" type="submit" class="submit button success hvr-float-shadow" value="Register">Register</button>
+            <button id="register-btn" type="submit" class="submit button success hvr-float-shadow" value="Register" disabled>Register</button>
           </div>
           <!-- Social Register -->
           <div class="grid-x icon-wrap">
@@ -109,11 +105,15 @@
           </div>
         </div>
       </form>
-
     </section>
-
   </main>
 
+  <!-- JS-COOKIE JS -->
+  <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.0/js.cookie.min.js"
+          integrity="sha256-9Nt2r+tJnSd2A2CRUvnjgsD+ES1ExvjbjBNqidm9doI="
+          crossorigin="anonymous">
+  </script>
   <!-- JQuery SLIM JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"
           integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="

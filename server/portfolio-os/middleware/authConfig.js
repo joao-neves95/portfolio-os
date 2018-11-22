@@ -3,7 +3,7 @@ const passport = require( 'passport' );
 const GitHubStrategy = require( 'passport-github' ).Strategy;
 const GoogleStrategy = require( 'passport-google-oauth20' ).Strategy;
 const userStore = require( '../dataAccess/userStore' );
-const db = require( '../dataAccess/db' );
+const db = require( '../../db' );
 const verifyJWT = require( './verifyJWT' );
 const LoginType = require( '../enums/loginType' );
 
@@ -29,7 +29,7 @@ module.exports = ( app ) => {
   passport.use( new GitHubStrategy( {
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: `http://localhost:${process.env.PORT}/auth/github/callback`,
+    callbackURL: `http://localhost:${process.env.PORT}/portfolio-os/auth/github/callback`,
     passReqToCallback: true
   }, async ( req, accessToken, refreshToken, profile, done ) => {
     const jsonProfile = profile._json;
@@ -49,8 +49,9 @@ module.exports = ( app ) => {
       const queryResult = await db.query(
         `SELECT Github_Id
          FROM Users
-         WHERE Users.Github_Id = '$1'`,
-        [profile.id] );
+         WHERE Users.Github_Id = $1`,
+        [profile.id]
+      );
 
       let user;
 
@@ -68,7 +69,8 @@ module.exports = ( app ) => {
 
       // This catch block catches any possible exceptions that may occure from above.
     } catch ( e ) {
-      return done( err, null );
+      console.debug( e );
+      return done( e, null );
     }
   }
   ) );
@@ -80,7 +82,7 @@ module.exports = ( app ) => {
   passport.use( new GoogleStrategy( {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://www.example.com/auth/google/callback',
+    callbackURL: `http://localhost:${process.env.PORT}/portfolio-os/auth/google/callback`,
     passReqToCallback: true
   }, async ( req, accessToken, refreshToken, profile, done ) => {
     const jsonProfile = profile._json;
@@ -110,7 +112,7 @@ module.exports = ( app ) => {
       if ( queryResult.rows.length <= 0 ) {
         user = await userStore.registerUserAsync( jsonProfile.displayName, jsonProfile.email, jsonProfile.bio, '', profile.id );
 
-      // Login.
+        // Login.
       } else {
         user = await userStore.updateLastLoginAsync( profile.id, LoginType.Google );
       }
@@ -121,7 +123,7 @@ module.exports = ( app ) => {
     } catch ( e ) {
       return done( e, null );
     }
-    }
+  }
   ) );
 
   // #endregion

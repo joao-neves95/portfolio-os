@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{54c6493f-ef00-438a-8a7d-717ec20e3815}</ProjectGuid>
+    <ProjectGuid>{95d01dbf-f461-4391-921a-35ff0aceea62}</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <ProjectView>ShowAllFiles</ProjectView>
     <StartupFile />
@@ -70,146 +70,14 @@
     <Content Include="database\DatabaseSchema.sql">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="database\inserts.sql">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="LICENSE.md" />
     <Content Include="merger-config.json" />
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="src\merger-config.json" />
-    <Content Include="src\package-lock.json" />
-    <Content Include="src\package.json" />
-    <Content Include="src\LICENSE.md" />
-    <Content Include="src\README.md" />
-    <Content Include="src\.env" />
-    <Content Include="src\server.js" />
-    <Content Include="src\common\commonUtils.js" />
-    <Content Include="src\client\private\desktop.html" />
-    <Content Include="src\client\wwwroot\index.html" />
-    <Content Include="src\client\wwwroot\portfolio-os_auth.html" />
-    <Content Include="src\client\private\css\index.css" />
-    <Content Include="src\client\private\js\portfolioOS.js" />
-    <Content Include="src\client\private\js\src\constants.js" />
-    <Content Include="src\client\private\js\src\domUtils.js" />
-    <Content Include="src\client\private\js\src\externalLibs.js" />
-    <Content Include="src\client\private\js\src\main.js" />
-    <Content Include="src\client\private\js\src\portfolioOS.header.js" />
-    <Content Include="src\client\private\js\src\utils.js" />
-    <Content Include="src\client\private\js\src\enums\defaultWebsiteHosts.js" />
-    <Content Include="src\client\private\js\src\enums\fileSystemItemType.js" />
-    <Content Include="src\client\private\js\src\enums\gridType.js" />
-    <Content Include="src\client\private\js\src\enums\profilePageType.js" />
-    <Content Include="src\client\private\js\src\enums\requestType.js" />
-    <Content Include="src\client\private\js\src\enums\voteType.js" />
-    <Content Include="src\client\private\js\src\models\appRating.js" />
-    <Content Include="src\client\private\js\src\models\appStoreApplication.js" />
-    <Content Include="src\client\private\js\src\models\systemApp.js" />
-    <Content Include="src\client\private\js\src\models\UserVote.js" />
-    <Content Include="src\client\private\js\src\modules\globalEvents.js" />
-    <Content Include="src\client\private\js\src\systemApps\systemAppsManager.js" />
-    <Content Include="src\client\private\js\src\systemLibs\dragAndDrop.js" />
-    <Content Include="src\client\private\js\src\systemLibs\httpClient.js" />
-    <Content Include="src\client\private\js\src\systemLibs\windowResizer.js" />
-    <Content Include="src\client\private\js\src\userApps\userAppsManager.js" />
-    <Content Include="src\client\private\js\src\modules\contextMenu\contextMenu.controller.js" />
-    <Content Include="src\client\private\js\src\modules\contextMenu\contextMenu.templates.js" />
-    <Content Include="src\client\private\js\src\modules\desktopManager\desktopIcon.js" />
-    <Content Include="src\client\private\js\src\modules\desktopManager\desktopManager.js" />
-    <Content Include="src\client\private\js\src\modules\desktopManager\desktopTemplates.js" />
-    <Content Include="src\client\private\js\src\modules\fileSystem\fileSystem.js" />
-    <Content Include="src\client\private\js\src\modules\processManager\process.js" />
-    <Content Include="src\client\private\js\src\modules\processManager\processManager.js" />
-    <Content Include="src\client\private\js\src\modules\startMenuManager\startMenuApp.js" />
-    <Content Include="src\client\private\js\src\modules\startMenuManager\startMenuManager.js" />
-    <Content Include="src\client\private\js\src\modules\taskbarManager\taskbarIcon.js" />
-    <Content Include="src\client\private\js\src\modules\taskbarManager\taskbarManager.js" />
-    <Content Include="src\client\private\js\src\modules\windowManager\window.js" />
-    <Content Include="src\client\private\js\src\modules\windowManager\windowManager.js" />
-    <Content Include="src\client\private\js\src\systemApps\appStore\appStore.controller.js" />
-    <Content Include="src\client\private\js\src\systemApps\appStore\appStore.js" />
-    <Content Include="src\client\private\js\src\systemApps\appStore\appStore.model.js" />
-    <Content Include="src\client\private\js\src\systemApps\appStore\appStore.templates.js" />
-    <Content Include="src\client\private\js\src\systemApps\appStore\appStore.view.js" />
-    <Content Include="src\client\private\js\src\systemApps\explorer\explorer.controller.js" />
-    <Content Include="src\client\private\js\src\systemApps\explorer\explorer.js" />
-    <Content Include="src\client\private\js\src\systemApps\explorer\explorer.model.js" />
-    <Content Include="src\client\private\js\src\systemApps\explorer\explorer.templates.js" />
-    <Content Include="src\client\private\js\src\systemApps\explorer\explorer.view.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\profiles.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\profiles.model.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\profiles.templates.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\profiles.view.js" />
-    <Content Include="src\client\private\js\src\systemApps\terminal\terminal.js" />
-    <Content Include="src\client\private\js\src\systemApps\terminal\terminalTemplates.js" />
-    <Content Include="src\client\private\js\src\systemApps\trash\trash.js" />
-    <Content Include="src\client\private\js\src\systemApps\trash\trashTemplates.js" />
-    <Content Include="src\client\private\js\src\systemApps\appStore\addNewApp\addNewApp.controller.js" />
-    <Content Include="src\client\private\js\src\systemApps\appStore\addNewApp\addNewApp.model.js" />
-    <Content Include="src\client\private\js\src\systemApps\appStore\addNewApp\addNewApp.templates.js" />
-    <Content Include="src\client\private\js\src\systemApps\appStore\addNewApp\addNewApp.view.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\exploreProfiles\exploreProfiles.controller.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\exploreProfiles\exploreProfiles.model.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\exploreProfiles\exploreProfiles.templates.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\exploreProfiles\exploreProfiles.view.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\myProfile\myProfile.controller.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\myProfile\myProfile.model.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\myProfile\myProfile.templates.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\myProfile\myProfile.view.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\userProfiles\userProfiles.controller.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\userProfiles\userProfiles.model.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\userProfiles\userProfiles.templates.js" />
-    <Content Include="src\client\private\js\src\systemApps\profiles\userProfiles\userProfiles.view.js" />
-    <Content Include="src\client\private\js\src\systemLibs\gridSystem\gridSystem.js" />
-    <Content Include="src\client\private\js\src\systemLibs\gridSystem\gridSystemTemplates.js" />
-    <Content Include="src\client\wwwroot\css\portfolio-os_auth_style.css" />
-    <Content Include="src\client\wwwroot\css\style.css" />
-    <Content Include="src\client\wwwroot\img\wallpaper-1.jpg" />
-    <Content Include="src\client\wwwroot\img\at.svg" />
-    <Content Include="src\client\wwwroot\img\close-white.svg" />
-    <Content Include="src\client\wwwroot\img\coding-white.svg" />
-    <Content Include="src\client\wwwroot\img\coding-yellow.svg" />
-    <Content Include="src\client\wwwroot\img\default-taskbar-icon-white.svg" />
-    <Content Include="src\client\wwwroot\img\folder.svg" />
-    <Content Include="src\client\wwwroot\img\github.svg" />
-    <Content Include="src\client\wwwroot\img\google-plus.svg" />
-    <Content Include="src\client\wwwroot\img\google.svg" />
-    <Content Include="src\client\wwwroot\img\hide.svg" />
-    <Content Include="src\client\wwwroot\img\lock.svg" />
-    <Content Include="src\client\wwwroot\img\maximize-white.svg" />
-    <Content Include="src\client\wwwroot\img\menu-white.svg" />
-    <Content Include="src\client\wwwroot\img\minimize-white.svg" />
-    <Content Include="src\client\wwwroot\img\profiles.svg" />
-    <Content Include="src\client\wwwroot\img\restore-white.svg" />
-    <Content Include="src\client\wwwroot\img\show.svg" />
-    <Content Include="src\client\wwwroot\img\terminal-blue.svg" />
-    <Content Include="src\client\wwwroot\img\terminal-green.svg" />
-    <Content Include="src\client\wwwroot\img\terminal-white.svg" />
-    <Content Include="src\client\wwwroot\img\terminal-yellow.svg" />
-    <Content Include="src\client\wwwroot\img\trash.svg" />
-    <Content Include="src\client\wwwroot\js\main.js" />
-    <Content Include="src\client\wwwroot\js\portfolio-os_auth_main.js" />
-    <Content Include="src\common\enums\permissionType.js" />
-    <Content Include="src\common\models\directoryModel.js" />
-    <Content Include="src\common\models\fileModel.js" />
-    <Content Include="src\common\models\fsItemModelBase.js" />
-    <Content Include="src\common\models\systemDirectoryModel.js" />
-    <Content Include="src\server\portfolio-os\dataAccess\appStoreStore.js" />
-    <Content Include="src\server\portfolio-os\dataAccess\db.js" />
-    <Content Include="src\server\portfolio-os\dataAccess\fileSystemStore.js" />
-    <Content Include="src\server\portfolio-os\dataAccess\userStore.js" />
-    <Content Include="src\server\portfolio-os\enums\loginType.js" />
-    <Content Include="src\server\portfolio-os\middleware\authConfig.js" />
-    <Content Include="src\server\portfolio-os\middleware\ensureAuthentication.js" />
-    <Content Include="src\server\portfolio-os\middleware\jsonValidator.js" />
-    <Content Include="src\server\portfolio-os\middleware\signJWT.js" />
-    <Content Include="src\server\portfolio-os\middleware\verifyJWT.js" />
-    <Content Include="src\server\portfolio-os\models\addAppDTO.js" />
-    <Content Include="src\server\portfolio-os\routes\apiIndex.js" />
-    <Content Include="src\server\portfolio-os\routes\appStore.js" />
-    <Content Include="src\server\portfolio-os\routes\auth.js" />
-    <Content Include="src\server\portfolio-os\routes\desktop.js" />
-    <Content Include="src\server\portfolio-os\routes\fileSystem.js" />
-    <Content Include="src\server\portfolio-os\routes\porfolioOSIndex.js" />
-    <Content Include="src\server\portfolio-os\routes\users.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="client\" />
@@ -257,53 +125,6 @@
     <Folder Include="server\portfolio-os\middleware\" />
     <Folder Include="server\portfolio-os\models\" />
     <Folder Include="server\portfolio-os\routes\" />
-    <Folder Include="src" />
-    <Folder Include="src\client" />
-    <Folder Include="src\client\private" />
-    <Folder Include="src\client\private\css" />
-    <Folder Include="src\client\private\css\src" />
-    <Folder Include="src\client\private\js" />
-    <Folder Include="src\client\private\js\src" />
-    <Folder Include="src\client\private\js\src\enums" />
-    <Folder Include="src\client\private\js\src\models" />
-    <Folder Include="src\client\private\js\src\modules" />
-    <Folder Include="src\client\private\js\src\modules\contextMenu" />
-    <Folder Include="src\client\private\js\src\modules\desktopManager" />
-    <Folder Include="src\client\private\js\src\modules\fileSystem" />
-    <Folder Include="src\client\private\js\src\modules\processManager" />
-    <Folder Include="src\client\private\js\src\modules\startMenuManager" />
-    <Folder Include="src\client\private\js\src\modules\taskbarManager" />
-    <Folder Include="src\client\private\js\src\modules\windowManager" />
-    <Folder Include="src\client\private\js\src\systemApps" />
-    <Folder Include="src\client\private\js\src\systemApps\appStore" />
-    <Folder Include="src\client\private\js\src\systemApps\appStore\addNewApp" />
-    <Folder Include="src\client\private\js\src\systemApps\explorer" />
-    <Folder Include="src\client\private\js\src\systemApps\profiles" />
-    <Folder Include="src\client\private\js\src\systemApps\profiles\exploreProfiles" />
-    <Folder Include="src\client\private\js\src\systemApps\profiles\myProfile" />
-    <Folder Include="src\client\private\js\src\systemApps\profiles\userProfiles" />
-    <Folder Include="src\client\private\js\src\systemApps\terminal" />
-    <Folder Include="src\client\private\js\src\systemApps\trash" />
-    <Folder Include="src\client\private\js\src\systemLibs" />
-    <Folder Include="src\client\private\js\src\systemLibs\gridSystem" />
-    <Folder Include="src\client\private\js\src\userApps" />
-    <Folder Include="src\client\wwwroot" />
-    <Folder Include="src\client\wwwroot\css" />
-    <Folder Include="src\client\wwwroot\css\src" />
-    <Folder Include="src\client\wwwroot\img" />
-    <Folder Include="src\client\wwwroot\js" />
-    <Folder Include="src\common" />
-    <Folder Include="src\common\enums" />
-    <Folder Include="src\common\models" />
-    <Folder Include="src\database" />
-    <Folder Include="src\portfolio-os" />
-    <Folder Include="src\server" />
-    <Folder Include="src\server\portfolio-os" />
-    <Folder Include="src\server\portfolio-os\dataAccess" />
-    <Folder Include="src\server\portfolio-os\enums" />
-    <Folder Include="src\server\portfolio-os\middleware" />
-    <Folder Include="src\server\portfolio-os\models" />
-    <Folder Include="src\server\portfolio-os\routes" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="client\private\js\portfolioOS.js" />
@@ -372,6 +193,9 @@
     <Compile Include="client\private\js\src\systemApps\terminal\terminalTemplates.js" />
     <Compile Include="client\private\js\src\systemApps\trash\trash.js" />
     <Compile Include="client\private\js\src\systemApps\trash\trashTemplates.js" />
+    <Compile Include="client\private\js\src\systemLibs\authentication.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="client\private\js\src\systemLibs\dragAndDrop.js" />
     <Compile Include="client\private\js\src\systemLibs\gridSystem\gridSystem.js" />
     <Compile Include="client\private\js\src\systemLibs\gridSystem\gridSystemTemplates.js" />
@@ -389,11 +213,17 @@
     <Compile Include="common\models\systemDirectoryModel.js" />
     <Compile Include="server.js" />
     <Compile Include="server\portfolio-os\dataAccess\appStoreStore.js" />
-    <Compile Include="server\portfolio-os\dataAccess\db.js" />
+    <Compile Include="server\db.js" />
     <Compile Include="server\portfolio-os\dataAccess\fileSystemStore.js" />
     <Compile Include="server\portfolio-os\dataAccess\userStore.js" />
+    <Compile Include="server\portfolio-os\enums\eventType.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="server\portfolio-os\enums\loginType.js" />
     <Compile Include="server\portfolio-os\middleware\authConfig.js" />
+    <Compile Include="server\portfolio-os\middleware\corsConfig.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="server\portfolio-os\middleware\ensureAuthentication.js" />
     <Compile Include="server\portfolio-os\middleware\jsonValidator.js" />
     <Compile Include="server\portfolio-os\middleware\signJWT.js" />

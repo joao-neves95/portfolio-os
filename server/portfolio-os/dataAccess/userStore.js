@@ -1,4 +1,4 @@
-﻿const db = require( './db' );
+﻿const db = require( '../../db' );
 const LoginType = require( '../enums/loginType' );
 
 module.exports = {
@@ -32,39 +32,152 @@ module.exports = {
   },
 
   // TODO: Test this.
-  getUserProfileAsync: ( userId ) => {
+  getProfileAsync: ( userId ) => {
     return new Promise( async ( resolve, reject ) => {
+      /** @type {PoolClient} */
+      const dbClient = await db.openClient();
+
       try {
-        const queryResult = await db.query(
-          `SELECT
-               Users.Name,
-               Users.Summary,
-               array_to_string(
-                   array_agg(
-                       (
-                           SELECT SocialLinks.Link
-                           FROM SocialLinks
-                           WHERE Users.Id = SocialLinks.UserId
-                           ORDER BY Id
-                       )
-                   ), ','
-               ),
-               array_to_string(
-                   array_agg(
-                       (
-                           SELECT SkillSet.Name
-                           FROM SkillSet
-                           WHERE Users.Id = SkillSet.UserId
-                           ORDER BY Id
-                       )
-                   ), ','
-               )
+        const queryResult = await dbClient.query(
+          `SELECT Users.Name, Users.Summary
            FROM Users
-           WHERE Users.Id = $1`,
+           WHERE Users.Id = $1
+           GROUP BY Id`,
           [userId]
         );
 
+        const queryResult2 = await dbClient.query(
+          `SELECT SocialLinks.Id, Hosts.Name AS HostName, SocialLinks.UrlPath
+           FROM SocialLinks
+               INNER JOIN Hosts
+               ON SocialLinks.HostId = Hosts.Id
+           WHERE SocialLinks.UserId = $1`,
+          [userId]
+        );
+
+        const queryResult3 = await dbClient.query(
+          `SELECT SkillSet.Id, SkillSet.Name
+           FROM SkillSet
+           WHERE SkillSet.UserId = $1
+           ORDER BY Id`,
+          [userId]
+        );
+
+        queryResult.rows[0].socialLinks = queryResult2.rows;
+        queryResult.rows[0].skillSet = queryResult3.rows;
+
+        dbClient.release();
         return resolve( queryResult.rows[0] );
+
+      } catch ( e ) {
+        dbClient.release();
+        return reject( e );
+      }
+    } );
+  },
+
+  updateSummaryAsync: ( userId, summary ) => {
+    return new Promise( async ( resolve, reject ) => {
+
+      try {
+        const queryResult = await db.query(
+          `UPDATE Users
+           SET Summary = $1
+           WHERE Users.Id = $2`,
+          [summary, userId]
+        );
+
+        console.debug( queryResult );
+
+        //const queryResult2 = await dbClient.query(
+        //  `UPDATE SocialLinks
+        //   SET UrlPath = $1
+        //   WHERE Id = $2 AND UserId = $3`,
+        //  [userId]
+        //);
+
+        //const queryResult3 = await dbClient.query(
+        //  `UPDATE SkillSet
+        //   SET Name = $1
+        //   WHERE Id = $2 AND UserId = $3`,
+        //  [userId]
+        //);
+
+        return resolve( queryResult.rowCount );
+
+      } catch ( e ) {
+        return reject( e );
+      }
+    } );
+  },
+
+  addSocialLinkAsync: ( userId, hostId, urlPath ) => {
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        const queryResult = await db.query(
+          `INSERT INTO SocialLinks (UserId, HostId, UrlPath)
+           VALUES ($1, $2, $3)`,
+          [userId, hostId, urlPath]
+        );
+
+        return resolve( queryResult.rowCount );
+
+      } catch ( e ) {
+        return reject( e );
+      }
+    } );
+  },
+
+  /**
+   * Return [ rowCount(<int>), id(<int>) ]
+   * @returns { Promise<Error | []> }
+   */
+  addSkillAsync: ( userId, skill ) => {
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        const queryResult = await db.query(
+          `INSERT INTO SkillSet (UserId, Name)
+           VALUES ($1, $2)
+           RETURNING Id`,
+          [userId, skill]
+        );
+
+        return resolve( [queryResult.rowCount, queryResult.rows[0] || null] );
+
+      } catch ( e ) {
+        return reject( e );
+      }
+    } );
+  },
+
+  updateSkillAsync: ( userId, skillId, skill ) => {
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        const queryResult = await db.query(
+          `UPDATE SkillSet
+           SET Name = $1
+           WHERE Id = $2 AND UserId = $3`,
+          [skill, skillId, userId]
+        );
+
+        return resolve( queryResult.rowCount );
+
+      } catch ( e ) {
+        return reject( e );
+      }
+    } );
+  },
+
+  deleteSkillAsync: ( userId, skillId ) => {
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        const queryResult = await db.query(
+          `DELETE FROM SkillSet
+           WHERE Id = $1 AND UserId = $2`,
+          [skillId, userId]
+        );
+
+        return resolve( queryResult.rowCount );
 
       } catch ( e ) {
         return reject( e );
@@ -87,23 +200,28 @@ module.exports = {
   registerUserAsync: ( name, email, summary = '', githubId = '', googleId = '', Callback ) => {
     return new Promise( async ( resolve, reject ) => {
       try {
+        email = !email ? '' : email;
+
         const queryResults = await db.transaction( [
           [
             `INSERT INTO Users (Email, Github_Id, Google_Id, LastLogin, Name, Summary)
-             VALUES ($1, $2, $3, ${db.utcDateFunc()}, $6, $7)`,
+             VALUES ($1, $2, $3, (${db.utcDateFunc()}), $4, $5)
+             RETURNING *`,
             [email, githubId, googleId, name, summary]
           ],
           [
             `INSERT INTO FS_Local (UserId)
-             VALUES ( ( SELECT currval( pg_get_serial_sequence('Users','Id') ) )`,
-            []
+             VALUES ( ( SELECT currval( pg_get_serial_sequence('Users', 'id') ) ) )`
           ]
         ] );
+
+        console.debug( queryResults[0].rows );
+        console.debug( queryResults[0].rows[0] );
 
         if ( Callback )
           return Callback( null, queryResults[0].rows[0] );
 
-        return resolve( queryResult[0].rows[0] );
+        return resolve( queryResults[0].rows[0] );
 
       } catch ( e ) {
         if ( Callback )
@@ -128,21 +246,15 @@ module.exports = {
 
         const queryResult = await db.query(
           `UPDATE Users
-           SET Users.LastLogin = ${db.utcDateFunc()}
+           SET Users.LastLogin = (${db.utcDateFunc()})
            WHERE Users.${loginType} = $2;
            ${getUser}`,
           [userId, userId]
         );
 
-        if ( Callback )
-          return Callback( null, queryResult.rows[0] );
-
         return resolve( queryResult.rows[0] );
 
       } catch ( e ) {
-        if ( Callback )
-          return Callback( e, null );
-
         return reject( e );
       }
     } );

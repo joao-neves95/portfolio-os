@@ -10,6 +10,10 @@ const pool = new Pool( {
 } );
 
 module.exports = {
+  openClient: async () => {
+    return await pool.connect();
+  },
+
   /** 
    * @param { string } queryString
    * @param { any[] } params
@@ -49,23 +53,25 @@ module.exports = {
         await client.query( 'BEGIN' );
 
         for ( let i = 0; i < commands.length; ++i ) {
-          queryResults.push( await client.query( commands[i][0], commands[i][1] ) );
+          if ( commands[i].length > 1 )
+            queryResults.push( await client.query( commands[i][0], commands[i][1] ) );
+          else
+            queryResults.push( await client.query( commands[i][0] ) );
         }
 
         await client.query( 'COMMIT' );
-        _resolve( queryResults );
+        client.release();
+        return _resolve( queryResults );
 
       } catch ( e ) {
         await client.query( 'ROLLBACK' );
-        _reject( e );
-
-      } finally {
         client.release();
+        return _reject( e );
       }
     } );
   },
 
   utcDateFunc: () => {
-    return "NOW() at time zone 'UTC'";
+    return "SELECT now() at time zone 'UTC'";
   }
 };

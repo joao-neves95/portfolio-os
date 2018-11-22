@@ -8,26 +8,36 @@
  * @param { Function } next If successfull, receives the decoded JWT token.
  */
 module.exports = async ( req, res, next ) => {
-  // if ( !req.headers.authorization )
-    // return ____notAuthorized( res );
-
-  let decoded;
   try {
-    decoded = Object.freeze( await verifyJWT( req.headers.authorization ) );
+    let decoded;
 
-    // if ( !decoded )
-      // return ____notAuthorized();
+    if ( req.signedCookies.JWT !== undefined ) {
+      decoded = Object.freeze( await verifyJWT( req.signedCookies.JWT ) );
+
+    // TODO: Forget the localStorage thing and just use signed cookies.
+    } else if ( req.cookies.JWT !== undefined ) {
+      decoded = Object.freeze( await verifyJWT( req.cookies.JWT ) );
+
+    } else if ( req.headers.authorization !== undefined ) {
+      decoded = Object.freeze( await verifyJWT( req.headers.authorization.split(' ')[1] ) );
+
+    } else {
+      return ____notAuthorized( res );
+    }
+
+    if ( !decoded ) {
+      return ____notAuthorized( res );
+    }
 
     req.user = decoded;
     return next();
 
-  } catch {
-    // return ____notAuthorized();
-    // TODO: Temporary.
-    return next();
+  } catch ( e ) {
+    console.error( e );
+    return ____notAuthorized( res );
   }
 };
 
 const ____notAuthorized = ( res ) => {
-  return res.status( 401 ).redirect( '/' );
+  return res.status( 401 ).redirect( '/portfolio-os/auth' );
 };
