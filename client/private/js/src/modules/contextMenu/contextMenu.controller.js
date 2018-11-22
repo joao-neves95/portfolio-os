@@ -1,4 +1,13 @@
-﻿// http://ignitersworld.com/lab/contextMenu.html
+﻿/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this 
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+// http://ignitersworld.com/lab/contextMenu.html
 const contextMenuTemplates = new ContextMenuTemplates();
 
 class ContextMenu {

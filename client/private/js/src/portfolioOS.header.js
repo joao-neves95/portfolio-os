@@ -1,4 +1,13 @@
-﻿// Imports for MergerJS.
+﻿/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this 
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+// Imports for MergerJS.
 //
 // @import './constants'
 // %import 'https://cdnjs.cloudflare.com/ajax/libs/ajv/6.5.5/ajv.min.js'
