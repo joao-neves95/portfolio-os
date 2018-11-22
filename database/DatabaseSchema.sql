@@ -1,7 +1,7 @@
 ﻿-- TODO: (PRODUCTION) Change OWNER.
 
 -- TABLES:
-CREATE DATABASE "PortfolioOS"
+CREATE DATABASE 'PortfolioOS'
     WITH 
     OWNER = postgres
     ENCODING = 'UTF8';
