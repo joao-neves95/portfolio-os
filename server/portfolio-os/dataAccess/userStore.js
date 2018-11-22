@@ -9,6 +9,31 @@ module.exports = {
             WHERE Users.${loginType} = $1`;
   },
 
+  /**
+   * @param { number } lastIdOfLastPage Defaults to 0.
+   * @param { number } limit Defaults to 10.
+   * @return { Promise<Error | [{}]> }
+   */
+  getUsersOrderByLastLogin: ( lastIdOfPreviousPage = 0, limit = 10 ) => {
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        const queryResult = await db.query(
+          `SELECT Id, Name, Summary, UNIX_TIMESTAMP( LastLogin ) LastLoginUnix
+           FROM App
+           WHERE Id > $1
+           ORDER BY LastLoginUnix DESC
+           LIMIT $2`,
+          [lastIdOfPreviousPage, limit]
+        );
+
+        return resolve( queryResult.rows );
+
+      } catch ( e ) {
+        return reject( e );
+      }
+    } );
+  },
+
   getUserAsync: ( userId, loginType, Callback ) => {
     return new Promise( async ( resolve, reject ) => {
       try {
@@ -86,15 +111,6 @@ module.exports = {
            WHERE Users.Id = $2`,
           [summary, userId]
         );
-
-        console.debug( queryResult );
-
-        //const queryResult2 = await dbClient.query(
-        //  `UPDATE SocialLinks
-        //   SET UrlPath = $1
-        //   WHERE Id = $2 AND UserId = $3`,
-        //  [userId]
-        //);
 
         //const queryResult3 = await dbClient.query(
         //  `UPDATE SkillSet
@@ -185,7 +201,6 @@ module.exports = {
     } );
   },
 
-  // TODO: Test.
   /**
    * Returns the new user (TO TEST)
    * @param { string } name

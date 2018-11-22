@@ -4,11 +4,10 @@ const path = require('path');
 const express = require( 'express' );
 const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
-// TODO: Set up CORS.
 const cors = require( 'cors' );
-const corsConfig = require( './server/portfolio-os/middleware/corsConfig' );
-const authConfig = require( './server/portfolio-os/middleware/authConfig' );
-const portfolioOSRoutes = require( './server/portfolio-os/routes/porfolioOSIndex' );
+const corsConfig = require( './portfolio-os/middleware/corsConfig' );
+const authConfig = require( './portfolio-os/middleware/authConfig' );
+const portfolioOSRoutes = require( './portfolio-os/routes/porfolioOSIndex' );
 const app = express();
 
 const PORT = process.env.PORT; // 3000

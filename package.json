@@ -2,12 +2,12 @@
   "name": "portfolio-os",
   "version": "0.0.0",
   "description": "portfolio-os",
-  "main": "server.js",
+  "main": "./server/server.js",
   "author": {
     "name": "Utilizador"
   },
   "scripts": {
-    "start": "node-dev server.js"
+    "start": "node-dev server/server.js"
   },
   "dependencies": {
     "ajv": "^6.5.5",

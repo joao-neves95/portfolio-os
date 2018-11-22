@@ -6,7 +6,6 @@ module.exports = async ( req, res, next ) => {
   const validateSchema = validSchema( req.body );
 
   if ( !validateSchema ) {
-    console.log( "Error", validSchema.errors );
     return res.status( 400 ).json( { "msg": "Wrong input.", "Error": validSchema.errors } );
 
   } else

@@ -211,7 +211,7 @@
     <Compile Include="common\models\fileModel.js" />
     <Compile Include="common\models\fsItemModelBase.js" />
     <Compile Include="common\models\systemDirectoryModel.js" />
-    <Compile Include="server.js" />
+    <Compile Include="server\server.js" />
     <Compile Include="server\portfolio-os\dataAccess\appStoreStore.js" />
     <Compile Include="server\db.js" />
     <Compile Include="server\portfolio-os\dataAccess\fileSystemStore.js" />

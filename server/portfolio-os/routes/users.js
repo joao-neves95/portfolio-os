@@ -1,30 +1,28 @@
 ﻿'use strict';
 const userStore = require( '../dataAccess/userStore' );
+const { sanitizeHTML } = require( '../../../common/commonUtils' );
 
 // NO VALIDATION:
 // TODO: VALIDATION.
 
 module.exports = {
   // Queries:
-  // ?firstLeter=a
-  getUsers: ( req, res ) => {
-    console.info( 'GET: /users/' );
-  },
+  // ?lastId=<int>&limit=<int>
+  // Default: 0 & 10
+  getUsersLastLoggedIn: async ( req, res ) => {
+    try {
+      const lastId = !req.query.lastId ? 0 : req.query.lastId;
+      const limit = !req.query.limit ? 10 : req.query.limit;
+      const result = await userStore.getUsersOrderByLastLogin( lastId, limit );
 
-  getUser: ( req, res ) => {
-    console.info( 'GET: /users/' + req.params.id );
-  },
+      if ( result > 0 )
+        return res.status( 200 ).json( result );
 
-  // Queries:
-  // ?count=10
-  getUsersRecentLogins: ( req, res ) => {
-    console.info( 'GET: /users/recent-logins' );
-  },
+      return res.status( 500 ).json( 'Error updating the user summary.' );
 
-  // Queries:
-  // ?count=10
-  getUsersRecentSignUps: ( req, res ) => {
-    console.info( 'GET: /users/recent-sign-ups' );
+    } catch ( e ) {
+      return res.status( 500 ).json( 'Unknown Error' );
+    }
   },
 
   getUserProfile: async ( req, res ) => {
@@ -35,7 +33,7 @@ module.exports = {
 
   putUserSummary: async ( req, res ) => {
     try {
-      const result = await userStore.updateSummaryAsync( req.user.id, req.body.summary );
+      const result = await userStore.updateSummaryAsync( req.user.id, sanitizeHTML( req.body.summary ) );
 
       if ( result > 0 )
         return res.status( 200 ).json( result );
@@ -49,7 +47,7 @@ module.exports = {
 
   addSkill: async ( req, res ) => {
     try {
-      const result = await userStore.addSkillAsync( req.user.id, req.body.skill );
+      const result = await userStore.addSkillAsync( req.user.id, sanitizeHTML( req.body.skill ) );
 
       if ( result[0] > 0 )
         return res.status( 200 ).json( result[1] );
@@ -64,7 +62,7 @@ module.exports = {
 
   updateSkill: async ( req, res ) => {
     try {
-      const result = await userStore.updateSkillAsync( req.user.id, req.params.skillId, req.body.skill );
+      const result = await userStore.updateSkillAsync( req.user.id, sanitizeHTML( req.params.skillId ), sanitizeHTML( req.body.skill ) );
 
       if ( result > 0 )
         return res.status( 200 ).json( result );
@@ -79,7 +77,7 @@ module.exports = {
 
   deleteSkill: async ( req, res ) => {
     try {
-      const result = await userStore.deleteSkillAsync( req.user.id, req.params.skillId );
+      const result = await userStore.deleteSkillAsync( req.user.id, sanitizeHTML( req.params.skillId ) );
 
       if ( result > 0 )
         return res.status( 200 ).json( result );

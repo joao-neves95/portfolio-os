@@ -56,6 +56,7 @@ CREATE TABLE App (
     Name VARCHAR(50) UNIQUE NOT NULL,
     Description TEXT DEFAULT (''),
     HtmlIndexUrl VARCHAR(500) NOT NULL,
+    Rating INT NOT NULL DEFAULT 0,
     CreationDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC'),
     LastUpdateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC')
 );

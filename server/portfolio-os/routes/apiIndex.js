@@ -4,12 +4,11 @@ const usersRoute = require( './users' );
 const fileSystemRoute = require( './fileSystem' );
 const appStoreRoute = require( './appStore' );
 const addAppDTOSchema = require( '../models/addAppDTO' );
-
+const jsonValidator = require( '../middleware/jsonValidator' );
 
 // #region USER PROFILES
 
-router.get( '/users', usersRoute.getUsers );
-router.get( '/users/:id', usersRoute.getUser );
+router.get( '/users/last-logged-in', usersRoute.getUsersLastLoggedIn );
 router.get( '/users/:id/profile', usersRoute.getUser );
 router.get( '/users/social-accounts', usersRoute.getUserSocialAccounts );
 
@@ -32,9 +31,17 @@ router.delete( '/users/file-system', fileSystemRoute.deleteUserItem );
 
 // #region APP STORE
 
-router.get( '/app-store', ( req, res, next ) => { req.schema = addAppDTOSchema; }, appStoreRoute.postApp );
-//router.put( '/file-system', ensureAuthentication, fileSystemRoute.putUserItem );
+router.get( '/app-store', appStoreRoute.getApps );
+router.post( '/app-store',
+  ( req, res, next ) => {
+    req.schema = addAppDTOSchema;
+    next();
+  },
+  jsonValidator,
+  appStoreRoute.postApp
+);
 //router.post( '/file-system', ensureAuthentication, fileSystemRoute.postUserItem );
+//router.put( '/file-system', ensureAuthentication, fileSystemRoute.putUserItem );
 //router.delete( '/file-system', ensureAuthentication, fileSystemRoute.deleteUserItem );
 
 // #endregion
