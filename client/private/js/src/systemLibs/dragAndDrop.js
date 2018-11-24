@@ -82,7 +82,7 @@ class DragAndDrop {
   }
 
   updateDraggableElements() {
-    Array.from(document.getElementsByClassName( 'draggable' )).forEach( value => {
+    Array.from( document.getElementsByClassName( 'draggable' ) ).forEach( value => {
       value.setAttribute( 'draggable', 'true' );
     } );
 
@@ -102,7 +102,7 @@ class DragAndDrop {
       return;
 
     for (let i = 0; i < constrainedDraggableElems.length; i++) {
-      constrainedDraggableElems[i].removeEventListener('dragstart', (e) => { this.dragstartHandler(e); });
+      constrainedDraggableElems[i].removeEventListener('dragstart', (e) => { this.dragstartHandler; });
       constrainedDraggableElems[i].addEventListener( 'dragstart', ( e ) => {
         e.stopPropagation();
         this.dragstartHandler( e );
@@ -111,22 +111,22 @@ class DragAndDrop {
   }
 
   updateDroppableListeners() {
-    const droppableElems = document.getElementsByClassName('droppable');
+    const droppableElems = document.getElementsByClassName( 'droppable' );
 
     if (droppableElems.length <= 0)
       return;
 
     for (let i = 0; i < droppableElems.length; i++) {
-      droppableElems[i].removeEventListener( 'dragover', ( e ) => { this.dragoverHandler( e ); });
+      droppableElems[i].removeEventListener( 'dragover', ( e ) => { this.dragoverHandler; });
       droppableElems[i].addEventListener('dragover', (e) => {
         e.stopPropagation();
         this.dragoverHandler(e);
       }, false);
 
-      droppableElems[i].removeEventListener( 'drop', ( e ) => { this.dropHandler( e ); });
+      droppableElems[i].removeEventListener( 'drop', ( e ) => { this.dropHandler; });
       droppableElems[i].addEventListener('drop', (e) => {
         e.stopPropagation();
-        this.dropHandler(e)
+        this.dropHandler( e );
       }, false);
     }
   }
@@ -139,16 +139,16 @@ class DragAndDrop {
 
     for (let i = 0; i < freeDraggableElems.length; i++) {
 
-      freeDraggableElems[i].removeEventListener('mousedown', (e) => { this.freeDragHandler(e); });
-      freeDraggableElems[i].addEventListener('mousedown', (e) => {
-        this.freeDragHandler(e);
+      freeDraggableElems[i].removeEventListener( 'mousedown', ( e ) => { this.freeDragHandler( e ); } );
+      freeDraggableElems[i].addEventListener( 'mousedown', ( e ) => {
+        this.freeDragHandler( e );
         return false;
-      });
+      } );
 
-      window.removeEventListener('mouseup', (e) => { this.freeDragendHandler(e); });
-      window.addEventListener('mouseup', (e) => {
-        this.freeDragendHandler(e);
-      });
+      window.removeEventListener( 'mouseup', ( e ) => { this.freeDragendHandler( e ); } );
+      window.addEventListener( 'mouseup', ( e ) => {
+        this.freeDragendHandler( e );
+      } );
     }
   }
 

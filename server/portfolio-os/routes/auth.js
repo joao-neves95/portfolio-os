@@ -21,9 +21,9 @@ router.get( '/', ( req, res ) => {
 
 // #region GITHUB AUTH
 
-router.get( '/github', passport.authenticate( 'github' ) );
+router.get( '/github', passport.authenticate( 'github', { scope: ['user'] } ) );
 
-router.get( '/github/callback', passport.authenticate( 'github', { failureRedirect: '/' } ), async ( req, res ) => {
+router.get( '/github/callback', passport.authenticate( 'github', { failureRedirect: '/portfolio-os/auth', failureFlash: false } ), async ( req, res ) => {
   return ____setJWTCookie( req, res );
 } );
 
@@ -33,7 +33,7 @@ router.get( '/github/callback', passport.authenticate( 'github', { failureRedire
 
 router.get( '/google', passport.authenticate( 'google', { scope: ['profile', 'email', 'openid'] } ) );
 
-router.get( '/google/callback', passport.authenticate( 'google', { failureRedirect: '/' } ), async ( req, res ) => {
+router.get( '/google/callback', passport.authenticate( 'google', { failureRedirect: '/portfolio-os/auth', failureFlash: false } ), async ( req, res ) => {
   return ____setJWTCookie( req, res );
 } );
 

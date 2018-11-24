@@ -7,6 +7,7 @@
  *
  */
 
+// TODO: (SERVER) PRODUCTION - Remove the exceptions from the passport callbacks.
 'use strict';
 const passport = require( 'passport' );
 const GitHubStrategy = require( 'passport-github' ).Strategy;
@@ -14,6 +15,7 @@ const GoogleStrategy = require( 'passport-google-oauth20' ).Strategy;
 const userStore = require( '../dataAccess/userStore' );
 const db = require( '../../db' );
 const verifyJWT = require( './verifyJWT' );
+const { sanitizeHTML } = require('../../../common/commonUtils');
 const LoginType = require( '../../../common/enums/loginType' );
 
 module.exports = ( app ) => {
@@ -56,7 +58,6 @@ module.exports = ( app ) => {
          WHERE Users.Github_Id = $1`,
         [profile.id]
       );
-
 
       let user;
 
@@ -139,7 +140,7 @@ const __linkAccountToUserIfTrue = ( req, profileId ) => {
         if ( !decoded )
           throw new Error();
 
-        const queryResult = await userStore.updateSocialAccountId( decoded.id, cookie.accountType, profileId );
+        const queryResult = await userStore.updateSocialAccountId( decoded.id, sanitizeHTML( cookie.accountType ), profileId );
         if ( queryResult.rowCount <= 0 )
           reject();
 

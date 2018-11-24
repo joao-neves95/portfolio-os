@@ -7,6 +7,7 @@
  *
  */
 
+'use strict';
 class FileSystemStore {
   static addDir() { }
 

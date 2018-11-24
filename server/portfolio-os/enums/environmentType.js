@@ -1,4 +1,6 @@
-﻿module.exports = Object.freeze( {
+﻿'use strict';
+
+module.exports = Object.freeze( {
   Development: 'DEV',
   Production: 'PROD'
 } );

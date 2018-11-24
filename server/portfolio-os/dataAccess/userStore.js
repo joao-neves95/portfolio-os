@@ -7,6 +7,7 @@
  *
  */
 
+'use strict';
 const db = require( '../../db' );
 const LoginType = require( '../../../common/enums/loginType' );
 
@@ -241,7 +242,7 @@ module.exports = {
    * @param { string } githubId Defaults to '' (empty <string>)
    * @param { string } googleId Defaults to '' (empty <string>)
    * @param { Function } Callback Receives the new user.
-   * 
+   *
    * @return { Promise<object | Error> }
    */
   registerUserAsync: ( name, email, summary = '', githubId = '', googleId = '', Callback ) => {

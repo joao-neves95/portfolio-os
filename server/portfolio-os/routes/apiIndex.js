@@ -8,6 +8,7 @@
  */
 
 // " portfolio-os/api/ "
+'use strict';
 const router = require( 'express' ).Router();
 const usersRoute = require( './users' );
 const fileSystemRoute = require( './fileSystem' );
@@ -59,4 +60,3 @@ router.post( '/app-store',
 // #endregion
 
 module.exports = router;
-

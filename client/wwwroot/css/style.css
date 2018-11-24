@@ -25,6 +25,25 @@
   font-weight: bold;
 }
 
+#curriculum-modal > div.modal-dialog {
+  max-width: 750px;
+}
+
+#curriculum-modal .modal-content {
+  width: 750px;
+}
+
+
+#curriculum-modal img {
+  width: 100%;
+}
+
+#curriculum a {
+  color: dodgerblue;
+  cursor: pointer;
+  margin-left: .3em;
+}
+
 #portfolio-os-login-btn {
   margin-bottom: 0;
 }

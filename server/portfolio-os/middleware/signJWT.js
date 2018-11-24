@@ -7,10 +7,11 @@
  *
  */
 
+'use strict';
 const jwt = require( 'jsonwebtoken' );
 
 /**
- * 
+ *
  * @param { object } payload <object>
  */
 module.exports = ( payload ) => {

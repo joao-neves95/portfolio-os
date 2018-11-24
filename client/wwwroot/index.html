@@ -58,6 +58,27 @@
   <!-- CONTENT -->
   <!-- role=”main” - Indicates the significance of this element to programs that don’t yet support the <main> element (such as some screen readers). -->
   <main role="main">
+    <!-- CURRICULUM MODAL -->
+    <div class="modal fade" id="curriculum-modal" tabindex="-1" role="dialog" aria-labelledby="curriculum-modal-title" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="curriculum-modal-title"> Curriculum Vitae </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- TODO: (FRONTEND) PRODUCTION: Change the host in all links. -->
+            <img src="http://localhost:2000/img/shivayl-cv.png" alt="Shivayl CV Icon" title="Shivayl CV" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End of CURRICULUM MODAL -->
     <!-- PERSONAL INFO -->
     <div class="container bg-white p-4" id="personal-info">
       <div class="row mb-5 mt-5">
@@ -83,8 +104,8 @@
           <!-- Curriculum Vitae BTN -->
           <p class="text-font" id="curriculum">
             <i class="far fa-file-alt"></i>
-            <a href="#">
-              <u>Curriculum Vitae</u>
+            <a data-toggle="modal" data-target="#curriculum-modal">
+              Curriculum Vitae
             </a>
           </p>
         </div>
@@ -94,7 +115,7 @@
     <!-- PORTFOLIO-OS LOGIN BUTTON -->
     <div class="container jumbotron" id="portfolio-os-login-btn">
       <div class="row">
-        <a href="/portfolio-os/auth" role="button" class="btn btn-outline-primary btn-lg anim popping">Login to Portfolio-OS</a>
+        <a href="/portfolio-os/auth" role="button" class="btn btn-outline-primary btn-lg anim popping">Login to Portfolio-OS Desktop</a>
       </div>
     </div>
     <!-- End of PORTFOLIO-OS LOGIN BUTTON -->
@@ -264,7 +285,6 @@
       </div>
     </div>
     <!-- End of EDUCATION -->
-
     <!-- KNOW-HOW -->
     <div class="container bg-white" id="know-how">
       <div class="row">
@@ -352,8 +372,8 @@
                   <img src="https://png.icons8.com/css/ios7/75" alt="CSS Logo" title="CSS" width="53" height="53">
                 </li>
                 <!--<li class="list-inline-item">
-                  <img src="https://i.imgur.com/WIdR658.png" alt="Bootstrap Stack" title="Bootstrap Stack" width="53" height="53">
-                </li>-->
+                <img src="https://i.imgur.com/WIdR658.png" alt="Bootstrap Stack" title="Bootstrap Stack" width="53" height="53">
+              </li>-->
               </ul>
             </div>
           </div>

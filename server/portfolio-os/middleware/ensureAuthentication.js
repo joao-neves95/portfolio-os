@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
@@ -7,11 +7,12 @@
  *
  */
 
+'use strict';
 const verifyJWT = require( './verifyJWT' );
 
 /**
  * Its blocks the req and returns 401 res if not successfull.
- * 
+ *
  * @param { Request } req
  * @param { Response } res
  * @param { Function } next If successfull, receives the decoded JWT token.

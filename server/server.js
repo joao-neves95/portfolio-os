@@ -13,15 +13,18 @@ const path = require('path');
 const express = require( 'express' );
 const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
+const helmet = require( 'helmet' );
+const helmetConfig = require( './portfolio-os/config/helmet' );
 const cors = require( 'cors' );
-const corsConfig = require( './portfolio-os/middleware/corsConfig' );
+const corsConfig = require( './portfolio-os/config/cors' );
 const authConfig = require( './portfolio-os/middleware/authConfig' );
+const noCache = require( './portfolio-os/middleware/noCache' );
 const portfolioOSRoutes = require( './portfolio-os/routes/porfolioOSIndex' );
 const app = express();
-const EnvironmentType = require( './portfolio-os/enums/environmentType' );
 
 const PORT = process.env.PORT; // 3000
 
+app.use( helmet( helmetConfig ) );
 app.use( cors( corsConfig ) );
 app.use( express.json() );
 app.use( express.urlencoded( { extended: true } ) );
@@ -38,7 +41,7 @@ authConfig( app );
 
 // #region PRIVATE API ROUTE.
 
-app.use( '/portfolio-os', portfolioOSRoutes );
+app.use( '/portfolio-os', noCache, portfolioOSRoutes );
 
 // #endregion
 

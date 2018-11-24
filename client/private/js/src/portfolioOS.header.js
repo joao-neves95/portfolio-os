@@ -10,7 +10,7 @@
 // Imports for MergerJS.
 //
 // @import './constants'
-// %import 'https://cdnjs.cloudflare.com/ajax/libs/ajv/6.5.5/ajv.min.js'
+// ignore 'https://cdnjs.cloudflare.com/ajax/libs/ajv/6.5.5/ajv.min.js'
 // %import<<GH 'js-cookie/js-cookie/master/src/js.cookie.js'
 // @import './externalLibs'
 // $import 'vanillatree/vanillatree.min.js'
@@ -66,6 +66,7 @@
 // @import './systemApps/explorer/explorer.view'
 // @import './systemApps/explorer/explorer.controller'
 // @import './systemApps/explorer/explorer'
+// @import './userApps/shivaylCV'
 // @import './modules/processManager/process'
 // @import './modules/processManager/processManager'
 // @import './modules/startMenuManager/startMenuApp'

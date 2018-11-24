@@ -25,10 +25,10 @@ class GridSystem {
   insertGrid( config ) {
     let rowCount = 0;
     let cellCount = 0;
-    const rowWidth = config.gridType === GridType.GridY ? config.cellWidthPercent : null;
-    const rowHeight = config.gridType === GridType.GridX ? config.cellHeightPercent : null;
-    const cellWidth = config.gridType === GridType.GridX ? config.cellWidthPercent : null;
-    const cellHeight = config.gridType === GridType.GridY ? config.cellHeightPercent : null;
+    const rowWidth = config.gridType === GridType.GridY ? config.cellWidthPercent : 100;
+    const rowHeight = config.gridType === GridType.GridX ? config.cellHeightPercent : 100;
+    const cellWidth = config.gridType === GridType.GridX ? config.cellWidthPercent : 100;
+    const cellHeight = config.gridType === GridType.GridY ? config.cellHeightPercent : 100;
 
     for ( let rowIdx = 0; rowIdx <= config.gridXCount; rowIdx++ ) {
       config.target.innerHTML += GridSystemTemplates.rowTemplate( config.rowIdsPrefix + ( rowIdx + 1 ).toString(), config.gridType, rowWidth, rowHeight );

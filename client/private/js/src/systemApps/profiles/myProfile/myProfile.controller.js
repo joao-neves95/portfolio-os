@@ -105,7 +105,7 @@ class MyProfileController {
       const res = await this.model.updateLink( valueElemId.substring( 5 ), that.value );
 
     } else if ( valueElemId.startsWith( 'skill_' ) ) {
-      if ( target.value === '' )
+      if ( that.value === '' )
         return;
 
       const res = await this.model.updateSkill( valueElemId.substring( 6 ), that.value );

@@ -1,12 +1,13 @@
 /*
  *
- * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ * Copyright (c) 2018 Joï¿½o Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
  * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
  * project, under the name "LICENSE.md".
  *
  */
 
+'use strict';
 const { Pool } = require( 'pg' );
 
 const pool = new Pool( {
@@ -23,7 +24,7 @@ module.exports = {
     return await pool.connect();
   },
 
-  /** 
+  /**
    * @param { string } queryString
    * @param { any[] } params
    * @param { Function } Callback Receives (error, <QueryResult>)
@@ -49,7 +50,7 @@ module.exports = {
   },
 
   /**
-   * 
+   *
    * @param { string[][] } commands [ [ <string> , (params)[] ] ]
    */
   transaction: ( commands ) => {
