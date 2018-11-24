@@ -8,8 +8,8 @@
  */
 
 module.exports = Object.freeze( {
-  origin: 'http://localhost:2000',
-  // origin: 'http://www.shivayl.com',
+  // origin: 'http://localhost:2000',
+  origin: 'http://shivayl.com',
   optionsSuccessStatus: 200,
   credentials: true,
   methods: 'GET,PUT,POST,DELETE'
