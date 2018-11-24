@@ -13,7 +13,7 @@ try {
   if ( process.env !== undefined )
     fsItemModelBaseDir = require( './fsItemModelBase' );
 
-} catch {
+} catch ( e ) {
   // This is the browser.
   fsItemModelBaseDir = FSItemModelBase;
 }
@@ -42,6 +42,6 @@ try {
   if ( process.env !== undefined )
     module.exports = DirectoryModel;
 
-} catch {
+} catch ( e ) {
   // Do nothing, this is the browser.
 }

@@ -37,13 +37,13 @@ class FileSystem {
               return false;
 
             dir = currDir;
-          } catch {
+          } catch ( e ) {
             return false;
           }
         }
 
         dir = currDir;
-      } catch {
+      } catch ( e ) {
         return false;
       }
     }
@@ -78,7 +78,7 @@ class FileSystem {
             return false;
         }
 
-      } catch {
+      } catch ( e ) {
         return false;
       }
     }

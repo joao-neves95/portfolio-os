@@ -17,6 +17,6 @@ try {
   if ( process.env !== undefined )
     module.exports = LoginType;
 
-} catch {
+} catch ( e ) {
   // Do nothing, this is the browser.
 }

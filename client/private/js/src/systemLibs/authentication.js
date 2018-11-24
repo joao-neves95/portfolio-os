@@ -24,7 +24,7 @@ class Authentication {
       //if ( !jwt )
       //  window.location = `${SERVER_ROOT_PATH}portfolio-os/auth`;
 
-    } catch  {
+    } catch ( e ) {
       //
     } finally {
       Cookies.remove( 'JWT' );

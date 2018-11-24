@@ -15,4 +15,4 @@ INSERT INTO Hosts
 VALUES (1, 'github.com', 'GitHub'),
        (2, 'behance.net', 'Behance'),
        (3, 'twitter.com', 'Twitter'),
-       (4, 'instagram.com', 'Instagram')
+       (4, 'instagram.com', 'Instagram');

@@ -23,7 +23,7 @@ try {
   if ( process.env !== undefined )
     module.exports = FSItemModelBase;
 
-} catch {
+} catch ( e ) {
   // This is the browser.
 }
 
