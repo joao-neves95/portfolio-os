@@ -1,6 +1,6 @@
 ﻿#body-style {
   background-color: #A8ABAD;
-  height: 700px;
+  height: 100%;
   overflow-y: scroll;
   position: relative;
 }
@@ -11,6 +11,28 @@
   position: fixed;
   width: 100%;
   z-index: 1000;
+}
+
+#spy {
+  margin-left: auto;
+  margin-right: 0 !important;
+}
+
+button.navbar-toggler {
+  border: 2px solid;
+  border-color: rgba(255,255,255, .5) !important;
+  margin-top: 1em;
+  float: right;
+  width: 3.2em;
+  height: 2.5em;
+}
+
+span.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='https://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(255, 255, 255)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+div.collapse {
+  margin-top: 1em;
 }
 
 .logo {
@@ -32,7 +54,6 @@
 #curriculum-modal .modal-content {
   width: 750px;
 }
-
 
 #curriculum-modal img {
   width: 100%;
