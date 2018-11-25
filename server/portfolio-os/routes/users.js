@@ -36,7 +36,6 @@ module.exports = {
 
   getUserProfile: async ( req, res ) => {
     const userProfile = await userStore.getProfileAsync( req.user.id );
-    console.debug( userProfile );
     return res.status( 200 ).json( userProfile );
   },
 

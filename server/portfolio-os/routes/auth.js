@@ -51,18 +51,15 @@ router.get( '/logout', ( req, res ) => {
 module.exports = router;
 
 /**
- * 
+ *
  * @param { Request } req
  * @param { Response } res
  */
 const ____setJWTCookie = async ( req, res ) => {
   try {
-    const jwt = await signJWT( { id: req.user.id } );
-
     res.cookie(
       'JWT',
-      //await signJWT( { id: req.user.id } ),
-    jwt,
+      await signJWT( { id: req.user.id } ),
       {
         maxAge: 999999,
         path: '/',

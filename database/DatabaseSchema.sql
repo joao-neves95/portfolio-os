@@ -10,11 +10,6 @@
 -- TODO: (PRODUCTION) Change OWNER.
 
 -- TABLES:
-CREATE DATABASE 'PortfolioOS'
-    WITH 
-    OWNER = postgres
-    ENCODING = 'UTF8';
-
 SET TIME ZONE 'UTC';
 
 CREATE TABLE Users (

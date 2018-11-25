@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2018 Jo„o Pedro Martins Neves (shivayl) - All Rights Reserved.
+ * Copyright (c) 2018 Jo√£o Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
  * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
  * project, under the name "LICENSE.md".
@@ -10,12 +10,13 @@
 'use strict';
 // https://github.com/helmetjs/helmet
 // 60 days
-// const HSTS_MAX_AGE = 5184000;
+const HSTS_MAX_AGE = 5184000;
 
 module.exports = {
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
+      connectSrc: ["'self'", "https://www.shivayl.com"],
       scriptSrc: ["'self'", 'https://code.jquery.com', 'https://stackpath.bootstrapcdn.com', 'https://cdnjs.cloudflare.com', 'https://cdn.jsdelivr.net'],
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://use.fontawesome.com', 'https://stackpath.bootstrapcdn.com', 'https://cdnjs.cloudflare.com', 'https://cdn.jsdelivr.net'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://use.fontawesome.com'],
@@ -29,9 +30,9 @@ module.exports = {
   },
   permittedCrossDomainPolicies: {
     permittedPolicies: 'none'
+  },
+  hsts: {
+    maxAge: HSTS_MAX_AGE,
+    includeSubDomains: true
   }
-  // hsts: {
-  //   maxAge: HSTS_MAX_AGE,
-  //   includeSubDomains: true
-  // }
 };

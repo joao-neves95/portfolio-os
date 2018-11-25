@@ -29,7 +29,8 @@ module.exports = ( app ) => {
   passport.deserializeUser( ( id, done ) => {
     userStore.getUserAsync( id, LoginType.Local, ( err, user ) => {
       if ( err )
-        return done( err, null );
+        // return done( err, null );
+        return done( null, null, { message: 'Unknown Error.' } );
 
       return done( null, user );
     } );
@@ -40,7 +41,7 @@ module.exports = ( app ) => {
   passport.use( new GitHubStrategy( {
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: `http://localhost:${process.env.PORT}/portfolio-os/auth/github/callback`,
+    callbackURL: `http://shivayl.com/portfolio-os/auth/github/callback`,
     passReqToCallback: true
   }, async ( req, accessToken, refreshToken, profile, done ) => {
     const jsonProfile = profile._json;
@@ -75,7 +76,8 @@ module.exports = ( app ) => {
 
       // This catch block catches any possible exceptions that may occure from above.
     } catch ( e ) {
-      return done( e, null );
+      // return done( e, null );
+      return done( null, null, { message: 'Unknown Error.' } );
     }
   }
   ) );
@@ -87,7 +89,7 @@ module.exports = ( app ) => {
   passport.use( new GoogleStrategy( {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `http://localhost:${process.env.PORT}/portfolio-os/auth/google/callback`,
+    callbackURL: `http://shivayl.com/portfolio-os/auth/google/callback`,
     passReqToCallback: true
   }, async ( req, accessToken, refreshToken, profile, done ) => {
     const jsonProfile = profile._json;
@@ -121,7 +123,8 @@ module.exports = ( app ) => {
       return done( null, user );
 
     } catch ( e ) {
-      return done( e, null );
+      // return done( e, null );
+      return done( null, null, { message: 'Unknown Error.' } );
     }
   }
   ) );
