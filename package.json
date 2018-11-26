@@ -7,7 +7,8 @@
     "name": "shivayl"
   },
   "scripts": {
-    "start": "forever start -c node server/server.js"
+    "forever": "forever start -c node server/server.js",
+    "start": "node server/server.js"
   },
   "dependencies": {
     "ajv": "^6.5.5",
