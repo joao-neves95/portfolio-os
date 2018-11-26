@@ -7,7 +7,6 @@
  *
  */
 
-// TODO: (SERVER) PRODUCTION - Remove the exceptions from the passport callbacks.
 'use strict';
 const passport = require( 'passport' );
 const GitHubStrategy = require( 'passport-github' ).Strategy;
@@ -41,7 +40,7 @@ module.exports = ( app ) => {
   passport.use( new GitHubStrategy( {
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: `http://shivayl.com/portfolio-os/auth/github/callback`,
+    callbackURL: `https://shivayl.com/portfolio-os/auth/github/callback`,
     passReqToCallback: true
   }, async ( req, accessToken, refreshToken, profile, done ) => {
     const jsonProfile = profile._json;
@@ -89,7 +88,7 @@ module.exports = ( app ) => {
   passport.use( new GoogleStrategy( {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `http://shivayl.com/portfolio-os/auth/google/callback`,
+    callbackURL: `https://shivayl.com/portfolio-os/auth/google/callback`,
     passReqToCallback: true
   }, async ( req, accessToken, refreshToken, profile, done ) => {
     const jsonProfile = profile._json;
