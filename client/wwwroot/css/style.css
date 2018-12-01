@@ -13,7 +13,13 @@
   z-index: 1000;
 }
 
-#spy {
+#shivayl-logo {
+  background-image: url("https://shivayl.com/img/shivayl-logo.svg");
+  background-repeat: no-repeat;
+  height: 100%;
+}
+
+#spy > ul {
   margin-left: auto;
   margin-right: 0 !important;
 }
@@ -73,6 +79,10 @@ div.collapse {
   margin: auto;
 }
 
+#vim-logo {
+  margin-bottom: 1em;
+}
+
 .anim {
   animation-duration: 1s;
   animation-fill-mode: both;
@@ -130,8 +140,12 @@ div.collapse {
   padding-top: 7em;
 }
 
+.bg-primary {
+  background-color: #248af7 !important;
+}
+
 .bg-soft-orange {
-  background-color: #FF9030;
+  background-color: rgb(241, 152, 78);
 }
 
 .bg-light-grey {
