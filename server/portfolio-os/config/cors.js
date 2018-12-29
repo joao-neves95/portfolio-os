@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
@@ -8,7 +8,7 @@
  */
 
 module.exports = Object.freeze( {
-  // origin: 'http://localhost:2000',
+  // origin: 'https://localhost:2000',
   origin: 'https://shivayl.com',
   optionsSuccessStatus: 200,
   credentials: true,

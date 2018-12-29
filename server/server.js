@@ -31,7 +31,7 @@ app.use( cors( corsConfig ) );
 app.use( express.json() );
 app.use( express.urlencoded( { extended: true } ) );
 app.use( cookieParser( process.env.COOKIE_SECRET ) );
-app.use( logger( 'dev' ) );
+app.use( logger( 'combined' ) );
 
 // #region PUBLIC FILES.
 app.use( '/', express.static( path.join( process.cwd(), './client/wwwroot' ) ) );
