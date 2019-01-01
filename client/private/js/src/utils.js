@@ -52,11 +52,16 @@ class Utils {
 
 /*
 
-https://github.com/joao-neves95/Exercises_Challenges_Courses/blob/master/JavaScript/Collections.js
+  Copyright (c) 2018 João Pedro Martins Neves <joao95neves@gmail.com> - All Rights Reserved
+  Written by João Pedro Martins Neves <joao95neves@gmail.com>
 
-Class Dictionary(): let dictionary = new Dictionary(uniqueKeys = false)
+  https://github.com/joao-neves95/Exercises_Challenges_Courses/blob/master/JavaScript/Collections.js
 
-Type safe Class List(): let list = new List('string' | 'number' | 'int' | 'float' | 'boolean' | 'any')
+
+
+  Class Dictionary(): let dictionary = new Dictionary(uniqueKeys = false)
+
+  Type safe Class List(): let list = new List('string' | 'number' | 'int' | 'float' | 'boolean' | 'any')
 
 */
 
@@ -82,6 +87,10 @@ class Collection {
     return this.elements.length;
   }
 
+  get __last() {
+    return this.elements[this.length - 1];
+  }
+
   /**
    * Get all elements from the Collection.
    * Returns elements[]
@@ -103,7 +112,17 @@ class Collection {
    */
   clear() {
     this.elements = [];
-  };
+  }
+
+
+  /**
+   * (private) 
+   */
+  __forEach( Callback ) {
+    for ( let i = 0; i < this.elements.length; ++i ) {
+      Callback( this.elements[i] );
+    }
+  }
 
   /**
    * (private)
@@ -135,6 +154,10 @@ class Dictionary extends Collection {
     super( uniqueKeys, 'any' );
   }
 
+  get lastValue() {
+    return Object.values( this.__last )[0];
+  }
+
   getAllValues() {
     let allValues = [];
 
@@ -145,19 +168,60 @@ class Dictionary extends Collection {
     return allValues;
   }
 
+
   add( key, value ) {
-    if ( this.uniqueKeys && this.findIndexOfKey( key ) !== false )
-      throw new Error( Errors.existingKey );
+    if ( this.uniqueKeys ) {
+      if ( this.findIndexOfKey( key ) !== false )
+        throw new Error( Errors.existingKey );
+    }
 
     this.push( { [key]: value } );
   }
 
+  /*
+   * Removes an item in the Dictionary with the provided key.
+   * @return { bool }
+   */
   remove( key ) {
     const index = this.findIndexOfKey( key );
     if ( index === false )
       return false;
 
-    this.splice( index );
+    this.splice( index, 1 );
+    return true;
+  }
+
+  /*
+   * Updates an item in the Dictionary with the provided key.
+   * @param { any } key
+   * @param { any } newValue
+   * @return { bool }
+   */
+  updateByKey( key, newValue ) {
+    const index = this.findIndexOfKey( key );
+    if ( index === false )
+      return false;
+
+    return this.updateByIndex( index, newValue );
+  }
+  /*
+   * Updates an item in the Dictionary with the provided index.
+   * @param { any } key
+   * @param { any } newValue
+   * @return { bool }
+   */
+
+  updateByIndex( idx, newValue ) {
+    try {
+      Object.defineProperty( this.elements[idx], key, {
+        value: newValue
+      } );
+
+      return true;
+
+    } catch ( e ) {
+      return false;
+    }
   }
 
   /**
@@ -205,6 +269,12 @@ class Dictionary extends Collection {
 
     return false;
   }
+
+  forEachValue( Callback ) {
+    this.__forEach( ( item ) => {
+      Callback( Object.values( item )[0] );
+    } );
+  }
 }
 
 // Type safe list.
@@ -217,6 +287,10 @@ class List extends Collection {
    */
   constructor( type ) {
     super( false, type );
+  }
+
+  get last() {
+    return this.__last;
   }
 
   /**
@@ -252,7 +326,14 @@ class List extends Collection {
    */
   remove( index ) {
     this.splice( index );
-  };
+  }
+
+
+  forEach( Callback ) {
+    this.__forEach( ( item ) => {
+      Callback( item );
+    } );
+  }
 
   /**
    * (private)

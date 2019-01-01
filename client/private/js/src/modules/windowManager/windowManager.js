@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ * Copyright (c) 2018 Joï¿½o Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
  * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
  * project, under the name "LICENSE.md".
@@ -33,12 +33,9 @@ class WindowManager {
       thisWindow.icon = newTaskbarIcon;
     }
 
-    this.windows.add( thisWindow.id, thisWindow );
-    this.updateListeners();
-    dragAndDrop.cancelNonDraggableElements();
-    dragAndDrop.updateFreeDraggListeners();
-    windowResizer.updateListeners();
-    const thisWindowElem = document.getElementById(thisWindow.id);
+    /** @type { HTMLElement } */
+    const thisWindowElem = thisWindow.element;
+    thisWindowElem.style.zIndex = this.windows.length > 0 ? ( DomUtils.getStyleProp( this.windows.lastValue.element, 'z-index' ) + 1 ).toString() : ( 1 ).toString();
     thisWindowElem.style.width = !width ? '70%' : width;
     thisWindowElem.style.height = !heigth ? '80%' : heigth;
     thisWindowElem.classList.add( 'anim' );
@@ -47,18 +44,27 @@ class WindowManager {
       thisWindowElem.classList.remove( 'anim' );
       thisWindowElem.classList.remove( 'zoom-in' );
     }, 1000 );
+
+    this.unselectAllWindows();
+    this.windows.add( thisWindow.id, thisWindow );
+    thisWindow.select();
+    this.updateListeners();
+    dragAndDrop.cancelNonDraggableElements();
+    dragAndDrop.updateFreeDraggListeners();
+    windowResizer.updateListeners();
+    console.debug( this.windows );
   }
 
   closeWindow( windowId ) {
-    this.findWindowInstance(windowId).kill();
-    taskbarManager.killIcon(windowId);
+    this.findWindowInstance( windowId ).kill();
+    taskbarManager.killIcon( windowId );
     this.windows.remove(windowId);
     this.updateListeners();
   }
 
   minimizeWindow( windowId ) {
     this.findWindowInstance(windowId).minimize();
-    taskbarManager.minimizedIcon(windowId);
+    taskbarManager.minimizedIcon( windowId );
   }
 
   unminimizeWindow( windowId ) {
@@ -70,12 +76,45 @@ class WindowManager {
     this.findWindowInstance( windowId ).maxSize();
   }
 
+  unselectAllWindows() {
+    this.windows.forEachValue( ( window ) => {
+      window.unselect();
+    } );
+  }
+
+  moveWindowToFront( window ) {
+    const windowIdx = this.windows.findIndexOfKey( window.id );
+    if ( windowIdx === false )
+      return;
+
+    this.windows.remove( window.id );
+
+    for ( let i = windowIdx; i < this.windows.length; ++i ) {
+      const thisWindow = this.windows.getByIndex( i );
+      if ( !thisWindow )
+        continue;
+
+      thisWindow.element.style.zIndex = i + 1;
+      thisWindow.unselect();
+    }
+
+    window.element.style.zIndex = parseInt( this.windows.lastValue.element.style.zIndex ) + 1;
+    this.windows.add( window.id, window );
+  }
+
   // #region LISTENERS:
 
-  // TODO: Fix "removeEventListener"'s.
   updateListeners() {
-    const allCloseWindowsBtns = document.querySelectorAll('[id^="win-"] .close-window');
+    // WINDOW CLICK.
+    this.windows.forEachValue( ( window ) => {
+      window.element.addEventListener( 'click', ( e ) => {
+        this.moveWindowToFront( window );
+        window.select();
+        } );
+    } );
 
+    // CLOSE WINDOW CLICK.
+    const allCloseWindowsBtns = document.querySelectorAll('[id^="win-"] .close-window');
     for (let i = 0; i < allCloseWindowsBtns.length; i++) {
       allCloseWindowsBtns[i].removeEventListener('click', this.closeWindowHandler);
       allCloseWindowsBtns[i].addEventListener('click', (e) => {
@@ -83,8 +122,8 @@ class WindowManager {
       });
     }
 
+    // MINIMIZE WINDOW CLICK.
     const allMinimizeWindowsBtns = document.querySelectorAll( '[id^="win-"] .minimize-window' );
-
     for (let i = 0; i < allMinimizeWindowsBtns.length; i++) {
       allMinimizeWindowsBtns[i].removeEventListener( 'click', this.minimizeWindowHandler );
       allMinimizeWindowsBtns[i].addEventListener('click', (e) => {
@@ -92,6 +131,7 @@ class WindowManager {
       });
     }
 
+    // MAX-SIZE WINDOW CLICK.
     const allMaxWindowsBtns = document.querySelectorAll( '[id^="win-"] .max-size-window' );
     for ( let i = 0; i < allMinimizeWindowsBtns.length; i++ ) {
       allMaxWindowsBtns[i].removeEventListener( 'click', this.maxSizeWindow );
@@ -100,8 +140,8 @@ class WindowManager {
       } );
     }
 
+    // TASKBAR ICONS CLICK.
     const allTaskbarIcons = document.querySelectorAll( '[id^="icn_"] .icon' );
-
     for (let i = 0; i < allTaskbarIcons.length; i++) {
       allTaskbarIcons[i].removeEventListener( 'click', this.taskbarIconsHandler );
       allTaskbarIcons[i].addEventListener('click', (e) => {

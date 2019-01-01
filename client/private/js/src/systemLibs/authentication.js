@@ -50,6 +50,7 @@ class Authentication {
   logout() {
     localStorage.removeItem( AUTH_TOKEN_ID );
     Cookies.remove( 'JWT' );
+    window.location = `${SERVER_ROOT_PATH}portfolio-os/auth`;
   }
 
 }

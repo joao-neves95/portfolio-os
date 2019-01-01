@@ -1,14 +1,15 @@
 {
   "name": "portfolio-os",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "portfolio-os",
   "main": "./server/server.js",
   "author": {
     "name": "shivayl"
   },
+  "private": true,
   "scripts": {
     "forever": "forever start -c node server/server.js",
-    "start": "node server/server.js"
+    "start": "node-dev server/server.js"
   },
   "dependencies": {
     "ajv": "^6.5.5",

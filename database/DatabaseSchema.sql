@@ -7,8 +7,6 @@
  *
  */
 
--- TODO: (PRODUCTION) Change OWNER.
-
 -- TABLES:
 SET TIME ZONE 'UTC';
 

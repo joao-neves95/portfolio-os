@@ -72,11 +72,11 @@ class DragAndDrop {
   }
 
   cancelNonDraggableElements() {
-    Array.from(document.getElementsByTagName( 'img' )).forEach( value => {
+    Array.from( document.getElementsByTagName( 'img' ) ).forEach( value => {
       value.setAttribute( 'draggable', 'false' );
     } );
 
-    Array.from(document.getElementsByTagName( 'a' )).forEach( value => {
+    Array.from( document.getElementsByTagName( 'a' ) ).forEach( value => {
       value.setAttribute( 'draggable', 'false' );
     } );
   }
@@ -86,7 +86,7 @@ class DragAndDrop {
       value.setAttribute( 'draggable', 'true' );
     } );
 
-    Array.from(document.getElementsByClassName( 'free-draggable' )).forEach( value => {
+    Array.from( document.getElementsByClassName( 'free-draggable' ) ).forEach( value => {
       value.setAttribute( 'draggable', 'true' );
     } );
   }

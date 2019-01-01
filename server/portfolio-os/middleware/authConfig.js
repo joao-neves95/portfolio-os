@@ -40,7 +40,7 @@ module.exports = ( app ) => {
   passport.use( new GitHubStrategy( {
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: `https://shivayl.com/portfolio-os/auth/github/callback`,
+    callbackURL: `${process.env.HOST}/portfolio-os/auth/github/callback`,
     passReqToCallback: true
   }, async ( req, accessToken, refreshToken, profile, done ) => {
     const jsonProfile = profile._json;
@@ -88,7 +88,7 @@ module.exports = ( app ) => {
   passport.use( new GoogleStrategy( {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `https://shivayl.com/portfolio-os/auth/google/callback`,
+    callbackURL: `${process.env.HOST}/portfolio-os/auth/google/callback`,
     passReqToCallback: true
   }, async ( req, accessToken, refreshToken, profile, done ) => {
     const jsonProfile = profile._json;
@@ -134,7 +134,7 @@ module.exports = ( app ) => {
 const __linkAccountToUserIfTrue = ( req, profileId ) => {
   return new Promise( async ( resolve, reject ) => {
     try {
-      // Add to existing account.
+      // Update existing account social link.
       if ( req.cookies.JWT !== undefined ) {
         const cookie = JSON.parse( req.cookies.JWT );
         const decoded = Object.freeze( await verifyJWT( cookie.JWT ) );

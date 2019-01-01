@@ -7,9 +7,15 @@
  *
  */
 
+const allowedOrigins = [process.env.HOST, 'https://shivayl.com'];
+
 module.exports = Object.freeze( {
-  // origin: 'https://localhost:2000',
-  origin: 'https://shivayl.com',
+  origin: ( origin, callback ) => {
+    if ( allowedOrigins.includes( origin ) )
+      return callback( null, true );
+
+    return callback( null, false );
+  },
   optionsSuccessStatus: 200,
   credentials: true,
   methods: 'GET,PUT,POST,DELETE'

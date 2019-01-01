@@ -33,7 +33,7 @@
       <li class="tabs-title right"><a href="#register">Register</a></li>
     </ul>
     <section class="tabs-content" data-tabs-content="auth">
-      <!-- Login -->
+      <!-- LOGIN -->
       <form action="/auth/login" method="post" class="tabs-panel is-active" id="login">
         <div class="grid-y">
           <!-- Email Login Input -->
@@ -54,30 +54,9 @@
           <div class="cell large-6">
             <button type="submit" class="submit button success" disabled>Login</button>
           </div>
-          <!-- Social Login -->
-          <div class="grid-x icon-wrap">
-            <div class="cell large-4 large-offset-2">
-              <a href="/portfolio-os/auth/google">
-                <span class="hint--top hint--bounce" aria-label="Login with Google.">
-                  <span class="hint--bottom hint--info  hint--bounce" aria-label="If you experience any errors while login-in try disabling browser extensions.">
-                    <img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon anim popping" id="google-btn" />
-                  </span>
-                </span>
-              </a>
-            </div>
-            <div class="cell large-4">
-              <a href="/portfolio-os/auth/github">
-                <span class="hint--top hint--bounce" aria-label="Login with GitHub.">
-                  <span class="hint--bottom hint--info  hint--bounce" aria-label="If you experience any errors while login-in try disabling browser extensions.">
-                    <img src="img/github.svg" alt="Github Icon" class="icon anim popping" draggable="false" />
-                  </span>
-                </span>
-              </a>
-            </div>
-          </div>
         </div>
       </form>
-      <!-- Register -->
+      <!-- REGISTER -->
       <form action="/auth/register" method="post" class="tabs-panel" id="register">
         <div class="grid-y">
           <!-- Email Register Input -->
@@ -106,17 +85,29 @@
           <div class="cell large-6">
             <button id="register-btn" type="submit" class="submit button success hvr-float-shadow" value="Register" disabled>Register</button>
           </div>
-          <!-- Social Register -->
-          <div class="grid-x icon-wrap">
-            <div class="cell large-4 large-offset-2">
-              <span class="hint--top hint--bounce" aria-label="Register with Google."><img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon" /></span>
-            </div>
-            <div class="cell large-4">
-              <span class="hint--top hint--bounce" aria-label="Register with GitHub."><img src="img/github.svg" alt="Github Icon" class="icon" /></span>
-            </div>
-          </div>
         </div>
       </form>
+    </section>
+    <!-- SOCIAL LOGIN -->
+    <section class="grid-x icon-wrap social">
+      <div class="cell large-4 large-offset-2">
+        <a href="/portfolio-os/auth/google">
+          <span class="hint--top hint--bounce" aria-label="Login with Google.">
+            <span class="hint--bottom hint--info  hint--bounce" aria-label="If you experience any errors while login-in try disabling browser extensions.">
+              <img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon anim popping" id="google-btn" />
+            </span>
+          </span>
+        </a>
+      </div>
+      <div class="cell large-4">
+        <a href="/portfolio-os/auth/github">
+          <span class="hint--top hint--bounce" aria-label="Login with GitHub.">
+            <span class="hint--bottom hint--info  hint--bounce" aria-label="If you experience any errors while login-in try disabling browser extensions.">
+              <img src="img/github.svg" alt="Github Icon" class="icon anim popping" draggable="false" />
+            </span>
+          </span>
+        </a>
+      </div>
     </section>
   </main>
 

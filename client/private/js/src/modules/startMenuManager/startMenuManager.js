@@ -16,7 +16,7 @@ class StartMenuManager {
 
   get element() { return document.getElementsByClassName( 'start-menu' )[0]; }
   get startMenuIcon() { return document.getElementsByClassName( 'menu-icon-wrap' )[0]; }
-  get appContainerElem() { return document.getElementById('start-menu-apps'); };
+  get appContainerElem() { return document.getElementById('start-menu-apps'); }
 
   init() {
     this.injectAllApps();
@@ -36,7 +36,8 @@ class StartMenuManager {
 
   updateListeners() {
     this.startMenuIcon.addEventListener( 'click', () => {
-      const bottom = DomUtils.getStyle( this.element, 'bottom' );
+      // Hide/Show the start menu.
+      const bottom = DomUtils.getStyleProp( this.element, 'bottom' );
       const bottomValue = parseInt( bottom.substring( 0, bottom.length - 2 ) );
 
       if ( bottomValue < 48 )
@@ -45,14 +46,26 @@ class StartMenuManager {
         this.hide();
     } );
 
-    const allApps = document.getElementsByClassName( 'start-menu-icon' );
+    // LOGOUT BUTTON.
+    document.getElementById( 'logout-btn' ).addEventListener( 'click', ( e ) => {
+      e.preventDefault();
+      /** @type { HTMLAudioElement } */
+      const logoutSound = document.getElementById( 'logout-audio' );
+      logoutSound.play();
+      setTimeout( () => {
+        authentication.logout();
+      }, 3200 );
+    } );
 
+    // APP BUTTONS.
+    const allApps = document.getElementsByClassName( 'start-menu-icon' );
     for (let i = 0; i < allApps.length; ++i) {
-      allApps[i].addEventListener('click', (e) => {
-        const clickedAppName = DomUtils.getDirectChildrenByTag(e.target, 'label').innerText;
-        processManager.launchNewProcess(clickedAppName);
+      allApps[i].addEventListener( 'click', ( e ) => {
+        const clickedAppName = DomUtils.getDirectChildrenByTag( e.target, 'label' ).innerText;
+        this.hide();
+        processManager.launchNewProcess( clickedAppName );
         // systemAppsManager.executeApplication(clickedAppName);
-      });
+      } );
     }
   }
 

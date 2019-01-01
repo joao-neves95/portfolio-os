@@ -97,7 +97,7 @@ class DomUtils {
    * @param { HTMLElement } element
    * @param { string } propertyName The CSS property element.
    */
-  static getStyle( element, propertyName ) {
+  static getStyleProp( element, propertyName ) {
     return window.getComputedStyle( element ).getPropertyValue( propertyName );
   }
 

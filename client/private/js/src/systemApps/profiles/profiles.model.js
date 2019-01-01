@@ -22,6 +22,11 @@ class ProfilesModel {
   }
 
   async getUserProfile( userId ) {
-    return await HttpClient.get( `${SERVER_ROOT_PATH}portfolio-os/api/users/${userId}/profile` );
+    try {
+      return await HttpClient.get( `${SERVER_ROOT_PATH}portfolio-os/api/users/${userId}/profile` );
+
+    } catch ( e ) {
+      console.error( e );
+    }
   }
 }

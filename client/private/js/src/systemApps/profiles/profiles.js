@@ -46,7 +46,7 @@ class Profiles {
   }
 
   async injectUserProfile( e ) {
-    // TODO: Get the user id from the user card.
+    // TODO: (FRONTEND) Get the user id from the user card.
     const userProfile = await this.model.getUserProfile( 1 );
     this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['1', 'Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
     this.model.currentPage = ProfilePageType.UserProfiles;

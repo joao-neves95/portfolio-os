@@ -10,7 +10,6 @@
 'use strict';
 const path = require('path');
 require( 'dotenv' ).config( { path: path.join( __dirname, '../.env' ) } );
-const { readFileSync } = require( 'fs' );
 const http = require( 'http' );
 const express = require( 'express' );
 const cookieParser = require( 'cookie-parser' );
@@ -42,7 +41,7 @@ authConfig( app );
 
 // #region PRIVATE API ROUTE.
 
-app.use( '/portfolio-os', noCache, portfolioOSRoutes );
+app.use( ['/portfolio-os', '/portfolio-os/'], noCache, portfolioOSRoutes );
 
 // #endregion
 
@@ -54,7 +53,7 @@ app.use( ( req, res, next ) => {
 http.createServer( app )
   .listen( PORT, ( err ) => {
     if ( err )
-      console.error( err );
+      throw console.error( err );
 
-    console.info( `The server is listening at http://localhost:${PORT}` );
+    console.info( `The server is listening at ${process.env.HOST}` );
 } );

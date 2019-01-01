@@ -26,7 +26,7 @@ class Window {
 
   get template() {
     return `
-      <article class="window-manager grid-y resizable" id="${this.id}">
+      <article class="window-manager grid-y resizable selected-win" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
             <div class="cell small-8 medium-8 large-8">
@@ -88,5 +88,13 @@ class Window {
     this.element.style.height = '92%';
     this.element.style.top = '0%';
     this.element.style.left = '0%';
+  }
+
+  select() {
+    this.element.classList.add( 'selected-win' );
+  }
+
+  unselect() {
+    this.element.classList.remove( 'selected-win' );
   }
 }

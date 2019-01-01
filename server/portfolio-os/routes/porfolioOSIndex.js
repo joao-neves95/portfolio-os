@@ -15,9 +15,11 @@ const router = express.Router();
 const authRoute = require( './auth' );
 const desktopRoute = require( './desktop' );
 const portfolioOSAPIIndex = require( './apiIndex' );
-// TODO: Fix the authentication.
 const ensureAuthentication = require( '../middleware/ensureAuthentication' );
 
+router.get( '/', ( req, res ) => {
+  res.status( 301 ).redirect( 'portfolio-os/auth' );
+} );
 router.use( '/', express.static( path.join( process.cwd(), './client/wwwroot' ) ) );
 
 // AUTH:
