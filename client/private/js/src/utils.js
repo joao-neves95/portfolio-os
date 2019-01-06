@@ -87,6 +87,9 @@ class Collection {
     return this.elements.length;
   }
 
+  /**
+   * (private)
+   */
   get __last() {
     return this.elements[this.length - 1];
   }
@@ -154,8 +157,18 @@ class Dictionary extends Collection {
     super( uniqueKeys, 'any' );
   }
 
+  /**
+   * Returns the last element of the Dictionary or false.
+   * 
+   * @returns { any }
+   */
   get lastValue() {
-    return Object.values( this.__last )[0];
+    try {
+      return Object.values( this.__last )[0];
+
+    } catch ( e ) {
+      return false;
+    }
   }
 
   getAllValues() {
@@ -289,8 +302,18 @@ class List extends Collection {
     super( false, type );
   }
 
+  /**
+   * Returns the last element of the List or false.
+   * 
+   * @returns { any }
+   */
   get last() {
-    return this.__last;
+    try {
+      return this.__last;
+
+    } catch ( e ) {
+      return false;
+    }
   }
 
   /**

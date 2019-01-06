@@ -52,13 +52,12 @@ class WindowManager {
     dragAndDrop.cancelNonDraggableElements();
     dragAndDrop.updateFreeDraggListeners();
     windowResizer.updateListeners();
-    console.debug( this.windows );
   }
 
   closeWindow( windowId ) {
     this.findWindowInstance( windowId ).kill();
     taskbarManager.killIcon( windowId );
-    this.windows.remove(windowId);
+    this.windows.remove( windowId );
     this.updateListeners();
   }
 
@@ -89,6 +88,7 @@ class WindowManager {
 
     this.windows.remove( window.id );
 
+    // Update the index of all the other windows.
     for ( let i = windowIdx; i < this.windows.length; ++i ) {
       const thisWindow = this.windows.getByIndex( i );
       if ( !thisWindow )
@@ -98,7 +98,12 @@ class WindowManager {
       thisWindow.unselect();
     }
 
-    window.element.style.zIndex = parseInt( this.windows.lastValue.element.style.zIndex ) + 1;
+    const lastWindow = this.windows.lastValue;
+    if ( !lastWindow )
+      window.element.style.zIndex = ( 1 ).toString();
+    else
+      window.element.style.zIndex = ( parseInt( lastWindow.element.style.zIndex ) + 1 ).toString();
+
     this.windows.add( window.id, window );
   }
 
@@ -116,19 +121,19 @@ class WindowManager {
     // CLOSE WINDOW CLICK.
     const allCloseWindowsBtns = document.querySelectorAll('[id^="win-"] .close-window');
     for (let i = 0; i < allCloseWindowsBtns.length; i++) {
-      allCloseWindowsBtns[i].removeEventListener('click', this.closeWindowHandler);
+      allCloseWindowsBtns[i].removeEventListener('click', this.__closeWindowHandler);
       allCloseWindowsBtns[i].addEventListener('click', (e) => {
-        this.closeWindowHandler(e, allCloseWindowsBtns[i]);
+        this.__closeWindowHandler(e, allCloseWindowsBtns[i]);
       });
     }
 
     // MINIMIZE WINDOW CLICK.
     const allMinimizeWindowsBtns = document.querySelectorAll( '[id^="win-"] .minimize-window' );
     for (let i = 0; i < allMinimizeWindowsBtns.length; i++) {
-      allMinimizeWindowsBtns[i].removeEventListener( 'click', this.minimizeWindowHandler );
-      allMinimizeWindowsBtns[i].addEventListener('click', (e) => {
-        this.minimizeWindowHandler(e, allMinimizeWindowsBtns[i]);
-      });
+      allMinimizeWindowsBtns[i].removeEventListener( 'click', this.__minimizeWindowHandler );
+      allMinimizeWindowsBtns[i].addEventListener( 'click', ( e ) => {
+        this.__minimizeWindowHandler( e, allMinimizeWindowsBtns[i] );
+      } );
     }
 
     // MAX-SIZE WINDOW CLICK.
@@ -136,17 +141,17 @@ class WindowManager {
     for ( let i = 0; i < allMinimizeWindowsBtns.length; i++ ) {
       allMaxWindowsBtns[i].removeEventListener( 'click', this.maxSizeWindow );
       allMaxWindowsBtns[i].addEventListener( 'click', ( e ) => {
-        this.maxSizeWindowHandler( e, allMaxWindowsBtns[i] );
+        this.__maxSizeWindowHandler( e, allMaxWindowsBtns[i] );
       } );
     }
 
     // TASKBAR ICONS CLICK.
     const allTaskbarIcons = document.querySelectorAll( '[id^="icn_"] .icon' );
     for (let i = 0; i < allTaskbarIcons.length; i++) {
-      allTaskbarIcons[i].removeEventListener( 'click', this.taskbarIconsHandler );
-      allTaskbarIcons[i].addEventListener('click', (e) => {
-        this.taskbarIconsHandler(e, allTaskbarIcons[i]);
-      });
+      allTaskbarIcons[i].removeEventListener( 'click', this.__taskbarIconsHandler );
+      allTaskbarIcons[i].addEventListener( 'click', ( e ) => {
+        this.__taskbarIconsHandler( e, allTaskbarIcons[i] );
+      } );
     }
   }
 
@@ -154,34 +159,34 @@ class WindowManager {
 
   // #region EVENT HANDLERS:
 
-  closeWindowHandler (e, closeWindowBtn) {
+  __closeWindowHandler(e, closeWindowBtn) {
     e.stopPropagation();
     const thisWindow = DomUtils.getParentByIdInclude( closeWindowBtn, 'win-' );
     this.closeWindow(thisWindow.id);
   }
 
-  minimizeWindowHandler(e, minimizeWindowBtn) {
+  __minimizeWindowHandler(e, minimizeWindowBtn) {
     e.stopPropagation();
     const thisWindow = DomUtils.getParentByIdInclude( minimizeWindowBtn, 'win-' );
-    this.minimizeWindow(thisWindow.id);
+    this.minimizeWindow( thisWindow.id );
   }
 
-  maxSizeWindowHandler( e, maxSizeWindowBtn ) {
+  __maxSizeWindowHandler( e, maxSizeWindowBtn ) {
     e.stopPropagation();
     const thisWindow = DomUtils.getParentByIdInclude( maxSizeWindowBtn, 'win-' );
     this.maxSizeWindow( thisWindow.id );
   }
 
-  taskbarIconsHandler(e, taskbarIcon) {
+  __taskbarIconsHandler(e, taskbarIcon) {
     e.stopPropagation();
     const thisIconId = DomUtils.getParentByIdInclude( taskbarIcon, 'icn_win-' ).id;
     const thisWindowId = Utils.parseIDs(thisIconId)[1];
     const thisWindow = this.findWindowInstance( thisWindowId );
 
-    if (thisWindow.isMinimized)
-      this.unminimizeWindow(thisWindowId);
+    if ( thisWindow.isMinimized )
+      this.unminimizeWindow( thisWindowId );
     else
-      this.minimizeWindow(thisWindowId);
+      this.minimizeWindow( thisWindowId );
   }
 
   // #endregion
@@ -192,14 +197,13 @@ class WindowManager {
     $( '#modal' ).foundation();
     $( '#modal' ).foundation( 'open' );
     document.querySelector( '[data-reveal]' ).addEventListener( 'closed.zf.reveal', () => {
-      console.debug('jgx')
       this.updateListeners();
       this.updateFreeDraggListeners();
     } );
   }
 
   // UTILITIES:
-  findWindowInstance(windowId, Callback) {
+  findWindowInstance( windowId, Callback ) {
     const thisWindow = this.windows.getByKey( windowId );
 
     return Callback ? Callback( thisWindow ) : thisWindow;

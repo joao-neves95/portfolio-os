@@ -2,7 +2,14 @@
 
 &nbsp;
 
-#### *v0.1.2 - 01/01/2018
+#### *v0.1.3 - 06/01/2018
+
+- CLIENT:
+  - Solved a bug (happening after resizing the window): "Uncaught TypeError: this.findWindowInstance(...).kill is not a function".
+
+&nbsp;
+
+#### v0.1.2 - 01/01/2018
 
 - CLIENT:
   - Added the logout button to the start menu;
