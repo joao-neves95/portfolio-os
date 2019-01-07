@@ -7,3 +7,25 @@
  *
  */
 
+class AddNewAppView {
+  constructor() {
+  }
+
+  get helpBtnElem() { return DomUtils.get( `#${Window.idPrefix}${processId} .help` ); }
+  get closeWindowBtnElem() { return DomUtils.get( `#${Window.idPrefix}${processId} .close-window` ); }
+  get addNewAppBtnElem() { return DomUtils.get( `#${Window.idPrefix}${processId} .addNewApp` ); }
+
+  getFormData() {
+    const windowQuery = `#${Window.idPrefix}${processId}`;
+
+    const appName = DomUtils.get( `#${windowQuery} .name` );
+    const appDescription = DomUtils.get( `#${windowQuery} .description` );
+    const appIndexPage = DomUtils.get( `#${windowQuery} .index-page` );
+
+    return {
+      appName: appName,
+      appDescription: appDescription,
+      indexPage: appIndexPage
+    };
+  }
+}

@@ -204,6 +204,9 @@
     <Compile Include="client\private\js\src\systemLibs\gridSystem\gridSystem.js" />
     <Compile Include="client\private\js\src\systemLibs\gridSystem\gridSystemTemplates.js" />
     <Compile Include="client\private\js\src\systemLibs\httpClient.js" />
+    <Compile Include="client\private\js\src\systemLibs\notifications.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="client\private\js\src\systemLibs\windowResizer.js" />
     <Compile Include="client\private\js\src\userApps\shivaylCV.js">
       <SubType>Code</SubType>
@@ -224,6 +227,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="server\portfolio-os\middleware\noCache.js" />
+    <Compile Include="server\portfolio-os\middleware\setResetCookie.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="server\server.js" />
     <Compile Include="server\portfolio-os\dataAccess\appStoreStore.js" />
     <Compile Include="server\db.js" />

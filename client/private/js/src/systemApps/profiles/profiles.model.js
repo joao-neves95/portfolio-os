@@ -14,7 +14,7 @@ class ProfilesModel {
 
   async getThisUserProfile() {
     try {
-      return await HttpClient.get( `${SERVER_ROOT_PATH}portfolio-os/api/user/profile` );
+      return await HttpClient.get( `${API_ROOT_PATH}user/profile` );
 
     } catch ( e ) {
       console.error( e );
@@ -23,7 +23,7 @@ class ProfilesModel {
 
   async getUserProfile( userId ) {
     try {
-      return await HttpClient.get( `${SERVER_ROOT_PATH}portfolio-os/api/users/${userId}/profile` );
+      return await HttpClient.get( `${API_ROOT_PATH}users/${userId}/profile` );
 
     } catch ( e ) {
       console.error( e );

@@ -35,13 +35,15 @@ module.exports = {
   // The app name must not exist.
   postApp: async ( req, res ) => {
     try {
-      const queryResult1 = await appStoreStore.appExistsByName( sanitizeHTML( req.body.name ) );
-      if ( queryResult1.length > 0 )
+      const appExists = await appStoreStore.appExistsByName( sanitizeHTML( req.body.name ) );
+      if ( appExists.length > 0 )
         return res.status( 400 ).json( { 'msg': 'App name already exists.' } );
 
-      const queryResult2 = await appStoreStore.insertApp( req.user.id, sanitizeHTML( req.body.name ), sanitizeHTML( req.body.description ), sanitizeHTML( req.body.htmlIndexUrl ) );
-      if ( queryResult2[0] <= 0 )
+      const insertApp = await appStoreStore.insertApp( req.user.id, sanitizeHTML( req.body.name ), sanitizeHTML( req.body.description ), sanitizeHTML( req.body.htmlIndexUrl ) );
+      if ( insertApp[0] <= 0 )
         return res.status( 500 ).json( { 'msg': 'There was an error while creating the new app.' } );
+
+      return res.status( 200 ).json( { 'msg': 'App successfully added.', appId: insertApp[1] } );
 
     } catch ( e ) {
       return res.status( 500 ).json( { 'msg': 'There was an error while creating the new app.' } );

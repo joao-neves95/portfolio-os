@@ -10,5 +10,23 @@
 class AddNewAppModel {
   constructor() {
     this.isOpen = false;
+    this.processId = '';
+  }
+
+  async addNewApp( formData ) {
+    const appModel = new AppStoreApplication(
+      FileSystemItemType.Executable,
+      formData.appName,
+      'user-name',
+      formData.indexPage,
+      formData.appDescription
+    );
+
+    try {
+      return await HttpClient.post( `${API_ROOT_PATH}app-store`, appModel );
+
+    } catch ( e ) {
+      throw new Error( e );
+    }
   }
 }

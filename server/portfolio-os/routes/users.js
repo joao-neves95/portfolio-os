@@ -63,7 +63,6 @@ module.exports = {
       return res.status( 500 ).json( 'Error adding user skill.' );
 
     } catch ( e ) {
-      console.debug( e );
       return res.status( 500 ).json( 'Unknown Error' );
     }
   },
@@ -78,7 +77,6 @@ module.exports = {
       return res.status( 500 ).json( result );
 
     } catch ( e ) {
-      console.debug( e );
       return res.status( 500 ).json( 'Unknown Error' );
     }
   },
@@ -93,7 +91,6 @@ module.exports = {
       return res.status( 500 ).json( result );
 
     } catch ( e ) {
-      console.debug( e );
       return res.status( 500 ).json( -1 );
     }
   },
@@ -108,7 +105,6 @@ module.exports = {
       return res.status( 500 ).json( -1 );
 
     } catch ( e ) {
-      console.debug( e );
       return res.status( 500 ).json( -1 );
     }
   },
@@ -123,7 +119,6 @@ module.exports = {
       return res.status( 500 ).json( -1 );
 
     } catch ( e ) {
-      console.debug( e );
       return res.status( 500 ).json( -1 );
     }
   },
@@ -138,7 +133,6 @@ module.exports = {
       return res.status( 500 ).json( -1 );
 
     } catch ( e ) {
-      console.debug( e );
       return res.status( 500 ).json( -1 );
     }
   }

@@ -14,11 +14,12 @@ class AppStoreApplication {
    * @param { string } creator
    * @param { string } htmlIndexUrl
    */
-  constructor( type, name, creator, htmlIndexUrl ) {
+  constructor( type, name, creator, htmlIndexUrl, description ) {
     this.type = type;
     this.name = name;
     this.creator = creator;
     this.htmlIndexUrl = htmlIndexUrl; // 'https://rawgit.com/'
+    this.description = description;
 
     this.rating = [];
     /** An array with the users id's

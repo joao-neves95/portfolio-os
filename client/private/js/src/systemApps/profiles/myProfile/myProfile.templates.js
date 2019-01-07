@@ -65,9 +65,9 @@ class MyProfileTemplates {
     `;
   }
 
-  static button( label, additionalClasses = '' ) {
+  static button( label, additionalClasses = '', addicionalAttributes = '' ) {
     return `
-      <button type="button" class="success button ${additionalClasses}">${label}</button>
+      <button type="button" class="success button ${additionalClasses}" ${addicionalAttributes}>${label}</button>
     `;
   }
 }

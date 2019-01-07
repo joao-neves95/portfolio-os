@@ -10,15 +10,16 @@
 class AddNewAppController {
   constructor() {
     this.model = new AddNewAppModel();
+    this.view = new AddNewAppView();
   }
 
   openWindow() {
     if (this.model.isOpen)
       return;
 
-    const processId = Utils.randomString(4);
+    this.model.processId = Utils.randomString( 4 );
     windowManager.openNewWindowCustom(
-      processId,
+      this.model.processId,
       'Add New App',
       AddNewAppTemplates.content,
       false, null,
@@ -26,11 +27,28 @@ class AddNewAppController {
     );
     this.model.isOpen = true;
 
-    DomUtils.get( `#${Window.idPrefix}${processId} .help` ).addEventListener( 'click', () => {
+    this.view.addNewAppBtnElem.addEventListener( 'click', ( e ) => {
+      e.preventDefault();
+
+      try {
+        const res = this.model.addNewApp( this.view.getFormData() );
+        this.view.closeWindowBtnElem.click();
+        Notifications.successToast( res.msg );
+        console.debug( res );
+
+      } catch ( e ) {
+        Notifications.errorToast( e );
+        console.debug( e );
+        return;
+      }
+
+    } );
+
+    this.view.helpBtnElem.addEventListener( 'click', () => {
       windowManager.openNewModal( AddNewAppTemplates.helpModalContent );
     } );
 
-    DomUtils.get(`#${Window.idPrefix}${processId} .close-window`).addEventListener('click', () => {
+    this.view.closeWindowBtnElem.addEventListener( 'click', () => {
       this.model.isOpen = false;
     });
   }

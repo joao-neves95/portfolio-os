@@ -2,7 +2,14 @@
 
 &nbsp;
 
-#### *v0.1.3 - 06/01/2018
+#### *v0.2.0-Alpha - //2018
+- Added the notifications module;
+- Added the setResetCookie to the server to solve a bug where if the JWT expired, it didn't let the user login;
+- Finishing the AppStore: addNewApp - (ALPHA).
+
+&nbsp;
+
+#### v0.1.3 - 06/01/2018
 
 - CLIENT:
   - Solved a bug (happening after resizing the window): "Uncaught TypeError: this.findWindowInstance(...).kill is not a function".

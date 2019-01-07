@@ -13,6 +13,7 @@ const path = require( 'path' );
 const router = require( 'express' ).Router();
 const passport = require( 'passport' );
 const signJWT = require( '../middleware/signJWT' );
+const setResetCookie = require( '../middleware/setResetCookie' );
 
 router.get( '/', ( req, res ) => {
   res.contentType = 'html';
@@ -42,6 +43,7 @@ router.get( '/google/callback', passport.authenticate( 'google', { failureRedire
 // #region LOGOUT
 
 router.get( '/logout', ( req, res ) => {
+  setResetCookie();
   req.logout();
   res.status( 202 ).redirect( '/' );
 } );
@@ -65,7 +67,7 @@ const ____setJWTCookie = async ( req, res ) => {
         path: '/',
         audience: process.env.JWT_AUDIENCE,
         issuer: process.env.JWT_ISSUER,
-        // TODO: Change to true in production (HTTPS).
+        // TODO: (SERVER) Change to true in production (HTTPS).
         secure: false,
         signed: true
       }
@@ -75,6 +77,7 @@ const ____setJWTCookie = async ( req, res ) => {
 
   } catch ( e ) {
     console.debug( e );
+    setResetCookie( req );
     return res.status( 401 ).redirect( '/' );
   }
 };

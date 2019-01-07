@@ -19,7 +19,7 @@ class HttpClient {
    * Awaitable (async/await) Fetch JSON object or an error.
    * 
    * @param { string } url
-   * @param { boolean } jwtAuth
+   * @param { boolean } jwtAuth Defaults to true.
    * 
    * @return { Promise<JSON | Error> }
    */
@@ -36,16 +36,16 @@ class HttpClient {
    *
    * @param {any} url
    * @param {any} body
-   * @param {any} jwtAuth
+   * @param {any} jwtAuth Defaults to true.
    * @param {any} Callback
    * 
-   * @return { Response }
+   * @return { Promise<JSON | Error> }
    */
   static post( url, body, jwtAuth = true ) {
     return new Promise( async ( resolve, reject ) => {
       HttpClient.request( RequestType.Post, url, body, jwtAuth )
         .then( res => { resolve( res.json() ); } )
-        .catch( err => { reject( err ); } );
+        .catch( e => { reject( e ); } );
     } );
   }
 
@@ -54,7 +54,7 @@ class HttpClient {
    * 
    * @param {any} url
    * @param {any} body
-   * @param {any} jwtAuth
+   * @param {any} jwtAuth Defaults to true.
    * 
    * @return { Promise<JSON | Error> }
    */

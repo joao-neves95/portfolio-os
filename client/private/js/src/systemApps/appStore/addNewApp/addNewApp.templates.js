@@ -19,22 +19,22 @@ class AddNewAppTemplates {
 
           <div class="cell">
             <h5>Application Name</h5>
-            <input type="text" name="name" required>
+            <input type="text" name="name" class="name" required>
           </div>
 
           <div class="cell">
             <h5>Descrition</h5>
-            <textarea type="text" name="description"></textarea>
+            <textarea type="text" name="description" class="description"></textarea>
           </div>
 
           <div class="cell">
             <h5>Index HTML Page</h5>
-            <input type="text" name="index-page" required>
+            <input type="text" name="index-page" class="index-page" required>
           </div>
 
           <div class="cell">
             <button class="button help" data-open="modal">Help</button>
-            ${MyProfileTemplates.button( 'Submit App' ) }
+            ${MyProfileTemplates.button( 'Submit App', 'addNewApp') }
           </div>
 
         </section>
