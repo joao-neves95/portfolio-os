@@ -104,14 +104,21 @@ class MyProfileController {
 
       const res = await this.model.updateLink( valueElemId.substring( 5 ), that.value );
 
+    // UPDATE SKILL.
     } else if ( valueElemId.startsWith( 'skill_' ) ) {
       if ( that.value === '' )
         return;
 
       const res = await this.model.updateSkill( valueElemId.substring( 6 ), that.value );
-      if ( res <= 0 )
-        // TODO: (FRONTEND) Show notification.
-        console.info( 'Error updating skill' );
+      if ( !res.ok() ) {
+        Notifications.errorToast(
+          await res.json()
+            .catch( e => { Notifications.errorToast( 'Error updating skill.' ); } )
+        );
+
+      } else {
+        Notifications.errorToast( 'Skill successfully updated.' );
+      }
 
     } else if ( that.className.includes( 'new-skill' ) ) {
       const res = await this.model.postNewSkill( that.value );
@@ -146,5 +153,8 @@ class MyProfileController {
 
     } else if ( that.className.includes( 'summary' ) )
       await this.model.updateSummary( that.value );
+  }
+
+  __notifyUserOfResponse( res ) {
   }
 }

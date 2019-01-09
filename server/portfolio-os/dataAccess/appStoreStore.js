@@ -21,10 +21,6 @@ module.exports = {
           [appName]
         );
 
-        console.debug( 'select 1 from app (DEBUG)' )
-        console.debug( queryResult )
-        console.debug( queryResult.rows )
-
         return resolve( queryResult.rows[0] );
 
       } catch ( e ) {
@@ -42,7 +38,7 @@ module.exports = {
     return new Promise( async ( resolve, reject ) => {
       try {
         const queryResult = await db.query(
-          `SELECT Id, UserId, Name, Description, HtmlIndexUrl, Rating
+          `SELECT Id, UserId AS Creator, Name, Description, HtmlIndexUrl, Rating
            FROM App
            WHERE Id > $1
            ORDER BY Rating DESC

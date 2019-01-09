@@ -2,7 +2,14 @@
 
 &nbsp;
 
-#### *v0.2.0-Alpha - //2018
+#### *v0.2.0-Alpha.2 - 09/01/2018
+- Finishing the appStore: Application explorer (the top apps);
+- Added the reset cookies (and localStorage) to clear the JWT if expired;
+- Refactored the HttpClient: It now returns the Response object (broke everything; to fix on the next release).
+
+&nbsp;
+
+#### v0.2.0-Alpha.1 - 07/01/2018
 - Added the notifications module;
 - Added the setResetCookie to the server to solve a bug where if the JWT expired, it didn't let the user login;
 - Finishing the AppStore: addNewApp - (ALPHA).

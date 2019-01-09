@@ -10,6 +10,9 @@
 'use strict';
 const appStoreStore = require( '../dataAccess/appStoreStore' );
 const { sanitizeHTML } = require( '../../../common/commonUtils' );
+const GET_APPS_ERROR_MESSAGE = 'There was an error while getting the apps.';
+
+// TODO: Test errors.
 
 module.exports = {
   // Queries:
@@ -18,18 +21,19 @@ module.exports = {
   getApps: async ( req, res ) => {
     try {
       const lastId = !req.query.lastId ? 0 : req.query.lastId;
-      const limit = !req.query.limit ? 10 : req.query.limit;
-      const queryResult = await appStoreStore.getAppsPaginatedOrderByRatingAsync( lastId, limit );
+      if ( !Number.isInteger( lastId ) )
+        return res.status( 400 ).json( { 'msg': GET_APPS_ERROR_MESSAGE + ' The parameter "lastId" must be an integer.' } );
 
+      const limit = !req.query.limit ? 10 : req.query.limit;
+      if ( !Number.isInteger( limit ) )
+        return res.status( 400 ).json( { 'msg': GET_APPS_ERROR_MESSAGE + ' The parameter "limit" must be an integer.' } );
+
+      const queryResult = await appStoreStore.getAppsPaginatedOrderByRatingAsync( lastId, limit );
       return res.status( 200 ).json( queryResult );
 
     } catch ( e ) {
-      return res.status( 201 ).json( { 'msg': `There was an error while updating app "${sanitizeHTML( req.body.name )}".` } );
+      return res.status( 500 ).json( { 'msg': 'There was an unknown error while getting the apps.' } );
     }
-  },
-
-  getApp: ( req, res ) => {
-
   },
 
   // The app name must not exist.
@@ -43,7 +47,7 @@ module.exports = {
       if ( insertApp[0] <= 0 )
         return res.status( 500 ).json( { 'msg': 'There was an error while creating the new app.' } );
 
-      return res.status( 200 ).json( { 'msg': 'App successfully added.', appId: insertApp[1] } );
+      return res.status( 201 ).json( { 'msg': 'App successfully added.', appId: insertApp[1] } );
 
     } catch ( e ) {
       return res.status( 500 ).json( { 'msg': 'There was an error while creating the new app.' } );
@@ -61,13 +65,25 @@ module.exports = {
       if ( queryResult.length <= 0 )
         return res.status( 500 ).json( { 'msg': `There was an error while updating app "${sanitizeHTML( req.body.name )}".` } );
 
+      return res.status( 201 ).json( { 'msg': 'App successfully created.' } );
+
     } catch ( e ) {
-      return res.status( 201 ).json( { 'msg': `There was an error while updating app "${sanitizeHTML( req.body.name )}".` } );
+      return res.status( 500 ).json( { 'msg': `There was an unknown error while updating app "${sanitizeHTML( req.body.name )}".` } );
     }
   },
 
-  deleteApp: ( req, res ) => {
+  deleteApp: async ( req, res ) => {
+    try {
+      const queryResult = await appStoreStore.deleteApp( req.user.id, req.params.appId );
 
+      if ( queryResult.length <= 0 )
+        return res.status( 404 ).json( { 'msg': 'There was an error while finding the app. App not found.' } );
+
+      return res.status( 200 ).json( { 'msg': 'App successfully deleted.' } );
+
+    } catch ( e ) {
+      return res.status( 500 ).json( { 'msg': 'There was an unknown error while deletng the app.'})
+    }
   },
 
 

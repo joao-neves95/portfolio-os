@@ -9,6 +9,13 @@
 
 'use strict';
 
+const reset = Cookies.get( 'reset' );
+if ( reset !== undefined || reset !== null ) {
+  localStorage.removeItem( 'JWT' );
+  Cookies.remove( 'JWT' );
+  Cookies.remove( 'reset' );
+}
+
 const jwt = localStorage.getItem( 'JWT' );
 
 if ( jwt !== null ) {

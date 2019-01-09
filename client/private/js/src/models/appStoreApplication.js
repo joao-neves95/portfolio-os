@@ -14,8 +14,9 @@ class AppStoreApplication {
    * @param { string } creator
    * @param { string } htmlIndexUrl
    */
-  constructor( type, name, creator, htmlIndexUrl, description ) {
+  constructor( type, id, name, creator, htmlIndexUrl, description ) {
     this.type = type;
+    this.id = id;
     this.name = name;
     this.creator = creator;
     this.htmlIndexUrl = htmlIndexUrl; // 'https://rawgit.com/'

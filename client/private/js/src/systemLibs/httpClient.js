@@ -21,12 +21,12 @@ class HttpClient {
    * @param { string } url
    * @param { boolean } jwtAuth Defaults to true.
    * 
-   * @return { Promise<JSON | Error> }
+   * @return { Promise<Response | Error> }
    */
   static get( url, jwtAuth = true ) {
     return new Promise( async ( resolve, reject ) => {
       HttpClient.request( RequestType.Get, url, null, jwtAuth )
-        .then( res => resolve( res.json() ) )
+        .then( res => { return resolve( res ); } )
         .catch( e => reject( e ) );
     } );
   }
@@ -36,15 +36,14 @@ class HttpClient {
    *
    * @param {any} url
    * @param {any} body
-   * @param {any} jwtAuth Defaults to true.
-   * @param {any} Callback
+   * @param { boolean } jwtAuth Defaults to true.
    * 
-   * @return { Promise<JSON | Error> }
+   * @return { Promise<Response | Error> }
    */
   static post( url, body, jwtAuth = true ) {
     return new Promise( async ( resolve, reject ) => {
       HttpClient.request( RequestType.Post, url, body, jwtAuth )
-        .then( res => { resolve( res.json() ); } )
+        .then( res => { return resolve( res ); } )
         .catch( e => { reject( e ); } );
     } );
   }
@@ -54,14 +53,14 @@ class HttpClient {
    * 
    * @param {any} url
    * @param {any} body
-   * @param {any} jwtAuth Defaults to true.
+   * @param { boolean } jwtAuth Defaults to true.
    * 
-   * @return { Promise<JSON | Error> }
+   * @return { Promise<Response | Error> }
    */
   static put( url, body, jwtAuth = true ) {
     return new Promise( async ( resolve, reject ) => {
       HttpClient.request( RequestType.Put, url, body, jwtAuth )
-        .then( res => { resolve( res.json() ); } )
+        .then( res => { return resolve( res ); } )
         .catch( err => { reject( err ); } );
     } );
   }
@@ -69,7 +68,7 @@ class HttpClient {
   static delete( url, jwtAuth = true ) {
     return new Promise( async ( resolve, reject ) => {
       HttpClient.request( RequestType.Delete, url, null, jwtAuth )
-        .then( res => { resolve( res.json() ); } )
+        .then( res => { return resolve( res ); } )
         .catch( err => { reject( err ); } );
     } );
   }
@@ -81,11 +80,10 @@ class HttpClient {
    * @param { string } url
    * @param { any } body
    * @param { boolean } jwtAuth Whether or not to use JWT authentication (from localStorage).
-   * @param {any} Callback
    * 
-   * @return { Response }
+   * @return { Primise<Response | Error> }
    */
-  static request( requestType, url, body = null, jwtAuth = true, Callback ) {
+  static request( requestType, url, body = null, jwtAuth = true ) {
     return new Promise( async ( resolve, reject ) => {
 
       let requestObject = {
@@ -102,8 +100,6 @@ class HttpClient {
       }
 
       await fetch( url, requestObject )
-        //.then( res => { return res.json(); } )
-        //.then( jsonData => { return Callback( null, jsonData ); } )
         .then( res => { return resolve( res ); } )
         .catch( err => { return reject( err ); } );
     } );

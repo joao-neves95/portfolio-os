@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
@@ -11,5 +11,17 @@ class AppStoreModel {
   constructor() {
     this.processId = '';
     this.id = '';
+  }
+
+  async getAppStorePageFrom( id ) {
+    try {
+      /** @type { Response } */
+      const res = await HttpClient.get( API_ROOT_PATH + 'app-store?lastId=' + id + '&limit=6' );
+      return !res.ok() ? Notifications.errorToast( res.josn() ) : await res.json();
+
+    } catch ( e ) {
+      console.debug( e );
+      return e;
+    }
   }
 }

@@ -53,6 +53,7 @@ router.post( '/app-store',
   jsonValidator,
   appStoreRoute.postApp
 );
+router.delete( '/app-store/:appId', appStoreRoute.deleteApp );
 //router.post( '/file-system', ensureAuthentication, fileSystemRoute.postUserItem );
 //router.put( '/file-system', ensureAuthentication, fileSystemRoute.putUserItem );
 //router.delete( '/file-system', ensureAuthentication, fileSystemRoute.deleteUserItem );

@@ -15,12 +15,13 @@ class AppStoreController {
 
     this.model.processId = processId;
     this.model.id = `app-store-${processId}`;
+    this.view.targetId = processId;
 
     this.init();
     Object.freeze( this );
   }
 
-  init() {
+  async init() {
     windowManager.openNewWindow( this.model.processId, AppStoreTemplates.window( this.model.id ) );
     $( `#${this.model.id} .dropdown` ).foundation();
 
@@ -29,5 +30,28 @@ class AppStoreController {
 
       this.addNewAppController.openWindow();
     } );
+
+    const firstPageApps = await this.model.getAppStorePageFrom( 0 );
+    this.__injectApps( firstPageApps );
+  }
+
+  async __nextPageHandler() {
+    const apps = await this.model.getAppStorePageFrom( this.view.lastAppId );
+    this.__injectApps( apps );
+  }
+
+  async __previousPageHandler() {
+    const apps = await this.model.getAppStorePageFrom( this.view.firstAppId );
+    this.__injectApps( apps );
+  }
+
+  /**
+   * 
+   * @param { AppStoreApplication[] } apps
+   */
+  __injectApps( apps ) {
+    for ( let i = 0; i < firstPageApps.length; ++i ) {
+      this.view.injectApp( firstPageApps[i] );
+    }
   }
 }

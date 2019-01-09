@@ -114,6 +114,7 @@
     <Folder Include="client\wwwroot\css\src\" />
     <Folder Include="client\wwwroot\img\" />
     <Folder Include="client\wwwroot\js\" />
+    <Folder Include="client\wwwroot\js\src_portfolio-os\" />
     <Folder Include="common\" />
     <Folder Include="common\enums\" />
     <Folder Include="common\models\" />
@@ -214,7 +215,10 @@
     <Compile Include="client\private\js\src\userApps\userAppsManager.js" />
     <Compile Include="client\private\js\src\utils.js" />
     <Compile Include="client\wwwroot\js\main.js" />
-    <Compile Include="client\wwwroot\js\portfolio-os_auth_main.js" />
+    <Compile Include="client\wwwroot\js\src_portfolio-os\portfolio-os_auth.header.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="client\wwwroot\js\src_portfolio-os\portfolio-os_auth.js" />
     <Compile Include="common\commonUtils.js" />
     <Compile Include="common\enums\permissionType.js" />
     <Compile Include="common\models\directoryModel.js" />
