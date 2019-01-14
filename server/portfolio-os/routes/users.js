@@ -127,10 +127,20 @@ module.exports = {
     try {
       const result = await userStore.deleteLinkAsync( req.user.id, sanitizeHTML( req.params.linkId ) );
 
-      if ( result > 0 )
-        return res.status( 200 ).json( result );
+      if ( result <= 0 )
+        return res.status( 500 ).json( -1 );
 
+      return res.status( 200 ).json( result );
+
+    } catch ( e ) {
       return res.status( 500 ).json( -1 );
+    }
+  },
+
+  getInstalledApps: async () => {
+    try {
+      const apps = await userStore.getInstalledApps( req.user.id );
+      return res.status( 200 ).json( apps );
 
     } catch ( e ) {
       return res.status( 500 ).json( -1 );

@@ -9,6 +9,7 @@
 
 'use strict';
 const db = require( '../../db' );
+const APP_SELECT_STATEMENT = 'SELECT Id, UserId AS Creator, Name, Description, HtmlIndexUrl, Rating, StartMenuIconUrl, TaskbarIconUrl';
 
 module.exports = {
   appExistsByName: ( appName ) => {
@@ -38,7 +39,7 @@ module.exports = {
     return new Promise( async ( resolve, reject ) => {
       try {
         const queryResult = await db.query(
-          `SELECT Id, UserId AS Creator, Name, Description, HtmlIndexUrl, Rating
+          `${APP_SELECT_STATEMENT}
            FROM App
            WHERE Id > $1
            ORDER BY Rating DESC
@@ -55,17 +56,41 @@ module.exports = {
   },
 
   /**
+   * @param { string } query WHERE statement query.
+   * @param { any[] } parameters
+   */
+  getAppsByWhereStatement: ( query, parameters ) => {
+    return new Promise( async ( _resolve, _reject ) => {
+      try {
+        const queryResult = await db.query(
+          `${APP_SELECT_STATEMENT}
+           FROM App
+           ${query}
+           ORDER BY Rating DESC
+          `,
+          parameters
+        );
+
+        return _resolve( queryResult.rows );
+
+      } catch ( e ) {
+        _reject( e );
+      }
+    } );
+  },
+
+  /**
    * Returns the rowCount and newAppId [ <int>, <int> ]
    * @returns { Promise<Error | []> }
    */
-  insertApp: ( userId, appName, description, htmlIndexUrl ) => {
+  insertApp: ( userId, appName, description, htmlIndexUrl, iconUrl = null ) => {
     return new Promise( async ( resolve, reject ) => {
       try {
         const queryResult = await db.query(
-          `INSERT INTO App (UserId, Name, Description, HtmlIndexUrl)
-           VALUES ($1, $2, $3, $4)
+          `INSERT INTO App (UserId, Name, Description, HtmlIndexUrl, IconUrl)
+           VALUES ($1, $2, $3, $4, $5)
            RETURNING Id`,
-          [userId, appName, description, htmlIndexUrl]
+          [userId, appName, description, htmlIndexUrl, iconUrl]
         );
 
         return resolve( [queryResult.rowCount, queryResult.rows[0]] );

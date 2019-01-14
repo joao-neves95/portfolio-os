@@ -171,6 +171,9 @@ class Dictionary extends Collection {
     }
   }
 
+  /** 
+   * Returns an Array containing all the values.
+   */
   getAllValues() {
     let allValues = [];
 

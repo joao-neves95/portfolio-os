@@ -19,21 +19,26 @@ class SystemAppsManager {
    * @param {string} taskbarIconUrl
    * @param {function} executeFunction
    */
-  bindApplication(appName, startMenuIconUrl, taskbarIconUrl, executeFunction) {
-    const newApp = new SystemApp( appName, startMenuIconUrl, taskbarIconUrl, executeFunction );
-    this.systemApps.add( appName, newApp );
+  bindApplication( appName, startMenuIconUrl, taskbarIconUrl, executeFunction ) {
+    this.systemApps.add( appName, new SystemApp( appName, startMenuIconUrl, taskbarIconUrl, executeFunction ) );
   }
 
   /**
-   * It executes the system application specified with the its bind name.
+   * It executes the system application specified with the its bind name returning true, or returns false if not found.
    * 
    * @param {string} appName
    * @param {string} processId
+   * 
+   * @returns { void | false }
    */
   executeApplication( appName, processId ) {
     /** @type { SystemApp } */
     const thisApp = this.systemApps.getByKey( appName );
-    !thisApp ? console.error( `Application not found ` ) : thisApp.executeFunction( processId );
+    if ( !thisApp )
+      return false;
+
+    thisApp.executeFunction( processId );
+    return true;
   }
 
   getAppInstance(appName) {

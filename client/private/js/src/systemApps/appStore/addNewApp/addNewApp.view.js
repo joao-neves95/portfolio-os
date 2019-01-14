@@ -18,14 +18,17 @@ class AddNewAppView {
   getFormData() {
     const windowQuery = `#${Window.idPrefix}${processId}`;
 
-    const appName = DomUtils.get( `#${windowQuery} .name` );
-    const appDescription = DomUtils.get( `#${windowQuery} .description` );
-    const appIndexPage = DomUtils.get( `#${windowQuery} .index-page` );
+    const appName = DomUtils.get( `#${windowQuery} .name` ).value;
+    const appDescription = DomUtils.get( `#${windowQuery} .description` ).value;
+    const appIndexPage = DomUtils.get( `#${windowQuery} .index-page` ).value;
+    const iconUrl = DomUtils.get( `#${windowQuery} .icon-url` ).value;
 
     return {
       appName: appName,
       appDescription: appDescription,
-      indexPage: appIndexPage
+      indexPage: appIndexPage,
+      startMenuIconUrl: iconUrl,
+      taskbarIconUrl: iconUrl
     };
   }
 }

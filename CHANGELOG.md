@@ -1,9 +1,23 @@
 # CHANGELOG
 
+<!-- &nbsp;
+
+#### *v0.2.0 - /01/2018 -->
+
 &nbsp;
 
-#### *v0.2.0-Alpha.2 - 09/01/2018
-- Finishing the appStore: Application explorer (the top apps);
+#### *v0.2.0-Alpha.3 - 14/01/2018
+- Finishing the AppStore [FRONTEND/SERVER/DATABASE] (TO TEST):
+  - When the process is launched it now tries to find the app on the SystemAppsManager and if not found it tries to found on the UserAppsManager;
+  - The StartMenuManager also injects the UserApps now;
+  - Added the app icon property/collumn to the appStore app model/table;
+  - Added the fetch all installed apps methods;
+  - Other fixes.
+
+&nbsp;
+
+#### v0.2.0-Alpha.2 - 09/01/2018
+- Finishing the AppStore: Application explorer (the top apps);
 - Added the reset cookies (and localStorage) to clear the JWT if expired;
 - Refactored the HttpClient: It now returns the Response object (broke everything; to fix on the next release).
 

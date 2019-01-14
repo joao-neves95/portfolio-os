@@ -11,9 +11,14 @@ class StartMenuApp {
   constructor(iconUrl, appName) {
     this.iconUrl = iconUrl;
     this.appName = appName;
-  };
+
+    return this.template;
+  }
 
   get template() {
+    if ( !this.iconUrl )
+      this.iconUrl = DEFAULT_ICON_URL;
+
     return `
       <li class="start-menu-icon">
         <img src="${this.iconUrl}" alt="${this.appName} Icon" class="icon" /><label>${this.appName}</label>

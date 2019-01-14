@@ -9,6 +9,7 @@
 
 'use strict';
 const db = require( '../../db' );
+const appStoreStore = require( '../dataAccess/appStoreStore' );
 const LoginType = require( '../../../common/enums/loginType' );
 
 module.exports = {
@@ -324,5 +325,25 @@ module.exports = {
         return reject( e );
       }
     } );
+  },
+
+  getInstalledApps: ( userId ) => {
+    return new Promise( async ( _resolve, _reject ) => {
+      try {
+        const queryStatement = `
+          WHERE Id IN (
+              SELECT AppId
+              FROM AppDownloads
+              WHERE UserId = $2
+          )
+        `;
+
+        const allInstalledApps = await appStoreStore.getAppsByQuery( whereStatement, [userId] );
+        return _resolve( allInstalledApps );
+
+      } catch ( e ) {
+        return _reject( e );
+      }
+    } );
   }
-};
+}

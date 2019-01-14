@@ -19,7 +19,24 @@ class WindowManager {
    */
   openNewWindow( processId, content = '' ) {
     const thisAppInstance = processManager.getAppInstance( processId );
-    this.openNewWindowCustom( processId, thisAppInstance.name, content, true, thisAppInstance.taskbarIconUrl );
+    this.openNewWindowCustom(
+      processId,
+      thisAppInstance.name,
+      content,
+      true,
+      thisAppInstance.taskbarIconUrl
+    );
+  }
+
+  openNewAppStoreAppWindow( processId, url ) {
+    const thisAppInstance = processManager.getAppInstance( processId );
+    this.openNewWindowCustom(
+      processId,
+      thisAppInstance.name,
+      window.appStoreAppWindowTemplate( url ),
+      true,
+      thisAppInstance.taskbarIconUrl
+    );
   }
 
   /**

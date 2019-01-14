@@ -27,13 +27,16 @@ class AddNewAppController {
     );
     this.model.isOpen = true;
 
-    this.view.addNewAppBtnElem.addEventListener( 'click', ( e ) => {
+    this.view.addNewAppBtnElem.addEventListener( 'click', async ( e ) => {
       e.preventDefault();
 
       try {
         const res = this.model.addNewApp( this.view.getFormData() );
+        if ( !res.ok() )
+          return Notifications.errorToast( 'There was an error while adding the new application.' );
+
+        Notifications.successToast( await res.json().msg );
         this.view.closeWindowBtnElem.click();
-        Notifications.successToast( res.msg );
         console.debug( res );
 
       } catch ( e ) {

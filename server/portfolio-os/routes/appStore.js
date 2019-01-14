@@ -12,6 +12,8 @@ const appStoreStore = require( '../dataAccess/appStoreStore' );
 const { sanitizeHTML } = require( '../../../common/commonUtils' );
 const GET_APPS_ERROR_MESSAGE = 'There was an error while getting the apps.';
 
+// "portfolio-os/app-store"
+
 // TODO: Test errors.
 
 module.exports = {
@@ -43,7 +45,7 @@ module.exports = {
       if ( appExists.length > 0 )
         return res.status( 400 ).json( { 'msg': 'App name already exists.' } );
 
-      const insertApp = await appStoreStore.insertApp( req.user.id, sanitizeHTML( req.body.name ), sanitizeHTML( req.body.description ), sanitizeHTML( req.body.htmlIndexUrl ) );
+      const insertApp = await appStoreStore.insertApp( req.user.id, sanitizeHTML( req.body.name ), sanitizeHTML( req.body.description ), sanitizeHTML( req.body.htmlIndexUrl ), sanitizeHTML( req.body.startMenuIconUrl ) );
       if ( insertApp[0] <= 0 )
         return res.status( 500 ).json( { 'msg': 'There was an error while creating the new app.' } );
 

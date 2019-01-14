@@ -23,12 +23,12 @@ class StartMenuManager {
   }
 
   injectAllApps() {
-    const allApps = systemAppsManager.getAllApps();
+    let allApps = systemAppsManager.getAllApps();
+    allApps.concat( userAppsManager.installedApps.getAllValues() );
 
     this.appContainerElem.innerHTML = '';
     for (let i = 0; i < allApps.length; ++i) {
-      const newApp = new StartMenuApp(allApps[i].startMenuIconUrl, allApps[i].name);
-      this.appContainerElem.innerHTML += newApp.template;
+      this.appContainerElem.innerHTML += new StartMenuApp( allApps[i].startMenuIconUrl, allApps[i].name );
     }
 
     this.updateListeners();

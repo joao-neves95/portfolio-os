@@ -13,13 +13,20 @@ class AddNewAppModel {
     this.processId = '';
   }
 
+  /**
+   * 
+   * @param { object } formData
+   * 
+   * @returns { Response | Error }
+   */
   async addNewApp( formData ) {
     const appModel = new AppStoreApplication(
       FileSystemItemType.Executable,
       formData.appName,
       'user-name',
       formData.indexPage,
-      formData.appDescription
+      formData.appDescription,
+      formData.startMenuIconUrl
     );
 
     try {

@@ -33,6 +33,11 @@ class AddNewAppTemplates {
           </div>
 
           <div class="cell">
+            <h5>Icon URL</h5>
+            <input type="text" name="icon-url" class="icon-url" placeholder="default">
+          </div>
+
+          <div class="cell">
             <button class="button help" data-open="modal">Help</button>
             ${MyProfileTemplates.button( 'Submit App', 'addNewApp') }
           </div>
