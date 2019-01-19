@@ -16,6 +16,7 @@ const authRoute = require( './auth' );
 const desktopRoute = require( './desktop' );
 const portfolioOSAPIIndex = require( './apiIndex' );
 const ensureAuthentication = require( '../middleware/ensureAuthentication' );
+const blockGuest = require( '../middleware/blockGuest' );
 
 router.get( '/', ( req, res ) => {
   res.status( 301 ).redirect( 'portfolio-os/auth' );
@@ -32,6 +33,6 @@ router.get( ['/desktop/js/:fileName', '/desktop/css/:fileName'], ensureAuthentic
 
 // #endregion
 
-router.use( '/api', ensureAuthentication, portfolioOSAPIIndex );
+router.use( '/api', blockGuest, ensureAuthentication, portfolioOSAPIIndex );
 
 module.exports = router;

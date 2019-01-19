@@ -9,6 +9,17 @@
 
 class ExploreProfilesTemplates {
   constructor() {
+    return false;
+  }
 
+  static userCard( id, name, description ) {
+    return `
+      <article id="user_${id}" class="card user-card">
+        <div class="card-section">
+          <h4>${name}</h4>
+          <p>${description}</p>
+        </div>
+      </article>
+    `;
   }
 }

@@ -74,7 +74,7 @@ class Window {
     return `
       <iframe
         title=""
-        src="${url}"
+        src="https://cdn.jsdelivr.net/gh/${url}"
         allowpaymentrequest="false"
         sandbox="allow-scripts"
       >

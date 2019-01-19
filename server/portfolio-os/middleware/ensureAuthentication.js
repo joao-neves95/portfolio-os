@@ -19,6 +19,12 @@ const verifyJWT = require( './verifyJWT' );
  */
 module.exports = async ( req, res, next ) => {
   try {
+    if ( req.cookies.IS_GUEST ) {
+      req.user = req.cookies.GUEST_SESSION;
+      return next();
+    }
+      
+
     let decoded;
 
     if ( req.signedCookies.JWT !== undefined ) {

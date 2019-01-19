@@ -49,9 +49,7 @@ class StartMenuManager {
     // LOGOUT BUTTON.
     document.getElementById( 'logout-btn' ).addEventListener( 'click', ( e ) => {
       e.preventDefault();
-      /** @type { HTMLAudioElement } */
-      const logoutSound = document.getElementById( 'logout-audio' );
-      logoutSound.play();
+      document.getElementById( 'logout-audio' ).play();
       setTimeout( () => {
         authentication.logout();
       }, 3200 );

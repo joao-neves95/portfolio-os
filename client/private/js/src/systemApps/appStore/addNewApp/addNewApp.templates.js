@@ -29,12 +29,12 @@ class AddNewAppTemplates {
 
           <div class="cell">
             <h5>Index HTML Page</h5>
-            <input type="text" name="index-page" class="index-page" required>
+            <input type="text" name="index-page" class="index-page" placeholder="user/repo@version/file" required>
           </div>
 
           <div class="cell">
             <h5>Icon URL</h5>
-            <input type="text" name="icon-url" class="icon-url" placeholder="default">
+            <input type="text" name="icon-url" class="icon-url" placeholder="Leave blank for the default icon">
           </div>
 
           <div class="cell">
@@ -52,10 +52,18 @@ class AddNewAppTemplates {
       <h1>Help</h1>
       <ul>
         <li>
-          For security reasons, Portfolio-OS only accepts apps stored on GitHub.
-          To add a new app just go to the GitHub file and click on RAW.
-          Then just copy and paste the link to Index HTML Page input.
+          For security reasons, Portfolio-OS only accepts apps stored on a public GitHub repository.
+          To add a new app add the path to the HTML index file of your application.
         </li>
-      </ul>`;
+
+        <li>
+          Example: my-username/master/path-to-file
+        </li>
+
+        <li>
+          All apllications that link to files that are not hosted on a public GitHub repository will be deleted.
+        </li>
+      </ul>
+    `;
   }
 }

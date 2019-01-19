@@ -6,7 +6,15 @@
 
 &nbsp;
 
-#### *v0.2.0-Alpha.3 - 14/01/2018
+#### *v0.2.0-Alpha.4 - 19/01/2018
+- Finishing the Profiles: ProfileExplorer + (public) UserProfile;
+- Added guest accounts;
+- Added the click sound;
+- Other fixes/refactorings.
+
+&nbsp;
+
+#### v0.2.0-Alpha.3 - 14/01/2018
 - Finishing the AppStore [FRONTEND/SERVER/DATABASE] (TO TEST):
   - When the process is launched it now tries to find the app on the SystemAppsManager and if not found it tries to found on the UserAppsManager;
   - The StartMenuManager also injects the UserApps now;

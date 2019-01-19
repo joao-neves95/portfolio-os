@@ -230,6 +230,9 @@
     <Compile Include="server\portfolio-os\enums\environmentType.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="server\portfolio-os\middleware\blockGuest.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="server\portfolio-os\middleware\noCache.js" />
     <Compile Include="server\portfolio-os\middleware\setResetCookie.js">
       <SubType>Code</SubType>
@@ -254,7 +257,7 @@
     <Compile Include="server\portfolio-os\routes\auth.js" />
     <Compile Include="server\portfolio-os\routes\desktop.js" />
     <Compile Include="server\portfolio-os\routes\fileSystem.js" />
-    <Compile Include="server\portfolio-os\routes\porfolioOSIndex.js" />
+    <Compile Include="server\portfolio-os\routes\index.js" />
     <Compile Include="server\portfolio-os\routes\users.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />

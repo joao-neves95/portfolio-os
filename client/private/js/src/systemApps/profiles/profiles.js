@@ -16,7 +16,7 @@ class Profiles {
     this.view = new ProfilesView();
 
     this.myProfileController = new MyProfileController();
-    this.userProfilesController = new UserProfilesController();
+    this.exploreProfilesController = new ExploreProfilesController();
 
     this.init();
     Object.freeze( this );
@@ -39,21 +39,25 @@ class Profiles {
   }
 
   async injectMyProfile() {
-    const thisUserProfile = await this.model.getThisUserProfile();
-    this.view.injectContent( this.id, ProfilesTemplates.userProfile( thisUserProfile.name, thisUserProfile.summary, thisUserProfile.socialLinks, thisUserProfile.skillSet ) );
+    /** @type {Response} */
+    const res = await this.model.getThisUserProfile();
+    if ( res.status !== 200 || !res )
+      return Notifications.errorToast( 'There was an error while getting the user profile.' );
+
+    const thisUserProfile = await res.json();
+    this.view.injectContent( this.id, UserProfilesTemplates.userProfile( thisUserProfile.name, thisUserProfile.summary, thisUserProfile.socialLinks, thisUserProfile.skillSet ) );
     this.myProfileController.initPage( this.view.contentTarget( this.id ) );
     this.model.currentPage = ProfilePageType.MyProfile;
   }
 
-  async injectUserProfile( e ) {
-    // TODO: (FRONTEND) Get the user id from the user card.
-    const userProfile = await this.model.getUserProfile( 1 );
-    this.view.injectContent( this.id, ProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['1', 'Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
-    this.model.currentPage = ProfilePageType.UserProfiles;
-  }
-
-  // TODO: (FRONTEND) Add the user cards (explore profiles)
   injectExploreProfiles() {
     this.model.currentPage = ProfilePageType.Explore;
+    this.exploreProfilesController.inject( this.id );
+  }
+
+  async injectUserProfile( userId ) {
+    const userProfile = await this.model.getUserProfile( userId );
+    this.view.injectContent( this.id, UserProfilesTemplates.userProfile( 'João Neves', 'I am a programmer.', [['1', 'Github', 'github.com', 'joao-neves95']], ['C#, .NET, ASP.NET Core', 'JavaScript, Node.js'] ) );
+    this.model.currentPage = ProfilePageType.UserProfiles;
   }
 }
