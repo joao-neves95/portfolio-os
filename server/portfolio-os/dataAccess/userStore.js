@@ -22,8 +22,8 @@ module.exports = {
     return new Promise( async ( resolve, reject ) => {
       try {
         const queryResult = await db.query(
-          `SELECT Id, Name, Summary, UNIX_TIMESTAMP( LastLogin ) LastLoginUnix
-           FROM App
+          `SELECT Id, Name, Summary, EXTRACT( EPOCH FROM LastLogin ) AS LastLoginUnix
+           FROM Users
            WHERE Id > $1
            ORDER BY LastLoginUnix DESC
            LIMIT $2`,
@@ -330,15 +330,15 @@ module.exports = {
   getInstalledApps: ( userId ) => {
     return new Promise( async ( _resolve, _reject ) => {
       try {
-        const queryStatement = `
+        const whereStatement = `
           WHERE Id IN (
               SELECT AppId
               FROM AppDownloads
-              WHERE UserId = $2
+              WHERE UserId = $1
           )
         `;
 
-        const allInstalledApps = await appStoreStore.getAppsByQuery( whereStatement, [userId] );
+        const allInstalledApps = await appStoreStore.getAppsByWhereStatement( whereStatement, [userId] );
         return _resolve( allInstalledApps );
 
       } catch ( e ) {

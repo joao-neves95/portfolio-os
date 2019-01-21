@@ -11,8 +11,6 @@ class StartMenuApp {
   constructor(iconUrl, appName) {
     this.iconUrl = iconUrl;
     this.appName = appName;
-
-    return this.template;
   }
 
   get template() {

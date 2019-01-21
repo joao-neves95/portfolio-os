@@ -23,11 +23,11 @@ module.exports = {
   getApps: async ( req, res ) => {
     try {
       const lastId = !req.query.lastId ? 0 : req.query.lastId;
-      if ( !Number.isInteger( lastId ) )
+      if ( !Number.isInteger( parseInt( lastId ) ) )
         return res.status( 400 ).json( { 'msg': GET_APPS_ERROR_MESSAGE + ' The parameter "lastId" must be an integer.' } );
 
       const limit = !req.query.limit ? 10 : req.query.limit;
-      if ( !Number.isInteger( limit ) )
+      if ( !Number.isInteger( parseInt( limit ) ) )
         return res.status( 400 ).json( { 'msg': GET_APPS_ERROR_MESSAGE + ' The parameter "limit" must be an integer.' } );
 
       const queryResult = await appStoreStore.getAppsPaginatedOrderByRatingAsync( lastId, limit );

@@ -5,7 +5,7 @@
 		"readme": "https://github.com/joao-neves95/merger-js/blob/master/README.md",
 		"changelog": "https://github.com/joao-neves95/merger-js/blob/master/CHANGELOG.md"
 	},
-	"uglify": true,
+	"uglify": false,
 	"autoBuild": true,
 	"notifications": true,
 	"sourceFiles": [
@@ -14,6 +14,13 @@
 			"output": {
 				"path": "C:\\Users\\Utilizador\\odrive\\ISTEC\\DEV\\portfolio-os\\src\\client\\private\\js\\",
 				"name": "portfolioOS.js"
+			}
+		},
+		{
+			"source": "C:\\Users\\Utilizador\\odrive\\ISTEC\\DEV\\portfolio-os\\src\\client\\wwwroot\\js\\src_portfolio-os\\portfolio-os_auth.header.js",
+			"output": {
+				"path": "C:\\Users\\Utilizador\\odrive\\ISTEC\\DEV\\portfolio-os\\src\\client\\wwwroot\\js\\",
+				"name": "portfolio-os_auth.js"
 			}
 		}
 	],

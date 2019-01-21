@@ -96,6 +96,8 @@ class Collection {
 
   /**
    * Get all elements from the Collection.
+   * For Dictionary is best to use .getAllValues()
+   * 
    * Returns elements[]
    */
   getAll() {

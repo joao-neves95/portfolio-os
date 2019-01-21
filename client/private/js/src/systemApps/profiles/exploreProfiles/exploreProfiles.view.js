@@ -11,14 +11,14 @@ class ExploreProfilesView {
   constructor() {
   }
 
-  get allUserCards() { return DomUtils.get( '#' + this.model.targetWindow + '.user-card' ); }
+  allUserCards( targetWindow ) { return DomUtils.get( `#${targetWindow} .user-card` ); }
 
   injectCards( target, users ) {
     const container = document.getElementById( 'cntnt_' + target );
     container.innerHTML = '';
 
-    for ( let i = 0; i < userCards.length; ++i ) {
-      container.innerHTML += ExploreProfilesTemplates.userCard();
+    for ( let i = 0; i < users.length; ++i ) {
+      container.innerHTML += ExploreProfilesTemplates.userCard( users[i].id, users[i].name, users[i].summary );
     }
   }
 

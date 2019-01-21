@@ -27,8 +27,8 @@ class StartMenuManager {
     allApps.concat( userAppsManager.installedApps.getAllValues() );
 
     this.appContainerElem.innerHTML = '';
-    for (let i = 0; i < allApps.length; ++i) {
-      this.appContainerElem.innerHTML += new StartMenuApp( allApps[i].startMenuIconUrl, allApps[i].name );
+    for ( let i = 0; i < allApps.length; ++i ) {
+      this.appContainerElem.innerHTML += new StartMenuApp( allApps[i].startMenuIconUrl, allApps[i].name ).template;
     }
 
     this.updateListeners();

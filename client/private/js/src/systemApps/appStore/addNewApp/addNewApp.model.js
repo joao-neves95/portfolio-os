@@ -30,8 +30,13 @@ class AddNewAppModel {
     );
 
     try {
-      return await HttpClient.post( `${API_ROOT_PATH}app-store`, appModel );
+      const res = await HttpClient.post( `${API_ROOT_PATH}app-store`, appModel );
+      if ( !res.ok )
+        Notifications.errorToast( 'There was an error while adding the new app.' );
 
+      Notifications.successToast( 'Application successfully added.' );
+
+      return res;
     } catch ( e ) {
       throw new Error( e );
     }

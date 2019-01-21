@@ -9,7 +9,7 @@
 
 'use strict';
 const db = require( '../../db' );
-const APP_SELECT_STATEMENT = 'SELECT Id, UserId AS Creator, Name, Description, HtmlIndexUrl, Rating, StartMenuIconUrl, TaskbarIconUrl';
+const APP_SELECT_STATEMENT = 'SELECT Id, UserId AS Creator, Name, Description, HtmlIndexUrl, Rating, IconUrl';
 
 module.exports = {
   appExistsByName: ( appName ) => {

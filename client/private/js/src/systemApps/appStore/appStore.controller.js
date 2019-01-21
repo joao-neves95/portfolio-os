@@ -50,8 +50,8 @@ class AppStoreController {
    * @param { AppStoreApplication[] } apps
    */
   __injectApps( apps ) {
-    for ( let i = 0; i < firstPageApps.length; ++i ) {
-      this.view.injectApp( firstPageApps[i] );
+    for ( let i = 0; i < apps.length; ++i ) {
+      this.view.injectApp( apps[i] );
     }
   }
 }

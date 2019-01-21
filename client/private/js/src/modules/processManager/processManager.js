@@ -23,13 +23,14 @@ class ProcessManager {
       thisAppInstance = userAppsManager.executeApplication( processName, newProcess.id );
 
       if ( !thisAppInstance )
-        Notifications.errorToast( 'App "' + appName + '" not found.' );
+        return Notifications.errorToast( `App "${appName}" not found.` );
+
+      this.activeProcesses.add( newProcess.id, thisAppInstance );
 
     } else {
+      this.activeProcesses.add( newProcess.id, thisAppInstance );
       systemAppsManager.executeApplication( processName, newProcess.id );
     }
-
-    this.activeProcesses.add( newProcess.id, thisAppInstance );
   }
 
   getActiveProcessesCount() {
@@ -37,13 +38,13 @@ class ProcessManager {
   }
 
   /**
-   * 
+   *
    * @param { string } processId
    * @returns { SystemApp }
    */
-  getAppInstance(processId) {
+  getAppInstance( processId ) {
     return this.activeProcesses.getByKey( processId );
-  }
+  } 
 }
 
 const processManager = new ProcessManager();

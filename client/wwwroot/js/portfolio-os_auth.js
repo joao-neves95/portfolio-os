@@ -1,1 +1,288 @@
-!function(e){var t;if("function"==typeof define&&define.amd&&(define(e),t=!0),"object"==typeof exports&&(module.exports=e(),t=!0),!t){var n=window.Cookies,o=window.Cookies=e();o.noConflict=function(){return window.Cookies=n,o}}}(function(){function e(){for(var e=0,t={};e<arguments.length;e++){var n=arguments[e];for(var o in n)t[o]=n[o]}return t}function t(e){return e.replace(/(%[0-9A-Z]{2})+/g,decodeURIComponent)}return function n(o){function r(){}function i(t,n,i){if("undefined"!=typeof document){"number"==typeof(i=e({path:"/"},r.defaults,i)).expires&&(i.expires=new Date(1*new Date+864e5*i.expires)),i.expires=i.expires?i.expires.toUTCString():"";try{var s=JSON.stringify(n);/^[\{\[]/.test(s)&&(n=s)}catch(e){}n=o.write?o.write(n,t):encodeURIComponent(String(n)).replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g,decodeURIComponent),t=encodeURIComponent(String(t)).replace(/%(23|24|26|2B|5E|60|7C)/g,decodeURIComponent).replace(/[\(\)]/g,escape);var c="";for(var a in i)i[a]&&(c+="; "+a,!0!==i[a]&&(c+="="+i[a].split(";")[0]));return document.cookie=t+"="+n+c}}function s(e,n){if("undefined"!=typeof document){for(var r={},i=document.cookie?document.cookie.split("; "):[],s=0;s<i.length;s++){var c=i[s].split("="),a=c.slice(1).join("=");n||'"'!==a.charAt(0)||(a=a.slice(1,-1));try{var d=t(c[0]);if(a=(o.read||o)(a,d)||t(a),n)try{a=JSON.parse(a)}catch(e){}if(r[d]=a,e===d)break}catch(e){}}return e?r[e]:r}}return r.set=i,r.get=function(e){return s(e,!1)},r.getJSON=function(e){return s(e,!0)},r.remove=function(t,n){i(t,"",e(n,{expires:-1}))},r.defaults={},r.withConverter=n,r}(function(){})});"use strict";const jwt=localStorage.getItem("JWT");null!==jwt&&(Cookies.remove("JWT"),Cookies.set("JWT",jwt),localStorage.removeItem("JWT"),document.location.href="/portfolio-os/desktop"),$(document).foundation();const findDirectChildrenByTag=(e,t)=>{if(e.localName===t)return e;const n=e.children;let o=!1,r=[];for(let e=0;e<n.length;e++)n[e].localName===t&&(r.push(n[e]),o=!0);return!!o&&(r.length<=1?r[0]:r)},getParentNodeClassIncludes=(e,t)=>{let n=e;for(;n&&!n.className.includes(t);)n=n.parentNode;return n};$(document).ready(()=>{const e=document.getElementsByTagName("img");for(let t=0;t<e.length;t++)e[t].addEventListener("dragstart",e=>(e.preventDefault(),!1));const t=document.getElementsByClassName("pass-visibility-span");for(let e=0;e<t.length;e++)t[e].addEventListener("click",e=>{e.stopPropagation();const t=e.target,n=getParentNodeClassIncludes(t,"pass-visibility-span").previousElementSibling,o=findDirectChildrenByTag(t,"img");o.src.includes("show.svg")?(o.src="img/hide.svg",n.type="text"):(o.src="img/show.svg",n.type="password")})});
+// %import<<GH 'js-cookie/js-cookie/master/src/js.cookie.js'
+// %import<<GH 'ckknight/random-js/master/lib/random.min.js'
+// @import 'portfolio-os_auth'
+
+/*!
+ * JavaScript Cookie v2.2.0
+ * https://github.com/js-cookie/js-cookie
+ *
+ * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+ * Released under the MIT license
+ */
+;(function (factory) {
+	var registeredInModuleLoader;
+	if (typeof define === 'function' && define.amd) {
+		define(factory);
+		registeredInModuleLoader = true;
+	}
+	if (typeof exports === 'object') {
+		module.exports = factory();
+		registeredInModuleLoader = true;
+	}
+	if (!registeredInModuleLoader) {
+		var OldCookies = window.Cookies;
+		var api = window.Cookies = factory();
+		api.noConflict = function () {
+			window.Cookies = OldCookies;
+			return api;
+		};
+	}
+}(function () {
+	function extend () {
+		var i = 0;
+		var result = {};
+		for (; i < arguments.length; i++) {
+			var attributes = arguments[ i ];
+			for (var key in attributes) {
+				result[key] = attributes[key];
+			}
+		}
+		return result;
+	}
+
+	function decode (s) {
+		return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
+	}
+
+	function init (converter) {
+		function api() {}
+
+		function set (key, value, attributes) {
+			if (typeof document === 'undefined') {
+				return;
+			}
+
+			attributes = extend({
+				path: '/'
+			}, api.defaults, attributes);
+
+			if (typeof attributes.expires === 'number') {
+				attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5);
+			}
+
+			// We're using "expires" because "max-age" is not supported by IE
+			attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+
+			try {
+				var result = JSON.stringify(value);
+				if (/^[\{\[]/.test(result)) {
+					value = result;
+				}
+			} catch (e) {}
+
+			value = converter.write ?
+				converter.write(value, key) :
+				encodeURIComponent(String(value))
+					.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+
+			key = encodeURIComponent(String(key))
+				.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
+				.replace(/[\(\)]/g, escape);
+
+			var stringifiedAttributes = '';
+			for (var attributeName in attributes) {
+				if (!attributes[attributeName]) {
+					continue;
+				}
+				stringifiedAttributes += '; ' + attributeName;
+				if (attributes[attributeName] === true) {
+					continue;
+				}
+
+				// Considers RFC 6265 section 5.2:
+				// ...
+				// 3.  If the remaining unparsed-attributes contains a %x3B (";")
+				//     character:
+				// Consume the characters of the unparsed-attributes up to,
+				// not including, the first %x3B (";") character.
+				// ...
+				stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
+			}
+
+			return (document.cookie = key + '=' + value + stringifiedAttributes);
+		}
+
+		function get (key, json) {
+			if (typeof document === 'undefined') {
+				return;
+			}
+
+			var jar = {};
+			// To prevent the for loop in the first place assign an empty array
+			// in case there are no cookies at all.
+			var cookies = document.cookie ? document.cookie.split('; ') : [];
+			var i = 0;
+
+			for (; i < cookies.length; i++) {
+				var parts = cookies[i].split('=');
+				var cookie = parts.slice(1).join('=');
+
+				if (!json && cookie.charAt(0) === '"') {
+					cookie = cookie.slice(1, -1);
+				}
+
+				try {
+					var name = decode(parts[0]);
+					cookie = (converter.read || converter)(cookie, name) ||
+						decode(cookie);
+
+					if (json) {
+						try {
+							cookie = JSON.parse(cookie);
+						} catch (e) {}
+					}
+
+					jar[name] = cookie;
+
+					if (key === name) {
+						break;
+					}
+				} catch (e) {}
+			}
+
+			return key ? jar[key] : jar;
+		}
+
+		api.set = set;
+		api.get = function (key) {
+			return get(key, false /* read as raw */);
+		};
+		api.getJSON = function (key) {
+			return get(key, true /* read as json */);
+		};
+		api.remove = function (key, attributes) {
+			set(key, '', extend(attributes, {
+				expires: -1
+			}));
+		};
+
+		api.defaults = {};
+
+		api.withConverter = init;
+
+		return api;
+	}
+
+	return init(function () {});
+}));
+
+!function(n){"use strict";function t(n){if(!(this instanceof t))return new t(n);if(null==n)n=t.engines.nativeMath;else if("function"!=typeof n)throw new TypeError("Expected engine to be a function, got "+typeof n);this.engine=n}function r(n){return function(){return n}}function e(n,t){return 0===t?n:function(r){return n(r)+t}}function i(n){var t=+n;return 0>t?Math.ceil(t):Math.floor(t)}function u(n,t){return 0>n?Math.max(n+t,0):Math.min(n,t)}function o(){return void 0}var f="Random",c="function"!=typeof Math.imul||-5!==Math.imul(4294967295,5)?function(n,t){var r=n>>>16&65535,e=65535&n,i=t>>>16&65535,u=65535&t;return e*u+(r*u+e*i<<16>>>0)|0}:Math.imul,a="function"==typeof String.prototype.repeat&&"xxx"==="x".repeat(3)?function(n,t){return n.repeat(t)}:function(n,t){for(var r="";t>0;)1&t&&(r+=n),t>>=1,n+=n;return r},l=t.prototype;t.engines={nativeMath:function(){return 4294967296*Math.random()|0},mt19937:function(n){function r(n){for(var t=0,r=0;227>(0|t);t=t+1|0)r=2147483648&n[t]|2147483647&n[t+1|0],n[t]=n[t+397|0]^r>>>1^(1&r?2567483615:0);for(;623>(0|t);t=t+1|0)r=2147483648&n[t]|2147483647&n[t+1|0],n[t]=n[t-227|0]^r>>>1^(1&r?2567483615:0);r=2147483648&n[623]|2147483647&n[0],n[623]=n[396]^r>>>1^(1&r?2567483615:0)}function e(n){return n^=n>>>11,n^=n<<7&2636928640,n^=n<<15&4022730752,n^n>>>18}function i(n,t){for(var r=1,e=0,i=t.length,u=0|Math.max(i,624),o=0|n[0];(0|u)>0;--u)n[r]=o=(n[r]^c(o^o>>>30,1664525))+(0|t[e])+(0|e)|0,r=r+1|0,++e,(0|r)>623&&(n[0]=n[623],r=1),e>=i&&(e=0);for(u=623;(0|u)>0;--u)n[r]=o=(n[r]^c(o^o>>>30,1566083941))-r|0,r=r+1|0,(0|r)>623&&(n[0]=n[623],r=1);n[0]=2147483648}function u(){function u(){(0|f)>=624&&(r(o),f=0);var n=o[f];return f=f+1|0,0|e(n)}var o=new n(624),f=0;return u.discard=function(n){for((0|f)>=624&&(r(o),f=0);n-f>624;)n-=624-f,r(o),f=0;return f=f+n|0,u},u.seed=function(n){var t=0;o[0]=t=0|n;for(var r=1;624>r;r=r+1|0)o[r]=t=c(t^t>>>30,1812433253)+r|0;return f=624,u},u.seedWithArray=function(n){return u.seed(19650218),i(o,n),u},u.autoSeed=function(){return u.seedWithArray(t.generateEntropyArray())},u}return u}("function"==typeof Int32Array?Int32Array:Array),browserCrypto:"undefined"!=typeof crypto&&"function"==typeof crypto.getRandomValues&&"function"==typeof Int32Array?function(){var n=null,t=128;return function(){return t>=128&&(null===n&&(n=new Int32Array(128)),crypto.getRandomValues(n),t=0),0|n[t++]}}():null},t.generateEntropyArray=function(){for(var n=[],r=t.engines.nativeMath,e=0;16>e;++e)n[e]=0|r();return n.push(0|(new Date).getTime()),n},t.int32=function(n){return 0|n()},l.int32=function(){return t.int32(this.engine)},t.uint32=function(n){return n()>>>0},l.uint32=function(){return t.uint32(this.engine)},t.uint53=function(n){var t=2097151&n(),r=n()>>>0;return 4294967296*t+r},l.uint53=function(){return t.uint53(this.engine)},t.uint53Full=function(n){for(;;){var t=0|n();if(!(2097152&t)){var r=n()>>>0;return 4294967296*(2097151&t)+r}if(2097152===(4194303&t)&&0===(0|n()))return 9007199254740992}},l.uint53Full=function(){return t.uint53Full(this.engine)},t.int53=function(n){var t=0|n(),r=n()>>>0;return 4294967296*(2097151&t)+r+(2097152&t?-9007199254740992:0)},l.int53=function(){return t.int53(this.engine)},t.int53Full=function(n){for(;;){var t=0|n();if(!(4194304&t)){var r=n()>>>0;return 4294967296*(2097151&t)+r+(2097152&t?-9007199254740992:0)}if(4194304===(8388607&t)&&0===(0|n()))return 9007199254740992}},l.int53Full=function(){return t.int53Full(this.engine)},t.integer=function(){function n(n){return 0===(n+1&n)}function i(n){return function(t){return t()&n}}function u(n){var t=n+1,r=t*Math.floor(4294967296/t);return function(n){var e=0;do e=n()>>>0;while(e>=r);return e%t}}function o(t){return n(t)?i(t):u(t)}function f(n){return 0===(0|n)}function c(n){return function(t){var r=t()&n,e=t()>>>0;return 4294967296*r+e}}function a(n){var t=n*Math.floor(9007199254740992/n);return function(r){var e=0;do{var i=2097151&r(),u=r()>>>0;e=4294967296*i+u}while(e>=t);return e%n}}function l(t){var r=t+1;if(f(r)){var e=(r/4294967296|0)-1;if(n(e))return c(e)}return a(r)}function h(n,t){return function(r){var e=0;do{var i=0|r(),u=r()>>>0;e=4294967296*(2097151&i)+u+(2097152&i?-9007199254740992:0)}while(n>e||e>t);return e}}return function(n,i){if(n=Math.floor(n),i=Math.floor(i),-9007199254740992>n||!isFinite(n))throw new RangeError("Expected min to be at least -9007199254740992");if(i>9007199254740992||!isFinite(i))throw new RangeError("Expected max to be at most 9007199254740992");var u=i-n;return 0>=u||!isFinite(u)?r(n):4294967295===u?0===n?t.uint32:e(t.int32,n+2147483648):4294967295>u?e(o(u),n):9007199254740991===u?e(t.uint53,n):9007199254740991>u?e(l(u),n):i-1-n===9007199254740991?e(t.uint53Full,n):-9007199254740992===n&&9007199254740992===i?t.int53Full:-9007199254740992===n&&9007199254740991===i?t.int53:-9007199254740991===n&&9007199254740992===i?e(t.int53,1):9007199254740992===i?e(h(n-1,i-1),1):h(n,i)}}(),l.integer=function(n,r){return t.integer(n,r)(this.engine)},t.realZeroToOneInclusive=function(n){return t.uint53Full(n)/9007199254740992},l.realZeroToOneInclusive=function(){return t.realZeroToOneInclusive(this.engine)},t.realZeroToOneExclusive=function(n){return t.uint53(n)/9007199254740992},l.realZeroToOneExclusive=function(){return t.realZeroToOneExclusive(this.engine)},t.real=function(){function n(n,t){return 1===t?n:0===t?function(){return 0}:function(r){return n(r)*t}}return function(r,i,u){if(!isFinite(r))throw new RangeError("Expected left to be a finite number");if(!isFinite(i))throw new RangeError("Expected right to be a finite number");return e(n(u?t.realZeroToOneInclusive:t.realZeroToOneExclusive,i-r),r)}}(),l.real=function(n,r,e){return t.real(n,r,e)(this.engine)},t.bool=function(){function n(n){return 1===(1&n())}function e(n,t){return function(r){return n(r)<t}}function i(n){if(0>=n)return r(!1);if(n>=1)return r(!0);var i=4294967296*n;return i%1===0?e(t.int32,i-2147483648|0):e(t.uint53,Math.round(9007199254740992*n))}return function(u,o){return null==o?null==u?n:i(u):0>=u?r(!1):u>=o?r(!0):e(t.integer(0,o-1),u)}}(),l.bool=function(n,r){return t.bool(n,r)(this.engine)},t.pick=function(n,r,e,o){var f=r.length,c=null==e?0:u(i(e),f),a=void 0===o?f:u(i(o),f);if(c>=a)return void 0;var l=t.integer(c,a-1);return r[l(n)]},l.pick=function(n,r,e){return t.pick(this.engine,n,r,e)};var h=Array.prototype.slice;t.picker=function(n,r,e){var i=h.call(n,r,e);if(!i.length)return o;var u=t.integer(0,i.length-1);return function(n){return i[u(n)]}},t.shuffle=function(n,r,e){var i=r.length;if(i){null==e&&(e=0);for(var u=i-1>>>0;u>e;--u){var o=t.integer(0,u),f=o(n);if(u!==f){var c=r[u];r[u]=r[f],r[f]=c}}}return r},l.shuffle=function(n){return t.shuffle(this.engine,n)},t.sample=function(n,r,e){if(0>e||e>r.length||!isFinite(e))throw new RangeError("Expected sampleSize to be within 0 and the length of the population");if(0===e)return[];var i=h.call(r),u=i.length;if(u===e)return t.shuffle(n,i,0);var o=u-e;return t.shuffle(n,i,o-1).slice(o)},l.sample=function(n,r){return t.sample(this.engine,n,r)},t.die=function(n){return t.integer(1,n)},l.die=function(n){return t.die(n)(this.engine)},t.dice=function(n,r){var e=t.die(n);return function(n){var t=[];t.length=r;for(var i=0;r>i;++i)t[i]=e(n);return t}},l.dice=function(n,r){return t.dice(n,r)(this.engine)},t.uuid4=function(){function n(n,t){return a("0",t-n.length)+n}return function(t){var r=t()>>>0,e=0|t(),i=0|t(),u=t()>>>0;return n(r.toString(16),8)+"-"+n((65535&e).toString(16),4)+"-"+n((e>>4&4095|16384).toString(16),4)+"-"+n((16383&i|32768).toString(16),4)+"-"+n((i>>4&65535).toString(16),4)+n(u.toString(16),8)}}(),l.uuid4=function(){return t.uuid4(this.engine)},t.string=function(){var n="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-";return function(r){null==r&&(r=n);var e=r.length;if(!e)throw new Error("Expected pool not to be an empty string");var i=t.integer(0,e-1);return function(n,t){for(var e="",u=0;t>u;++u){var o=i(n);e+=r.charAt(o)}return e}}}(),l.string=function(n,r){return t.string(r)(this.engine,n)},t.hex=function(){var n="0123456789abcdef",r=t.string(n),e=t.string(n.toUpperCase());return function(n){return n?e:r}}(),l.hex=function(n,r){return t.hex(r)(this.engine,n)},t.date=function(n,r){if(!(n instanceof Date))throw new TypeError("Expected start to be a Date, got "+typeof n);if(!(r instanceof Date))throw new TypeError("Expected end to be a Date, got "+typeof r);var e=t.integer(n.getTime(),r.getTime());return function(n){return new Date(e(n))}},l.date=function(n,r){return t.date(n,r)(this.engine)},"function"==typeof define&&define.amd?define(function(){return t}):"undefined"!=typeof module&&"function"==typeof require?module.exports=t:(!function(){var r=n[f];t.noConflict=function(){return n[f]=r,this}}(),n[f]=t)}(this);
+/*
+ *
+ * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * Portfolio-OS is licensed under the GNU LGPLv3, located in the root of this
+ * project, under the name "LICENSE.md".
+ *
+ */
+
+'use strict';
+
+// #region UTILS
+const findDirectChildrenByTag = ( elem, tag ) => {
+  if ( elem.localName === tag ) return elem;
+
+  const that = elem.children;
+  let found = false;
+  let elems = [];
+  for ( let i = 0; i < that.length; i++ ) {
+    if ( that[i].localName === tag ) {
+      elems.push( that[i] );
+      found = true;
+    }
+  }
+  if ( found ) {
+    if ( elems.length <= 1 )
+      return elems[0];
+    else
+      return elems;
+  }
+
+  return false;
+};
+
+const getParentNodeClassIncludes = ( elem, query ) => {
+  let that = elem;
+  while ( that && !that.className.includes( query ) ) {
+    that = that.parentNode;
+  }
+
+  return that;
+};
+
+// From an external library.
+const randomString = ( length ) => {
+  return Random.string( 'qwertyuiopasdfghjklçzxcvbnmQWERTYUIOPÇLKJHGFDSAZXCVBNM1234567890«»<>!$%&/()?{[]}~^*-0+.@' )( Random.engines.browserCrypto, length );
+};
+
+// #endregion
+
+$( document ).ready( () => {
+  const reset = Cookies.get( 'reset' );
+  if ( reset !== undefined && reset !== null && reset !== false ) {
+    console.debug( reset );
+    localStorage.removeItem( 'JWT' );
+    Cookies.remove( 'JWT' );
+    Cookies.remove( 'reset' );
+  }
+
+  // AUTO LOGIN
+  const jwt = localStorage.getItem( 'JWT' );
+  if ( jwt !== null ) {
+    Cookies.remove( 'JWT' );
+    Cookies.set( 'JWT', jwt );
+    localStorage.removeItem( 'JWT' );
+    document.location.href = '/portfolio-os/desktop';
+  }
+
+  $( document ).foundation();
+
+  const allPageImgs = document.getElementsByTagName( 'img' );
+  for ( let i = 0; i < allPageImgs.length; i++ ) {
+    allPageImgs[i].addEventListener( 'dragstart', ( e ) => {
+      e.preventDefault();
+      return false;
+    } );
+  }
+
+  const showHidePasswordIcons = document.getElementsByClassName( 'pass-visibility-span' );
+  for ( let i = 0; i < showHidePasswordIcons.length; i++ ) {
+    showHidePasswordIcons[i].addEventListener( 'click', ( e ) => {
+      e.stopPropagation();
+
+      const that = e.target;
+      const passwordInput = getParentNodeClassIncludes( that, 'pass-visibility-span' ).previousElementSibling;
+      const showHideImg = findDirectChildrenByTag( that, 'img' );
+
+      if ( showHideImg.src.includes( 'show.svg' ) ) {
+        showHideImg.src = 'img/hide.svg';
+        passwordInput.type = 'text';
+      } else {
+        showHideImg.src = 'img/show.svg';
+        passwordInput.type = 'password';
+      }
+    } );
+  }
+
+  document.getElementById( 'login-as-guest' ).addEventListener( 'click', ( e ) => {
+    e.preventDefault();
+    Cookies.set( 'IS_GUEST', JSON.stringify( true ) );
+    Cookies.set( 'GUEST_SESSION', JSON.stringify( { id: randomString( 21 ) } ) );
+  } );
+
+  //document.getElementById( 'register-btn' ).addEventListener( 'click', ( e ) => {
+  //  e.preventDefault();
+
+  //  const userPassword = document.getElementById( 'register-password' ).value;
+  //  const passwordRepeat = document.getElementById( 'register-password-repeat' ).value;
+
+  //  if ( passwordRepeat !== userPassword ) {
+  //    console.debug( 'The passwords do not match.' );
+  //    e.preventDefault();
+  //    return false;
+  //  }
+
+  //  document.getElementById( 'register' ).submit();
+  //}, false );
+} );
+

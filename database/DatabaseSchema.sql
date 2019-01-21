@@ -62,7 +62,6 @@ CREATE TABLE App (
     Rating INT NOT NULL DEFAULT 0,
     CreationDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC'),
     LastUpdateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC'),
-    --
     IconUrl VARCHAR(1000) NULL DEFAULT NULL
 );
 

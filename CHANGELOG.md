@@ -6,7 +6,13 @@
 
 &nbsp;
 
-#### *v0.2.0-Alpha.4 - 19/01/2018
+#### *v0.2.0-Alpha.5 - 21/01/2018
+- Testing and solving multiple bugs from Profiles and AppStore;
+- Solved other bugs.
+
+&nbsp;
+
+#### v0.2.0-Alpha.4 - 19/01/2018
 - Finishing the Profiles: ProfileExplorer + (public) UserProfile;
 - Added guest accounts;
 - Added the click sound;

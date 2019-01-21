@@ -16,17 +16,18 @@ class ExploreProfilesController {
   }
 
   inject( targetWindow ) {
-    this.model.target = target;
-    this.__nextUsersPage( 0 );
+    this.model.targetWindow = targetWindow;
+    this.__changeUsersPage( 0 );
   }
 
   async __changeUsersPage( lastId ) {
-    const users = this.model.getUsersPage();
-    this.view.injectCards( targetWindow, users );
+    const users = await this.model.getUsersPage( lastId );
+    this.view.injectCards( this.model.targetWindow, users );
+    // this.____updateListeners();
   }
 
   ____updateListeners() {
-    const allUserCards = this.view.allUserCards;
+    const allUserCards = this.view.allUserCards( this.model.targetWindow );
     for ( let i = 0; i < allUserCards.length; ++i ) {
       allUserCards[i].addEventListener( 'click', async ( e ) => {
         const thisUserId = e.target.id;

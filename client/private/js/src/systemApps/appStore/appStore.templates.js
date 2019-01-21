@@ -36,7 +36,7 @@ class AppStoreTemplates {
 
         <div class="grid-container fluid content">
           <div class="grid-x content-grid">
-            <!-- ${
+            <!-- {
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
@@ -45,7 +45,7 @@ class AppStoreTemplates {
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' )
-            } -->
+            //} -->
           </div>
         </div>
 

@@ -14,8 +14,8 @@ class ExploreProfilesModel {
 
   async getUsersPage( lastId = 0 ) {
     const res = await HttpClient.get( `${API_ROOT_PATH}users/last-logged-in?lastId=${lastId}&limit=10` );
-    if ( !res.ok() ) {
-      Notifications.errorToast( 'There has been an error while getting the users page. Please try again later.' );
+    if ( !res.ok ) {
+      Notifications.errorToast( 'There was an error while getting the users page. Please try again later.' );
       return false;
     }
 

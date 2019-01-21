@@ -16,8 +16,8 @@ class AppStoreModel {
   async getAppStorePageFrom( id ) {
     try {
       /** @type { Response } */
-      const res = await HttpClient.get( API_ROOT_PATH + 'app-store?lastId=' + id + '&limit=6' );
-      return !res.ok() ? Notifications.errorToast( await res.json() ) : await res.json();
+      const res = await HttpClient.get( `${API_ROOT_PATH}app-store?lastId=${id}&limit=6` );
+      return !res.ok ? Notifications.errorToast( 'There was an error getting the AppStore page.' ) : await res.json();
 
     } catch ( e ) {
       console.debug( e );

@@ -98,61 +98,84 @@ class MyProfileController {
     const that = e.target;
     const valueElemId = that.id;
 
+    // UPDATE LINK.
     if ( valueElemId.startsWith( 'link_' ) ) {
       if ( that.value === '' )
         return;
 
       const res = await this.model.updateLink( valueElemId.substring( 5 ), that.value );
+      if ( !res.ok )
+        return Notifications.errorToast( 'There was an error updating the link.' );
 
-    // UPDATE SKILL.
+      Notifications.successToast( 'Link successfully updated.' );
+
+      // UPDATE SKILL.
     } else if ( valueElemId.startsWith( 'skill_' ) ) {
       if ( that.value === '' )
         return;
 
       const res = await this.model.updateSkill( valueElemId.substring( 6 ), that.value );
-      if ( !res.ok() ) {
-        Notifications.errorToast(
-          await res.json()
-            .catch( e => { Notifications.errorToast( 'Error updating skill.' ); } )
-        );
+      if ( !res.ok )
+        return Notifications.errorToast( 'There was an error updating the skill.' );
 
-      } else {
-        Notifications.errorToast( 'Skill successfully updated.' );
-      }
+      Notifications.successToast( 'Skill successfully updated.' );
 
+      // POST NEW SKILL.
     } else if ( that.className.includes( 'new-skill' ) ) {
-      const res = await this.model.postNewSkill( that.value );
+      let res = await this.model.postNewSkill( that.value );
+      if ( !res.ok )
+        return Notifications.errorToast( 'There was an error while adding the new link.' );
+
+      Notifications.successToast( 'New skill successfully added.' );
+      res = await res.json();
       that.id = 'skill_' + res.id;
 
+      // POST NEW LINK.
     } else if ( that.className.includes( 'new-link' ) ) {
-      const res = await this.model.postNewLink( that.parentElement.parentElement.parentElement.firstElementChild.firstElementChild.firstElementChild.value, that.value );
+      let res = await this.model.postNewLink( that.parentElement.parentElement.parentElement.firstElementChild.firstElementChild.firstElementChild.value, that.value );
+      if ( !res.ok )
+        return Notifications.errorToast( 'There was an error while adding the new link.' );
+
+      Notifications.successToast( 'Link successfully added.' );
+      res = await res.json();
       that.id = 'link_' + res.id;
 
-    } else if ( that.parentElement.className.includes( 'close-button' ) ) {
-       if ( that.className.includes( 'disabled' ) )
+      // DELETE.
+    } else if ( that.parentElement.className.includes( 'close-button' ) || that.className.includes( 'close-button' ) ) {
+      if ( that.className.includes( 'disabled' ) )
         return;
 
-
-      const target = that.parentElement.parentElement;
       let res;
 
       // DELETE SKILL
-      if ( target.firstElementChild.classList.contains( 'skill' ) || target.firstElementChild.classList.contains( 'new-skill' ) ) {
-        res = await this.model.deleteSkill( target.firstElementChild.id.substring( 6 ) );
+      if ( that.parentElement.firstElementChild.className.includes( 'skill' ) ) {
+        res = await this.model.deleteSkill( that.parentElement.firstElementChild.id.substring( 6 ) );
+        if ( res.ok )
+          Notifications.successToast( 'Skill successfully deleted.' );
+        else
+          return Notifications.errorToast( 'There was an error while deleting the skill.' );
 
-      // DELETE LINK
+        // DELETE LINK
       } else {
-        res = await this.model.deleteLink( target.firstElementChild.lastElementChild.firstElementChild.firstElementChild.id.substring( 5 ) );
+        res = await this.model.deleteLink( that.parentElement.firstElementChild.lastElementChild.firstElementChild.firstElementChild.id.substring( 5 ) );
+        if ( res.ok )
+          Notifications.successToast( 'Link successfully deleted.' );
+        else
+          return Notifications.errorToast( 'There was an error while deleting the link.' );
       }
 
       if ( res <= 0 )
-        // TODO: (FRONTEND) Show notification.
-        console.info( 'Error Deleting.' );
+        return Notifications.errorToast( 'Error while removing from the page.' );
       else
-        target.remove();
+        that.parentElement.remove();
 
-    } else if ( that.className.includes( 'summary' ) )
-      await this.model.updateSummary( that.value );
+    } else if ( that.className.includes( 'summary' ) ) {
+      let res = await this.model.updateSummary( that.value );
+      if ( !res.ok )
+        return Notifications.errorToast( 'There was an error while updating the summary.' );
+
+      Notifications.successToast( 'Summary successfully updated.' );
+    }
   }
 
   __notifyUserOfResponse( res ) {

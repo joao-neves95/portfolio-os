@@ -14,7 +14,7 @@ class ExploreProfilesTemplates {
 
   static userCard( id, name, description ) {
     return `
-      <article id="user_${id}" class="card user-card">
+      <article id="user_${id}" class="cell card user-card">
         <div class="card-section">
           <h4>${name}</h4>
           <p>${description}</p>

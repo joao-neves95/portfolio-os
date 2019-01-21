@@ -50,12 +50,14 @@ const randomString = ( length ) => {
 
 $( document ).ready( () => {
   const reset = Cookies.get( 'reset' );
-  if ( reset !== undefined || reset !== null ) {
+  if ( reset !== undefined && reset !== null && reset !== false ) {
+    console.debug( reset );
     localStorage.removeItem( 'JWT' );
     Cookies.remove( 'JWT' );
     Cookies.remove( 'reset' );
   }
 
+  // AUTO LOGIN
   const jwt = localStorage.getItem( 'JWT' );
   if ( jwt !== null ) {
     Cookies.remove( 'JWT' );

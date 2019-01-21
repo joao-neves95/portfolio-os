@@ -34,7 +34,12 @@ whenDomReady( () => {
   // GlobalEvents bindings:
   globalEvents.bindEvent( 'click', ( e ) => { contextMenu.outsideClickGlobalEvent( e ); } );
   globalEvents.bindEvent( 'click', ( e ) => { startMenuManager.outsideClickGlobalEvent( e ); } );
-  globalEvents.bindEvent( 'click', ( e ) => { document.getElementById( 'click-audio' ).play(); } );
+  globalEvents.bindEvent( 'click', ( e ) => {
+    const click = document.getElementById( 'click-audio' );
+    click.pause();
+    click.currentTime = 0;
+    click.play();
+  } );
   globalEvents.init();
 
   //console.debug( 'FS V2:', fileSystem.____fsv2 );

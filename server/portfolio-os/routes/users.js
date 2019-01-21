@@ -24,7 +24,7 @@ module.exports = {
       const limit = !req.query.limit ? 10 : req.query.limit;
       const result = await userStore.getUsersOrderByLastLogin( lastId, limit );
 
-      if ( result > 0 )
+      if ( result.length > 0 )
         return res.status( 200 ).json( result );
 
       return res.status( 500 ).json( 'Error updating the user summary.' );
@@ -58,6 +58,7 @@ module.exports = {
       const result = await userStore.addSkillAsync( req.user.id, sanitizeHTML( req.body.skill ) );
 
       if ( result[0] > 0 )
+        // example "{ id: 2 }"
         return res.status( 200 ).json( result[1] );
 
       return res.status( 500 ).json( 'Error adding user skill.' );
@@ -137,9 +138,10 @@ module.exports = {
     }
   },
 
-  getInstalledApps: async () => {
+  getInstalledApps: async ( req, res ) => {
     try {
       const apps = await userStore.getInstalledApps( req.user.id );
+      console.debug( apps );
       return res.status( 200 ).json( apps );
 
     } catch ( e ) {

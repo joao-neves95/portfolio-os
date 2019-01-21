@@ -32,7 +32,7 @@ class UserAppsManager {
     const thisApp = this.installedApps.getByKey( appName );
 
     if ( !thisApp ) {
-      Notifications.errorToast( 'App "' + appName + '" not found.' );
+      Notifications.errorToast( `App "${appName}" not found.` );
       return false;
 
     } else {
@@ -50,17 +50,19 @@ class UserAppsManager {
   }
 
   async __fetchInstalledApps() {
-    const installedApps = await HttpClient.get( API_ROOT_PATH + 'user/installed-apps' );
-    if ( !installedApps.ok() ) {
+    let installedApps = await HttpClient.get( API_ROOT_PATH + 'user/installed-apps' );
+    if ( !installedApps.ok ) {
       Notifications.errorToast( 'There was an error while fetching the installed apps. Please try again later.' );
-      return _reject( false );
+      return false;
     }
+
+    installedApps = await installedApps.json();
 
     for ( let i = 0; i < installedApps.lenght; ++i ) {
       this.installedApps.add( installedApps[i].name, installedApps[i] );
     }
 
-    return _resolve();
+    return true;
   }
 }
 
