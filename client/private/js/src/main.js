@@ -47,7 +47,7 @@ whenDomReady( () => {
   //console.debug( 'Taskbar Icons:', taskbarManager.icons );
   windowManager.openNewModal(
     `<p><strong>Portfolio-OS</strong> is a work in progress and so, some features do not work as of yet.</p>
-     <p>(Features like the AppStore, the Explorer, or searrching for users in the Profiles app)</p>
+     <p>(Features like the AppStore and the Explorer)</p>
      <p>Keep also in mind that this is the Portfolio-OS's Dekstop version and not the mobile, so it is <strong>not</strong> mobile responsive.</p>`
   );
 

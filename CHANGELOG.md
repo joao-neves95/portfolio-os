@@ -1,46 +1,25 @@
 # CHANGELOG
 
-<!-- &nbsp;
-
-#### *v0.2.0 - /01/2018 -->
-
 &nbsp;
 
-#### *v0.2.0-Alpha.5 - 21/01/2018
-- Testing and solving multiple bugs from Profiles and AppStore;
-- Solved other bugs.
-
-&nbsp;
-
-#### v0.2.0-Alpha.4 - 19/01/2018
-- Finishing the Profiles: ProfileExplorer + (public) UserProfile;
-- Added guest accounts;
+#### *v0.2.0 - 22/01/2018
 - Added the click sound;
-- Other fixes/refactorings.
-
-&nbsp;
-
-#### v0.2.0-Alpha.3 - 14/01/2018
-- Finishing the AppStore [FRONTEND/SERVER/DATABASE] (TO TEST):
-  - When the process is launched it now tries to find the app on the SystemAppsManager and if not found it tries to found on the UserAppsManager;
-  - The StartMenuManager also injects the UserApps now;
-  - Added the app icon property/collumn to the appStore app model/table;
-  - Added the fetch all installed apps methods;
-  - Other fixes.
-
-&nbsp;
-
-#### v0.2.0-Alpha.2 - 09/01/2018
-- Finishing the AppStore: Application explorer (the top apps);
-- Added the reset cookies (and localStorage) to clear the JWT if expired;
-- Refactored the HttpClient: It now returns the Response object (broke everything; to fix on the next release).
-
-&nbsp;
-
-#### v0.2.0-Alpha.1 - 07/01/2018
 - Added the notifications module;
-- Added the setResetCookie to the server to solve a bug where if the JWT expired, it didn't let the user login;
-- Finishing the AppStore: addNewApp - (ALPHA).
+- Refactored the HttpClient (frontend): It now returns the Response object (broke everything; to fix on the next release);
+- Added the setResetCookie to the server to solve a bug where if the JWT expired, it didn't let the user login; Added the reset cookies (and localStorage) to clear the JWT if expired;
+- Completed the Profiles:
+  - ProfileExplorer;
+  - (Public) UserProfile.
+- AppStore:
+  - Application Explorer (the top apps) is now functional (not searchable though);
+  - Add new app is now functional (kind of);
+  - Added the fetch all installed apps methods;
+  - Added the app icon property/collumn to the appStore app model/table;
+  - When the process is launched it now tries to find the app on the SystemAppsManager and if not found it tries to found on the        UserAppsManager;
+  - The StartMenuManager also injects the installed UserApps now (apps can not yet be installed).
+  - **A lot of bugs**.
+- Added guest accounts (not functional yet);
+- Fixes on the Desktop responsibility.
 
 &nbsp;
 

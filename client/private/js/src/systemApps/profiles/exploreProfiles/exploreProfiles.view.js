@@ -11,7 +11,7 @@ class ExploreProfilesView {
   constructor() {
   }
 
-  allUserCards( targetWindow ) { return DomUtils.get( `#${targetWindow} .user-card` ); }
+  allUserCards( targetWindow ) { return DomUtils.getAll( `#${targetWindow} .user-card` ); }
 
   injectCards( target, users ) {
     const container = document.getElementById( 'cntnt_' + target );
@@ -23,6 +23,6 @@ class ExploreProfilesView {
   }
 
   injectProfile( target, content ) {
-
+    document.getElementById( 'cntnt_' + target ).innerHTML = content;
   }
 }

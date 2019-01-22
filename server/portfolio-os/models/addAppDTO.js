@@ -9,14 +9,13 @@
 
 'use strict';
 const Ajv = require( 'ajv' );
-const ajv = new Ajv( { allErrors: true } );
 
 module.exports = Object.freeze( {
   "type": "object",
   "required": ["name", "htmlIndexUrl"],
   "properties": {
-    "name": { "type": "string", "maxLength": 50 },
+    "name": { "type": "string", "maxLength": 50, "minLength": 2 },
     "description": { "type": "string" },
-    "htmlIndexUrl": { "type": "string", "maxLength": 500, "format": "url" }
+    "htmlIndexUrl": { "type": "string", "maxLength": 1000, "minLength": 1 }
   }
 } );

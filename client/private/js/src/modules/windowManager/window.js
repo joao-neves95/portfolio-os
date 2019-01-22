@@ -64,9 +64,9 @@ class Window {
     return `
       <div class="reveal" id="modal" data-reveal>
         ${content}
-        <button class="close-button" data-close aria-label="Close modal" type="button">
+        <!--<button class="close-button" data-close aria-label="Close modal" type="button">
           <span aria-hidden="true">&times;</span>
-        </button>
+        </button>-->
       </div>`;
   }
 
@@ -87,7 +87,7 @@ class Window {
   }
 
   kill() {
-    this.element.remove();
+    if ( this.element ) this.element.remove();
   }
 
   minimize() {
@@ -108,7 +108,7 @@ class Window {
   }
 
   select() {
-    this.element.classList.add( 'selected-win' );
+    if ( this.element ) this.element.classList.add( 'selected-win' );
   }
 
   unselect() {

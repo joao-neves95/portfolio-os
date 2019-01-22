@@ -15,7 +15,7 @@ class AppStoreController {
 
     this.model.processId = processId;
     this.model.id = `app-store-${processId}`;
-    this.view.targetId = processId;
+    this.view.targetId = this.model.id;
 
     this.init();
     Object.freeze( this );
@@ -24,12 +24,7 @@ class AppStoreController {
   async init() {
     windowManager.openNewWindow( this.model.processId, AppStoreTemplates.window( this.model.id ) );
     $( `#${this.model.id} .dropdown` ).foundation();
-
-    DomUtils.get( `#${this.model.id} .add-new` ).addEventListener( 'click', ( e ) => {
-      e.preventDefault();
-
-      this.addNewAppController.openWindow();
-    } );
+    this.__updateListeners();
 
     const firstPageApps = await this.model.getAppStorePageFrom( 0 );
     this.__injectApps( firstPageApps );
@@ -46,12 +41,20 @@ class AppStoreController {
   }
 
   /**
-   * 
+   *
    * @param { AppStoreApplication[] } apps
    */
   __injectApps( apps ) {
     for ( let i = 0; i < apps.length; ++i ) {
       this.view.injectApp( apps[i] );
     }
+  }
+
+  __updateListeners() {
+    DomUtils.get( `#${this.model.id} .add-new` ).addEventListener( 'click', ( e ) => {
+      e.preventDefault();
+      this.addNewAppController.openWindow();
+      document.getElementById( 'win-' + this.model.processId ).getElementsByClassName( 'close-window' )[0].click();
+    } );
   }
 }

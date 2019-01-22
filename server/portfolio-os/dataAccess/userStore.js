@@ -62,6 +62,30 @@ module.exports = {
     } );
   },
 
+  /**
+   * Returns a prommise with the user name as string or an Error.
+   * 
+   * @param { number } userId
+   * @returns { Promise<string|Error> }
+   */
+  getNameById: ( userId ) => {
+    return new Promise( async ( _resolve, _reject ) => {
+      try {
+        const queryResult = await db.query(
+          `SELECT Name
+           FROM Users
+           WHERE Id = $1`,
+          [userId]
+        );
+
+        return _resolve( queryResult.rows[0].name );
+
+      } catch ( e ) {
+        return _reject( e );
+      }
+    } );
+  },
+
   getProfileAsync: ( userId ) => {
     return new Promise( async ( resolve, reject ) => {
       /** @type {PoolClient} */

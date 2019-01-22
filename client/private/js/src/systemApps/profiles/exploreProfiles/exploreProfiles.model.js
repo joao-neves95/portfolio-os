@@ -21,4 +21,14 @@ class ExploreProfilesModel {
 
     return await res.json();
   }
+
+  async getUserProfile( userId ) {
+    try {
+      return await HttpClient.get( `${API_ROOT_PATH}users/${userId}/profile` );
+
+    } catch ( e ) {
+      console.error( e );
+      return false;
+    }
+  }
 }

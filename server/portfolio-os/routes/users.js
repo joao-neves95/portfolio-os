@@ -34,9 +34,24 @@ module.exports = {
     }
   },
 
-  getUserProfile: async ( req, res ) => {
-    const userProfile = await userStore.getProfileAsync( req.user.id );
-    return res.status( 200 ).json( userProfile );
+  getThisUserProfile: async ( req, res ) => {
+    try {
+      const userProfile = await userStore.getProfileAsync( req.user.id );
+      return res.status( 200 ).json( userProfile );
+
+    } catch ( e ) {
+      return res.status( 500 ).json( 'Unknown Error.' );
+    }
+  },
+
+  getUserProfileById: async ( req, res ) => {
+    try {
+      const userProfile = await userStore.getProfileAsync( sanitizeHTML( req.params.id ) );
+      return res.status( 200 ).json( userProfile );
+
+    } catch ( e ) {
+      return res.status( 500 ).json( 'Unknown Error.' );
+    }
   },
 
   putUserSummary: async ( req, res ) => {

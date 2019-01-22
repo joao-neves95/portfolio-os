@@ -23,27 +23,34 @@ class ExploreProfilesController {
   async __changeUsersPage( lastId ) {
     const users = await this.model.getUsersPage( lastId );
     this.view.injectCards( this.model.targetWindow, users );
-    // this.____updateListeners();
+    await this.____updateListeners();
   }
 
   ____updateListeners() {
     const allUserCards = this.view.allUserCards( this.model.targetWindow );
     for ( let i = 0; i < allUserCards.length; ++i ) {
       allUserCards[i].addEventListener( 'click', async ( e ) => {
-        const thisUserId = e.target.id;
-        await this.____injectProfile();
+        e.stopPropagation();
+        const thisUserId = DomUtils.getParentByIdInclude( e.target, 'user_' ).id.substring( 5 );
+        await this.____injectProfile( thisUserId );
       } );
     }
   }
 
-  async ____injectProfile() {
-    const userProfile = await this.model.getUserProfile( userId );
-    this.view.injectProfile( this.id,
+  async ____injectProfile( userId ) {
+    let res = await this.model.getUserProfile( userId );
+    if ( !res.ok )
+      return Notifications.errorToast( 'There was an error getting the user profile.' );
+
+    res = await res.json();
+
+    this.view.injectProfile(
+      this.model.targetWindow,
       UserProfilesTemplates.userProfile(
-        userProfile.name,
-        userProfile.summary,
-        userProfile.socialLinks,
-        userProfile.skillSet
+        res.name,
+        res.summary,
+        res.socialLinks,
+        res.skillSet
       )
     );
   }

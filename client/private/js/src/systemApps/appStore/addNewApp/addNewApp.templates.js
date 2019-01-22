@@ -29,7 +29,7 @@ class AddNewAppTemplates {
 
           <div class="cell">
             <h5>Index HTML Page</h5>
-            <input type="text" name="index-page" class="index-page" placeholder="user/repo@version/file" required>
+            <input type="text" name="index-page" class="index-page" placeholder="user/repo-name@repo-version/path-to-file" required>
           </div>
 
           <div class="cell">

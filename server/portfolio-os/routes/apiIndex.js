@@ -19,10 +19,9 @@ const jsonValidator = require( '../middleware/jsonValidator' );
 // #region USER PROFILES
 
 router.get( '/users/last-logged-in', usersRoute.getUsersLastLoggedIn );
-//router.get( '/users/:id/profile', usersRoute.getUser );
-//router.get( '/users/social-accounts', usersRoute.getUserSocialAccounts );
+router.get( '/users/:id/profile', usersRoute.getUserProfileById );
 
-router.get( '/user/profile', usersRoute.getUserProfile );
+router.get( '/user/profile', usersRoute.getThisUserProfile );
 router.put( '/user/profile/summary', usersRoute.putUserSummary );
 router.post( '/user/profile/skills', usersRoute.addSkill );
 router.put( '/user/profile/skills/:skillId', usersRoute.updateSkill );

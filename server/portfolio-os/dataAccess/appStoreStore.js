@@ -9,9 +9,13 @@
 
 'use strict';
 const db = require( '../../db' );
-const APP_SELECT_STATEMENT = 'SELECT Id, UserId AS Creator, Name, Description, HtmlIndexUrl, Rating, IconUrl';
+const APP_SELECT_STATEMENT = 'SELECT App.Id, App.Name, App.Description, App.HtmlIndexUrl, App.Rating, App.IconUrl';
 
 module.exports = {
+  /**
+   * @param { string } appName
+   * It returns the count of apps with that name.
+   */
   appExistsByName: ( appName ) => {
     return new Promise( async ( resolve, reject ) => {
       try {
@@ -22,7 +26,7 @@ module.exports = {
           [appName]
         );
 
-        return resolve( queryResult.rows[0] );
+        return resolve( queryResult.rowCount );
 
       } catch ( e ) {
         return reject( e );
@@ -39,10 +43,12 @@ module.exports = {
     return new Promise( async ( resolve, reject ) => {
       try {
         const queryResult = await db.query(
-          `${APP_SELECT_STATEMENT}
+          `${APP_SELECT_STATEMENT}, Users.Name AS Creator
            FROM App
-           WHERE Id > $1
-           ORDER BY Rating DESC
+               INNER JOIN Users
+               ON App.UserId = Users.Id
+           WHERE App.Id > $1
+           ORDER BY App.Rating DESC
            LIMIT $2`,
           [lastIdOfPreviousPage, limit]
         );

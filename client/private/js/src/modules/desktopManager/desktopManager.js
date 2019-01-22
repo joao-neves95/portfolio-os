@@ -18,8 +18,8 @@ class DesktopManager {
     // 0 because it's added bellow.
     this.gridSystemConfig = {
       gridType: GridType.GridY,
-      cellWidthPercent: 5,
-      cellHeightPercent: 10,
+      cellWidthPercent: 10,
+      cellHeightPercent: 15,
       gridXCount: 0,
       gridYCount: 0,
       target: document.getElementById( 'desktop' ),
@@ -31,7 +31,7 @@ class DesktopManager {
   }
 
   init() {
-    const grid = Utils.calculateGrid( 5, 15 );
+    const grid = Utils.calculateGrid( 10, 15 );
     this.rowCount = grid.y;
     this.gridSystemConfig.gridYCount = grid.y;
     this.cellCount = grid.x;

@@ -11,13 +11,18 @@
 const Ajv = require( 'ajv' );
 const ajv = new Ajv( { allErrors: true } );
 
-module.exports = async ( req, res, next ) => {
-  const validSchema = await ajv.compileAsync( req.schema );
-  const validateSchema = validSchema( req.body );
+module.exports = ( req, res, next ) => {
+  try {
+    const validateSchema = ajv.compile( req.schema );
+    const validSchema = validateSchema( req.body );
 
-  if ( !validateSchema ) {
-    return res.status( 400 ).json( { "msg": "Wrong input.", "Error": validSchema.errors } );
+    if ( !validateSchema )
+      return res.status( 400 ).json( { "msg": "Wrong input.", "Error": validateSchema.errors } );
 
-  } else
     return next();
+
+  } catch ( e ) {
+    console.error( e );
+    return res.status( 500 ).json( { "msg": "Unknown Error.", "Error": 'Unknown' } );
+  }
 };
