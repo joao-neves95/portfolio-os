@@ -19,7 +19,24 @@ class WindowManager {
    */
   openNewWindow( processId, content = '' ) {
     const thisAppInstance = processManager.getAppInstance( processId );
-    this.openNewWindowCustom( processId, thisAppInstance.name, content, true, thisAppInstance.taskbarIconUrl );
+    this.openNewWindowCustom(
+      processId,
+      thisAppInstance.name,
+      content,
+      true,
+      thisAppInstance.taskbarIconUrl
+    );
+  }
+
+  openNewAppStoreAppWindow( processId, url ) {
+    const thisAppInstance = processManager.getAppInstance( processId );
+    this.openNewWindowCustom(
+      processId,
+      thisAppInstance.name,
+      window.appStoreAppWindowTemplate( url ),
+      true,
+      thisAppInstance.taskbarIconUrl
+    );
   }
 
   /**
@@ -162,7 +179,7 @@ class WindowManager {
   __closeWindowHandler(e, closeWindowBtn) {
     e.stopPropagation();
     const thisWindow = DomUtils.getParentByIdInclude( closeWindowBtn, 'win-' );
-    this.closeWindow(thisWindow.id);
+    this.closeWindow( thisWindow.id );
   }
 
   __minimizeWindowHandler(e, minimizeWindowBtn) {
@@ -193,6 +210,7 @@ class WindowManager {
 
   openNewModal( content ) {
     const target = document.getElementById( 'window-manager-container' );
+    $( '#modal' ).remove();
     target.innerHTML += Window.modalTemplate( content );
     $( '#modal' ).foundation();
     $( '#modal' ).foundation( 'open' );
@@ -202,12 +220,15 @@ class WindowManager {
     } );
   }
 
-  // UTILITIES:
+  // #region UTILITIES
+
   findWindowInstance( windowId, Callback ) {
     const thisWindow = this.windows.getByKey( windowId );
 
     return Callback ? Callback( thisWindow ) : thisWindow;
   }
+
+  // #endregion
 }
 
 const windowManager = new WindowManager();

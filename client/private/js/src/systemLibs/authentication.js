@@ -9,7 +9,6 @@
 
 class Authentication {
   constructor() {
-
   }
 
   init() {

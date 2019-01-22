@@ -7,19 +7,24 @@
  *
  */
 
+const DEFAULT_ICON = '';
+
 class AppStoreApplication {
   /**
    * @param { FileSystemItemType } type FileSystemItemType enum
-   * @param { string } name
+   * @param { string } appName
    * @param { string } creator
    * @param { string } htmlIndexUrl
+   * @param { string } description
+   * @param { string } startMenuIconUrl
+   * @param { string } taskbarIconUrl
    */
-  constructor( type, id, name, creator, htmlIndexUrl, description ) {
+  constructor( type, id, appName, creator, htmlIndexUrl, description, iconUrl = '' ) {
     this.type = type;
     this.id = id;
-    this.name = name;
+    this.name = appName;
     this.creator = creator;
-    this.htmlIndexUrl = htmlIndexUrl; // 'https://rawgit.com/'
+    this.htmlIndexUrl = htmlIndexUrl; // https://cdn.jsdelivr.net/gh/user/repo@version/file
     this.description = description;
 
     this.rating = [];
@@ -28,5 +33,8 @@ class AppStoreApplication {
     this.downloads = [];
     this.creationDate = '';
     this.lastUpdateDate = '';
+
+    this.startMenuIconUrl = !iconUrl ? null : iconUrl;
+    this.taskbarIconUrl = !iconUrl ? null : iconUrl;
   }
 }

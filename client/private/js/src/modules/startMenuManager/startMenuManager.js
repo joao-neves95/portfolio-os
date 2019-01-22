@@ -23,12 +23,12 @@ class StartMenuManager {
   }
 
   injectAllApps() {
-    const allApps = systemAppsManager.getAllApps();
+    let allApps = systemAppsManager.getAllApps();
+    allApps.concat( userAppsManager.installedApps.getAllValues() );
 
     this.appContainerElem.innerHTML = '';
-    for (let i = 0; i < allApps.length; ++i) {
-      const newApp = new StartMenuApp(allApps[i].startMenuIconUrl, allApps[i].name);
-      this.appContainerElem.innerHTML += newApp.template;
+    for ( let i = 0; i < allApps.length; ++i ) {
+      this.appContainerElem.innerHTML += new StartMenuApp( allApps[i].startMenuIconUrl, allApps[i].name ).template;
     }
 
     this.updateListeners();
@@ -49,9 +49,7 @@ class StartMenuManager {
     // LOGOUT BUTTON.
     document.getElementById( 'logout-btn' ).addEventListener( 'click', ( e ) => {
       e.preventDefault();
-      /** @type { HTMLAudioElement } */
-      const logoutSound = document.getElementById( 'logout-audio' );
-      logoutSound.play();
+      document.getElementById( 'logout-audio' ).play();
       setTimeout( () => {
         authentication.logout();
       }, 3200 );

@@ -13,15 +13,24 @@ class ProcessManager {
   }
 
   /**
-   * @param {string} processName
-   * The name of the application.
+   * @param {string} processName The name of the application.
    */
   launchNewProcess( processName ) {
     const newProcess = new Process( processName );
-    // TODO: In the future find the app on systemAppsManager or userAppsManager.
-    const thisAppInstance = systemAppsManager.getAppInstance( processName );
-    this.activeProcesses.add( newProcess.id, thisAppInstance );
-    systemAppsManager.executeApplication( processName, newProcess.id );
+    let thisAppInstance = systemAppsManager.getAppInstance( processName );
+
+    if ( !thisAppInstance ) {
+      thisAppInstance = userAppsManager.executeApplication( processName, newProcess.id );
+
+      if ( !thisAppInstance )
+        return Notifications.errorToast( `App "${appName}" not found.` );
+
+      this.activeProcesses.add( newProcess.id, thisAppInstance );
+
+    } else {
+      this.activeProcesses.add( newProcess.id, thisAppInstance );
+      systemAppsManager.executeApplication( processName, newProcess.id );
+    }
   }
 
   getActiveProcessesCount() {
@@ -29,13 +38,13 @@ class ProcessManager {
   }
 
   /**
-   * 
+   *
    * @param { string } processId
    * @returns { SystemApp }
    */
-  getAppInstance(processId) {
+  getAppInstance( processId ) {
     return this.activeProcesses.getByKey( processId );
-  }
+  } 
 }
 
 const processManager = new ProcessManager();

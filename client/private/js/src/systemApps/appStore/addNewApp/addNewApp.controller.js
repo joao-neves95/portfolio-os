@@ -27,28 +27,25 @@ class AddNewAppController {
     );
     this.model.isOpen = true;
 
-    this.view.addNewAppBtnElem.addEventListener( 'click', ( e ) => {
+    this.view.addNewAppBtnElem( this.model.processId ).addEventListener( 'click', async ( e ) => {
       e.preventDefault();
-
       try {
-        const res = this.model.addNewApp( this.view.getFormData() );
-        this.view.closeWindowBtnElem.click();
-        Notifications.successToast( res.msg );
+        const res = await this.model.addNewApp( this.view.getFormData( this.model.processId ) );
+        this.view.closeWindowBtnElem( this.model.processId ).click();
         console.debug( res );
 
       } catch ( e ) {
-        Notifications.errorToast( e );
         console.debug( e );
         return;
       }
 
     } );
 
-    this.view.helpBtnElem.addEventListener( 'click', () => {
+    this.view.helpBtnElem( this.model.processId ).addEventListener( 'click', () => {
       windowManager.openNewModal( AddNewAppTemplates.helpModalContent );
     } );
 
-    this.view.closeWindowBtnElem.addEventListener( 'click', () => {
+    this.view.closeWindowBtnElem( this.model.processId ).addEventListener( 'click', () => {
       this.model.isOpen = false;
     });
   }

@@ -9,6 +9,20 @@
 
 class ExploreProfilesView {
   constructor() {
+  }
 
+  allUserCards( targetWindow ) { return DomUtils.getAll( `#${targetWindow} .user-card` ); }
+
+  injectCards( target, users ) {
+    const container = document.getElementById( 'cntnt_' + target );
+    container.innerHTML = '';
+
+    for ( let i = 0; i < users.length; ++i ) {
+      container.innerHTML += ExploreProfilesTemplates.userCard( users[i].id, users[i].name, users[i].summary );
+    }
+  }
+
+  injectProfile( target, content ) {
+    document.getElementById( 'cntnt_' + target ).innerHTML = content;
   }
 }

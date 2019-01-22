@@ -22,11 +22,11 @@ class AppStoreView {
    * @param { AppStoreApplication } appStoreApplication
    */
   injectApp( appStoreApplication ) {
-    appContainer.innerHTML += AppStoreTemplates.appCard(
+    this.appContainer.innerHTML += AppStoreTemplates.appCard(
       appStoreApplication.id,
       appStoreApplication.name,
       appStoreApplication.creator,
-      appStoreApplication.htmlIndexUrl,
+      appStoreApplication.htmlindexurl,
       Infinity,
       Infinity,
       appStoreApplication.description

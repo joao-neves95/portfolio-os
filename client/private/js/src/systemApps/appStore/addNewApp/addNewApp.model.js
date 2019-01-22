@@ -13,17 +13,38 @@ class AddNewAppModel {
     this.processId = '';
   }
 
+  /**
+   * 
+   * @param { object } formData
+   * 
+   * @returns { Response | Error }
+   */
   async addNewApp( formData ) {
+    // VALIDATION
+    if ( formData.appName.length <= 2 )
+      return Notifications.errorToast( 'The application name must have more than 2 characters.' );
+    else if ( formData.indexPage <= 1)
+      return Notifications.errorToast( 'The application html index page is required.' );
+
     const appModel = new AppStoreApplication(
       FileSystemItemType.Executable,
+      '',
       formData.appName,
       'user-name',
       formData.indexPage,
-      formData.appDescription
+      formData.appDescription,
+      formData.startMenuIconUrl
     );
 
     try {
-      return await HttpClient.post( `${API_ROOT_PATH}app-store`, appModel );
+      let res = await HttpClient.post( `${API_ROOT_PATH}app-store`, appModel );
+      if ( !res.ok ) {
+        res = await res.json();
+        Notifications.errorToast( res.msg );
+        return res;
+      }
+
+      Notifications.successToast( 'Application successfully added.' );
 
     } catch ( e ) {
       throw new Error( e );

@@ -9,25 +9,7 @@
 
 'use strict';
 
-const reset = Cookies.get( 'reset' );
-if ( reset !== undefined || reset !== null ) {
-  localStorage.removeItem( 'JWT' );
-  Cookies.remove( 'JWT' );
-  Cookies.remove( 'reset' );
-}
-
-const jwt = localStorage.getItem( 'JWT' );
-
-if ( jwt !== null ) {
-  Cookies.remove( 'JWT' );
-  Cookies.set( 'JWT', jwt );
-  localStorage.removeItem( 'JWT' );
-  document.location.href = '/portfolio-os/desktop';
-}
-
-$(document).foundation();
-
-// Utils:
+// #region UTILS
 const findDirectChildrenByTag = ( elem, tag ) => {
   if ( elem.localName === tag ) return elem;
 
@@ -46,6 +28,7 @@ const findDirectChildrenByTag = ( elem, tag ) => {
     else
       return elems;
   }
+
   return false;
 };
 
@@ -54,10 +37,37 @@ const getParentNodeClassIncludes = ( elem, query ) => {
   while ( that && !that.className.includes( query ) ) {
     that = that.parentNode;
   }
+
   return that;
 };
 
+// From an external library.
+const randomString = ( length ) => {
+  return Random.string( 'qwertyuiopasdfghjklçzxcvbnmQWERTYUIOPÇLKJHGFDSAZXCVBNM1234567890«»<>!$%&/()?{[]}~^*-0+.@' )( Random.engines.browserCrypto, length );
+};
+
+// #endregion
+
 $( document ).ready( () => {
+  const reset = Cookies.get( 'reset' );
+  if ( reset !== undefined && reset !== null && reset !== false ) {
+    console.debug( reset );
+    localStorage.removeItem( 'JWT' );
+    Cookies.remove( 'JWT' );
+    Cookies.remove( 'reset' );
+  }
+
+  // AUTO LOGIN
+  const jwt = localStorage.getItem( 'JWT' );
+  if ( jwt !== null ) {
+    Cookies.remove( 'JWT' );
+    Cookies.set( 'JWT', jwt );
+    localStorage.removeItem( 'JWT' );
+    document.location.href = '/portfolio-os/desktop';
+  }
+
+  $( document ).foundation();
+
   const allPageImgs = document.getElementsByTagName( 'img' );
   for ( let i = 0; i < allPageImgs.length; i++ ) {
     allPageImgs[i].addEventListener( 'dragstart', ( e ) => {
@@ -84,6 +94,12 @@ $( document ).ready( () => {
       }
     } );
   }
+
+  document.getElementById( 'login-as-guest' ).addEventListener( 'click', ( e ) => {
+    e.preventDefault();
+    Cookies.set( 'IS_GUEST', JSON.stringify( true ) );
+    Cookies.set( 'GUEST_SESSION', JSON.stringify( { id: randomString( 21 ) } ) );
+  } );
 
   //document.getElementById( 'register-btn' ).addEventListener( 'click', ( e ) => {
   //  e.preventDefault();

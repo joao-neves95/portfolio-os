@@ -36,7 +36,7 @@ class AppStoreTemplates {
 
         <div class="grid-container fluid content">
           <div class="grid-x content-grid">
-            <!-- ${
+            <!-- {
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
@@ -45,7 +45,7 @@ class AppStoreTemplates {
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' ) +
             //  this.appCard( '1', 'Wikipedia Viewer', 'shivayl', 'https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html', Infinity, 0, 'The Wikipedia Viewer enables you to search wikipedia in an enjoyable fashion.' )
-            } -->
+            //} -->
           </div>
         </div>
 
@@ -66,8 +66,15 @@ class AppStoreTemplates {
             <p class="meta">Creator: ${creator}</p>
             <p class="meta">Downloads: ${downloadNum}</p>
             <p class="meta">Vote Ratio: ${voteRatio}</p>
-            <a href="${appLink}" target="_blank" class="primary button">View on GitHub</a>
-            <button type="button" class="install primary button">Install</button>
+            <div class="grid-x">
+              <div class="cell small-6 medium-6 large-6">
+                <a href="https://cdn.jsdelivr.net/gh/${appLink}" target="_blank" class="primary button">View Code</a>
+              </div>
+              <div class="cell small-6 medium-6 large-6">
+                <button type="button" class="install primary button">Install</button>
+              </div>
+            </div>
+            </div>
           </div>
         </div>
       </div>

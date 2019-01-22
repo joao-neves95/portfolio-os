@@ -1,6 +1,6 @@
 {
   "name": "portfolio-os",
-  "version": "0.2.0-Alpha",
+  "version": "0.2.0",
   "description": "portfolio-os",
   "main": "./server/server.js",
   "author": {

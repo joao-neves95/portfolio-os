@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
@@ -10,8 +10,13 @@
 // TODO: Add the z-index of each each window.
 
 class Window {
-  constructor(processId, title, content) {
-
+  /**
+   * 
+   * @param { string } processId
+   * @param { string } title
+   * @param { string } content
+   */
+  constructor( processId, title, content ) {
     this.id = `${Window.idPrefix}${processId}`;
     this.title = title;
     this.content = content;
@@ -24,7 +29,7 @@ class Window {
   get element() { return document.getElementById( this.id ); }
   static get idPrefix() { return 'win-'; }
 
-  get template() {
+  get windowTemplate() {
     return `
       <article class="window-manager grid-y resizable selected-win" id="${this.id}">
         <header class="toolbar">
@@ -59,18 +64,30 @@ class Window {
     return `
       <div class="reveal" id="modal" data-reveal>
         ${content}
-        <button class="close-button" data-close aria-label="Close modal" type="button">
+        <!--<button class="close-button" data-close aria-label="Close modal" type="button">
           <span aria-hidden="true">&times;</span>
-        </button>
+        </button>-->
       </div>`;
   }
 
+  static appStoreAppWindowTemplate( url ) {
+    return `
+      <iframe
+        title=""
+        src="https://cdn.jsdelivr.net/gh/${url}"
+        allowpaymentrequest="false"
+        sandbox="allow-scripts"
+      >
+      </iframe>
+    `;
+  }
+
   init() {
-    document.getElementById( 'window-manager-container' ).innerHTML += this.template;
+    document.getElementById( 'window-manager-container' ).innerHTML += this.windowTemplate;
   }
 
   kill() {
-    this.element.remove();
+    if ( this.element ) this.element.remove();
   }
 
   minimize() {
@@ -91,7 +108,7 @@ class Window {
   }
 
   select() {
-    this.element.classList.add( 'selected-win' );
+    if ( this.element ) this.element.classList.add( 'selected-win' );
   }
 
   unselect() {

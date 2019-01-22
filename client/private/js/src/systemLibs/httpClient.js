@@ -74,7 +74,7 @@ class HttpClient {
   }
 
   /**
-   * Returns a Fetch Response object or an error.
+   * Returns a Fetch Response object, false (and a notification to the user) if it's a guest session (not authenticated) or an error.
    * 
    * @param { RequestType } requestType
    * @param { string } url
@@ -100,7 +100,14 @@ class HttpClient {
       }
 
       await fetch( url, requestObject )
-        .then( res => { return resolve( res ); } )
+        .then( res => {
+          if ( res.status == 401 ) {
+            Notifications.errorToast( 'The user must be authenticated.' );
+            return false;
+          }
+
+          return resolve( res );
+        } )
         .catch( err => { return reject( err ); } );
     } );
   }

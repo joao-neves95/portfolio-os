@@ -12,3 +12,4 @@ const SERVER_ROOT_PATH = 'https://www.shivayl.com/';
 const API_ROOT_PATH = `${SERVER_ROOT_PATH}portfolio-os/api/`;
 const IMG_PATH = `${SERVER_ROOT_PATH}img/`;
 const AUTH_TOKEN_ID = 'JWT';
+const DEFAULT_APP_ICON = '';

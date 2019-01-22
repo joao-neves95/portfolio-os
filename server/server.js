@@ -20,7 +20,7 @@ const cors = require( 'cors' );
 const corsConfig = require( './portfolio-os/config/cors' );
 const authConfig = require( './portfolio-os/middleware/authConfig' );
 const noCache = require( './portfolio-os/middleware/noCache' );
-const portfolioOSRoutes = require( './portfolio-os/routes/porfolioOSIndex' );
+const portfolioOSRoutes = require( './portfolio-os/routes/index' );
 const app = express();
 
 const PORT = process.env.PORT;

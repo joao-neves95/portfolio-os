@@ -34,6 +34,12 @@ whenDomReady( () => {
   // GlobalEvents bindings:
   globalEvents.bindEvent( 'click', ( e ) => { contextMenu.outsideClickGlobalEvent( e ); } );
   globalEvents.bindEvent( 'click', ( e ) => { startMenuManager.outsideClickGlobalEvent( e ); } );
+  globalEvents.bindEvent( 'click', ( e ) => {
+    const click = document.getElementById( 'click-audio' );
+    click.pause();
+    click.currentTime = 0;
+    click.play();
+  } );
   globalEvents.init();
 
   //console.debug( 'FS V2:', fileSystem.____fsv2 );
@@ -41,7 +47,7 @@ whenDomReady( () => {
   //console.debug( 'Taskbar Icons:', taskbarManager.icons );
   windowManager.openNewModal(
     `<p><strong>Portfolio-OS</strong> is a work in progress and so, some features do not work as of yet.</p>
-     <p>(Features like the AppStore, the Explorer, or searrching for users in the Profiles app)</p>
+     <p>(Features like the AppStore and the Explorer)</p>
      <p>Keep also in mind that this is the Portfolio-OS's Dekstop version and not the mobile, so it is <strong>not</strong> mobile responsive.</p>`
   );
 

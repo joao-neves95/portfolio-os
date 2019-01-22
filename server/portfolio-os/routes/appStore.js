@@ -9,8 +9,11 @@
 
 'use strict';
 const appStoreStore = require( '../dataAccess/appStoreStore' );
+const userStore = require( '../dataAccess/userStore' );
 const { sanitizeHTML } = require( '../../../common/commonUtils' );
 const GET_APPS_ERROR_MESSAGE = 'There was an error while getting the apps.';
+
+// "portfolio-os/app-store"
 
 // TODO: Test errors.
 
@@ -21,11 +24,11 @@ module.exports = {
   getApps: async ( req, res ) => {
     try {
       const lastId = !req.query.lastId ? 0 : req.query.lastId;
-      if ( !Number.isInteger( lastId ) )
+      if ( !Number.isInteger( parseInt( lastId ) ) )
         return res.status( 400 ).json( { 'msg': GET_APPS_ERROR_MESSAGE + ' The parameter "lastId" must be an integer.' } );
 
       const limit = !req.query.limit ? 10 : req.query.limit;
-      if ( !Number.isInteger( limit ) )
+      if ( !Number.isInteger( parseInt( limit ) ) )
         return res.status( 400 ).json( { 'msg': GET_APPS_ERROR_MESSAGE + ' The parameter "limit" must be an integer.' } );
 
       const queryResult = await appStoreStore.getAppsPaginatedOrderByRatingAsync( lastId, limit );
@@ -40,16 +43,19 @@ module.exports = {
   postApp: async ( req, res ) => {
     try {
       const appExists = await appStoreStore.appExistsByName( sanitizeHTML( req.body.name ) );
-      if ( appExists.length > 0 )
+      if ( appExists > 0 )
         return res.status( 400 ).json( { 'msg': 'App name already exists.' } );
 
-      const insertApp = await appStoreStore.insertApp( req.user.id, sanitizeHTML( req.body.name ), sanitizeHTML( req.body.description ), sanitizeHTML( req.body.htmlIndexUrl ) );
+      const thisUserName = await userStore.getNameById( req.user.id );
+
+      const insertApp = await appStoreStore.insertApp( req.user.id, sanitizeHTML( req.body.name ), sanitizeHTML( req.body.description ), sanitizeHTML( req.body.htmlIndexUrl ), sanitizeHTML( req.body.startMenuIconUrl ) );
       if ( insertApp[0] <= 0 )
         return res.status( 500 ).json( { 'msg': 'There was an error while creating the new app.' } );
 
       return res.status( 201 ).json( { 'msg': 'App successfully added.', appId: insertApp[1] } );
 
     } catch ( e ) {
+      console.error( e );
       return res.status( 500 ).json( { 'msg': 'There was an error while creating the new app.' } );
     }
   },
@@ -57,7 +63,8 @@ module.exports = {
   putApp: async ( req, res ) => {
     try {
       const queryResult = await appStoreStore.updateApp(
-        req.user.id, sanitizeHTML( req.params.appId ),
+        req.user.id, 
+        sanitizeHTML( req.params.appId ),
         sanitizeHTML( req.body.name ),
         sanitizeHTML( req.body.description ),
         sanitizeHTML( req.body.htmlIndexUrl )
