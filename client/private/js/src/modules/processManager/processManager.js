@@ -7,9 +7,17 @@
  *
  */
 
+let processManager = null;
+
 class ProcessManager {
   constructor() {
+    if ( processManager )
+      throw new Error( 'There can only be one instance of ProcessManager.' );
+
     this.activeProcesses = new Dictionary();
+
+    processManager = this;
+    Object.seal( processManager );
   }
 
   /**
@@ -47,4 +55,4 @@ class ProcessManager {
   } 
 }
 
-const processManager = new ProcessManager();
+new ProcessManager();

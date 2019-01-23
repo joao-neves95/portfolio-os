@@ -7,12 +7,18 @@
  *
  */
 
-const START_MENU_ANIM_DELAY = 1;
+let taskbarManager = null;
 
 class TaskbarManager {
   constructor() {
-    this.iconContainerElem = document.getElementById('icon-container');
+    if ( taskbarManager )
+      throw new Error( 'There can only be one instance of TaskbarManager.' );
+
+    this.iconContainerElem = document.getElementById( 'icon-container' );
     this.icons = new Dictionary();
+
+    taskbarManager = this;
+    Object.seal( taskbarManager );
   }
 
   // #region TASKBAR ICONS
@@ -50,4 +56,4 @@ class TaskbarManager {
   // #endregion
 }
 
-const taskbarManager = new TaskbarManager();
+new TaskbarManager();

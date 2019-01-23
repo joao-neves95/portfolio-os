@@ -2,7 +2,12 @@
 
 &nbsp;
 
-#### *v0.2.0 - 22/01/2018
+#### *v0.2.1 - 23/01/2018
+- (CLIENT) Turned all module managers into a singleton to ensure only on instance and integrity of each module manager.
+
+&nbsp;
+
+#### v0.2.0 - 22/01/2018
 - Added the click sound;
 - Added the notifications module;
 - Refactored the HttpClient (frontend): It now returns the Response object (broke everything; to fix on the next release);

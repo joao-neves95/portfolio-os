@@ -7,8 +7,13 @@
  *
  */
 
+let desktopManager = null;
+
 class DesktopManager {
   constructor() {
+    if ( desktopManager )
+      throw new Error( 'There can only be one instance of DesktopManager.' );
+
     this.rowCount = 0;
     this.cellCount = 0;
     this.icons = new Dictionary();
@@ -28,6 +33,9 @@ class DesktopManager {
       additionalCellClasses: 'desktop-cell',
       droppableCell: true
     };
+
+    desktopManager = this;
+    Object.seal( desktopManager );
   }
 
   init() {
@@ -88,4 +96,4 @@ class DesktopManager {
   }
 }
 
-const desktopManager = new DesktopManager();
+new DesktopManager();

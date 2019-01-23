@@ -7,9 +7,17 @@
  *
  */
 
+let windowManager = null;
+
 class WindowManager {
   constructor() {
+    if ( windowManager )
+      throw new Error( 'There can only be one instance of WindowManager.' );
+
     this.windows = new Dictionary();
+
+    windowManager = this;
+    Object.seal( windowManager );
   }
 
   /**
@@ -231,4 +239,4 @@ class WindowManager {
   // #endregion
 }
 
-const windowManager = new WindowManager();
+new WindowManager();

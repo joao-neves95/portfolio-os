@@ -7,11 +7,18 @@
  *
  */
 
+let startMenuManager = null;
+
 class StartMenuManager {
   constructor() {
+    if ( startMenuManager )
+      throw new Error( 'There can only be one instance of StartMenuManager.' );
+
     this.init();
 
     this.active = false;
+    startMenuManager = this;
+    Object.seal( startMenuManager );
   }
 
   get element() { return document.getElementsByClassName( 'start-menu' )[0]; }
@@ -94,4 +101,4 @@ class StartMenuManager {
   }
 }
 
-const startMenuManager = new StartMenuManager();
+new StartMenuManager();

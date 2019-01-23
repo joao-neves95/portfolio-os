@@ -7,21 +7,29 @@
  *
  */
 
+let globalEvents = null;
+
 /**
  * Document events.
  * */
 class GlobalEvents {
   constructor() {
+    if ( globalEvents )
+      throw new Error( 'There can only be one instance of GlobalEvents.' );
+
     this.clickEventFunctions = [];
+
+    globalEvents = this;
+    Object.seal( globalEvents );
   }
 
   init() {
-    document.addEventListener('click', (e) => {
-      for (let i = 0; i < this.clickEventFunctions.length; ++i) {
-        this.clickEventFunctions[i](e);
+    document.addEventListener( 'click', ( e ) => {
+      for ( let i = 0; i < this.clickEventFunctions.length; ++i ) {
+        this.clickEventFunctions[i]( e );
       }
-    });
-  };
+    } );
+  }
 
   bindEvent(eventType, executeFunction) {
     switch (eventType.toUpperCase()) {
@@ -31,7 +39,7 @@ class GlobalEvents {
       default:
         return;
     }
-  };
+  }
 }
 
-const globalEvents = new GlobalEvents();
+new GlobalEvents();
