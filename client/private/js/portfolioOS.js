@@ -101,8 +101,8 @@
 // const SERVER_ROOT_PATH = 'https://www.shivayl.com/';
 const API_ROOT_PATH = `${SERVER_ROOT_PATH}portfolio-os/api/`;
 const IMG_PATH = `${SERVER_ROOT_PATH}img/`;
+const DEFAULT_APP_ICON = `${IMG_PATH}default-taskbar-icon-white.svg`;
 const AUTH_TOKEN_ID = 'JWT';
-const DEFAULT_APP_ICON = '';
 const START_MENU_ANIM_DELAY = 1;
 
 /*!
@@ -2155,9 +2155,14 @@ class TaskbarManager {
     return newIcon;
   }
 
-  killIcon(windowId) {
-    this.findIconInstance(windowId).kill();
-    this.icons.remove(TaskbarIcon.idPrefix + windowId);
+  killIcon( windowId ) {
+    const thisWindow = this.findIconInstance( windowId );
+    // For the AddNewApp windows.
+    if ( !thisWindow )
+      return;
+
+    thisWindow.kill();
+    this.icons.remove( TaskbarIcon.idPrefix + windowId );
   }
 
   minimizedIcon(windowId) {
@@ -2214,10 +2219,10 @@ class Window {
       <article class="window-manager grid-y resizable selected-win" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
-            <div class="cell small-7 medium-8 large-8">
+            <div class="cell small-6 medium-8 large-8">
               <p class="window-title free-draggable">${this.title}</p>
             </div>
-            <div class="cell auto hide-for-small"></div>
+            <div class="cell auto"></div>
             <div class="cell small-1 medium-1 large-1 icon-wrap">
               <img src="${IMG_PATH}minimize-white.svg" alt="Minimize Window Icon" class="minimize-window icon" />
             </div>
@@ -2378,7 +2383,12 @@ class WindowManager {
   }
 
   closeWindow( windowId ) {
-    this.findWindowInstance( windowId ).kill();
+    const thisWindow = this.findWindowInstance( windowId );
+    // For AddNewApp windows.
+    if ( !thisWindow )
+      return;
+
+    thisWindow.kill();
     taskbarManager.killIcon( windowId );
     this.windows.remove( windowId );
     this.updateListeners();
@@ -5109,16 +5119,16 @@ whenDomReady( () => {
   desktopManager.init();
   desktopManager.insertNewIcon( IMG_PATH + 'trash.svg', 'Trash' );
   desktopManager.insertNewIcon( IMG_PATH + 'profiles.svg', 'Profiles' );
-  desktopManager.insertNewIcon( `${IMG_PATH}default-taskbar-icon-white.svg`, 'ShivaylCV' );
+  desktopManager.insertNewIcon( DEFAULT_APP_ICON, 'ShivaylCV' );
 
   // SystemApps bindings:
   systemAppsManager.bindApplication( 'Explorer', `${IMG_PATH}folder.svg`, `${IMG_PATH}folder.svg`, ( processId ) => { new Explorer( processId ); } );
   systemAppsManager.bindApplication( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, ( processId ) => { new Terminal( processId ); } );
   systemAppsManager.bindApplication( 'Profiles', `${IMG_PATH}profiles.svg`, `${IMG_PATH}profiles.svg`, ( processId ) => { new Profiles( processId ); } );
-  systemAppsManager.bindApplication( 'AppStore', `${IMG_PATH}default-taskbar-icon-white.svg`, `${IMG_PATH}default-taskbar-icon-white.svg`, ( processId ) => { new AppStore( processId ); } );
+  systemAppsManager.bindApplication( 'AppStore', `${IMG_PATH}app-store.svg`, `${IMG_PATH}app-store.svg`, ( processId ) => { new AppStore( processId ); } );
   // The trash is temporary.
   systemAppsManager.bindApplication( 'Trash', `${IMG_PATH}trash.svg`, `${IMG_PATH}trash.svg`, ( processId ) => { new Trash( processId ); } );
-  systemAppsManager.bindApplication( 'ShivaylCV', `${IMG_PATH}default-taskbar-icon-white.svg`, `${IMG_PATH}default-taskbar-icon-white.svg`, ( processId ) => { new ShivaylCV( processId ); } );
+  systemAppsManager.bindApplication( 'ShivaylCV', DEFAULT_APP_ICON, DEFAULT_APP_ICON, ( processId ) => { new ShivaylCV( processId ); } );
   startMenuManager.init();
 
   // ContextMenu bindings:

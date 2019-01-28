@@ -80,7 +80,12 @@ class WindowManager {
   }
 
   closeWindow( windowId ) {
-    this.findWindowInstance( windowId ).kill();
+    const thisWindow = this.findWindowInstance( windowId );
+    // For AddNewApp windows.
+    if ( !thisWindow )
+      return;
+
+    thisWindow.kill();
     taskbarManager.killIcon( windowId );
     this.windows.remove( windowId );
     this.updateListeners();

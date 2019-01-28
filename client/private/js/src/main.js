@@ -16,16 +16,16 @@ whenDomReady( () => {
   desktopManager.init();
   desktopManager.insertNewIcon( IMG_PATH + 'trash.svg', 'Trash' );
   desktopManager.insertNewIcon( IMG_PATH + 'profiles.svg', 'Profiles' );
-  desktopManager.insertNewIcon( `${IMG_PATH}default-taskbar-icon-white.svg`, 'ShivaylCV' );
+  desktopManager.insertNewIcon( DEFAULT_APP_ICON, 'ShivaylCV' );
 
   // SystemApps bindings:
   systemAppsManager.bindApplication( 'Explorer', `${IMG_PATH}folder.svg`, `${IMG_PATH}folder.svg`, ( processId ) => { new Explorer( processId ); } );
   systemAppsManager.bindApplication( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, ( processId ) => { new Terminal( processId ); } );
   systemAppsManager.bindApplication( 'Profiles', `${IMG_PATH}profiles.svg`, `${IMG_PATH}profiles.svg`, ( processId ) => { new Profiles( processId ); } );
-  systemAppsManager.bindApplication( 'AppStore', `${IMG_PATH}default-taskbar-icon-white.svg`, `${IMG_PATH}default-taskbar-icon-white.svg`, ( processId ) => { new AppStore( processId ); } );
+  systemAppsManager.bindApplication( 'AppStore', `${IMG_PATH}app-store.svg`, `${IMG_PATH}app-store.svg`, ( processId ) => { new AppStore( processId ); } );
   // The trash is temporary.
   systemAppsManager.bindApplication( 'Trash', `${IMG_PATH}trash.svg`, `${IMG_PATH}trash.svg`, ( processId ) => { new Trash( processId ); } );
-  systemAppsManager.bindApplication( 'ShivaylCV', `${IMG_PATH}default-taskbar-icon-white.svg`, `${IMG_PATH}default-taskbar-icon-white.svg`, ( processId ) => { new ShivaylCV( processId ); } );
+  systemAppsManager.bindApplication( 'ShivaylCV', DEFAULT_APP_ICON, DEFAULT_APP_ICON, ( processId ) => { new ShivaylCV( processId ); } );
   startMenuManager.init();
 
   // ContextMenu bindings:

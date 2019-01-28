@@ -156,8 +156,16 @@ module.exports = {
   getInstalledApps: async ( req, res ) => {
     try {
       const apps = await userStore.getInstalledApps( req.user.id );
-      console.debug( apps );
       return res.status( 200 ).json( apps );
+
+    } catch ( e ) {
+      return res.status( 500 ).json( -1 );
+    }
+  },
+
+  installApp: async ( req, res ) => {
+    try {
+      console.log( 'install app:', req.body );
 
     } catch ( e ) {
       return res.status( 500 ).json( -1 );

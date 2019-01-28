@@ -4,9 +4,11 @@
 
 #### v0.2.2 - //2018
 - CLIENT:
-  - Fixes on the GridSystem and Desktop icons responsibility;
+  - Multiple important fixes for the AppStore;
+  - Added the AppStore icon;
+  - Fixes on the GridSystem and Desktop icons (and general) responsibility;
   - Fixed shivayl's landing page mobile navbar responsibility;
-  - Added the Portfolio OS logo icon to the taskbar start menu button + styling.
+  - Added the Portfolio OS logo icon to the taskbar start menu button + styling;
 - SERVER:
   - Fixed the caching of Portfolio OS's IMG/HTML/JS/CSS.
 
