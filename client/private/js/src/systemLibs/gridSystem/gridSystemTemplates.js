@@ -21,14 +21,14 @@ class GridSystemTemplates {
    * @param { number | null } heightPercent <number | null>
    */
   static rowTemplate( id, gridType, widthPercent = null, heightPercent = null ) {
-    widthPercent = widthPercent === null ? '' : `width: ${widthPercent.toString()}%;min-width: ${widthPercent.toString()}% !important;`;
-    heightPercent = heightPercent === null ? '' : `height: ${heightPercent.toString()}%;min-height: ${heightPercent.toString()}% !important;`;
+    widthPercent = widthPercent === null ? '' : `width: ${widthPercent.toString()}%;min-width: 10em !important;`;
+    heightPercent = heightPercent === null ? '' : `height: ${heightPercent.toString()}%;min-height: 40em !important;`;
     const gridTypeClass = gridType === GridType.GridY ? 'grid-system-row-y' : 'grid-system-row-x';
 
     return `
-      <div id="${id}" class="${gridType} ${gridTypeClass}" style="${widthPercent}${heightPercent}"></div>
+      <div id="${id}" class="${gridType} ${gridTypeClass} unselectable" style="${widthPercent}${heightPercent}"></div>
     `;
-  };
+  }
 
   /**
     * If grid-y use height, if grid-x use width.
@@ -39,12 +39,12 @@ class GridSystemTemplates {
    * @param { boolean } droppable
    */
   static cellTemplate( id, widthPercent, heightPercent, droppable = false, additionalClasses ) {
-    widthPercent = widthPercent === null ? '' : `width: ${widthPercent.toString()}%;min-width: ${widthPercent.toString()}% !important;`;
-    heightPercent = heightPercent === null ? '' : `height: ${heightPercent.toString()}%;min-height: ${heightPercent.toString()}% !important;`;
+    widthPercent = widthPercent === null ? '' : `width: ${widthPercent.toString()}%; min-width: ${widthPercent.toString()}% !important;`;
+    heightPercent = heightPercent === null ? '' : `height: ${heightPercent.toString()}%; min-height: ${heightPercent.toString()}% !important;`;
     droppable = droppable ? 'droppable' : '';
 
     return `
-        <article id="${id}" class="cell grid-system-cell ${droppable} ${additionalClasses}" style="${widthPercent}${heightPercent}">&nbsp;</article>
+        <article id="${id}" class="cell grid-system-cell unselectable ${droppable} ${additionalClasses}" style="${widthPercent}${heightPercent}">&nbsp;</article>
       `;
-  };
+  }
 }

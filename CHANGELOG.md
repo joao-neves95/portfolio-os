@@ -2,6 +2,16 @@
 
 &nbsp;
 
+#### v0.2.2 - //2018
+- CLIENT:
+  - Fixes on the GridSystem and Desktop icons responsibility;
+  - Fixed shivayl's landing page mobile navbar responsibility;
+  - Added the Portfolio OS logo icon to the taskbar start menu button + styling.
+- SERVER:
+  - Fixed the caching of Portfolio OS's IMG/HTML/JS/CSS.
+
+&nbsp;
+
 #### *v0.2.1 - 23/01/2018
 - (CLIENT) Turned all module managers into a singleton to ensure only on instance and integrity of each module manager.
 

@@ -16,6 +16,7 @@ const authRoute = require( './auth' );
 const desktopRoute = require( './desktop' );
 const portfolioOSAPIIndex = require( './apiIndex' );
 const ensureAuthentication = require( '../middleware/ensureAuthentication' );
+const noCache = require( '../middleware/noCache' );
 const blockGuest = require( '../middleware/blockGuest' );
 
 router.get( '/', ( req, res ) => {
@@ -23,16 +24,16 @@ router.get( '/', ( req, res ) => {
 } );
 router.use( '/', express.static( path.join( process.cwd(), './client/wwwroot' ) ) );
 
-// AUTH:
-router.use( '/auth', authRoute );
 
 // #region DESKTOP FILES (CSS / JS / IMG)
 
-router.get( '/desktop', ensureAuthentication, desktopRoute.getDesktopHtmlPage );
-router.get( ['/desktop/js/:fileName', '/desktop/css/:fileName'], ensureAuthentication, desktopRoute.getDesktopFiles );
+router.get( '/desktop', ensureAuthentication, noCache, desktopRoute.getDesktopHtmlPage );
+router.get( ['/desktop/js/:fileName', '/desktop/css/:fileName'], ensureAuthentication, noCache, desktopRoute.getDesktopFiles );
 
 // #endregion
 
-router.use( '/api', blockGuest, ensureAuthentication, portfolioOSAPIIndex );
+router.use( '/auth', noCache, authRoute );
+
+router.use( '/api', blockGuest, ensureAuthentication, noCache, portfolioOSAPIIndex );
 
 module.exports = router;

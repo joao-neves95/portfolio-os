@@ -34,7 +34,7 @@ class Window {
       <article class="window-manager grid-y resizable selected-win" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
-            <div class="cell small-8 medium-8 large-8">
+            <div class="cell small-6 medium-8 large-8">
               <p class="window-title free-draggable">${this.title}</p>
             </div>
             <div class="cell auto"></div>

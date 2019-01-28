@@ -98,7 +98,7 @@
  */
 
  const SERVER_ROOT_PATH = 'http://localhost:55555/';
-//const SERVER_ROOT_PATH = 'https://www.shivayl.com/';
+// const SERVER_ROOT_PATH = 'https://www.shivayl.com/';
 const API_ROOT_PATH = `${SERVER_ROOT_PATH}portfolio-os/api/`;
 const IMG_PATH = `${SERVER_ROOT_PATH}img/`;
 const AUTH_TOKEN_ID = 'JWT';
@@ -1497,14 +1497,14 @@ class GridSystemTemplates {
    * @param { number | null } heightPercent <number | null>
    */
   static rowTemplate( id, gridType, widthPercent = null, heightPercent = null ) {
-    widthPercent = widthPercent === null ? '' : `width: ${widthPercent.toString()}%;min-width: ${widthPercent.toString()}% !important;`;
-    heightPercent = heightPercent === null ? '' : `height: ${heightPercent.toString()}%;min-height: ${heightPercent.toString()}% !important;`;
+    widthPercent = widthPercent === null ? '' : `width: ${widthPercent.toString()}%;min-width: 10em !important;`;
+    heightPercent = heightPercent === null ? '' : `height: ${heightPercent.toString()}%;min-height: 40em !important;`;
     const gridTypeClass = gridType === GridType.GridY ? 'grid-system-row-y' : 'grid-system-row-x';
 
     return `
-      <div id="${id}" class="${gridType} ${gridTypeClass}" style="${widthPercent}${heightPercent}"></div>
+      <div id="${id}" class="${gridType} ${gridTypeClass} unselectable" style="${widthPercent}${heightPercent}"></div>
     `;
-  };
+  }
 
   /**
     * If grid-y use height, if grid-x use width.
@@ -1515,14 +1515,14 @@ class GridSystemTemplates {
    * @param { boolean } droppable
    */
   static cellTemplate( id, widthPercent, heightPercent, droppable = false, additionalClasses ) {
-    widthPercent = widthPercent === null ? '' : `width: ${widthPercent.toString()}%;min-width: ${widthPercent.toString()}% !important;`;
-    heightPercent = heightPercent === null ? '' : `height: ${heightPercent.toString()}%;min-height: ${heightPercent.toString()}% !important;`;
+    widthPercent = widthPercent === null ? '' : `width: ${widthPercent.toString()}%; min-width: ${widthPercent.toString()}% !important;`;
+    heightPercent = heightPercent === null ? '' : `height: ${heightPercent.toString()}%; min-height: ${heightPercent.toString()}% !important;`;
     droppable = droppable ? 'droppable' : '';
 
     return `
-        <article id="${id}" class="cell grid-system-cell ${droppable} ${additionalClasses}" style="${widthPercent}${heightPercent}">&nbsp;</article>
+        <article id="${id}" class="cell grid-system-cell unselectable ${droppable} ${additionalClasses}" style="${widthPercent}${heightPercent}">&nbsp;</article>
       `;
-  };
+  }
 }
 /*
  *
@@ -2214,10 +2214,10 @@ class Window {
       <article class="window-manager grid-y resizable selected-win" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
-            <div class="cell small-8 medium-8 large-8">
+            <div class="cell small-7 medium-8 large-8">
               <p class="window-title free-draggable">${this.title}</p>
             </div>
-            <div class="cell auto"></div>
+            <div class="cell auto hide-for-small"></div>
             <div class="cell small-1 medium-1 large-1 icon-wrap">
               <img src="${IMG_PATH}minimize-white.svg" alt="Minimize Window Icon" class="minimize-window icon" />
             </div>
