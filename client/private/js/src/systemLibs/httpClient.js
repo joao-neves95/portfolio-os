@@ -101,7 +101,7 @@ class HttpClient {
 
       await fetch( url, requestObject )
         .then( res => {
-          if ( res.status == 401 ) {
+          if ( res.status === 401 ) {
             Notifications.errorToast( 'The user must be authenticated.' );
             return false;
           }

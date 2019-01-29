@@ -9,9 +9,10 @@
 
 // Initializations.
 
-whenDomReady( () => {
+whenDomReady( async () => {
 
   authentication.init();
+  await userAppsManager.__fetchInstalledApps();
   $( document ).foundation();
   desktopManager.init();
   desktopManager.insertNewIcon( IMG_PATH + 'trash.svg', 'Trash' );

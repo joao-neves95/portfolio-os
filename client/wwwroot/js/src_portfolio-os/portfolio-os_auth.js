@@ -50,7 +50,7 @@ const randomString = ( length ) => {
 
 $( document ).ready( () => {
   const reset = Cookies.get( 'reset' );
-  if ( reset !== undefined && reset !== null && reset !== false ) {
+  if ( reset !== undefined ) {
     console.debug( reset );
     localStorage.removeItem( 'JWT' );
     Cookies.remove( 'JWT' );
@@ -60,6 +60,7 @@ $( document ).ready( () => {
   // AUTO LOGIN
   const jwt = localStorage.getItem( 'JWT' );
   if ( jwt !== null ) {
+    Cookies.remove( 'reset' );
     Cookies.remove( 'JWT' );
     Cookies.set( 'JWT', jwt );
     localStorage.removeItem( 'JWT' );
@@ -95,11 +96,12 @@ $( document ).ready( () => {
     } );
   }
 
-  document.getElementById( 'login-as-guest' ).addEventListener( 'click', ( e ) => {
-    e.preventDefault();
-    Cookies.set( 'IS_GUEST', JSON.stringify( true ) );
-    Cookies.set( 'GUEST_SESSION', JSON.stringify( { id: randomString( 21 ) } ) );
-  } );
+  // TODO: (FRONTEND) Login as guest button.
+  //document.getElementById( 'login-as-guest' ).addEventListener( 'click', ( e ) => {
+  //  e.preventDefault();
+  //  Cookies.set( 'IS_GUEST', JSON.stringify( true ) );
+  //  Cookies.set( 'GUEST_SESSION', JSON.stringify( { id: randomString( 21 ) } ) );
+  //} );
 
   //document.getElementById( 'register-btn' ).addEventListener( 'click', ( e ) => {
   //  e.preventDefault();

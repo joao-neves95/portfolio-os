@@ -7,8 +7,8 @@
  *
  */
 
-module.exports = ( req ) => {
-  req.cookie(
+module.exports = ( res, next ) => {
+  res.cookie(
     'reset',
     true,
     {
@@ -17,4 +17,6 @@ module.exports = ( req ) => {
       issuer: process.env.JWT_ISSUER
     }
   );
+
+  if ( next ) return next();
 };

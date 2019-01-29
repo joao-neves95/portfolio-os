@@ -7,7 +7,7 @@
  *
  */
 
-const allowedOrigins = [process.env.HOST, 'https://shivayl.com'];
+const allowedOrigins = [process.env.HOST, 'https://shivayl.com', 'https://cdn.jsdelivr.net'];
 
 module.exports = Object.freeze( {
   origin: ( origin, callback ) => {

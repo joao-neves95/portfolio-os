@@ -70,11 +70,11 @@ class Window {
       </div>`;
   }
 
-  static appStoreAppWindowTemplate( url ) {
+  static appStoreAppWindowTemplate() {
     return `
       <iframe
+        class="user-app-window"
         title=""
-        src="https://cdn.jsdelivr.net/gh/${url}"
         allowpaymentrequest="false"
         sandbox="allow-scripts"
       >

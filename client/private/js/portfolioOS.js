@@ -105,6 +105,8 @@ const DEFAULT_APP_ICON = `${IMG_PATH}default-taskbar-icon-white.svg`;
 const AUTH_TOKEN_ID = 'JWT';
 const START_MENU_ANIM_DELAY = 1;
 
+const ERROR_MSG_INSTALL_APP = 'There was an error while installing the app.';
+
 /*!
  * JavaScript Cookie v2.2.0
  * https://github.com/js-cookie/js-cookie
@@ -1405,7 +1407,7 @@ class HttpClient {
 
       await fetch( url, requestObject )
         .then( res => {
-          if ( res.status == 401 ) {
+          if ( res.status === 401 ) {
             Notifications.errorToast( 'The user must be authenticated.' );
             return false;
           }
@@ -2255,11 +2257,11 @@ class Window {
       </div>`;
   }
 
-  static appStoreAppWindowTemplate( url ) {
+  static appStoreAppWindowTemplate() {
     return `
       <iframe
+        class="user-app-window"
         title=""
-        src="https://cdn.jsdelivr.net/gh/${url}"
         allowpaymentrequest="false"
         sandbox="allow-scripts"
       >
@@ -2339,15 +2341,25 @@ class WindowManager {
     );
   }
 
-  openNewAppStoreAppWindow( processId, url ) {
+  async openNewAppStoreAppWindow( processId, url ) {
     const thisAppInstance = processManager.getAppInstance( processId );
+    //let content = await HttpClient.get( `https://cdn.jsdelivr.net/gh/${url}`, false );
+    let content = await HttpClient.get( `https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html`, false );
+    if ( !content.ok )
+      return Notifications.errorToast( 'There was an error launching the application.' );
+
+    content = await content.text();
+
     this.openNewWindowCustom(
       processId,
       thisAppInstance.name,
-      window.appStoreAppWindowTemplate( url ),
+      Window.appStoreAppWindowTemplate(),
       true,
       thisAppInstance.taskbarIconUrl
     );
+
+    const iframe = DomUtils.get( `#${Window.idPrefix}${processId} iframe.user-app-window` );
+    iframe.srcdoc = content;
   }
 
   /**
@@ -2567,7 +2579,6 @@ class UserAppsManager {
       return null;
 
     this.installedApps = new Dictionary();
-    this.__fetchInstalledApps();
 
     userAppsManager = this;
     Object.seal( userAppsManager );
@@ -2587,7 +2598,7 @@ class UserAppsManager {
       return false;
 
     } else {
-      windowManager.openNewAppStoreAppWindow( processId, thisApp.htmlIndexUrl );
+      windowManager.openNewAppStoreAppWindow( processId, thisApp.htmlindexurl );
       return thisApp;
     }
   }
@@ -2608,8 +2619,9 @@ class UserAppsManager {
     }
 
     installedApps = await installedApps.json();
+    this.installedApps.clear();
 
-    for ( let i = 0; i < installedApps.lenght; ++i ) {
+    for ( let i = 0; i < installedApps.length; ++i ) {
       this.installedApps.add( installedApps[i].name, installedApps[i] );
     }
 
@@ -3396,7 +3408,18 @@ class AppStoreModel {
       return !res.ok ? Notifications.errorToast( 'There was an error getting the AppStore page.' ) : await res.json();
 
     } catch ( e ) {
+      Notifications.errorToast( 'There was an error getting the AppStore page.' );
       console.debug( e );
+      return e;
+    }
+  }
+
+  async installApp( appId ) {
+    try {
+      return await HttpClient.post( `${API_ROOT_PATH}user/installed-apps/${appId}` );
+
+    } catch ( e ) {
+      console.error( e );
       return e;
     }
   }
@@ -3464,7 +3487,6 @@ class AppStoreController {
   async init() {
     windowManager.openNewWindow( this.model.processId, AppStoreTemplates.window( this.model.id ) );
     $( `#${this.model.id} .dropdown` ).foundation();
-    this.__updateListeners();
 
     const firstPageApps = await this.model.getAppStorePageFrom( 0 );
     this.__injectApps( firstPageApps );
@@ -3488,6 +3510,8 @@ class AppStoreController {
     for ( let i = 0; i < apps.length; ++i ) {
       this.view.injectApp( apps[i] );
     }
+
+    this.__updateListeners();
   }
 
   __updateListeners() {
@@ -3496,6 +3520,26 @@ class AppStoreController {
       this.addNewAppController.openWindow();
       document.getElementById( 'win-' + this.model.processId ).getElementsByClassName( 'close-window' )[0].click();
     } );
+
+    const allAppCardsInstallBtns = DomUtils.getAll( `#${this.model.id} .install` );
+    for ( let i = 0; i < allAppCardsInstallBtns.length; ++i ) {
+      allAppCardsInstallBtns[i].addEventListener( 'click', async ( e ) => {
+        try {
+          const thisAppId = DomUtils.getParentByIdInclude( e.target, 'app_' ).id.substring( 4 );
+          const res = await this.model.installApp( thisAppId );
+          if ( !res.ok )
+            return Notifications.errorToast( ERROR_MSG_INSTALL_APP );
+
+          Notifications.successToast( 'App successfully installed.' );
+          // TODO (FRONTEND) Optimise.
+          await startMenuManager.injectAllApps();
+          return 0;
+
+        } catch ( e ) {
+          return Notifications.errorToast( ERROR_MSG_INSTALL_APP );
+        }
+      } );
+    }
   }
 }
 
@@ -4654,7 +4698,7 @@ class StartMenuApp {
 
   get template() {
     if ( !this.iconUrl )
-      this.iconUrl = DEFAULT_ICON_URL;
+      this.iconUrl = DEFAULT_APP_ICON;
 
     return `
       <li class="start-menu-icon">
@@ -4673,6 +4717,7 @@ class StartMenuApp {
  *
  */
 
+/** @type { StartMenuManager } */
 let startMenuManager = null;
 
 class StartMenuManager {
@@ -4691,13 +4736,14 @@ class StartMenuManager {
   get startMenuIcon() { return document.getElementsByClassName( 'menu-icon-wrap' )[0]; }
   get appContainerElem() { return document.getElementById('start-menu-apps'); }
 
-  init() {
-    this.injectAllApps();
+  async init() {
+    await this.injectAllApps();
   }
 
-  injectAllApps() {
+  async injectAllApps() {
     let allApps = systemAppsManager.getAllApps();
-    allApps.concat( userAppsManager.installedApps.getAllValues() );
+    await userAppsManager.__fetchInstalledApps();
+    allApps = allApps.concat( userAppsManager.installedApps.getAllValues() );
 
     this.appContainerElem.innerHTML = '';
     for ( let i = 0; i < allApps.length; ++i ) {
@@ -5112,9 +5158,10 @@ new GlobalEvents();
 
 // Initializations.
 
-whenDomReady( () => {
+whenDomReady( async () => {
 
   authentication.init();
+  await userAppsManager.__fetchInstalledApps();
   $( document ).foundation();
   desktopManager.init();
   desktopManager.insertNewIcon( IMG_PATH + 'trash.svg', 'Trash' );

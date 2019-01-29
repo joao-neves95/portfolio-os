@@ -354,20 +354,57 @@ module.exports = {
   getInstalledApps: ( userId ) => {
     return new Promise( async ( _resolve, _reject ) => {
       try {
-        const whereStatement = `
+        const allInstalledApps = await appStoreStore.getAppsByWhereStatement( `
           WHERE Id IN (
               SELECT AppId
               FROM AppDownloads
               WHERE UserId = $1
           )
-        `;
-
-        const allInstalledApps = await appStoreStore.getAppsByWhereStatement( whereStatement, [userId] );
+        `, [userId] );
         return _resolve( allInstalledApps );
 
       } catch ( e ) {
         return _reject( e );
       }
     } );
+  },
+
+  /**
+   * It returns the affected rows if succesfsful or an Error. 
+   * 
+   * @returns { Promise<number | Error> }
+   */
+  installApp: ( userId, appId ) => {
+    return new Promise( async ( _resolve, _reject ) => {
+      try {
+        const insertResult = await db.query(
+          `INSERT INTO AppDownloads (UserId, AppId)
+           VALUES ($1, $2)`,
+          [userId, appId]
+        );
+
+        return _resolve( insertResult.rowCount );
+
+      } catch ( e ) {
+        return _reject( e );
+      }
+    } );
+  },
+
+  uninstallApp: ( userId, appId ) => {
+    return new Promise( async ( _resolve, _reject ) => {
+      try {
+        const insertResult = await db.query(
+          `DELETE FROM AppDownloads
+           WHERE UserId = $1 AND AppId = $2`,
+          [userId, appId]
+        );
+
+        return _resolve( insertResult.rowCount );
+
+      } catch ( e ) {
+        return _reject( e );
+      }
+    } );
   }
-}
+};
