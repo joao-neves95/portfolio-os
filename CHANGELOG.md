@@ -2,7 +2,7 @@
 
 &nbsp;
 
-#### v0.2.2 - //2018
+#### v0.2.2 - 29/01/2018
 - CLIENT:
   - Multiple important fixes for the AppStore;
   - Added the AppStore icon;
