@@ -76,8 +76,6 @@ module.exports = ( app ) => {
 
       // This catch block catches any possible exceptions that may occure from above.
     } catch ( e ) {
-      setResetCookie( req );
-
       // return done( e, null );
       return done( null, null, { message: 'Unknown Error.' } );
     }
@@ -125,8 +123,6 @@ module.exports = ( app ) => {
       return done( null, user );
 
     } catch ( e ) {
-      setResetCookie( req );
-
       // return done( e, null );
       return done( null, null, { message: 'Unknown Error.' } );
     }
@@ -157,7 +153,6 @@ const __linkAccountToUserIfTrue = ( req, profileId ) => {
       return resolve( false );
 
     } catch ( e ) {
-      setResetCookie( req );
       return reject( e );
     }
   } );

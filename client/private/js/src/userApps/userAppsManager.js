@@ -16,7 +16,6 @@ class UserAppsManager {
       return null;
 
     this.installedApps = new Dictionary();
-    this.__fetchInstalledApps();
 
     userAppsManager = this;
     Object.seal( userAppsManager );
@@ -36,7 +35,7 @@ class UserAppsManager {
       return false;
 
     } else {
-      windowManager.openNewAppStoreAppWindow( processId, thisApp.htmlIndexUrl );
+      windowManager.openNewAppStoreAppWindow( processId, thisApp.htmlindexurl );
       return thisApp;
     }
   }
@@ -57,8 +56,9 @@ class UserAppsManager {
     }
 
     installedApps = await installedApps.json();
+    this.installedApps.clear();
 
-    for ( let i = 0; i < installedApps.lenght; ++i ) {
+    for ( let i = 0; i < installedApps.length; ++i ) {
       this.installedApps.add( installedApps[i].name, installedApps[i] );
     }
 

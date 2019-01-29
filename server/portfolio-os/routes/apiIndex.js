@@ -30,6 +30,7 @@ router.post( '/user/profile/links', usersRoute.addLink );
 router.put( '/user/profile/links/:linkId', usersRoute.updateLink );
 router.delete( '/user/profile/links/:linkId', usersRoute.deleteLink );
 router.get( '/user/installed-apps', usersRoute.getInstalledApps );
+router.post( '/user/installed-apps/:appId', usersRoute.installApp );
 
 // #endregion
 

@@ -35,9 +35,14 @@ class TaskbarManager {
     return newIcon;
   }
 
-  killIcon(windowId) {
-    this.findIconInstance(windowId).kill();
-    this.icons.remove(TaskbarIcon.idPrefix + windowId);
+  killIcon( windowId ) {
+    const thisWindow = this.findIconInstance( windowId );
+    // For the AddNewApp windows.
+    if ( !thisWindow )
+      return;
+
+    thisWindow.kill();
+    this.icons.remove( TaskbarIcon.idPrefix + windowId );
   }
 
   minimizedIcon(windowId) {

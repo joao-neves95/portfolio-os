@@ -21,41 +21,46 @@
   <!-- Font Awesome CDN -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
         integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="https://shivayl.com/css/style.css?v=1">
+  <link rel="stylesheet" type="text/css" href="https://shivayl.com/css/style.css?v=1.1">
 </head>
 
 <body id="body-style" data-spy="scroll" data-target="#spy" data-offset="110">
+
   <!-- HEADER -->
-  <header class="container-fluid bg-soft-orange" id="header">
+  <header class="container-fluid bg-dark" id="header">
     <nav class="container navbar-dark navbar-expand-lg">
       <div class="row">
-        <div class="col-md-4 col-sm-12 col-12">
+        <div class="col-md-6 col-sm-6 col-6">
           <a href="#">
             <figure id="shivayl-logo"></figure>
           </a>
+        </div>
+        <div class="col-md-6 col-sm-6 col-6 d-lg-none">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".collapse" aria-controls="spy" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
         </div>
-        <div class="collapse navbar-collapse col-md-8 col-sm-12 col-12 mr-auto text-right bg-soft-orange" role="navigation" id="spy">
-          <ul class="navbar-nav nav nav-pills mr-auto justify-content-end" role="tablist">
+        <div id="spy" class="collapse navbar-collapse col-12 col-sm-6 col-md-6 col-lg-6 text-right bg-dark" role="navigation">
+          <ul class="navbar-nav nav nav-pills justify-content-end" role="tablist">
             <li class="nav-item">
-              <a type="button" class="btn btn-outline-success nav-link" href="#personal-info">Personal Info</a>
+              <a type="button" class="btn btn-sm btn-outline-success nav-link" href="#personal-info">Personal Info</a>
             </li>
             <li class="nav-item">
-              <a type="button" class="btn btn-outline-success nav-link" href="#education">Education</a>
+              <a type="button" class="btn btn-sm btn-outline-success nav-link" href="#education">Education</a>
             </li>
             <li class="nav-item">
-              <a type="button" class="btn btn-outline-success nav-link" href="#know-how">Know-How</a>
+              <a type="button" class="btn btn-sm btn-outline-success nav-link" href="#know-how">Know-How</a>
             </li>
             <li class="nav-item">
-              <a type="button" class="btn btn-outline-success nav-link" href="#find-me">Contacts</a>
+              <a type="button" class="btn btn-sm btn-outline-success nav-link" href="#find-me">Contacts</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
   </header>
+  <!-- End of HEADER -->
+
   <!-- CONTENT -->
   <!-- role=”main” - Indicates the significance of this element to programs that don’t yet support the <main> element (such as some screen readers). -->
   <main role="main">
@@ -151,6 +156,56 @@
               <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses" target="_blank" class="text-dark">GitHub</a>
             </li>
           </ul>
+          <!-- edX.com -->
+          <h5 class="text-font mt-2em">
+            <a href="https://www.edx.org/" target="_blank" class="text-dark">
+              <u>edx.org</u>
+            </a>
+          </h5>
+          <ul>
+            <li class="text-font">
+              <strong>
+                <a href="https://www.edx.org/course/introduction-node-js-microsoft-dev283x" target="_blank" class="text-dark">
+                  Introduction to Node.js, Express.js and MongoDB (Microsoft)
+                </a>
+              </strong>
+              <ul class="list-unstyled">
+                <li class="text-font"><strong>Current Status:</strong> Complete (12/2017)</li>
+                <li class="text-font">
+                  <strong>Certificate:</strong>
+                  <a href="https://courses.edx.org/certificates/011d0afd84254c06846fbfd2261587e8" target="_blank" class="text-dark">edX Link</a>
+                </li>
+                <li class="text-font">
+                  <strong>Repository:</strong>
+                  <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses/tree/master/Node.js/Introduction-to-NodeJS-edX_Microsoft" target="_blank" class="text-dark">GitHub</a>
+                </li>
+              </ul>
+            </li>
+            <li class="text-font">
+              <strong>
+                <a href="https://www.edx.org/course/build-web-apis-using-asp-net-microsoft-dev247x" target="_blank" class="text-dark">
+                  Build Web APIs using ASP.NET (Microsoft)
+                </a>
+              </strong>
+              <ul class="list-unstyled">
+                <li class="text-font"><strong>Current Status:</strong> Complete (4/2018)</li>
+                <li class="text-font">
+                  <strong>Repository:</strong>
+                  <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses/tree/master/CSharp/Build-Web-APIs-using-ASP.NET_edX-Microsoft" target="_blank" class="text-dark">GitHub</a>
+                </li>
+              </ul>
+            </li>
+            <li class="text-font">
+              <strong>
+                <a href="https://www.edx.org/course/developing-sql-databases-microsoft-dat215-1x-2" target="_blank" class="text-dark">
+                  Developing SQL Databases (Microsoft)
+                </a>
+              </strong>
+              <ul class="list-unstyled">
+                <li><p class="text-font"><strong>Current Status:</strong> Complete (12/2017)</p></li>
+              </ul>
+            </li>
+          </ul>
           <!-- freeCodeCamp.com -->
           <h5 class="text-font mt-2em">
             <a href="https://www.freecodecamp.org/joao-neves95" target="_blank" class="text-dark">
@@ -183,52 +238,6 @@
                   <strong>Repository:</strong>
                   <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses/tree/master/CSharp/Diploma-in-CSharp-Programming_Alison-Microsoft" target="_blank" class="text-dark">GitHub</a>
                 </li>
-              </ul>
-            </li>
-          </ul>
-          <!-- edX.com -->
-          <h5 class="text-font mt-2em">
-            <a href="https://www.edx.org/" target="_blank" class="text-dark">
-              <u>edx.org</u>
-            </a>
-          </h5>
-          <ul>
-            <li class="text-font">
-              <strong>
-                <a href="https://www.edx.org/course/introduction-node-js-microsoft-dev283x" target="_blank" class="text-dark">
-                  Introduction to Node.js, Express.js and MongoDB (Microsoft)
-                </a>
-              </strong>
-              <ul class="list-unstyled">
-                <li class="text-font"><strong>Current Status:</strong> Complete (12/2017)</li>
-                <li class="text-font">
-                  <strong>Repository:</strong>
-                  <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses/tree/master/Node.js/Introduction-to-NodeJS-edX_Microsoft" target="_blank" class="text-dark">GitHub</a>
-                </li>
-              </ul>
-            </li>
-            <li class="text-font">
-              <strong>
-                <a href="https://www.edx.org/course/build-web-apis-using-asp-net-microsoft-dev247x" target="_blank" class="text-dark">
-                  Build Web APIs using ASP.NET (Microsoft)
-                </a>
-              </strong>
-              <ul class="list-unstyled">
-                <li class="text-font"><strong>Current Status:</strong> Complete (4/2018)</li>
-                <li class="text-font">
-                  <strong>Repository:</strong>
-                  <a href="https://github.com/joao-neves95/Exercises_Challenges_Courses/tree/master/CSharp/Build-Web-APIs-using-ASP.NET_edX-Microsoft" target="_blank" class="text-dark">GitHub</a>
-                </li>
-              </ul>
-            </li>
-            <li class="text-font mt-4">
-              <strong>
-                <a href="https://www.edx.org/course/developing-sql-databases-microsoft-dat215-1x-2" target="_blank" class="text-dark">
-                  Developing SQL Databases (Microsoft)
-                </a>
-              </strong>
-              <ul class="list-unstyled">
-                <li><p class="text-font"><strong>Current Status:</strong> Complete (12/2017)</p></li>
               </ul>
             </li>
           </ul>
@@ -387,6 +396,7 @@
     </div>
     <!-- End of KNOW-HOW -->
   </main>
+  <!-- End of CONTENT -->
 
   <!-- FOOTER -->
   <footer>

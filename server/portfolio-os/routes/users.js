@@ -7,6 +7,8 @@
  *
  */
 
+// api/portfolio-os/(users | user )/
+
 'use strict';
 const userStore = require( '../dataAccess/userStore' );
 const { sanitizeHTML } = require( '../../../common/commonUtils' );
@@ -156,8 +158,20 @@ module.exports = {
   getInstalledApps: async ( req, res ) => {
     try {
       const apps = await userStore.getInstalledApps( req.user.id );
-      console.debug( apps );
       return res.status( 200 ).json( apps );
+
+    } catch ( e ) {
+      return res.status( 500 ).json( -1 );
+    }
+  },
+
+  installApp: async ( req, res ) => {
+    try {
+      const affectedRows = await userStore.installApp( req.user.id, req.params.appId );
+      if ( affectedRows <= 0 )
+        return res.status( 500 ).json( 0 );
+
+      return res.status( 200 ).json( affectedRows );
 
     } catch ( e ) {
       return res.status( 500 ).json( -1 );

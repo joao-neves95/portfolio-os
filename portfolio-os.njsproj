@@ -35,10 +35,16 @@
     <Content Include="client\private\css\src\startMenu.less" />
     <Content Include="client\private\css\src\taskbar.less" />
     <Content Include="client\private\css\src\terminal.less" />
+    <Content Include="client\private\css\src\userAppWindow.less">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="client\private\css\src\utils.less" />
     <Content Include="client\private\css\src\variables.less" />
     <Content Include="client\private\css\src\windowManager.less" />
     <Content Include="client\private\desktop.html" />
+    <Content Include="client\wwwroot\crossdomain.xml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="client\wwwroot\css\portfolio-os_auth_style.css" />
     <Content Include="client\wwwroot\css\src\portfolio-os_auth_style.less" />
     <Content Include="client\wwwroot\css\style.css" />

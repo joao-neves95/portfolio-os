@@ -15,7 +15,7 @@ class StartMenuApp {
 
   get template() {
     if ( !this.iconUrl )
-      this.iconUrl = DEFAULT_ICON_URL;
+      this.iconUrl = DEFAULT_APP_ICON;
 
     return `
       <li class="start-menu-icon">

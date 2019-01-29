@@ -36,15 +36,25 @@ class WindowManager {
     );
   }
 
-  openNewAppStoreAppWindow( processId, url ) {
+  async openNewAppStoreAppWindow( processId, url ) {
     const thisAppInstance = processManager.getAppInstance( processId );
+    //let content = await HttpClient.get( `https://cdn.jsdelivr.net/gh/${url}`, false );
+    let content = await HttpClient.get( `https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html`, false );
+    if ( !content.ok )
+      return Notifications.errorToast( 'There was an error launching the application.' );
+
+    content = await content.text();
+
     this.openNewWindowCustom(
       processId,
       thisAppInstance.name,
-      window.appStoreAppWindowTemplate( url ),
+      Window.appStoreAppWindowTemplate(),
       true,
       thisAppInstance.taskbarIconUrl
     );
+
+    const iframe = DomUtils.get( `#${Window.idPrefix}${processId} iframe.user-app-window` );
+    iframe.srcdoc = content;
   }
 
   /**
@@ -80,7 +90,12 @@ class WindowManager {
   }
 
   closeWindow( windowId ) {
-    this.findWindowInstance( windowId ).kill();
+    const thisWindow = this.findWindowInstance( windowId );
+    // For AddNewApp windows.
+    if ( !thisWindow )
+      return;
+
+    thisWindow.kill();
     taskbarManager.killIcon( windowId );
     this.windows.remove( windowId );
     this.updateListeners();

@@ -32,6 +32,9 @@ app.use( express.urlencoded( { extended: true } ) );
 app.use( cookieParser( process.env.COOKIE_SECRET ) );
 app.use( logger( 'combined' ) );
 
+// (only for dev)
+// app.use( noCache );
+
 // #region PUBLIC FILES.
 app.use( '/', express.static( path.join( process.cwd(), './client/wwwroot' ) ) );
 
@@ -41,7 +44,7 @@ authConfig( app );
 
 // #region PRIVATE API ROUTE.
 
-app.use( ['/portfolio-os', '/portfolio-os/'], noCache, portfolioOSRoutes );
+app.use( ['/portfolio-os', '/portfolio-os/'], portfolioOSRoutes );
 
 // #endregion
 

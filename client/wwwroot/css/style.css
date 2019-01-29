@@ -2,6 +2,7 @@
   background-color: #A8ABAD;
   height: 100%;
   overflow-y: scroll;
+  overflow-x: hidden;
   position: relative;
 }
 
@@ -16,7 +17,15 @@
 #shivayl-logo {
   background-image: url("https://shivayl.com/img/shivayl-logo.svg");
   background-repeat: no-repeat;
-  height: 100%;
+  height: 4em;
+}
+
+#spy {
+  margin: auto;
+  margin-left: auto;
+  margin-right: 0 !important;
+  /*padding-right: 1em !important;*/
+  margin-top: 2em;
 }
 
 #spy > ul {

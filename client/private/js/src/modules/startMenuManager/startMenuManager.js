@@ -7,6 +7,7 @@
  *
  */
 
+/** @type { StartMenuManager } */
 let startMenuManager = null;
 
 class StartMenuManager {
@@ -25,13 +26,14 @@ class StartMenuManager {
   get startMenuIcon() { return document.getElementsByClassName( 'menu-icon-wrap' )[0]; }
   get appContainerElem() { return document.getElementById('start-menu-apps'); }
 
-  init() {
-    this.injectAllApps();
+  async init() {
+    await this.injectAllApps();
   }
 
-  injectAllApps() {
+  async injectAllApps() {
     let allApps = systemAppsManager.getAllApps();
-    allApps.concat( userAppsManager.installedApps.getAllValues() );
+    await userAppsManager.__fetchInstalledApps();
+    allApps = allApps.concat( userAppsManager.installedApps.getAllValues() );
 
     this.appContainerElem.innerHTML = '';
     for ( let i = 0; i < allApps.length; ++i ) {

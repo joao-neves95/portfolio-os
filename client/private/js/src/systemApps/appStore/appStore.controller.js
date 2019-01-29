@@ -24,7 +24,6 @@ class AppStoreController {
   async init() {
     windowManager.openNewWindow( this.model.processId, AppStoreTemplates.window( this.model.id ) );
     $( `#${this.model.id} .dropdown` ).foundation();
-    this.__updateListeners();
 
     const firstPageApps = await this.model.getAppStorePageFrom( 0 );
     this.__injectApps( firstPageApps );
@@ -48,6 +47,8 @@ class AppStoreController {
     for ( let i = 0; i < apps.length; ++i ) {
       this.view.injectApp( apps[i] );
     }
+
+    this.__updateListeners();
   }
 
   __updateListeners() {
@@ -56,5 +57,25 @@ class AppStoreController {
       this.addNewAppController.openWindow();
       document.getElementById( 'win-' + this.model.processId ).getElementsByClassName( 'close-window' )[0].click();
     } );
+
+    const allAppCardsInstallBtns = DomUtils.getAll( `#${this.model.id} .install` );
+    for ( let i = 0; i < allAppCardsInstallBtns.length; ++i ) {
+      allAppCardsInstallBtns[i].addEventListener( 'click', async ( e ) => {
+        try {
+          const thisAppId = DomUtils.getParentByIdInclude( e.target, 'app_' ).id.substring( 4 );
+          const res = await this.model.installApp( thisAppId );
+          if ( !res.ok )
+            return Notifications.errorToast( ERROR_MSG_INSTALL_APP );
+
+          Notifications.successToast( 'App successfully installed.' );
+          // TODO (FRONTEND) Optimise.
+          await startMenuManager.injectAllApps();
+          return 0;
+
+        } catch ( e ) {
+          return Notifications.errorToast( ERROR_MSG_INSTALL_APP );
+        }
+      } );
+    }
   }
 }

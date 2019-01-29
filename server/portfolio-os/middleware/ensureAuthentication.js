@@ -9,6 +9,7 @@
 
 'use strict';
 const verifyJWT = require( './verifyJWT' );
+const setResetCookie = require( '../middleware/setResetCookie' );
 
 /**
  * Its blocks the req and returns 401 res if not successfull.
@@ -23,14 +24,12 @@ module.exports = async ( req, res, next ) => {
       req.user = req.cookies.GUEST_SESSION;
       return next();
     }
-      
 
     let decoded;
 
     if ( req.signedCookies.JWT !== undefined ) {
       decoded = Object.freeze( await verifyJWT( req.signedCookies.JWT ) );
 
-    // TODO: Forget the localStorage thing and just use signed cookies.
     } else if ( req.cookies.JWT !== undefined ) {
       decoded = Object.freeze( await verifyJWT( req.cookies.JWT ) );
 
@@ -42,6 +41,7 @@ module.exports = async ( req, res, next ) => {
     }
 
     if ( !decoded ) {
+      setResetCookie( res );
       return ____notAuthorized( res );
     }
 
@@ -49,7 +49,7 @@ module.exports = async ( req, res, next ) => {
     return next();
 
   } catch ( e ) {
-    console.error( e );
+    setResetCookie( res );
     return ____notAuthorized( res );
   }
 };

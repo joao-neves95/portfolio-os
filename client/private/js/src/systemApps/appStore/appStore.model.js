@@ -20,7 +20,18 @@ class AppStoreModel {
       return !res.ok ? Notifications.errorToast( 'There was an error getting the AppStore page.' ) : await res.json();
 
     } catch ( e ) {
+      Notifications.errorToast( 'There was an error getting the AppStore page.' );
       console.debug( e );
+      return e;
+    }
+  }
+
+  async installApp( appId ) {
+    try {
+      return await HttpClient.post( `${API_ROOT_PATH}user/installed-apps/${appId}` );
+
+    } catch ( e ) {
+      console.error( e );
       return e;
     }
   }

@@ -34,7 +34,7 @@ class Window {
       <article class="window-manager grid-y resizable selected-win" id="${this.id}">
         <header class="toolbar">
           <div class="grid-x">
-            <div class="cell small-8 medium-8 large-8">
+            <div class="cell small-6 medium-8 large-8">
               <p class="window-title free-draggable">${this.title}</p>
             </div>
             <div class="cell auto"></div>
@@ -70,11 +70,11 @@ class Window {
       </div>`;
   }
 
-  static appStoreAppWindowTemplate( url ) {
+  static appStoreAppWindowTemplate() {
     return `
       <iframe
+        class="user-app-window"
         title=""
-        src="https://cdn.jsdelivr.net/gh/${url}"
         allowpaymentrequest="false"
         sandbox="allow-scripts"
       >

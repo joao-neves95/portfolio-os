@@ -2,6 +2,21 @@
 
 &nbsp;
 
+#### v0.2.2 - 29/01/2018
+- CLIENT:
+  - Multiple important fixes for the AppStore;
+  - Added the AppStore icon;
+  - Added the install app ability;
+  - Fixes on the GridSystem and Desktop icons (and general) responsibility;
+  - Fixed shivayl's landing page mobile navbar responsibility;
+  - Added the Portfolio OS logo icon to the taskbar start menu button + styling;
+- SERVER:
+  - Major authentication issues/bugs fixes;
+  - Added the install app methods;
+  - Fixed the caching of Portfolio OS's IMG/HTML/JS/CSS.
+
+&nbsp;
+
 #### *v0.2.1 - 23/01/2018
 - (CLIENT) Turned all module managers into a singleton to ensure only on instance and integrity of each module manager.
 

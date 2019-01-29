@@ -24,8 +24,14 @@ router.get( '/', ( req, res ) => {
 
 router.get( '/github', passport.authenticate( 'github', { scope: ['user'] } ) );
 
-router.get( '/github/callback', passport.authenticate( 'github', { failureRedirect: '/portfolio-os/auth', failureFlash: false } ), async ( req, res ) => {
-  return ____setJWTCookie( req, res );
+router.get( '/github/callback', ( req, res, next ) => {
+  passport.authenticate( 'github', ( err, user, info ) => {
+    ____redirectIfLoginFail( err, res, next );
+
+  } )( req, res, next );
+  },
+  async ( req, res ) => {
+    return ____setJWTCookie( req, res );
 } );
 
 // #endregion
@@ -34,8 +40,14 @@ router.get( '/github/callback', passport.authenticate( 'github', { failureRedire
 
 router.get( '/google', passport.authenticate( 'google', { scope: ['profile', 'email', 'openid'] } ) );
 
-router.get( '/google/callback', passport.authenticate( 'google', { failureRedirect: '/portfolio-os/auth', failureFlash: false } ), async ( req, res ) => {
-  return ____setJWTCookie( req, res );
+router.get( '/google/callback', ( req, res, next ) => {
+  passport.authenticate( 'google', ( err, user, info ) => {
+    ____redirectIfLoginFail( err, res, next );
+
+  } )( req, res, next );
+  },
+  async ( req, res ) => {
+    return ____setJWTCookie( req, res );
 } );
 
 // #endregion
@@ -63,11 +75,10 @@ const ____setJWTCookie = async ( req, res ) => {
       'JWT',
       await signJWT( { id: req.user.id } ),
       {
-        maxAge: 999999,
+        maxAge: process.env.JWT_EXPIRATION,
         path: '/',
         audience: process.env.JWT_AUDIENCE,
         issuer: process.env.JWT_ISSUER,
-        // TODO: (SERVER) Change to true in production (HTTPS).
         secure: false,
         signed: true
       }
@@ -76,8 +87,21 @@ const ____setJWTCookie = async ( req, res ) => {
     return res.status( 200 ).redirect( '/portfolio-os/desktop' );
 
   } catch ( e ) {
-    console.debug( e );
-    setResetCookie( req );
+    setResetCookie( res );
     return res.status( 401 ).redirect( '/' );
+  }
+};
+
+const ____redirectIfLoginFail = ( err, res, next ) => {
+  try {
+    if ( err ) {
+      setResetCookie( res );
+      return res.status( 401 ).redirect( '/portfolio-os/auth' );
+    }
+
+    return next();
+
+  } catch ( e ) {
+    return res.status( 401 ).redirect( '/portfolio-os/auth' );
   }
 };
