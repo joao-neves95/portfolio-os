@@ -75,7 +75,7 @@ const ____setJWTCookie = async ( req, res ) => {
       'JWT',
       await signJWT( { id: req.user.id } ),
       {
-        maxAge: process.env.JWT_EXPIRATION,
+        maxAge: parseInt( process.env.JWT_EXPIRATION ),
         path: '/',
         audience: process.env.JWT_AUDIENCE,
         issuer: process.env.JWT_ISSUER,
