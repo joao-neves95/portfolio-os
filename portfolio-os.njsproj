@@ -243,6 +243,9 @@
     <Compile Include="server\portfolio-os\middleware\setResetCookie.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="server\portfolio-os\middleware\spoofReferer.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="server\server.js" />
     <Compile Include="server\portfolio-os\dataAccess\appStoreStore.js" />
     <Compile Include="server\db.js" />

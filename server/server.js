@@ -19,8 +19,8 @@ const helmetConfig = require( './portfolio-os/config/helmet' );
 const cors = require( 'cors' );
 const corsConfig = require( './portfolio-os/config/cors' );
 const authConfig = require( './portfolio-os/middleware/authConfig' );
-const noCache = require( './portfolio-os/middleware/noCache' );
 const portfolioOSRoutes = require( './portfolio-os/routes/index' );
+const spoofReferer = require( './portfolio-os/middleware/spoofReferer' );
 const app = express();
 
 const PORT = process.env.PORT;
@@ -47,6 +47,11 @@ authConfig( app );
 app.use( ['/portfolio-os', '/portfolio-os/'], portfolioOSRoutes );
 
 // #endregion
+
+app.get( '/goto/:url', spoofReferer,
+  ( req, res ) => {
+    res.redirect( decodeURIComponent( req.params.url ) );
+  } );
 
 app.use( ( req, res, next ) => {
   // TODO: (SERVER) Send 404 page.

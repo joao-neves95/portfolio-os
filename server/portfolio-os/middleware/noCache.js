@@ -7,7 +7,7 @@
  *
  */
 
-'use strict'
+'use strict';
 
 module.exports = ( req, res, next ) => {
   res.set( 'Cache-Control', 'private, no-cache, no-store, must-revalidate, proxy-revalidate' );

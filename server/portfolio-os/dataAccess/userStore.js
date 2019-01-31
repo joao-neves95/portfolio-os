@@ -130,6 +130,25 @@ module.exports = {
     } );
   },
 
+  getUserCodePenLinksAsync: ( userId ) => {
+    return new Promise( async ( resolve, reject ) => {
+
+      try {
+        const queryResult = await db.query(
+          `SELECT UrlPath
+           FROM SocialLinks
+           WHERE UserId = $1 AND HostId = 5`,
+          [userId]
+        );
+
+        return resolve( queryResult.rows );
+
+      } catch ( e ) {
+        return reject( e );
+      }
+    } );
+  },
+
   updateSummaryAsync: ( userId, summary ) => {
     return new Promise( async ( resolve, reject ) => {
 

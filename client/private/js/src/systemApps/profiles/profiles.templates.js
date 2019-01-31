@@ -59,7 +59,7 @@ class ProfilesTemplates {
       <div class="grid-x">
         <div class="medium-2 cell link-label-wrapper">
           <label class="lbl">Website</label>
-          <a class="pointer" href="https://${hostUrl}/${urlPath}" target="_blank">
+          <a class="pointer" href="${HIDE_REFERER}https://${hostUrl}/${urlPath}" rel="noreferrer" target="_blank">
             <p>${hostLabel}</p>
           </a>
         </div>

@@ -43,6 +43,7 @@ class MyProfileTemplates {
         <div class="medium-2 cell link-label-wrapper">
           <label>Website
             <select>
+              <option value="${HostId.CodePen}">CodePen</option>
               <option value="${HostId.GitHub}">GitHub</option>
               <option value="${HostId.Behance}">Behance</option>
               <option value="${HostId.Twitter}">Twitter</option>

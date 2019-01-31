@@ -23,15 +23,15 @@ class ProcessManager {
   /**
    * @param {string} processName The name of the application.
    */
-  launchNewProcess( processName ) {
+  async launchNewProcess( processName ) {
     const newProcess = new Process( processName );
     let thisAppInstance = systemAppsManager.getAppInstance( processName );
 
     if ( !thisAppInstance ) {
-      thisAppInstance = userAppsManager.executeApplication( processName, newProcess.id );
+      thisAppInstance = await userAppsManager.executeApplication( processName, newProcess.id );
 
       if ( !thisAppInstance )
-        return Notifications.errorToast( `App "${appName}" not found.` );
+        return Notifications.errorToast( `App "${thisAppInstance.name}" not found.` );
 
       this.activeProcesses.add( newProcess.id, thisAppInstance );
 
