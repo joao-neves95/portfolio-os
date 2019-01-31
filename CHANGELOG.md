@@ -2,6 +2,20 @@
 
 &nbsp;
 
+#### v0.2.3 - 31/01/2018
+- GLOBAL:
+  - Added CodePen to the user links.
+- CLIENT:
+  - Now, instead of injecting the user app directly on an iframe, the user hosts the application on CodePen and its app is framed on a window;
+  - Fixed the AddNewApp modal;
+  - Added a toast informing the user to go fullscreen.
+- SERVER:
+  - Reenforced header policies;
+  - Added a redirecting referer spoofing route;
+  - Added the get user codepen username methods/route.
+
+&nbsp;
+
 #### v0.2.2 - 29/01/2018
 - CLIENT:
   - Multiple important fixes for the AppStore;

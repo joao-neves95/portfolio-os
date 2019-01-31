@@ -24,7 +24,7 @@ module.exports = {
     try {
       const lastId = !req.query.lastId ? 0 : req.query.lastId;
       const limit = !req.query.limit ? 10 : req.query.limit;
-      const result = await userStore.getUsersOrderByLastLogin( lastId, limit );
+      const result = await userStore.getUsersOrderByLastLogin( sanitizeHTML( lastId ), sanitizeHTML( limit ) );
 
       if ( result.length > 0 )
         return res.status( 200 ).json( result );
@@ -113,6 +113,20 @@ module.exports = {
     }
   },
 
+  getThisUserCodePenLinks: async ( req, res ) => {
+    try {
+      const result = await userStore.getUserCodePenLinksAsync( req.user.id );
+
+      if ( result <= 0 )
+        return res.status( 404 ).json( 'CodePen username not found.' );
+
+      return res.status( 200 ).json( result );
+
+    } catch ( e ) {
+      return res.status( 500 ).json( -1 );
+    }
+  },
+
   addLink: async ( req, res ) => {
     try {
       const result = await userStore.addLinkAsync( req.user.id, sanitizeHTML( req.body.hostId ), sanitizeHTML( req.body.urlPath ) );
@@ -167,7 +181,7 @@ module.exports = {
 
   installApp: async ( req, res ) => {
     try {
-      const affectedRows = await userStore.installApp( req.user.id, req.params.appId );
+      const affectedRows = await userStore.installApp( req.user.id, sanitizeHTML( req.params.appId ) );
       if ( affectedRows <= 0 )
         return res.status( 500 ).json( 0 );
 

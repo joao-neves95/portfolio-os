@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
@@ -12,6 +12,8 @@ const SERVER_ROOT_PATH = 'https://www.shivayl.com/';
 const API_ROOT_PATH = `${SERVER_ROOT_PATH}portfolio-os/api/`;
 const IMG_PATH = `${SERVER_ROOT_PATH}img/`;
 const DEFAULT_APP_ICON = `${IMG_PATH}default-taskbar-icon-white.svg`;
+const HIDE_REFERER_REDIRECT = `${SERVER_ROOT_PATH}goto/`;
+const HIDE_REFERER = 'https://1ll.us/bL/';
 const AUTH_TOKEN_ID = 'JWT';
 const START_MENU_ANIM_DELAY = 1;
 

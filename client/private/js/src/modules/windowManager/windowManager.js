@@ -36,25 +36,16 @@ class WindowManager {
     );
   }
 
-  async openNewAppStoreAppWindow( processId, url ) {
-    const thisAppInstance = processManager.getAppInstance( processId );
-    //let content = await HttpClient.get( `https://cdn.jsdelivr.net/gh/${url}`, false );
-    let content = await HttpClient.get( `https://raw.githubusercontent.com/joao-neves95/freeCodeCampProjects/master/Wikipedia_Viewer_App/index.html`, false );
-    if ( !content.ok )
-      return Notifications.errorToast( 'There was an error launching the application.' );
-
-    content = await content.text();
-
+  async openNewAppStoreAppWindow( processId, appStoreApp ) {
+    // "&#x2F;" = "/" (HTML character)
+    const codePenMeta = appStoreApp.htmlindexurl.split( '&#x2F;' );
     this.openNewWindowCustom(
       processId,
-      thisAppInstance.name,
-      Window.appStoreAppWindowTemplate(),
+      'USER APPLICATION',
+      Window.appStoreAppWindowTemplate( appStoreApp.name, codePenMeta[0], codePenMeta[1] ),
       true,
-      thisAppInstance.taskbarIconUrl
+      ''
     );
-
-    const iframe = DomUtils.get( `#${Window.idPrefix}${processId} iframe.user-app-window` );
-    iframe.srcdoc = content;
   }
 
   /**
@@ -88,6 +79,21 @@ class WindowManager {
     dragAndDrop.updateFreeDraggListeners();
     windowResizer.updateListeners();
   }
+
+  openNewModal( content ) {
+    const target = document.getElementById( 'window-manager-container' );
+    $( '#modal' ).remove();
+    target.innerHTML += Window.modalTemplate( content );
+    $( '#modal' ).foundation();
+    $( '#modal' ).foundation( 'open' );
+    document.querySelector( '[data-reveal]' ).addEventListener( 'closed.zf.reveal', () => {
+      $( '#modal' ).remove();
+      this.updateListeners();
+      this.updateFreeDraggListeners();
+    } );
+  }
+
+  // #region WINDOW ACTION METHODS
 
   closeWindow( windowId ) {
     const thisWindow = this.findWindowInstance( windowId );
@@ -146,6 +152,8 @@ class WindowManager {
 
     this.windows.add( window.id, window );
   }
+
+  // #endregion
 
   // #region LISTENERS:
 
@@ -231,17 +239,6 @@ class WindowManager {
 
   // #endregion
 
-  openNewModal( content ) {
-    const target = document.getElementById( 'window-manager-container' );
-    $( '#modal' ).remove();
-    target.innerHTML += Window.modalTemplate( content );
-    $( '#modal' ).foundation();
-    $( '#modal' ).foundation( 'open' );
-    document.querySelector( '[data-reveal]' ).addEventListener( 'closed.zf.reveal', () => {
-      this.updateListeners();
-      this.updateFreeDraggListeners();
-    } );
-  }
 
   // #region UTILITIES
 

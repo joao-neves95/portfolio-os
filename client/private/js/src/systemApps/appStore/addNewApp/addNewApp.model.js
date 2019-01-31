@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
@@ -13,6 +13,27 @@ class AddNewAppModel {
     this.processId = '';
   }
 
+  async getThisUserCodepenUsername() {
+    try {
+      let res = await HttpClient.get( `${API_ROOT_PATH}user/profile/links/codepen` );
+      if ( !res.ok )
+        return false;
+      else if ( res.status === 404 ) {
+        Notifications.infoToast( 'If you add your CodePen username to your profile, it will be automaticaly added to the AddNewApp formulary.' );
+        return false;
+      }
+
+      res = await res.json();
+      if ( res.length <= 0 )
+        return false;
+
+      return res[0].urlpath;
+
+    } catch ( e ) {
+      return false;
+    }
+  }
+
   /**
    * 
    * @param { object } formData
@@ -23,9 +44,9 @@ class AddNewAppModel {
     // VALIDATION
     if ( formData.appName.length <= 2 )
       return Notifications.errorToast( 'The application name must have more than 2 characters.' );
-    else if ( formData.indexPage <= 1)
-      return Notifications.errorToast( 'The application html index page is required.' );
-
+    else if ( formData.indexPage.split( '/' ).length !== 2 )
+      return Notifications.errorToast( 'The application CodePen\'s index page is not valid.' );
+    
     const appModel = new AppStoreApplication(
       FileSystemItemType.Executable,
       '',

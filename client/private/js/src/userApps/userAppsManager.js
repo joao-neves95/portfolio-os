@@ -35,7 +35,7 @@ class UserAppsManager {
       return false;
 
     } else {
-      windowManager.openNewAppStoreAppWindow( processId, thisApp.htmlindexurl );
+      windowManager.openNewAppStoreAppWindow( processId, thisApp );
       return thisApp;
     }
   }

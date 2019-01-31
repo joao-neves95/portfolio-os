@@ -11,5 +11,6 @@ const HostId = Object.freeze( {
   GitHub: 1,
   Behance: 2,
   Twitter: 3,
-  Instagram: 4
+  Instagram: 4,
+  CodePen: 5
 } );

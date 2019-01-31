@@ -58,6 +58,7 @@ class AppStoreController {
       document.getElementById( 'win-' + this.model.processId ).getElementsByClassName( 'close-window' )[0].click();
     } );
 
+    // INSTALL BUTTON
     const allAppCardsInstallBtns = DomUtils.getAll( `#${this.model.id} .install` );
     for ( let i = 0; i < allAppCardsInstallBtns.length; ++i ) {
       allAppCardsInstallBtns[i].addEventListener( 'click', async ( e ) => {

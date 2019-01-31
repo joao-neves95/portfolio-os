@@ -26,6 +26,7 @@ router.put( '/user/profile/summary', usersRoute.putUserSummary );
 router.post( '/user/profile/skills', usersRoute.addSkill );
 router.put( '/user/profile/skills/:skillId', usersRoute.updateSkill );
 router.delete( '/user/profile/skills/:skillId', usersRoute.deleteSkill );
+router.get( '/user/profile/links/codepen', usersRoute.getThisUserCodePenLinks );
 router.post( '/user/profile/links', usersRoute.addLink );
 router.put( '/user/profile/links/:linkId', usersRoute.updateLink );
 router.delete( '/user/profile/links/:linkId', usersRoute.deleteLink );

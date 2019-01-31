@@ -53,4 +53,5 @@ whenDomReady( async () => {
   );
 
   dragAndDrop.updateDraggables();
+  Notifications.infoToast( 'Portfolio OS can give recursion syndrome to some users. Click [ <b>F11</b> ] to go fullscreen.' );
 } );

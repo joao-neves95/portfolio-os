@@ -16,7 +16,7 @@ class Window {
    * @param { string } title
    * @param { string } content
    */
-  constructor( processId, title, content ) {
+  constructor( processId, title = '', content ) {
     this.id = `${Window.idPrefix}${processId}`;
     this.title = title;
     this.content = content;
@@ -53,7 +53,8 @@ class Window {
           ${this.content}
         </section>
         <div class="resizer"></div>
-      </article>`;
+      </article>
+    `;
   }
 
   /**
@@ -64,20 +65,23 @@ class Window {
     return `
       <div class="reveal" id="modal" data-reveal>
         ${content}
-        <!--<button class="close-button" data-close aria-label="Close modal" type="button">
+        <button class="close-button" data-close aria-label="Close modal" type="button">
           <span aria-hidden="true">&times;</span>
-        </button>-->
+        </button>
       </div>`;
   }
 
-  static appStoreAppWindowTemplate() {
+  static appStoreAppWindowTemplate( appTitle, codePenUserName, penCode ) {
     return `
       <iframe
+        scrolling="no" frameborder="no" allowtransparency="true" allowfullscreen="true" allowpaymentrequest="false" referrerpolicy="origin-when-cross-origin"
+        sandbox="allow-scripts allow-same-origin"
+        height="406" style="width: 100%;"
         class="user-app-window"
-        title=""
-        allowpaymentrequest="false"
-        sandbox="allow-scripts"
-      >
+        title="${appTitle}"
+        src="${Utils.spoofRefererRedirectUrl( `https://codepen.io/${codePenUserName}/embed/${penCode}/?height=406&theme-id=0&default-tab=result`)}">
+        See the Pen <a href='${HIDE_REFERER}https://codepen.io/${codePenUserName}/pen/${penCode}/'  rel="noreferrer">${appTitle}</a> by João Neves
+        (<a href='${HIDE_REFERER}https://codepen.io/${codePenUserName}'  rel="noreferrer">@${codePenUserName}</a>) on <a href='${HIDE_REFERER}https://codepen.io'  rel="noreferrer">CodePen</a>.
       </iframe>
     `;
   }

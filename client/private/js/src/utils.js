@@ -16,6 +16,10 @@ class Utils {
     console.log(message);
   }
 
+  static spoofRefererRedirectUrl( url ) {
+    return HIDE_REFERER_REDIRECT + encodeURIComponent( url );
+  }
+
   // From an external library.
   static randomString(length) {
     return Random.string('qwertyuiopasdfghjklçzxcvbnmQWERTYUIOPÇLKJHGFDSAZXCVBNM1234567890«»')(Random.engines.browserCrypto, length);

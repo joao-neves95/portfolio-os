@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
@@ -12,7 +12,9 @@ class AddNewAppTemplates {
     throw new Error( 'Can not instantiate the static class AddNewAppTemplate.' );
   }
 
-  static get content() {
+  static content( penCodeUsername = '' ) {
+    penCodeUsername = !penCodeUsername || penCodeUsername === '' ? '' : `value="${penCodeUsername}/"`;
+
     return `
       <form class="grid-container add-new-app">
         <section class="grid-x wrapper" >
@@ -28,8 +30,8 @@ class AddNewAppTemplates {
           </div>
 
           <div class="cell">
-            <h5>Index HTML Page</h5>
-            <input type="text" name="index-page" class="index-page" placeholder="user/repo-name@repo-version/path-to-file" required>
+            <h5>CodePen Meta</h5>
+            <input type="text" name="index-page" class="index-page" placeholder="codePenUserame/penCode" ${penCodeUsername} required>
           </div>
 
           <div class="cell">
@@ -50,20 +52,26 @@ class AddNewAppTemplates {
   static get helpModalContent() {
     return `
       <h1>Help</h1>
-      <ul>
-        <li>
-          For security reasons, Portfolio-OS only accepts apps stored on a public GitHub repository.
-          To add a new app add the path to the HTML index file of your application.
-        </li>
+      
+      <p>
+        For security reasons, Portfolio-OS only accepts apps stored publicly on https://codepen.io/.
+      </p>
 
-        <li>
-          Example: my-username/master/path-to-file
-        </li>
+      <p>
+        To add a new app add your CodePen's username and pen code of your application.
+      </p>
 
-        <li>
-          All apllications that link to files that are not hosted on a public GitHub repository will be deleted.
-        </li>
-      </ul>
+      <p>
+        Example: "shivayl/qVVbdO"
+      </p>
+
+      <p>
+        You can add your CodePen's username to your social accounts in order to ease the process.
+      </p>
+
+      <p>
+        All apllications that link to files that are not hosted on a public GitHub repository will be deleted.
+      </p>
     `;
   }
 }
