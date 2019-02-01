@@ -1,7 +1,13 @@
 # TODO FOR NEXT PRODUCTION
 
-- Push PortfolioOS.js (client/private) and server to production;
-- Add the CodePen link to the production DB.
-
+## DATABASE:
+- CREATE TABLE Boards
+- CREATE TABLE Threads
+- CREATE TABLE Replies
+- CREATE INDEX UserId_AppDownloads_Idx
+ON AppDownloads(UserId);
+- CREATE INDEX AppId_AppDownloads_Idx
+ON AppDownloads(AppId);
+- INSERT INTO Boards
 
 *Helmet's referer policy.

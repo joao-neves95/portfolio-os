@@ -2,7 +2,18 @@
 
 &nbsp;
 
-#### v0.2.3 - 31/01/2018
+#### v0.3.0-Alpha.1 - 01/02/2019
+- CLIENT:
+  - Multiple fixes on the MyProfiles (Profiles) + fixed compatibility issues with Chrome.
+- SERVER:
+  - Fixed the referer spoofing redirection route ("/goto").
+- DATABASE:
+  - Started working on the theCodeChan tables;
+  - Added missong indexes (of foreign keys).
+
+&nbsp;
+
+#### *v0.2.3 - 31/01/2019
 - GLOBAL:
   - Added CodePen to the user links.
 - CLIENT:
@@ -16,7 +27,7 @@
 
 &nbsp;
 
-#### v0.2.2 - 29/01/2018
+#### v0.2.2 - 29/01/2019
 - CLIENT:
   - Multiple important fixes for the AppStore;
   - Added the AppStore icon;
@@ -31,12 +42,12 @@
 
 &nbsp;
 
-#### *v0.2.1 - 23/01/2018
+#### v0.2.1 - 23/01/2019
 - (CLIENT) Turned all module managers into a singleton to ensure only on instance and integrity of each module manager.
 
 &nbsp;
 
-#### v0.2.0 - 22/01/2018
+#### v0.2.0 - 22/01/2019
 - Added the click sound;
 - Added the notifications module;
 - Refactored the HttpClient (frontend): It now returns the Response object (broke everything; to fix on the next release);
@@ -57,14 +68,14 @@
 
 &nbsp;
 
-#### v0.1.3 - 06/01/2018
+#### v0.1.3 - 06/01/2019
 
 - CLIENT:
   - Solved a bug (happening after resizing the window): "Uncaught TypeError: this.findWindowInstance(...).kill is not a function".
 
 &nbsp;
 
-#### v0.1.2 - 01/01/2018
+#### v0.1.2 - 01/01/2019
 
 - CLIENT:
   - Added the logout button to the start menu;

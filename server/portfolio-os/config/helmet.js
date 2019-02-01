@@ -22,7 +22,7 @@ module.exports = {
       fontSrc: ["'self'", process.env.HOST, 'https://shivayl.com', 'https://fonts.gstatic.com', 'https://use.fontawesome.com'],
       imgSrc: ["'self'", process.env.HOST, 'https://shivayl.com', "data: https:", 'https://png.icons8.com', 'https://img.icons8.com'],
       mediaSrc: ["'self'", process.env.HOST, 'https://shivayl.com'],
-      frameSrc: ["'self'", process.env.HOST, 'https://shivayl.com', 'https://codepen.io']
+      frameSrc: ["'self'", process.env.HOST, 'https://shivayl.com/', 'https://codepen.io']
     }
   },
   permittedCrossDomainPolicies: {

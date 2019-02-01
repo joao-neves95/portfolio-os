@@ -80,14 +80,33 @@ CREATE TABLE AppDownloads (
 );
 
 CREATE TABLE FS_Local (
-  Id SERIAL PRIMARY KEY,
-  UserId INT UNIQUE NOT NULL REFERENCES Users(Id),
-  DIR_desktop TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
-  DIR_documents TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
-  DIR_music TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
-  DIR_images TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
-  DIR_videos TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
-  DIR_shared TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[])
+    Id SERIAL PRIMARY KEY,
+    UserId INT UNIQUE NOT NULL REFERENCES Users(Id),
+    DIR_desktop TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
+    DIR_documents TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
+    DIR_music TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
+    DIR_images TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
+    DIR_videos TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
+    DIR_shared TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[])
+);
+
+CREATE TABLE Boards (
+    Id SERIAL PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Threads (
+    Id SERIAL PRIMARY KEY,
+    BoardId INT NOT NULL REFERENCES Boards(Id)
+    UserId INT NOT NULL REFERENCES Users(Id),
+    Message TEXT NOT NULL
+);
+
+CREATE TABLE Replies (
+    Id SERIAL PRIMARY KEY,
+    ThreadId INT NOT NULL REFERENCES Threads(Id),
+    UserId INT NOT NULL REFERENCES Users(Id),
+    Message TEXT NOT NULL
 );
 
 -- INDEXES:
@@ -105,3 +124,9 @@ ON SocialLinks(UserId);
 
 CREATE INDEX UserId_FS_Local_Idx
 ON FS_Local(UserId);
+
+CREATE INDEX UserId_AppDownloads_Idx
+ON AppDownloads(UserId);
+
+CREATE INDEX AppId_AppDownloads_Idx
+ON AppDownloads(AppId);
