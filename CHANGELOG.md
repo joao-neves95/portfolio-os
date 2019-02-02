@@ -2,11 +2,12 @@
 
 &nbsp;
 
-#### v0.3.0-Alpha.1 - 01/02/2019
+#### v0.3.0-Alpha.2 - 02/02/2019
 - CLIENT:
   - Multiple fixes on the MyProfiles (Profiles) + fixed compatibility issues with Chrome.
 - SERVER:
-  - Fixed the referer spoofing redirection route ("/goto").
+  - Fixed the referer spoofing redirection route ("/goto");
+  - Added the theCodeChain data access.
 - DATABASE:
   - Started working on the theCodeChan tables;
   - Added missong indexes (of foreign keys).

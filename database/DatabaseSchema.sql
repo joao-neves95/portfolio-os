@@ -97,16 +97,19 @@ CREATE TABLE Boards (
 
 CREATE TABLE Threads (
     Id SERIAL PRIMARY KEY,
-    BoardId INT NOT NULL REFERENCES Boards(Id)
+    BoardId INT NOT NULL REFERENCES Boards(Id),
     UserId INT NOT NULL REFERENCES Users(Id),
-    Message TEXT NOT NULL
+    Message TEXT NOT NULL,
+    CreateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC'),
+    IsClosed BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Replies (
     Id SERIAL PRIMARY KEY,
     ThreadId INT NOT NULL REFERENCES Threads(Id),
     UserId INT NOT NULL REFERENCES Users(Id),
-    Message TEXT NOT NULL
+    Message TEXT NOT NULL,
+    CreateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC')
 );
 
 -- INDEXES:

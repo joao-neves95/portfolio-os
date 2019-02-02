@@ -233,6 +233,7 @@
     <Compile Include="common\models\systemDirectoryModel.js" />
     <Compile Include="server\portfolio-os\config\cors.js" />
     <Compile Include="server\portfolio-os\config\helmet.js" />
+    <Compile Include="server\portfolio-os\dataAccess\theCodeChanStore.js" />
     <Compile Include="server\portfolio-os\enums\environmentType.js">
       <SubType>Code</SubType>
     </Compile>
@@ -246,6 +247,7 @@
     <Compile Include="server\portfolio-os\middleware\spoofReferer.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="server\portfolio-os\routes\theCodeChan.js" />
     <Compile Include="server\server.js" />
     <Compile Include="server\portfolio-os\dataAccess\appStoreStore.js" />
     <Compile Include="server\db.js" />

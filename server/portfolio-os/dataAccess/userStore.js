@@ -14,6 +14,49 @@ const LoginType = require( '../../../common/enums/loginType' );
 
 module.exports = {
   /**
+   * Returns the new user (TO TEST)
+   * @param { string } name
+   * @param { string } email
+   * @param { string } email Defaults to '' (empty <string>)
+   * @param { string } githubId Defaults to '' (empty <string>)
+   * @param { string } googleId Defaults to '' (empty <string>)
+   * @param { Function } Callback Receives the new user.
+   *
+   * @return { Promise<object | Error> }
+   */
+  registerUserAsync: ( name, email, summary = '', githubId = '', googleId = '', Callback ) => {
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        email = !email ? '' : email;
+
+        const queryResults = await db.transaction( [
+          [
+            `INSERT INTO Users (Email, Github_Id, Google_Id, LastLogin, Name, Summary)
+             VALUES ($1, $2, $3, (${db.utcDateFunc()}), $4, $5)
+             RETURNING *`,
+            [email, githubId, googleId, name, summary]
+          ],
+          [
+            `INSERT INTO FS_Local (UserId)
+             VALUES ( ( SELECT currval( pg_get_serial_sequence('Users', 'id') ) ) )`
+          ]
+        ] );
+
+        if ( Callback )
+          return Callback( null, queryResults[0].rows[0] );
+
+        return resolve( queryResults[0].rows[0] );
+
+      } catch ( e ) {
+        if ( Callback )
+          return Callback( e, null );
+
+        return reject( e );
+      }
+    } );
+  },
+
+  /**
    * @param { number } lastIdOfLastPage Defaults to 0.
    * @param { number } limit Defaults to 10.
    * @return { Promise<Error | [{}]> }
@@ -278,48 +321,6 @@ module.exports = {
     } );
   },
 
-  /**
-   * Returns the new user (TO TEST)
-   * @param { string } name
-   * @param { string } email
-   * @param { string } email Defaults to '' (empty <string>)
-   * @param { string } githubId Defaults to '' (empty <string>)
-   * @param { string } googleId Defaults to '' (empty <string>)
-   * @param { Function } Callback Receives the new user.
-   *
-   * @return { Promise<object | Error> }
-   */
-  registerUserAsync: ( name, email, summary = '', githubId = '', googleId = '', Callback ) => {
-    return new Promise( async ( resolve, reject ) => {
-      try {
-        email = !email ? '' : email;
-
-        const queryResults = await db.transaction( [
-          [
-            `INSERT INTO Users (Email, Github_Id, Google_Id, LastLogin, Name, Summary)
-             VALUES ($1, $2, $3, (${db.utcDateFunc()}), $4, $5)
-             RETURNING *`,
-            [email, githubId, googleId, name, summary]
-          ],
-          [
-            `INSERT INTO FS_Local (UserId)
-             VALUES ( ( SELECT currval( pg_get_serial_sequence('Users', 'id') ) ) )`
-          ]
-        ] );
-
-        if ( Callback )
-          return Callback( null, queryResults[0].rows[0] );
-
-        return resolve( queryResults[0].rows[0] );
-
-      } catch ( e ) {
-        if ( Callback )
-          return Callback( e, null );
-
-        return reject( e );
-      }
-    } );
-  },
 
   /**
    * @param { string | number } userId
