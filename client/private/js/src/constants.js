@@ -15,6 +15,7 @@ const DEFAULT_APP_ICON = `${IMG_PATH}default-taskbar-icon-white.svg`;
 const HIDE_REFERER_REDIRECT = `${SERVER_ROOT_PATH}goto?url=`;
 const HIDE_REFERER = 'https://1ll.us/bL/';
 const AUTH_TOKEN_ID = 'JWT';
+const PROCESS_ID_LENGTH = 5;
 const START_MENU_ANIM_DELAY = 1;
 
 const ERROR_MSG_INSTALL_APP = 'There was an error while installing the app.';

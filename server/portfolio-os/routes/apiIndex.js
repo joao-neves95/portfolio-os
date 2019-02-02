@@ -15,6 +15,7 @@ const fileSystemRoute = require( './fileSystem' );
 const appStoreRoute = require( './appStore' );
 const addAppDTOSchema = require( '../models/addAppDTO' );
 const jsonValidator = require( '../middleware/jsonValidator' );
+const theCodeChanRoute = require( '../routes/theCodeChan' );
 
 // #region USER PROFILES
 
@@ -56,9 +57,16 @@ router.post( '/app-store',
   appStoreRoute.postApp
 );
 router.delete( '/app-store/:appId', appStoreRoute.deleteApp );
-//router.post( '/file-system', ensureAuthentication, fileSystemRoute.postUserItem );
-//router.put( '/file-system', ensureAuthentication, fileSystemRoute.putUserItem );
-//router.delete( '/file-system', ensureAuthentication, fileSystemRoute.deleteUserItem );
+
+// #endregion
+
+// #region THE CODE CHAN
+
+router.get( 'the-code-chan/boards', theCodeChanRoute.getAllBoards );
+router.get( 'the-code-chan/:boardId/threads', theCodeChanRoute.getThreadsPaginated );
+router.post( 'the-code-chan/:boardId/threads', theCodeChanRoute.postThread );
+router.get( 'the-code-chan/:threadId/replies', theCodeChanRoute.getRepliesPaginated );
+router.post( 'the-code-chan/:threadId/replies', theCodeChanRoute.postReply );
 
 // #endregion
 

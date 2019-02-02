@@ -7,7 +7,7 @@
  *
  */
 
-// TODO: (FRONTEND) Refectoring. Pass view logic to the view.
+// TODO: (FRONTEND) Refectoring. Pass view logic to the view and redo all of this crap.
 
 class MyProfileController {
   constructor() {

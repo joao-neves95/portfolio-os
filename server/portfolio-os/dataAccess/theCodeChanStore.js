@@ -1,6 +1,7 @@
 const db = require('../../db');
 
 module.exports = {
+
   // #region SELECT
 
   getAllBoardsAsync: () => {
@@ -9,8 +10,11 @@ module.exports = {
         const queryResult = await db.query(
           `SELECT Id, Name
            FROM Boards
+           ORDER BY Id ASC
           `
         );
+
+        return _resolve( queryResult.rows );
 
       } catch ( e ) {
         console.error( e );
@@ -23,12 +27,15 @@ module.exports = {
     return new Promise( async ( _resolve, _reject ) => {
       try {
         const queryResult = await db.query(
-          `SELECT Id, UserId, Message, CreateDate
+          `SELECT Threads.Id, Users.Name AS username, Threads.Message, Threads.CreateDate AS timestamp
            FROM Threads
+               INNER JOIN Users
+               ON Threads.UserId = Users.Id
            WHERE BoardId = $1 AND Id > $2
            ORDER BY Id $3 ASC
            LIMIT $4
-          `
+          `,
+          [boardId, lastPageId, limit]
         );
 
         return _resolve( queryResult.rows );
@@ -44,8 +51,10 @@ module.exports = {
     return new Promise( async ( _resolve, _reject ) => {
       try {
         const queryhResult = await db.query(
-          `SELECT Id, UserId, Message, CreateDate
+          `SELECT Replies.Id, Users.Name AS username, Replies.Message, Replies.CreateDate AS timestamp
            FROM Replies
+               INNER JOIN Users
+               ON Threads.UserId = Users.Id
            WHERE ThreadId = $1 AND Id > $2 
            ORDER BY Id ASC
            LIMIT $3
@@ -99,7 +108,7 @@ module.exports = {
           [boardId, userId, message]
         );
 
-        return _resolve( queryhResult.rows );
+        return _resolve( queryhResult.rowCount );
 
       } catch ( e ) {
         console.error( e );
@@ -118,7 +127,49 @@ module.exports = {
           [threadId, userId, message]
         );
 
-        return _resolve( queryhResult.rows );
+        return _resolve( queryhResult.rowCount );
+
+      } catch ( e ) {
+        console.error( e );
+        return _reject( e );
+      }
+    } );
+  },
+
+  // #endregion
+
+  // #region DELETE
+
+  deleteThread: ( threadId ) => {
+    return new Promise( async ( _resolve, _reject ) => {
+      try {
+        const queryhResult = await db.query(
+          `DELETE FROM Threads
+           WHERE Id = $1
+          `,
+          [threadId]
+        );
+
+        return _resolve( queryResult.rowCount );
+
+      } catch ( e ) {
+        console.error( e );
+        return _reject( e );
+      }
+    } );
+  },
+
+  deleteReply: ( replyId ) => {
+    return new Promise( async ( _resolve, _reject ) => {
+      try {
+        const queryhResult = await db.query(
+          `DELETE FROM Replies
+           WHERE Id = $1
+          `,
+          [replyId]
+        );
+
+        return _resolve( queryResult.rowCount );
 
       } catch ( e ) {
         console.error( e );

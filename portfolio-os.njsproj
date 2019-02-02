@@ -111,6 +111,7 @@
     <Folder Include="client\private\js\src\systemApps\profiles\myProfile\" />
     <Folder Include="client\private\js\src\systemApps\profiles\userProfiles\" />
     <Folder Include="client\private\js\src\systemApps\terminal\" />
+    <Folder Include="client\private\js\src\systemApps\theCodeChan\" />
     <Folder Include="client\private\js\src\systemApps\trash\" />
     <Folder Include="client\private\js\src\systemLibs\" />
     <Folder Include="client\private\js\src\systemLibs\gridSystem\" />
@@ -146,6 +147,9 @@
     </Compile>
     <Compile Include="client\private\js\src\enums\profilePageType.js" />
     <Compile Include="client\private\js\src\enums\requestType.js" />
+    <Compile Include="client\private\js\src\enums\theCodeChanPageType.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="client\private\js\src\enums\voteType.js" />
     <Compile Include="client\private\js\src\externalLibs.js" />
     <Compile Include="client\private\js\src\main.js" />
@@ -202,6 +206,18 @@
     <Compile Include="client\private\js\src\systemApps\systemAppsManager.js" />
     <Compile Include="client\private\js\src\systemApps\terminal\terminal.js" />
     <Compile Include="client\private\js\src\systemApps\terminal\terminalTemplates.js" />
+    <Compile Include="client\private\js\src\systemApps\theCodeChan\theCodeChan.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="client\private\js\src\systemApps\theCodeChan\theCodeChan.model.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="client\private\js\src\systemApps\theCodeChan\theCodeChan.templates.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="client\private\js\src\systemApps\theCodeChan\theCodeChan.view.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="client\private\js\src\systemApps\trash\trash.js" />
     <Compile Include="client\private\js\src\systemApps\trash\trashTemplates.js" />
     <Compile Include="client\private\js\src\systemLibs\authentication.js">

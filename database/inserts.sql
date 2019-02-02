@@ -20,7 +20,8 @@ VALUES (1, 'github.com', 'GitHub'),
 
 INSERT INTO Boards (Name)
 VALUES ('help'),
-       ('debug'),
        ('random'),
+       ('debug'),
+       ('news'),
        ('memes'),
        ('biz')

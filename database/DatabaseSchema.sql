@@ -101,7 +101,8 @@ CREATE TABLE Threads (
     UserId INT NOT NULL REFERENCES Users(Id),
     Message TEXT NOT NULL,
     CreateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC'),
-    IsClosed BOOLEAN NOT NULL DEFAULT FALSE
+    IsClosed BOOLEAN NOT NULL DEFAULT FALSE,
+    IsPinned BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Replies (
@@ -133,3 +134,9 @@ ON AppDownloads(UserId);
 
 CREATE INDEX AppId_AppDownloads_Idx
 ON AppDownloads(AppId);
+
+CREATE INDEX BoardId_Threads_Idx
+ON Threads(BoardId);
+
+CREATE INDEX ThreadId_Replies_Idx
+ON Replies(ThreadId);

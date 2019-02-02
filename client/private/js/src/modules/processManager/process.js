@@ -8,8 +8,8 @@
  */
 
 class Process {
-  constructor(processName) {
-    this.id = Utils.randomString(5);
+  constructor( processName ) {
+    this.id = Utils.randomString( PROCESS_ID_LENGTH );
     this.name = processName;
   }
 }
