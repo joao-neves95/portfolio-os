@@ -11,14 +11,23 @@ class CommonUtils {
   /**
    * Escaping following OWASP's rules.
    * https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet#RULE_.231_-_HTML_Escape_Before_Inserting_Untrusted_Data_into_HTML_Element_Content
-   * @param { any } input
+   * @param { string } input
    * @returns { string }
    */
   static sanitizeHTML( input ) {
     if ( !input )
       return null;
 
-    return input.toString().trim().replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /'/g, '&#x27;' ).replace( /"/g, '&#34;' ).replace( /&/g, '&amp;' ).replace( /\//g, '&#x2F;' );
+    input = input.toString().trim().replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /'/g, '&#x27;' ).replace( /"/g, '&#34;' ).replace( /\//g, '&#x2F;' );
+    return input;
+  }
+
+  static desanitizeHTML( input ) {
+    if ( !input )
+      return null;
+
+    input = input.toString().trim().replace( /&amp;/g, '&' ).replace( /&lt;/g, '<' ).replace( /&gt;/g, '>' ).replace( /&#x27;/g, "'" ).replace( /&#34;/g, '"' ).replace( /&#x2F;/g, '\/' ).replace( /&#x27;/g, "'" );
+    return input;
   }
 }
 

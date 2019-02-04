@@ -5,6 +5,10 @@
 - CREATE TABLE Boards
 - CREATE TABLE Threads
 - CREATE TABLE Replies
+- CREATE INDEX UserId_SkillSet_Idx
+ON SkillSet(UserId);
+- CREATE INDEX HostId_SocialLinks_Idx
+ON SocialLinks(HostId);
 - CREATE INDEX UserId_AppDownloads_Idx
 ON AppDownloads(UserId);
 - CREATE INDEX AppId_AppDownloads_Idx

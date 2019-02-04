@@ -24,6 +24,7 @@ whenDomReady( async () => {
   systemAppsManager.bindApplication( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, ( processId ) => { new Terminal( processId ); } );
   systemAppsManager.bindApplication( 'Profiles', `${IMG_PATH}profiles.svg`, `${IMG_PATH}profiles.svg`, ( processId ) => { new Profiles( processId ); } );
   systemAppsManager.bindApplication( 'AppStore', `${IMG_PATH}app-store.svg`, `${IMG_PATH}app-store.svg`, ( processId ) => { new AppStore( processId ); } );
+  systemAppsManager.bindApplication( 'theCodeChan', `${DEFAULT_APP_ICON}`, `${DEFAULT_APP_ICON}`, ( processId ) => { new TheCodeChan( processId ); } );
   // The trash is temporary.
   systemAppsManager.bindApplication( 'Trash', `${IMG_PATH}trash.svg`, `${IMG_PATH}trash.svg`, ( processId ) => { new Trash( processId ); } );
   systemAppsManager.bindApplication( 'ShivaylCV', DEFAULT_APP_ICON, DEFAULT_APP_ICON, ( processId ) => { new ShivaylCV( processId ); } );

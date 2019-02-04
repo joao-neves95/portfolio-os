@@ -1,14 +1,15 @@
 ﻿class TheCodeChanModel {
-  constructor() {
-    this.processId;
-    this.currentPage;
+  constructor( processId ) {
+    this.processId = processId;
     this.allBoards = [];
+    this.currentBoardId = -1;
+    this.currentThreadId = -1;
   }
 
-  async allBoardsAsync() {
+  async getAllBoardsAsync() {
     try {
       let allBoards = await HttpClient.get( `${API_ROOT_PATH}the-code-chan/boards` );
-      if ( !allBoards.ok() )
+      if ( !allBoards.ok )
         throw new Error();
 
       return await allBoards.json();
@@ -22,12 +23,12 @@
 
   async getThreadsPaginatedAsync( boardId, lastPageId = 0 ) {
     try {
-      let boardThreads = await HttpClient.get( `${API_ROOT_PATH}the-code-chan/${boardId}/threads?lastId=${lastPageId}&limit=20` );
+      let boardThreads = await HttpClient.get( `${API_ROOT_PATH}the-code-chan/${boardId}/threads?lastId=${lastPageId}&limit=10` );
 
       if ( boardThreads.status !== 500 && boardThreads.status !== 404 ) {
-        boardThreads = await firstBoardThreads.json();
+        boardThreads = await boardThreads.json();
       } else {
-        boardThreads = [];
+        return [];
       }
 
       return boardThreads;
@@ -46,7 +47,7 @@
       if ( threadReplies.status !== 500 && threadReplies.status !== 404 ) {
         threadReplies = await threadReplies.json();
       } else {
-        threadReplies = [];
+        return [];
       }
 
       return threadReplies;
@@ -65,11 +66,12 @@
       if ( !res.ok )
         throw new Error();
 
-      return await threadReplies.json();
+      return await res.json();
 
     } catch ( e ) {
       console.error( e );
       Notifications.errorToast( 'There was an error while posting the thread. Please, try again later.' );
+      return -1;
     }
   }
 
@@ -80,11 +82,12 @@
       if ( !res.ok )
         throw new Error();
 
-      return await threadReplies.json();
+      return await res.json();
 
     } catch ( e ) {
       console.error( e );
       Notifications.errorToast( 'There was an error while posting the reply. Please, try again later.' );
+      return -1;
     }
   }
 }

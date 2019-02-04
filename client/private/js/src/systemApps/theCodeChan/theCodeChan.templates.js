@@ -8,16 +8,15 @@
   static page( processId, boards ) {
     let boardsListItems = '';
     for ( let i = 0; i < boards.length; ++i ) {
-      boardsListItems += `<li><a href="#" id="${processId}_board-${boards.id}" class="board_btn">${boards.name}</a></li>`;
+      boardsListItems += `<li><a href="#" id="${processId}_board-${boards[i].id}" class="board_btn">${boards[i].name}</a></li>`;
     }
 
     return `
-      <section class="grid-y profiles" id="${this.tCCPagePrefix}${id}">
+      <section class="grid-y" id="${this.tCCPagePrefix}${processId}">
 
         <div class="cell top-bar stacked-for-medium">
           <div class="top-bar-left">
             <ul class="menu">
-              <li class="menu-text">theCodeChan</li>
               ${boardsListItems}
             </ul>
           </div>
@@ -26,7 +25,8 @@
 
               <div class="cell">
                 <h5>Message</h5>
-                <input type="text" name="message" class="message" required>
+                <!-- <input type="text" name="message" class="message" required> -->
+                <textarea name="message" class="input-message" required></textarea> 
               </div>
 
               <div class="cell">
@@ -44,39 +44,54 @@
     `;
   }
 
-  static boardPage( boardName, threads ) {
+  static boardPage( boardName, threads = [] ) {
+    let threadCards = '';
+    for ( let i = 0; i < threads.length; ++i ) {
+      threadCards += TheCodeChanTemplates.threadCard( threads[i].id, threads[i].username, threads[i].timestamp, threads[i].message );
+    }
+
     return `
       <section class="grid-y board">
-        <h3 class="title">${boardName}</h3>
+        <div>
+          <h3 class="title"> /${boardName}/ </h3>
+        </div>
+        <div class="grid-y">
+          ${threadCards}
+        </div>
       </section>
     `;
   }
 
-  static threadPage( threadId, userName, timestamp, message, replies = '' ) {
+  static threadPage( threadId, userName, timestamp, message, replies = [] ) {
+    let replyCards = '';
+    for ( let i = 0; i < replies.length; ++i ) {
+      replyCards += TheCodeChanTemplates.replyCard( replies[i].id, replies[i].username, replies[i].timestamp, replies[i].message );
+    }
+
     return `
       <section class="grid-y thread">
 
         <div class="t-header">
-          <p>User: ${userName} nbsp; At: ${timestamp} nbsp; ThreadId: ${threadId}</p>
-          <p class="message">${message}</p>
+          <p>User: ${CommonUtils.desanitizeHTML( userName )} \ At: ${CommonUtils.desanitizeHTML( timestamp )} \ ThreadId: ${CommonUtils.desanitizeHTML(threadId)}</p>
+          <textarea class="message" readonly>${CommonUtils.desanitizeHTML(message)}</textarea>
           <form class="grid-container post-reply">
             <section class="grid-x wrapper" >
 
               <div class="cell">
-                <h5>Message</h5>
-                <input type="text" name="message" class="message" required>
+                <h5>Post Reply</h5>
+                <textarea type="text" name="message" class="reply-message" required></textarea>
               </div>
 
               <div class="cell">
-                <button class="success button post-reply-btn">Post Reply</button>
+                <a class="success button post-reply-btn">Post Reply</a>
               </div>
 
             </section>
           </form>
         </div>
 
-        <div class="t-replies">
-          ${replies}
+        <div class="grid-y t-replies">
+          ${replyCards}
         </div>
 
       </section>
@@ -87,11 +102,11 @@
     return `
       <article class="cell card thread-card">
         <div class="card-section">
-          <p class="message">${message}</p>
+          <textarea class="message" readonly>${CommonUtils.desanitizeHTML(message)}</textarea>
           <p>
-            User: <span class="user-name-val">${userName}</span> nbsp;
-            At: <span class="timestamp-val">${timestamp}</span> nbsp;
-            ThreadId: <span class="thead-id-val">${threadId}</span>
+            User: <span class="user-name-val">${CommonUtils.desanitizeHTML(userName)}</span> |
+            At: <span class="timestamp-val">${CommonUtils.desanitizeHTML(timestamp)}</span> |
+            ThreadId: <span class="thead-id-val">${CommonUtils.desanitizeHTML(threadId)}</span>
           </p>
         </div>
       </article>
@@ -102,8 +117,8 @@
     return `
       <article class="cell card reply-card">
         <div class="card-section">
-          <p>User: ${userName} nbsp; At: ${timestamp} nbsp; ReplyId: ${replyId}</p>
-          <p>${message}</p>
+          <p>User: ${CommonUtils.desanitizeHTML(userName)} | At: ${CommonUtils.desanitizeHTML(timestamp)} | ReplyId: ${CommonUtils.desanitizeHTML(replyId)}</p>
+          <textarea class="message" readonly>${CommonUtils.desanitizeHTML( message )}</textarea>
         </div>
       </article>
     `;

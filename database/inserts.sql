@@ -19,9 +19,9 @@ VALUES (1, 'github.com', 'GitHub'),
        (5, 'codepen.io', 'CodePen');
 
 INSERT INTO Boards (Name)
-VALUES ('help'),
-       ('random'),
+VALUES ('news'),
        ('debug'),
-       ('news'),
+       ('help'),
+       ('random'),
        ('memes'),
        ('biz')

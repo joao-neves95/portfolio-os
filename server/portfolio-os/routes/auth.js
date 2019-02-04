@@ -84,9 +84,12 @@ const ____setJWTCookie = async ( req, res ) => {
       }
     );
 
+    console.debug( parseInt( process.env.JWT_EXPIRATION ) );
+
     return res.status( 200 ).redirect( '/portfolio-os/desktop' );
 
   } catch ( e ) {
+    console.error( e );
     setResetCookie( res );
     return res.status( 401 ).redirect( '/' );
   }
@@ -95,6 +98,7 @@ const ____setJWTCookie = async ( req, res ) => {
 const ____redirectIfLoginFail = ( err, res, next ) => {
   try {
     if ( err ) {
+      console.error( err );
       setResetCookie( res );
       return res.status( 401 ).redirect( '/portfolio-os/auth' );
     }
@@ -102,6 +106,7 @@ const ____redirectIfLoginFail = ( err, res, next ) => {
     return next();
 
   } catch ( e ) {
+    console.error( e );
     return res.status( 401 ).redirect( '/portfolio-os/auth' );
   }
 };

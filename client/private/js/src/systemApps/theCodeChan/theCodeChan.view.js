@@ -3,23 +3,29 @@
   }
 
   /** @returns { HTMLElement[] } */
-  get allThreadCardElems() { return DomUtils.getAll( `${this.model.processId}_cntn .thread-card` ); }
-  get allBoardBtnsElems() { return DomUtils.getAll( `${this.model.processId}_cntn .board_btn` ); }
+  getAllThreadCardElems( processId ) { return DomUtils.getAll( `#${processId}_cntnt article.thread-card` ); }
+  getAllBoardBtnsElems( processId ) { return DomUtils.getAll( `#${TheCodeChanTemplates.tCCPagePrefix + processId} .board_btn` ); }
+  getPostThreadBtn( processId ) { return DomUtils.get( `#${TheCodeChanTemplates.tCCPagePrefix + processId} .post-thread-btn` ); }
+  getThreadFormInput( processId ) { return DomUtils.get( `#${TheCodeChanTemplates.tCCPagePrefix + processId} textarea.input-message` ).value; }
+  getThreadReplyBtn( processId ) { return DomUtils.get( `#${TheCodeChanTemplates.tCCPagePrefix + processId} .post-reply-btn` ); }
+  getThreadReplyInput( processId ) { return DomUtils.get( `#${TheCodeChanTemplates.tCCPagePrefix + processId} textarea.reply-message` ).value; }
 
   /**
    * Returns: { userName: <string>, timestamp: <string>, threadId: <string> }
    * @param { HTMLElement } cardElem
    */
-  getThreadCardValues( cardElem ) {
+  getThreadCardValues( eventTarget ) {
+    eventTarget = DomUtils.getParentByClassInclude( eventTarget, 'thread-card' );
+
     return {
-      userName: cardElem.getElementsByClassName( 'user-name-val' )[0].nodeValue,
-      timestamp: cardElem.getElementsByClassName( 'timestamp-val' )[0].nodeValue,
-      threadId: cardElem.getElementsByClassName( 'thead-id-val' )[0].nodeValue,
-      message: cardElem.getElementsByClassName( 'message' )[0].nodeValue
+      userName: eventTarget.getElementsByClassName( 'user-name-val' )[0].innerText,
+      timestamp: eventTarget.getElementsByClassName( 'timestamp-val' )[0].innerText,
+      threadId: eventTarget.getElementsByClassName( 'thead-id-val' )[0].innerText,
+      message: eventTarget.getElementsByClassName( 'message' )[0].value
     };
   }
 
   injectContent( processId, content ) {
-    DomUtils.get( `${processId}_cntnt` ).innerHTML = content;
+    document.getElementById( `${processId}_cntnt` ).innerHTML = content;
   }
 }

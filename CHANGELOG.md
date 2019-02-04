@@ -2,7 +2,7 @@
 
 &nbsp;
 
-#### v0.3.0-Alpha.3 - 02/02/2019
+#### v0.3.0-Alpha.4 - 04/02/2019
 - CLIENT:
   - Multiple fixes on the MyProfiles (Profiles) + fixed compatibility issues with Chrome (it needs a total refactoring);
   - Added the theCodeChan frontend (not tested or compiled yet).

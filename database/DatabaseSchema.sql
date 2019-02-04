@@ -92,7 +92,8 @@ CREATE TABLE FS_Local (
 
 CREATE TABLE Boards (
     Id SERIAL PRIMARY KEY,
-    Name VARCHAR(50) NOT NULL
+    Name VARCHAR(50) NOT NULL,
+    ThreadCount INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE Threads (
@@ -101,6 +102,8 @@ CREATE TABLE Threads (
     UserId INT NOT NULL REFERENCES Users(Id),
     Message TEXT NOT NULL,
     CreateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC'),
+    -- In the future change to a smaller numeric data type and add a maximum reply count on the server.
+    ReplyCount INT NOT NULL DEFAULT 0,
     IsClosed BOOLEAN NOT NULL DEFAULT FALSE,
     IsPinned BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -123,8 +126,14 @@ ON Users(Google_Id);
 CREATE INDEX UserId_UserEvents_Idx
 ON UserEvents(UserId);
 
+CREATE INDEX UserId_SkillSet_Idx
+ON SkillSet(UserId);
+
 CREATE INDEX UserId_SocialLinks_Idx
 ON SocialLinks(UserId);
+
+CREATE INDEX HostId_SocialLinks_Idx
+ON SocialLinks(HostId);
 
 CREATE INDEX UserId_FS_Local_Idx
 ON FS_Local(UserId);

@@ -64,10 +64,14 @@ module.exports = {
   // "/:boardId/threads"
   postThread: async ( req, res ) => {
     try {
-      const result = await theCodeChanStore.insertNewThread( sanitizeHTML( req.params.boardId ), req.user.id, sanitizeHTML( req.body.message ) );
+      // TODO: (SERVER) Turn this into a transaction to account for errors and concurrency issues.
+      const thisBoardId = sanitizeHTML( req.params.boardId );
+      const result = await theCodeChanStore.insertNewThread( thisBoardId, req.user.id, sanitizeHTML( req.body.message ) );
 
       if ( result <= 0 )
         throw new Error();
+
+      await theCodeChanStore.incrementBoardThreadCount( thisBoardId );
 
       return res.status( 201 ).json( result );
 
@@ -79,10 +83,14 @@ module.exports = {
   // "/:threadId/replies"
   postReply: async ( req, res ) => {
     try {
-      const result = await theCodeChanStore.insertNewReply( sanitizeHTML( req.params.threadId ), req.user.id, sanitizeHTML( req.body.message ) );
+      // TODO: (SERVER) Turn this into a transaction to account for errors and concurrency issues.
+      const thisThreadId = sanitizeHTML( req.params.threadId );
+      const result = await theCodeChanStore.insertNewReply( thisThreadId, req.user.id, sanitizeHTML( req.body.message ) );
 
       if ( result <= 0 )
         throw new Error();
+
+      await theCodeChanStore.incrementThreadReplyCount( thisThreadId );
 
       return res.status( 201 ).json( result );
 

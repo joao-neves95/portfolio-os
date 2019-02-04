@@ -62,11 +62,11 @@ router.delete( '/app-store/:appId', appStoreRoute.deleteApp );
 
 // #region THE CODE CHAN
 
-router.get( 'the-code-chan/boards', theCodeChanRoute.getAllBoards );
-router.get( 'the-code-chan/:boardId/threads', theCodeChanRoute.getThreadsPaginated );
-router.post( 'the-code-chan/:boardId/threads', theCodeChanRoute.postThread );
-router.get( 'the-code-chan/:threadId/replies', theCodeChanRoute.getRepliesPaginated );
-router.post( 'the-code-chan/:threadId/replies', theCodeChanRoute.postReply );
+router.get( '/the-code-chan/boards', theCodeChanRoute.getAllBoards );
+router.get( '/the-code-chan/:boardId/threads', theCodeChanRoute.getThreadsPaginated );
+router.post( '/the-code-chan/:boardId/threads', theCodeChanRoute.postThread );
+router.get( '/the-code-chan/:threadId/replies', theCodeChanRoute.getRepliesPaginated );
+router.post( '/the-code-chan/:threadId/replies', theCodeChanRoute.postReply );
 
 // #endregion
 
