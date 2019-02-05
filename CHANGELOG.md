@@ -2,7 +2,7 @@
 
 &nbsp;
 
-#### v0.3.0 - 05/02/2019
+#### *v0.3.0 - 05/02/2019
 - CLIENT:
   - Multiple fixes on the MyProfiles (Profiles) + fixed compatibility issues with Chrome (it needs a total refactoring);
   - Added the theCodeChan frontend (not tested or compiled yet);
@@ -21,7 +21,7 @@
 
 &nbsp;
 
-#### *v0.2.3 - 31/01/2019
+#### v0.2.3 - 31/01/2019
 - GLOBAL:
   - Added CodePen to the user links.
 - CLIENT:

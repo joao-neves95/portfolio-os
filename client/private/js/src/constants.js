@@ -7,8 +7,8 @@
  *
  */
 
- const SERVER_ROOT_PATH = 'http://localhost:55555/';
-//const SERVER_ROOT_PATH = 'https://shivayl.com/';
+// const SERVER_ROOT_PATH = 'http://localhost:55555/';
+const SERVER_ROOT_PATH = 'https://shivayl.com/';
 const API_ROOT_PATH = `${SERVER_ROOT_PATH}portfolio-os/api/`;
 const IMG_PATH = `${SERVER_ROOT_PATH}img/`;
 const DEFAULT_APP_ICON = `${IMG_PATH}default-taskbar-icon-white.svg`;
