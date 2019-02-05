@@ -35,6 +35,9 @@
     <Content Include="client\private\css\src\startMenu.less" />
     <Content Include="client\private\css\src\taskbar.less" />
     <Content Include="client\private\css\src\terminal.less" />
+    <Content Include="client\private\css\src\theCodeChan.less">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="client\private\css\src\userAppWindow.less">
       <SubType>Code</SubType>
     </Content>
@@ -42,7 +45,7 @@
     <Content Include="client\private\css\src\variables.less" />
     <Content Include="client\private\css\src\windowManager.less" />
     <Content Include="client\private\desktop.html" />
-    <Content Include="client\wwwroot\crossdomain.xml">
+    <Content Include="client\wwwroot\css\portfolio-os.css">
       <SubType>Code</SubType>
     </Content>
     <Content Include="client\wwwroot\css\portfolio-os_auth_style.css" />
@@ -72,6 +75,9 @@
     <Content Include="client\wwwroot\img\trash.svg" />
     <Content Include="client\wwwroot\img\wallpaper-1.jpg" />
     <Content Include="client\wwwroot\index.html" />
+    <Content Include="client\wwwroot\portfolio-os.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="client\wwwroot\portfolio-os_auth.html" />
     <Content Include="database\DatabaseSchema.sql">
       <SubType>Code</SubType>
@@ -111,6 +117,7 @@
     <Folder Include="client\private\js\src\systemApps\profiles\myProfile\" />
     <Folder Include="client\private\js\src\systemApps\profiles\userProfiles\" />
     <Folder Include="client\private\js\src\systemApps\terminal\" />
+    <Folder Include="client\private\js\src\systemApps\theCodeChan\" />
     <Folder Include="client\private\js\src\systemApps\trash\" />
     <Folder Include="client\private\js\src\systemLibs\" />
     <Folder Include="client\private\js\src\systemLibs\gridSystem\" />
@@ -146,6 +153,9 @@
     </Compile>
     <Compile Include="client\private\js\src\enums\profilePageType.js" />
     <Compile Include="client\private\js\src\enums\requestType.js" />
+    <Compile Include="client\private\js\src\enums\theCodeChanPageType.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="client\private\js\src\enums\voteType.js" />
     <Compile Include="client\private\js\src\externalLibs.js" />
     <Compile Include="client\private\js\src\main.js" />
@@ -202,6 +212,18 @@
     <Compile Include="client\private\js\src\systemApps\systemAppsManager.js" />
     <Compile Include="client\private\js\src\systemApps\terminal\terminal.js" />
     <Compile Include="client\private\js\src\systemApps\terminal\terminalTemplates.js" />
+    <Compile Include="client\private\js\src\systemApps\theCodeChan\theCodeChan.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="client\private\js\src\systemApps\theCodeChan\theCodeChan.model.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="client\private\js\src\systemApps\theCodeChan\theCodeChan.templates.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="client\private\js\src\systemApps\theCodeChan\theCodeChan.view.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="client\private\js\src\systemApps\trash\trash.js" />
     <Compile Include="client\private\js\src\systemApps\trash\trashTemplates.js" />
     <Compile Include="client\private\js\src\systemLibs\authentication.js">
@@ -221,6 +243,9 @@
     <Compile Include="client\private\js\src\userApps\userAppsManager.js" />
     <Compile Include="client\private\js\src\utils.js" />
     <Compile Include="client\wwwroot\js\main.js" />
+    <Compile Include="client\wwwroot\js\portfolio-os.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="client\wwwroot\js\src_portfolio-os\portfolio-os_auth.header.js">
       <SubType>Code</SubType>
     </Compile>
@@ -233,6 +258,7 @@
     <Compile Include="common\models\systemDirectoryModel.js" />
     <Compile Include="server\portfolio-os\config\cors.js" />
     <Compile Include="server\portfolio-os\config\helmet.js" />
+    <Compile Include="server\portfolio-os\dataAccess\theCodeChanStore.js" />
     <Compile Include="server\portfolio-os\enums\environmentType.js">
       <SubType>Code</SubType>
     </Compile>
@@ -246,6 +272,7 @@
     <Compile Include="server\portfolio-os\middleware\spoofReferer.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="server\portfolio-os\routes\theCodeChan.js" />
     <Compile Include="server\server.js" />
     <Compile Include="server\portfolio-os\dataAccess\appStoreStore.js" />
     <Compile Include="server\db.js" />

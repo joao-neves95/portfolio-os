@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Copyright (c) 2018 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
@@ -20,12 +20,12 @@ class ProfilesTemplates {
               <li><a href="#" class="explore-btn">Explore</a></li>
             </ul>
           </div>
-          <div class="top-bar-right">
+          <!-- <div class="top-bar-right">
             <ul class="menu">
               <li><input type="search" placeholder="Search for someone"></li>
               <li><button type="button" class="button">Search</button></li>
             </ul>
-          </div>
+          </div> -->
         </div>
 
         <div class="cell content" id="cntnt_${id}">
@@ -69,11 +69,6 @@ class ProfilesTemplates {
           </label>
         </div>
       </div>
-    `;
-  }
-
-  static profileCard() {
-    return `
     `;
   }
 }

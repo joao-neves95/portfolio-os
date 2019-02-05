@@ -41,6 +41,7 @@ module.exports = async ( req, res, next ) => {
     }
 
     if ( !decoded ) {
+      console.error( 'ERROR: Problem while decoding and verifying JWT token' );
       setResetCookie( res );
       return ____notAuthorized( res );
     }
@@ -49,6 +50,7 @@ module.exports = async ( req, res, next ) => {
     return next();
 
   } catch ( e ) {
+    console.error( e );
     setResetCookie( res );
     return ____notAuthorized( res );
   }

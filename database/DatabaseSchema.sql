@@ -80,14 +80,40 @@ CREATE TABLE AppDownloads (
 );
 
 CREATE TABLE FS_Local (
-  Id SERIAL PRIMARY KEY,
-  UserId INT UNIQUE NOT NULL REFERENCES Users(Id),
-  DIR_desktop TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
-  DIR_documents TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
-  DIR_music TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
-  DIR_images TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
-  DIR_videos TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
-  DIR_shared TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[])
+    Id SERIAL PRIMARY KEY,
+    UserId INT UNIQUE NOT NULL REFERENCES Users(Id),
+    DIR_desktop TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
+    DIR_documents TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
+    DIR_music TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
+    DIR_images TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
+    DIR_videos TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[]),
+    DIR_shared TEXT[] NOT NULL DEFAULT (ARRAY[]::TEXT[])
+);
+
+CREATE TABLE Boards (
+    Id SERIAL PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL,
+    ThreadCount INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE Threads (
+    Id SERIAL PRIMARY KEY,
+    BoardId INT NOT NULL REFERENCES Boards(Id),
+    UserId INT NOT NULL REFERENCES Users(Id),
+    Message TEXT NOT NULL,
+    CreateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC'),
+    -- In the future change to a smaller numeric data type and add a maximum reply count on the server.
+    ReplyCount INT NOT NULL DEFAULT 0,
+    IsClosed BOOLEAN NOT NULL DEFAULT FALSE,
+    IsPinned BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE Replies (
+    Id SERIAL PRIMARY KEY,
+    ThreadId INT NOT NULL REFERENCES Threads(Id),
+    UserId INT NOT NULL REFERENCES Users(Id),
+    Message TEXT NOT NULL,
+    CreateDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (NOW() at time zone 'UTC')
 );
 
 -- INDEXES:
@@ -100,8 +126,26 @@ ON Users(Google_Id);
 CREATE INDEX UserId_UserEvents_Idx
 ON UserEvents(UserId);
 
+CREATE INDEX UserId_SkillSet_Idx
+ON SkillSet(UserId);
+
 CREATE INDEX UserId_SocialLinks_Idx
 ON SocialLinks(UserId);
 
+CREATE INDEX HostId_SocialLinks_Idx
+ON SocialLinks(HostId);
+
 CREATE INDEX UserId_FS_Local_Idx
 ON FS_Local(UserId);
+
+CREATE INDEX UserId_AppDownloads_Idx
+ON AppDownloads(UserId);
+
+CREATE INDEX AppId_AppDownloads_Idx
+ON AppDownloads(AppId);
+
+CREATE INDEX BoardId_Threads_Idx
+ON Threads(BoardId);
+
+CREATE INDEX ThreadId_Replies_Idx
+ON Replies(ThreadId);

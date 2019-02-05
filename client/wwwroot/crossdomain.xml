@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<cross-domain-policy>
-    <allow-access-from domain="*.shivayl.com" />
-    <allow-access-from domain="shivayl.com" />
-    <allow-access-from domain="localhost:55555" />
-    <allow-access-from domain="*.localhost:55555" />
-    <allow-access-from domain="127.0.0.1" />
-</cross-domain-policy>

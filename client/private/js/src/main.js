@@ -24,6 +24,7 @@ whenDomReady( async () => {
   systemAppsManager.bindApplication( 'Terminal', `${IMG_PATH}terminal-green.svg`, `${IMG_PATH}terminal-white.svg`, ( processId ) => { new Terminal( processId ); } );
   systemAppsManager.bindApplication( 'Profiles', `${IMG_PATH}profiles.svg`, `${IMG_PATH}profiles.svg`, ( processId ) => { new Profiles( processId ); } );
   systemAppsManager.bindApplication( 'AppStore', `${IMG_PATH}app-store.svg`, `${IMG_PATH}app-store.svg`, ( processId ) => { new AppStore( processId ); } );
+  systemAppsManager.bindApplication( 'theCodeChan', `${DEFAULT_APP_ICON}`, `${DEFAULT_APP_ICON}`, ( processId ) => { new TheCodeChan( processId ); } );
   // The trash is temporary.
   systemAppsManager.bindApplication( 'Trash', `${IMG_PATH}trash.svg`, `${IMG_PATH}trash.svg`, ( processId ) => { new Trash( processId ); } );
   systemAppsManager.bindApplication( 'ShivaylCV', DEFAULT_APP_ICON, DEFAULT_APP_ICON, ( processId ) => { new ShivaylCV( processId ); } );
@@ -48,7 +49,6 @@ whenDomReady( async () => {
   //console.debug( 'Taskbar Icons:', taskbarManager.icons );
   windowManager.openNewModal(
     `<p><strong>Portfolio-OS</strong> is a work in progress and so, some features do not work as of yet.</p>
-     <p>(Features like the AppStore and the Explorer)</p>
      <p>Keep also in mind that this is the Portfolio-OS's Dekstop version and not the mobile, so it is <strong>not</strong> mobile responsive.</p>`
   );
 

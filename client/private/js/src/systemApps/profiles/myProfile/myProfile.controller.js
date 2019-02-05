@@ -7,7 +7,7 @@
  *
  */
 
-// TODO: Refectoring. Pass view logic to the view.
+// TODO: (FRONTEND) Refectoring. Pass view logic to the view and redo all of this crap.
 
 class MyProfileController {
   constructor() {
@@ -132,7 +132,7 @@ class MyProfileController {
 
       // POST NEW LINK.
     } else if ( that.className.includes( 'new-link' ) ) {
-      let res = await this.model.postNewLink( that.parentElement.parentElement.parentElement.firstElementChild.firstElementChild.firstElementChild.value, that.value );
+      let res = await this.model.postNewLink( that.parentElement.parentElement.previousElementSibling.children[0].children[0].value, that.value );
       if ( !res.ok )
         return Notifications.errorToast( 'There was an error while adding the new link.' );
 
@@ -148,26 +148,28 @@ class MyProfileController {
       let res;
 
       // DELETE SKILL
-      if ( that.parentElement.firstElementChild.className.includes( 'skill' ) ) {
-        res = await this.model.deleteSkill( that.parentElement.firstElementChild.id.substring( 6 ) );
-        if ( res.ok )
-          Notifications.successToast( 'Skill successfully deleted.' );
-        else
+      if ( that.parentElement.previousElementSibling.className.includes( 'skill' ) ) {
+        res = await this.model.deleteSkill( that.parentElement.previousElementSibling.id.substring( 6 ) );
+        if ( !res.ok )
           return Notifications.errorToast( 'There was an error while deleting the skill.' );
+
+        that.parentElement.parentElement.remove();
+        Notifications.successToast( 'Skill successfully deleted.' );
 
         // DELETE LINK
       } else {
-        res = await this.model.deleteLink( that.parentElement.firstElementChild.lastElementChild.firstElementChild.firstElementChild.id.substring( 5 ) );
-        if ( res.ok )
-          Notifications.successToast( 'Link successfully deleted.' );
-        else
+        res = await this.model.deleteLink( that.parentElement.previousElementSibling.children[1].children[0].children[0].id.substring( 5 ) );
+        if ( !res.ok )
           return Notifications.errorToast( 'There was an error while deleting the link.' );
+
+        DomUtils.getParentByClassInclude( that, 'callout' ).remove();
+        Notifications.successToast( 'Link successfully deleted.' );
       }
 
       if ( res <= 0 )
         return Notifications.errorToast( 'Error while removing from the page.' );
       else
-        that.parentElement.remove();
+        if ( that.parentElement ) that.parentElement.remove();
 
     } else if ( that.className.includes( 'summary' ) ) {
       let res = await this.model.updateSummary( that.value );

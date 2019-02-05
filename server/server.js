@@ -48,9 +48,9 @@ app.use( ['/portfolio-os', '/portfolio-os/'], portfolioOSRoutes );
 
 // #endregion
 
-app.get( '/goto/:url', spoofReferer,
+app.get( '/goto', spoofReferer,
   ( req, res ) => {
-    res.redirect( decodeURIComponent( req.params.url ) );
+    res.redirect( decodeURIComponent( req.query.url ) );
   } );
 
 app.use( ( req, res, next ) => {

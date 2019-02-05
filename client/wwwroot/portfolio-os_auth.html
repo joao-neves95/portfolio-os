@@ -5,10 +5,10 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title></title>
-  <meta name="application-name" content="Portfolio-OS">
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <title>Login to Portfolio OS</title>
+  <meta name="application-name" content="Portfolio-OS Authentication">
+  <meta name="description" content="Login and register free on Portfolio OS">
+  <meta name="keywords" content="portfolio os auth, free">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <!-- Tells Google not to provide a translation for this page -->
@@ -47,7 +47,7 @@
           <div class="cell large-12">
             <div class="input-group">
               <span class="input-group-label"><img src="img/lock.svg" alt="A Lock Icon" /></span>
-                <input id="login-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" disabled>
+              <input id="login-password" class="input-group-field hvr-float-shadow" type="password" placeholder="Password" name="password" disabled>
               <span class="input-group-label pass-visibility-span"><img src="img/show.svg" alt="Show/Hide Password Icon" draggable="false" /></span>
             </div>
           </div>
@@ -56,6 +56,7 @@
           </div>
         </div>
       </form>
+      <!-- End of LOGIN -->
       <!-- REGISTER -->
       <form action="/auth/register" method="post" class="tabs-panel" id="register">
         <div class="grid-y">
@@ -88,34 +89,51 @@
         </div>
       </form>
     </section>
+    <!-- End of REGISTER -->
     <!-- SOCIAL LOGIN -->
+    <section class="grid-x cell info-section text-right">
+      <p><button class="pointer" data-open="info-modal"><img src="https://img.icons8.com/color/48/000000/about.png"/></button></p>
+    </section>
     <section class="grid-x icon-wrap social">
       <div class="cell large-4 large-offset-2">
         <a href="/portfolio-os/auth/google">
           <span class="hint--top hint--bounce" aria-label="Login with Google.">
-            <span class="hint--bottom hint--info  hint--bounce" aria-label="If you experience any errors while login-in try disabling browser extensions.">
-              <img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon anim popping" id="google-btn" />
-            </span>
+            <img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon anim popping" id="google-btn" />
           </span>
         </a>
       </div>
       <div class="cell large-4">
         <a href="/portfolio-os/auth/github">
           <span class="hint--top hint--bounce" aria-label="Login with GitHub.">
-            <span class="hint--bottom hint--info  hint--bounce" aria-label="If you experience any errors while login-in try disabling browser extensions.">
-              <img src="img/github.svg" alt="Github Icon" class="icon anim popping" draggable="false" />
-            </span>
+            <img src="img/github.svg" alt="Github Icon" class="icon anim popping" draggable="false" />
           </span>
         </a>
       </div>
     </section>
+    <!-- End of LOGIN -->
+    <!-- GUEST LOGIN -->
     <!--<section class="grid-x guest">
       <div class="cell">
         <button id="login-as-guest">Login As Guest</button>
       </div>
     </section>-->
   </main>
-
+  <article class="reveal info" id="info-modal" data-reveal>
+    <ul class="no-bullet-points">
+      <li>If you experience any errors while login-in try disabling your browser extensions.</li>
+      <li>
+        <p>When you login with your Google or GitHub account, Portfolio OS only have access to your profile data (name, email). We have no access to your emails/repositories.</p>
+        <p>You can learn more in articles like:</p>
+        <ul>
+          <li><a href="https://support.google.com/accounts/answer/112802?co=GENIE.Platform%3DDesktop&hl=en" target="_blank">Google Support: "Use your Google Account to sign in to other sites or apps"</a></li>
+          <li><a href="https://www.scienceabc.com/innovation/oauth-how-does-login-with-facebook-google-work.html" target="_blank">Science ABC: "How Does ‘Login With Facebook/Google’ Work?"</a></li>
+        </ul>
+      </li>
+    </ul>
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </article>
   <!-- JQuery SLIM JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"
           integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
