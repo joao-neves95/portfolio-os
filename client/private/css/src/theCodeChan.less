@@ -1,0 +1,36 @@
+﻿@import 'utils.less';
+
+.the-code-chan {
+    .post-thread {
+        .input-message {
+            margin-left: .2em;
+            width: 500px;
+            height: 60px;
+        }
+    }
+
+    .board {
+        .title {
+            margin-left: .5em;
+        }
+
+        .message {
+            max-height: 300px;
+            resize: none;
+            .pointer;
+            .truncate;
+            white-space: pre-line;
+        }
+    }
+
+    .thread {
+        .message {
+            cursor: auto;
+            resize: none;
+        }
+    }
+
+    textarea {
+        resize: vertical;
+    }
+}

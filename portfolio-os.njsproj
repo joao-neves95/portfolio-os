@@ -35,6 +35,9 @@
     <Content Include="client\private\css\src\startMenu.less" />
     <Content Include="client\private\css\src\taskbar.less" />
     <Content Include="client\private\css\src\terminal.less" />
+    <Content Include="client\private\css\src\theCodeChan.less">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="client\private\css\src\userAppWindow.less">
       <SubType>Code</SubType>
     </Content>
@@ -42,7 +45,7 @@
     <Content Include="client\private\css\src\variables.less" />
     <Content Include="client\private\css\src\windowManager.less" />
     <Content Include="client\private\desktop.html" />
-    <Content Include="client\wwwroot\crossdomain.xml">
+    <Content Include="client\wwwroot\css\portfolio-os.css">
       <SubType>Code</SubType>
     </Content>
     <Content Include="client\wwwroot\css\portfolio-os_auth_style.css" />
@@ -72,6 +75,9 @@
     <Content Include="client\wwwroot\img\trash.svg" />
     <Content Include="client\wwwroot\img\wallpaper-1.jpg" />
     <Content Include="client\wwwroot\index.html" />
+    <Content Include="client\wwwroot\portfolio-os.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="client\wwwroot\portfolio-os_auth.html" />
     <Content Include="database\DatabaseSchema.sql">
       <SubType>Code</SubType>
@@ -237,6 +243,9 @@
     <Compile Include="client\private\js\src\userApps\userAppsManager.js" />
     <Compile Include="client\private\js\src\utils.js" />
     <Compile Include="client\wwwroot\js\main.js" />
+    <Compile Include="client\wwwroot\js\portfolio-os.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="client\wwwroot\js\src_portfolio-os\portfolio-os_auth.header.js">
       <SubType>Code</SubType>
     </Compile>

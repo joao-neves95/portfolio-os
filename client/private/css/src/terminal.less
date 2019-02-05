@@ -1,9 +1,15 @@
-﻿.terminal {
+﻿@greyy: rgb(78, 78, 78);
+
+.terminal {
     width: 100%;
+    height: 100%;
+    background-color:@greyy;
+    color: white;
 
     .line {
         width: 100%;
         margin-bottom: 0.1em;
+        background-color:@greyy;
 
         p {
             margin-bottom: 0.1em;
@@ -12,14 +18,17 @@
         .input-icon {
             width: 1%;
             margin-bottom: 0;
+            color: white;
         }
 
         .input {
-            width: 97%;
+            background-color:@greyy;
+            box-shadow: none;
+            color: white;
             margin-right: 0;
             margin-left: 0.3em;
             margin-bottom: 0;
-            box-shadow: none;
+            width: 97%;
         }
     }
 }

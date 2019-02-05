@@ -83,13 +83,13 @@ main {
     text-align: center;
 
     .icon-wrap {
-        margin-top: 1em;
+        margin-top: 0.5em;
         text-align: center;
         width: 100%;
     }
 
     .icon {
-        margin-top:1em;
+        margin-top: 1em;
         width: 3.2em;
         transition: all 0.1s ease-in-out;
     }
@@ -97,6 +97,28 @@ main {
     .icon:hover {
         cursor: pointer;
         transform: scale(1.1);
+    }
+}
+
+.info-section {
+    margin-top: 2em;
+    
+    p {
+        margin-left: auto;
+        margin-right: 3em;
+
+        img {
+            min-width: 48px;
+        }
+    }
+}
+
+.info {
+    margin-top: 2em;
+    font-size: smaller;
+
+    & > ul > li {
+        margin-top: 1em;
     }
 }
 
@@ -127,6 +149,14 @@ main {
 .popping {
     animation-name: popping;
     animation-iteration-count: infinite;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.no-bullet-points {
+    list-style: none;
 }
 
 /* SHADOWS */

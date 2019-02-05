@@ -12,7 +12,7 @@
     }
 
     return `
-      <section class="grid-y" id="${this.tCCPagePrefix}${processId}">
+      <section class="grid-y the-code-chan" id="${this.tCCPagePrefix}${processId}">
 
         <div class="cell top-bar stacked-for-medium">
           <div class="top-bar-left">
@@ -26,7 +26,7 @@
               <div class="cell">
                 <h5>Message</h5>
                 <!-- <input type="text" name="message" class="message" required> -->
-                <textarea name="message" class="input-message" required></textarea> 
+                <textarea name="message" class="input-message" placeholder="Remember, be civilized!" required></textarea> 
               </div>
 
               <div class="cell">
@@ -72,8 +72,8 @@
       <section class="grid-y thread">
 
         <div class="t-header">
-          <p>User: ${CommonUtils.desanitizeHTML( userName )} \ At: ${CommonUtils.desanitizeHTML( timestamp )} \ ThreadId: ${CommonUtils.desanitizeHTML(threadId)}</p>
-          <textarea class="message" readonly>${CommonUtils.desanitizeHTML(message)}</textarea>
+          <p>User: ${CommonUtils.desanitizeHTML( userName )} | At: ${CommonUtils.desanitizeHTML( timestamp )} | Thread Id: ${CommonUtils.desanitizeHTML(threadId)}</p>
+          <textarea class="message" height="auto;" readonly>${CommonUtils.desanitizeHTML(message)}</textarea>
           <form class="grid-container post-reply">
             <section class="grid-x wrapper" >
 
@@ -102,11 +102,11 @@
     return `
       <article class="cell card thread-card">
         <div class="card-section">
-          <textarea class="message" readonly>${CommonUtils.desanitizeHTML(message)}</textarea>
+          <textarea class="message" wrap="hard" readonly>${CommonUtils.desanitizeHTML(message)}</textarea>
           <p>
             User: <span class="user-name-val">${CommonUtils.desanitizeHTML(userName)}</span> |
             At: <span class="timestamp-val">${CommonUtils.desanitizeHTML(timestamp)}</span> |
-            ThreadId: <span class="thead-id-val">${CommonUtils.desanitizeHTML(threadId)}</span>
+            Thread Id: <span class="thead-id-val">${CommonUtils.desanitizeHTML(threadId)}</span>
           </p>
         </div>
       </article>
@@ -117,8 +117,8 @@
     return `
       <article class="cell card reply-card">
         <div class="card-section">
-          <p>User: ${CommonUtils.desanitizeHTML(userName)} | At: ${CommonUtils.desanitizeHTML(timestamp)} | ReplyId: ${CommonUtils.desanitizeHTML(replyId)}</p>
-          <textarea class="message" readonly>${CommonUtils.desanitizeHTML( message )}</textarea>
+          <p>User: ${CommonUtils.desanitizeHTML(userName)} | At: ${CommonUtils.desanitizeHTML(timestamp)} | Reply Id: ${CommonUtils.desanitizeHTML(replyId)}</p>
+          <textarea class="message" height="auto;" readonly>${CommonUtils.desanitizeHTML( message )}</textarea>
         </div>
       </article>
     `;

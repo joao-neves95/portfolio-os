@@ -2,10 +2,14 @@
 
 &nbsp;
 
-#### v0.3.0-Alpha.4 - 04/02/2019
+#### v0.3.0 - 05/02/2019
 - CLIENT:
   - Multiple fixes on the MyProfiles (Profiles) + fixed compatibility issues with Chrome (it needs a total refactoring);
-  - Added the theCodeChan frontend (not tested or compiled yet).
+  - Added the theCodeChan frontend (not tested or compiled yet);
+  - Added the Portfolio OS index (landing page);
+  - Multiple fixes on the desktop responsibility;
+  - Changed the global font to "DROIDSANSMONO, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+  - Style improvements on the Terminal (dark theme).
 - SERVER:
   - Fixed the referer spoofing redirection route ("/goto");
   - Added the theCodeChain data access;

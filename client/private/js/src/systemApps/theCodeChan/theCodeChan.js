@@ -1,4 +1,6 @@
-﻿class TheCodeChan {
+﻿
+/** TheCodeChanController */
+class TheCodeChan {
   constructor( processId ) {
     this.model = new TheCodeChanModel( processId );
     this.view = new TheCodeChanView();
@@ -61,6 +63,7 @@
   }
 
   __updateBoardListeners() {
+    $( 'textarea.message' ).autoResize();
     // THREAD CARD CLICKS.
 
     /** @type { HTMLElement[] } */
@@ -79,9 +82,12 @@
         this.__updateThreadListeners();
       } );
     }
+
   }
 
   __updateThreadListeners() {
+    $( 'textarea.message' ).autoResize();
+
     // REPLY BUTTON.
     this.view.getThreadReplyBtn( this.model.processId ).addEventListener( 'click', async ( e ) => {
       e.preventDefault();

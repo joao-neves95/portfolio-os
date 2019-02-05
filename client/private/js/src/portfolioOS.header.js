@@ -12,6 +12,7 @@
 // @import './constants'
 // ignore 'https://cdnjs.cloudflare.com/ajax/libs/ajv/6.5.5/ajv.min.js'
 // %import<<GH 'js-cookie/js-cookie/master/src/js.cookie.js'
+// %import<<GH 'azoff/AutoResize/master/jquery.autoresize.min.js'
 // $import 'sweetalert2/dist/sweetalert2.all.min.js'
 // @import './externalLibs'
 // $import 'vanillatree/vanillatree.min.js'

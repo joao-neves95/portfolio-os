@@ -20,7 +20,8 @@ const noCache = require( '../middleware/noCache' );
 const blockGuest = require( '../middleware/blockGuest' );
 
 router.get( '/', ( req, res ) => {
-  res.status( 301 ).redirect( 'portfolio-os/auth' );
+  res.contentType = 'html';
+  return res.status( 200 ).sendFile( path.join( process.cwd(), './client/wwwroot/portfolio-os.html' ) );
 } );
 router.use( '/', express.static( path.join( process.cwd(), './client/wwwroot' ) ) );
 

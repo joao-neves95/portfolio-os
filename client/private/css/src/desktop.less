@@ -26,6 +26,7 @@
         .desktop-icon {
             cursor: pointer;
             display: table;
+            margin: auto;
             max-height: 50%;
             max-width: 100%;
             height: 5em;
@@ -44,6 +45,10 @@
                 max-width: 100%;
                 width: 10em;
                 display: block;
+
+                @media screen and (min-width: 1200) {
+                    width: 8em;
+                }
             }
 
             .icon-label {
@@ -65,8 +70,13 @@
                     font-size: 1vw;
                 }
 
-                @media screen and (min-width: @tablet-width-max) {
+                @media screen and (min-width: 1000px) {
                     font-size: .8vw;
+                }
+
+                @media screen and (min-width: 1500px) {
+                    font-size: .6vw;
+                    margin-bottom: .5em;
                 }
             }
         }
