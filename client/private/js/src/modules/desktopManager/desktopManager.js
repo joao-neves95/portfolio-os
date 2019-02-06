@@ -73,19 +73,16 @@ class DesktopManager {
         allIcons[i].classList.add( 'clk' );
       }
 
-      if ( !allIcons[i].classList.contains( 'dblclk' ) ) {
-        allIcons[i].removeEventListener( 'dblclick', processManager.launchNewProcess );
-        allIcons[i].addEventListener( 'dblclick', ( e ) => {
-          const that = e.target;
-          const icon = DomUtils.getDirectChildrenByTag( that, 'img' );
-          // windowManager.openNewWindow(icon.alt);
-          processManager.launchNewProcess( icon.alt );
-        } );
-
-        allIcons[i].classList.add( 'dblclk' );
-      }
-
+      allIcons[i].removeEventListener( 'dblclick', this.launchNewProcess );
+      allIcons[i].addEventListener( 'dblclick', this.__launchProcess );
     }
+  }
+  
+  __launchProcess( e ) {
+    const that = e.target;
+    const icon = DomUtils.getDirectChildrenByTag( that, 'img' );
+    // windowManager.openNewWindow(icon.alt);
+    processManager.launchNewProcess( icon.alt );
   }
 
   __findIconInstance( iconId, Callback ) {

@@ -2,7 +2,16 @@
 
 &nbsp;
 
-#### *v0.3.0 - 05/02/2019
+#### *v0.3.1 - 06/02/2019
+- CLIENT:
+  - Fixed the Desktop icons event listeners for a bug when launching a new process (the event was beeing set multiple times on the same icon, so it would launch exponentially more instances of the same application);
+  - Style fixes on the index page (landing page);
+  - Meta tags updates for SEO optimization;
+  - Other minor fixes.
+
+&nbsp;
+
+#### v0.3.0 - 05/02/2019
 - CLIENT:
   - Multiple fixes on the MyProfiles (Profiles) + fixed compatibility issues with Chrome (it needs a total refactoring);
   - Added the theCodeChan frontend (not tested or compiled yet);
