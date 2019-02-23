@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en">
 
@@ -9,30 +9,28 @@
   <meta name="application-name" content="Portfolio-OS">
   <meta name="description" content="Portfolio OS is an online cloud operating system developed by programmers for programmers. The user can create applications, share their work and technical skills, and communicate with others.">
   <meta name="keywords" content="social network, operating system, programmers, developers">
+  <meta name="robots" content="index, follow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <!-- Tells Google not to provide a translation for this page -->
   <meta name="google" content="notranslate">
   <!-- BOOTSTRAP CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-        rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-        crossorigin="anonymous" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous" />
   <!-- ANIMATE CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" />
-  <link href="css/portfolio-os.css" rel="stylesheet" />
+  <!-- HINT CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hint.css/2.5.0/hint.min.css" integrity="sha256-EaR2e3c1FypmKsKDNZmWB6cSPqi+c/wXPX0eQQKwj70="
+  crossorigin="anonymous" />
   <!-- FONTAWESOME -->
   <!-- https://fontawesome.com/icons?d=gallery -->
-  <link rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.7.1/css/solid.css"
-        integrity="sha384-r/k8YTFqmlOaqRkZuSiE9trsrDXkh07mRaoGBMoDcmA58OHILZPsk29i2BsFng1B"
-        crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/brands.css"
-        integrity="sha384-BKw0P+CQz9xmby+uplDwp82Py8x1xtYPK3ORn/ZSoe6Dk3ETP59WCDnX+fI1XCKK"
-        crossorigin="anonymous" />
-  <link rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.7.1/css/fontawesome.css"
-        integrity="sha384-4aon80D8rXCGx9ayDt85LbyUHeMWd3UiBaWliBlJ53yzm9hqN21A+o1pqoyK04h+"
-        crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/solid.css" integrity="sha384-r/k8YTFqmlOaqRkZuSiE9trsrDXkh07mRaoGBMoDcmA58OHILZPsk29i2BsFng1B"
+  crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/brands.css" integrity="sha384-BKw0P+CQz9xmby+uplDwp82Py8x1xtYPK3ORn/ZSoe6Dk3ETP59WCDnX+fI1XCKK"
+  crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/fontawesome.css" integrity="sha384-4aon80D8rXCGx9ayDt85LbyUHeMWd3UiBaWliBlJ53yzm9hqN21A+o1pqoyK04h+"
+  crossorigin="anonymous" />
+  <link href="css/portfolio-os.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -56,12 +54,26 @@
 
       <!-- ABOVE THE FOLD -->
       <div class="row">
-        <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 text-center hero-text pb0 pro-animate" data-animate-effect="fadeIn">
+        <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 text-center hero-text pb0 pro-animate"
+          data-animate-effect="fadeIn">
           <h1>The home for programmers!</h1>
           <h2>Portfolio OS is the place all programmers are looking for.</h2>
-          <p>
+          <!-- <p>
             <a href="portfolio-os/auth" class="btn btn-primary btn-lg register" role="button">Register For Free!</a>
-          </p>
+          </p> -->
+          <div class="social-icons">
+            <h3>JOIN US, IT'S FREE!</h3>
+            <a href="/portfolio-os/auth/google">
+              <span class="hint--top hint--bounce" aria-label="Login with Google.">
+                <img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon anim popping" id="google-btn" />
+              </span>
+            </a>
+            <a href="/portfolio-os/auth/github">
+              <span class="hint--top hint--bounce" aria-label="Login with GitHub.">
+                <img src="img/github.svg" alt="Github Icon" class="icon anim popping" draggable="false" />
+              </span>
+            </a>
+          </div>
         </div>
       </div>
       <!-- End of ABOVE THE FOLD -->
@@ -91,7 +103,8 @@
           <ul>
             <li class="active">
               <a href="#">Profiles</a>
-              <p>Here you can create your online portfolio, linking to your other social accounts and adding technical skills.</p>
+              <p>Here you can create your online portfolio, linking to your other social accounts and adding technical
+                skills.</p>
               <p>You will also be able to explore other profiles.</p>
             </li>
             <li>
@@ -100,7 +113,8 @@
             </li>
             <li>
               <a href="#">theCodeChan</a>
-              <p>The Portfolio OS's own message board. Here you can share knowledge, talk about random stuff, or even get debugging help. Go nuts, but be civilized!</p>
+              <p>The Portfolio OS's own message board. Here you can communicate, share knowledge, talk about random
+                stuff, or even debug with others. Go nuts, but be civilized!</p>
             </li>
             <li>
               <a href="#">Start Menu</a>
@@ -135,53 +149,95 @@
         <div class="col-lg-4">
           <div class="features_item">
             <i class="fas fa-address-card"></i>
-            <a href="#"><h4>Show Yourself</h4></a>
+            <h4>Show Yourself</h4>
             <p>Create your profile and present yourself to other professionals.</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="features_item">
             <i class="fab fa-untappd"></i>
-            <a href="#"><h4>Connect With Others</h4></a>
+            <h4>Connect With Others</h4>
             <p>On the theCodeChan, the OS's coding message board, you can speak with other technology enthusiasts.</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="features_item">
             <i class="fas fa-pencil-alt"></i>
-            <a href="#"><h4>Integrate Your Creations</h4></a>
+            <h4>Integrate Your Creations</h4>
             <p>On the AppStore you can link apps hosted on CodePen that other users can use.</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="features_item">
             <i class="fas fa-sliders-h"></i>
-            <a href="#"><h4>A Dynamic Environment</h4></a>
+            <h4>A Dynamic Environment</h4>
             <p>Portfolio OS is not just a mere static website, it has a life of its own.</p>
           </div>
         </div>
         <div class="col-lg-4">
-            <div class="features_item">
-              <i class="fas fa-code-branch"></i>
-              <a href="#"><h4>Contribute</h4></a>
-              <p>You can contribute to the OS source code and help grow the community through GitHub.</p>
-            </div>
+          <div class="features_item">
+            <i class="fas fa-code-branch"></i>
+            <h4>Contribute</h4>
+            <p>You can contribute to the OS source code and help grow the community through GitHub.</p>
           </div>
+        </div>
         <div class="col-lg-4">
           <div class="features_item">
             <i class="fas fa-code"></i>
-            <a href="#"><h4>A Modular Architecture</h4></a>
-            <p>Portfolio OS code base is organized in a modular architecture and all the System Applications are made with the MVC pattern.</p>
+            <h4>A Modular Architecture</h4>
+            <p>Portfolio OS code base is organized in a modular architecture and all the System Applications are made
+              with the MVC pattern.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <!-- FEATURES -->
+  <!-- End of FEATURES -->
 
-  <section class="container banner-leaderboard">
+  <!-- FEATURE-VIDEO -->
+  <div class="row features-video">
+    <div class="col-md-8 col-md-pull-4 pro-animate" style="position: relative;">
+      <div class="home-showcase-wrap">
+        <div class="home-showcase-inner">
+          <div class="chrome">
+            <div><span></span><span></span><span></span></div>
+          </div>
+          <div class="image-showcase">
+            <ul class="images-list">
+              <!-- <li class="active"><img src="img/screenshot_profiles.png" alt="Image" class="img-responsive"></li> -->
+              <li class="active"><video src="video/Portfolio-OS_Features-Video.mp4" autoplay loop muted></video></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End of FEATURE-VIDEO -->
+
+  <!-- BANNER -->
+  <section class="container-fluid banner-leaderboard">
     <div>.</div>
   </section>
+  <!-- End of BANNER -->
+
+  <!-- JOIN US -->
+  <div class="row join-us">
+    <div class="col-md-12">
+      <h3>JOIN US, IT'S FREE!</h3>
+      <a href="/portfolio-os/auth/google">
+        <span class="hint--top hint--bounce" aria-label="Login with Google.">
+          <img src="img/google-plus.svg" alt="Google-Plus Icon" class="icon anim popping" id="google-btn" />
+        </span>
+      </a>
+      <a href="/portfolio-os/auth/github">
+        <span class="hint--top hint--bounce" aria-label="Login with GitHub.">
+          <img src="img/github.svg" alt="Github Icon" class="icon anim popping" draggable="false" />
+        </span>
+      </a>
+    </div>
+  </div>
+  <!-- End of JOIN US -->
+
 
   <!-- FOOTER -->
   <footer class="footer">
@@ -210,8 +266,8 @@
             <p>Find us online or help Portfolio OS grow.</p>
             <ul class="footer-social">
               <li><a href="https://github.com/joao-neves95/portfolio-os" target="_blank" rel="nofollow"><i class="fab fa-github-square"></i></i></a></li>
-              <li><a href="#"><i class="fab fa-twitter-square"></i></a></li>
-              <li><a href="#"><i class="fab fa-facebook-square"></i></a></li>
+              <li><a href="https://twitter.com/PortfolioOS" target="_blank" rel="noreferrer nofollow"><i class="fab fa-twitter-square"></i></a></li>
+              <li><a href="https://www.facebook.com/portfolioOS" target="_blank" rel="noreferrer nofollow"><i class="fab fa-facebook-square"></i></a></li>
             </ul>
           </div>
         </div>
@@ -219,27 +275,24 @@
 
       <div class="row">
         <div class="col-md-12 copyright pro-animate">
-          <p><small>&copy; 2019 <a href="https://shivayl.com">João Neves (shivayl)</a>. All Rights Reserved. <br> Designed &amp; Developed with <i class="fas fa-heart"></i> by <a href="https://github.com/joao-neves95">shivayl</a></small></p>
+          <p><small>&copy; 2019 <a href="https://shivayl.com">João Neves (shivayl)</a>. All Rights Reserved. <br>
+              Designed &amp; Developed with <i class="fas fa-heart"></i> by <a target="_blank" rel="nofollow" href="https://github.com/joao-neves95">shivayl</a></small></p>
         </div>
       </div>
     </div>
   </footer>
   <!-- End of FOOTER -->
 
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-          crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous">
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-          integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-          crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous">
   </script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-          integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-          crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous">
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"
-          integrity="sha256-jDnOKIOq2KNsQZTcBTEnsp76FnfMEttF6AV2DF2fFNE="
-          crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js" integrity="sha256-jDnOKIOq2KNsQZTcBTEnsp76FnfMEttF6AV2DF2fFNE="
+    crossorigin="anonymous">
   </script>
   <script src="js/portfolio-os.js"></script>
 </body>
