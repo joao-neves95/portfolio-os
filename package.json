@@ -25,7 +25,7 @@
     "passport-github": "^1.1.0",
     "passport-google-oauth20": "^1.0.0",
     "pg": "^7.6.1",
-    "sweetalert2": "^7.33.1"
+    "sweetalert2": "^8.8.1"
   },
   "devDependencies": {
     "node-dev": "^3.1.3",
